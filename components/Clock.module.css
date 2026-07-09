@@ -1,0 +1,28 @@
+.clock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wd-space-1);
+}
+
+.time {
+  font-family: var(--wd-font-display);
+  font-weight: 600;
+  font-size: clamp(3.5rem, 9vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+}
+
+.date {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  color: var(--wd-muted);
+  opacity: 0.9;
+}
+
+:global(.weatherDashboard[data-daypart="night"]) .date {
+  color: var(--wd-muted-on-dark);
+}
