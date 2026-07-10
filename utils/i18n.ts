@@ -2,9 +2,10 @@ import { SupportedLocale } from "@/types2/weather.types";
 
 interface Dictionary {
   feelsLike: string;
-  max: string;
-  min: string;
+  maxMin: string;
   precipitation: string;
+  sunrise: string;
+  sunset: string;
   now: string;
   today: string;
   nextHours: string;
@@ -15,9 +16,10 @@ interface Dictionary {
 const DICTIONARIES: Record<SupportedLocale, Dictionary> = {
   "pt-BR": {
     feelsLike: "Sensação",
-    max: "Máx",
-    min: "Mín",
+    maxMin: "Máx/Mín",
     precipitation: "Precipitação",
+    sunrise: "Nascer do sol",
+    sunset: "Pôr do sol",
     now: "Agora",
     today: "Hoje",
     nextHours: "Próximas horas",
@@ -26,9 +28,10 @@ const DICTIONARIES: Record<SupportedLocale, Dictionary> = {
   },
   "en-US": {
     feelsLike: "Feels like",
-    max: "Max",
-    min: "Min",
+    maxMin: "Max/Min",
     precipitation: "Precipitation",
+    sunrise: "Sunrise",
+    sunset: "Sunset",
     now: "Now",
     today: "Today",
     nextHours: "Hourly forecast",
@@ -46,4 +49,3 @@ export function detectLocale(): SupportedLocale {
   if (typeof navigator === "undefined") return "en-US";
   return navigator.language.toLowerCase().startsWith("pt") ? "pt-BR" : "en-US";
 }
-

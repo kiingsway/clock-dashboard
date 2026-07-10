@@ -15,6 +15,8 @@ const ICON_FILES = {
   showers: "showers.svg",
   thunderstorm: "thunderstorm.svg",
   unknown: "uv-index-alert.svg",
+  sunrise: "sunrise.svg",
+  sunset: "sunset.svg",
 } as const;
 
 /**
@@ -76,6 +78,21 @@ export function getWeatherAnimatedIcon(
       src={`${ICON_BASE_URI}${src}`}
       alt={resolvedCategory}
       title={`Weather code: ${weatherCode} (${resolvedCategory})`}
+      loading="lazy"
+      style={{ width: size, height: size, display: "block" }}
+    />
+  );
+}
+
+/**
+ * Renders the fixed sunrise/sunset icon (not weather-code dependent, unlike
+ * `getWeatherAnimatedIcon`).
+ */
+export function getSunIcon(kind: "sunrise" | "sunset", size: number): ReactNode {
+  return (
+    <img
+      src={`${ICON_BASE_URI}${ICON_FILES[kind]}`}
+      alt={kind}
       loading="lazy"
       style={{ width: size, height: size, display: "block" }}
     />

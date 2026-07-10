@@ -83,6 +83,52 @@ export function inferIsDayFromHour(date: Date, timeZone?: string): boolean {
   return hour >= 6 && hour < 18;
 }
 
+export function isDaytimeBySunrises(
+  date: Date,
+  sunrises: string[],
+  sunsets: string[]
+): boolean {
+  const targetYear = date.getFullYear();
+  const targetMonth = date.getMonth();
+  const targetDay = date.getDate();
+
+  const index = sunrises.findIndex((sunrise) => {
+    const d = new Date(sunrise);
+
+    return (
+      d.getFullYear() === targetYear &&
+      d.getMonth() === targetMonth &&
+      d.getDate() === targetDay
+    );
+  });
+
+  if (index === -1) {
+    // Não encontrou dados para esse dia.
+    // Escolha o comportamento desejado.
+    return true;
+  }
+
+  const sunrise = new Date(sunrises[index]);
+  const sunset = new Date(sunsets[index]);
+
+  return date >= sunrise && date < sunset;
+}
+
+/**
+ * How far `current.time` sits between sunrise and sunset, clamped to
+ * [0, 1]. Used to place the marker on the sunrise→sunset track. Pinned to
+ * 0 or 1 outside daylight hours rather than extrapolated, since "how far
+ * past sunset" isn't a meaningful position on a track that represents the
+ * daylight span.
+ */
+export function getSunProgress(currentTime: string, sunrise: string, sunset: string): number {
+  const now = new Date(currentTime).getTime();
+  const rise = new Date(sunrise).getTime();
+  const set = new Date(sunset).getTime();
+  if (set <= rise) return 0;
+  return Math.min(1, Math.max(0, (now - rise) / (set - rise)));
+}
+
 function capitalize(text: string): string {
   if (!text) return text;
   return text.charAt(0).toLocaleUpperCase() + text.slice(1);

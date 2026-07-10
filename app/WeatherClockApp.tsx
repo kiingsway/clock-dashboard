@@ -42,7 +42,10 @@ export function WeatherClockApp({ weather, locale, className }: WeatherClockAppP
         currentUnits={current_units}
         todayMax={daily.temperature_2m_max[0] ?? current.temperature_2m}
         todayMin={daily.temperature_2m_min[0] ?? current.temperature_2m}
+        sunrise={daily.sunrise[0] ?? current.time}
+        sunset={daily.sunset[0] ?? current.time}
         locale={resolvedLocale}
+        timeZone={timezone}
       />
 
       <HourlyForecast
@@ -50,6 +53,8 @@ export function WeatherClockApp({ weather, locale, className }: WeatherClockAppP
         hourlyUnits={hourly_units}
         currentTime={current.time}
         timeZone={timezone}
+        sunrises={daily.sunrise}
+        sunsets={daily.sunset}
         locale={resolvedLocale}
       />
 

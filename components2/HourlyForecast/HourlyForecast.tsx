@@ -1,7 +1,7 @@
 import { IHourly, IHourlyUnits, SupportedLocale } from "@/types2/weather.types";
 import styles from "./HourlyForecast.module.css";
 import { getDictionary } from "@/utils/i18n";
-import { formatHourLabel, inferIsDayFromHour, isSameHour } from "@/utils/formatters";
+import { formatHourLabel, inferIsDayFromHour, isDaytimeBySunrises, isSameHour } from "@/utils/formatters";
 import { getWeatherAnimatedIcon } from "@/utils/weatherIcons";
 
 export interface HourlyForecastProps {
@@ -11,6 +11,8 @@ export interface HourlyForecastProps {
   currentTime: string;
   timeZone?: string;
   locale: SupportedLocale;
+  sunrises: string[];
+  sunsets: string[];
   /** How many upcoming hours to render. Defaults to 24. */
   hoursToShow?: number;
 }
@@ -26,6 +28,8 @@ export function HourlyForecast({
   currentTime,
   timeZone,
   locale,
+  sunrises,
+  sunsets,
   hoursToShow = 24,
 }: HourlyForecastProps) {
   const t = getDictionary(locale);
@@ -42,12 +46,12 @@ export function HourlyForecast({
 
   return (
     <section className={styles.section} aria-label={t.nextHours}>
-      {/* <h2 className={styles.heading}>{t.nextHours}</h2> */}
       <ul className={styles.scroller}>
         {indices.map((i) => {
           const date = new Date(hourly.time[i]);
           const isNow = isSameHour(date, now, timeZone);
-          const isDay = inferIsDayFromHour(date, timeZone);
+          // const isDay = inferIsDayFromHour(date, timeZone);
+          const isDay = isDaytimeBySunrises(date, sunrises, sunsets);
           const precip = hourly.precipitation[i];
 
           return (

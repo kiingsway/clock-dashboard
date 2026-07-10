@@ -81,8 +81,9 @@
   margin: 20px 0 0;
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 20px;
+  justify-content: center;
+  gap: 28px;
+  padding: 14px 24px;
   background: var(--wc-surface);
   border: 1px solid var(--wc-hairline);
   border-radius: var(--wc-radius-lg);
@@ -93,7 +94,7 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  min-width: 56px;
+  min-width: 72px;
 }
 
 .stat dt {
@@ -118,4 +119,60 @@
   width: 1px;
   height: 28px;
   background: var(--wc-hairline);
+}
+
+.sunArc {
+  margin: 12px 0 0;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sunPoint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+}
+
+.sunPoint img {
+  opacity: 0.85;
+}
+
+.sunPoint span {
+  font-family: var(--wc-font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--wc-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.sunTrack {
+  position: relative;
+  flex: 1 1 auto;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--wc-hairline);
+}
+
+.sunTrackFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 2px;
+  background: var(--wc-accent);
+  opacity: 0.55;
+}
+
+.sunMarker {
+  position: absolute;
+  top: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--wc-accent);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--wc-accent) 70%, transparent);
+  transform: translate(-50%, -50%);
 }
