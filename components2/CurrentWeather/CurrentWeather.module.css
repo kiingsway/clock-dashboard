@@ -1,0 +1,121 @@
+.current {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4px 16px 20px;
+}
+
+.iconStage {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Signature element: a dim, weather-tinted halo that breathes slowly.
+   Kept low-opacity and heavily blurred so it reads as atmosphere, not
+   a bright light source, on a phone screen at night. */
+.glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--wc-accent) 0%, transparent 68%);
+  opacity: 0.4;
+  filter: blur(14px);
+  animation: breathe 6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.32;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.48;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow {
+    animation: none;
+    opacity: 0.36;
+  }
+}
+
+.icon {
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+}
+
+.temp {
+  margin: 4px 0 0;
+  font-family: var(--wc-font-display);
+  font-weight: 700;
+  font-size: clamp(40px, 13vw, 56px);
+  line-height: 1;
+  color: var(--wc-text);
+}
+
+.tempUnit {
+  font-size: 0.4em;
+  font-weight: 600;
+  color: var(--wc-text-muted);
+  margin-left: 2px;
+}
+
+.feelsLike {
+  margin: 6px 0 0;
+  font-family: var(--wc-font-body);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--wc-text-muted);
+}
+
+.statRow {
+  margin: 20px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  background: var(--wc-surface);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-lg);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 56px;
+}
+
+.stat dt {
+  font-family: var(--wc-font-body);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wc-text-faint);
+}
+
+.stat dd {
+  margin: 0;
+  font-family: var(--wc-font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--wc-text);
+  white-space: nowrap;
+}
+
+.statDivider {
+  width: 1px;
+  height: 28px;
+  background: var(--wc-hairline);
+}

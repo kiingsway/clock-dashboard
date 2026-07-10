@@ -1,0 +1,84 @@
+.section {
+  padding: 18px 0 24px;
+  border-top: 1px solid var(--wc-hairline);
+}
+
+.heading {
+  margin: 0 0 10px;
+  padding: 0 16px;
+  font-family: var(--wc-font-body);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--wc-text-faint);
+}
+
+/* Fixed-height, internally scrolling panel: a long forecast (7–16 days)
+   never pushes the rest of the page off screen. */
+.list {
+  margin: 0 16px;
+  padding: 4px 4px;
+  list-style: none;
+  max-height: 246px;
+  overflow-y: auto;
+  background: var(--wc-surface);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-lg);
+  mask-image: linear-gradient(to bottom, transparent 0, black 10px, black calc(100% - 10px), transparent 100%);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 44px 30px 34px 1fr 38px;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--wc-hairline);
+}
+
+.weekday {
+  font-family: var(--wc-font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wc-text);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+.minLabel {
+  font-family: var(--wc-font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--wc-text-faint);
+  text-align: right;
+}
+
+.maxLabel {
+  font-family: var(--wc-font-body);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--wc-text);
+  text-align: right;
+}
+
+.range {
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--wc-hairline);
+}
+
+.rangeFill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #4fa0e0, #f4b860);
+}
