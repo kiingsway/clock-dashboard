@@ -36,7 +36,6 @@ export const DailyForecast: FC<DailyForecastProps> = ({ daily, units }) => {
         {rows.map((row) => (
           <li key={row.date} className={styles.card}>
             <span className={styles.day}>{formatDayLabel(row.date)}</span>
-            {/* <span className={styles.icon}>{getWeatherIcon(row.weatherCode)}</span> */}
             {getWeatherAnimatedIcon(row.weatherCode, true, 40, getWeatherCategory(row.weatherCode))}
             <span className={styles.temps}>
               <span className={styles.max}>

@@ -36,6 +36,8 @@ export const WeatherDashboard: FC<WeatherDashboardProps> = ({
                 <CurrentWeatherCard
                   current={request.data.current}
                   units={request.data.current_units}
+                  min={request.data.daily.temperature_2m_min[0]}
+                  max={request.data.daily.temperature_2m_max[0]}
                 />
                 <p className={styles.updatedAt}>
                   Atualizado às {formatClock(request.updatedAt)}

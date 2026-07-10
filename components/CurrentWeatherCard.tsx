@@ -6,6 +6,8 @@ import styles from "./CurrentWeatherCard.module.css";
 export interface CurrentWeatherCardProps {
   current: IWeatherCurrent;
   units: IWeatherUnits;
+  min: number;
+  max: number;
 }
 
 const categoryLabel: Record<string, string> = {
@@ -23,14 +25,18 @@ const categoryLabel: Record<string, string> = {
 export const CurrentWeatherCard: FC<CurrentWeatherCardProps> = ({
   current,
   units,
+  min,
+  max
 }) => {
   const category = getWeatherCategory(current.weather_code);
 
   const onDebugClick = () => console.log('Current Weather', { ...current, category });
 
   return (
-    <>
-      <section className={styles.card} aria-label="Condições atuais" onClick={onDebugClick}>
+    <section className={styles.card} aria-label="Condições atuais" onClick={onDebugClick}>
+
+      <div className={styles.cardTop}>
+
         <div className={styles.temp}>
 
           {getWeatherAnimatedIcon(current.weather_code, Boolean(current.is_day), 100, category)}
@@ -40,39 +46,23 @@ export const CurrentWeatherCard: FC<CurrentWeatherCardProps> = ({
             <span className={styles.unit}>{units.temperature_2m}</span>
           </p>
 
-          <span>max min</span>
+          <div className={styles.minmax}>
+            <p><span style={{ color: '#22577A' }}>↑</span> {Math.round(max)}ªC</p>
+            <p><span style={{ color: '#611531' }}>↓</span> {Math.round(min)}ªC</p>
+          </div>
 
         </div>
-      </section>
 
-      <section className={styles.card} aria-label="Condições atuais">
-        <div className={styles.iconRow}>
-          <div className={styles.icon}>{getWeatherIcon(current.weather_code)}</div>
-          <p className={styles.description}>{categoryLabel[category]}</p>
+        <div className={styles.feels}>
+          <p>
+            FEELS <span>{Math.round(current.apparent_temperature)} {units.apparent_temperature}</span>
+          </p>
+          <p>
+            PREC. <span>{Math.round(current.precipitation)} {units.precipitation}</span>
+          </p>
         </div>
+      </div>
 
-        <p className={styles.temperature}>
-          {Math.round(current.temperature_2m)}
-          <span className={styles.unit}>{units.temperature_2m}</span>
-        </p>
-
-        <dl className={styles.meta}>
-          <div className={styles.metaItem}>
-            <dt>Sensação</dt>
-            <dd>
-              {Math.round(current.apparent_temperature)}
-              {units.apparent_temperature}
-            </dd>
-          </div>
-          <div className={styles.metaItem}>
-            <dt>Precipitação</dt>
-            <dd>
-              {current.precipitation}
-              {units.precipitation}
-            </dd>
-          </div>
-        </dl>
-      </section>
-    </>
+    </section>
   );
 };
