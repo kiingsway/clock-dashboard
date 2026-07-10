@@ -1,4 +1,4 @@
-import type { SupportedLocale } from "../types/weather.types";
+import { SupportedLocale } from "@/types2/weather.types";
 
 /**
  * Formats a 24h HH:mm clock string in a given IANA timezone.

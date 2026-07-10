@@ -1,4 +1,4 @@
-import type { SupportedLocale } from "../types/weather.types";
+import { SupportedLocale } from "@/types2/weather.types";
 
 interface Dictionary {
   feelsLike: string;
