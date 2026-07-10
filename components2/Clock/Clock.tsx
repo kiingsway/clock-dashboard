@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import type { SupportedLocale } from "../../types/weather.types";
-import { formatClockTime, formatLongDate, formatWeekdayLong } from "../../utils/formatters";
 import styles from "./Clock.module.css";
+import { SupportedLocale } from "@/types2/weather.types";
+import { formatClockTime, formatWeekdayLong, formatLongDate } from "@/utils/formatters";
 
 export interface ClockProps {
   /** UI language for the weekday/date strings. */
