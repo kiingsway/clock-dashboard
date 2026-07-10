@@ -54,12 +54,14 @@ export const CurrentWeatherCard: FC<CurrentWeatherCardProps> = ({
         </div>
 
         <div className={styles.feels}>
-          <p>
-            FEELS <span>{Math.round(current.apparent_temperature)} {units.apparent_temperature}</span>
-          </p>
-          <p>
-            PREC. <span>{Math.round(current.precipitation)} {units.precipitation}</span>
-          </p>
+          <div className={styles.feels_item}>
+            <small>FEELS</small>
+            <span>{Math.round(current.apparent_temperature)} {units.apparent_temperature}</span>
+          </div>
+          <div className={styles.feels_item}>
+            <small>PREC.</small>
+            <span>{Math.round(current.precipitation)} {units.precipitation}</span>
+          </div>
         </div>
       </div>
 
