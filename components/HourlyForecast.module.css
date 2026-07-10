@@ -44,12 +44,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--wd-space-1);
+  gap: 1px;
   min-width: 84px;
-  padding: var(--wd-space-3) var(--wd-space-2);
+  padding: var(--wd-space-2) var(--wd-space-2);
   border-radius: var(--wd-radius-md);
-  background: var(--wd-surface);
-  border: 1px solid var(--wd-surface-border);
+  background-color: #131a21;
   box-shadow: var(--wd-shadow-sm);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -64,9 +63,9 @@
 }
 
 .hour {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   font-weight: 600;
-  color: var(--wd-muted);
+  color: #BBB;
 }
 
 .icon {
@@ -77,11 +76,12 @@
   font-family: var(--wd-font-display);
   font-weight: 600;
   font-size: 1.1rem;
+  color: #DDD;
 }
 
 .feelsLike,
 .precipitation {
-  font-size: 0.7rem;
+  font-size: 0.775rem;
   color: var(--wd-muted);
   text-align: center;
 }

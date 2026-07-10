@@ -47,7 +47,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: var(--wd-space-5);
+  gap: var(--wd-space-3);
   padding: var(--wd-space-5) var(--wd-space-4) var(--wd-space-4);
 }
 
@@ -59,12 +59,17 @@
 
 .placeholderCard {
   padding: var(--wd-space-4);
-  border-radius: var(--wd-radius-lg);
+  border-radius: var(--wd-radius-sm);
   background: var(--wd-surface);
-  border: 1px solid var(--wd-surface-border);
   color: var(--wd-muted);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+  background: #152331;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #000000, #152331);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #000000, #152331);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 /* Night re-tints the token set itself, so every card that reads

@@ -10,13 +10,8 @@ import { useClock } from "@/helpers/useClock";
 import { useWeatherPolling } from "@/hooks/useWeatherPolling";
 import { LuCloudSun } from "react-icons/lu";
 import { RiDownloadCloud2Line } from "react-icons/ri";
-import { IBM_Plex_Mono } from "next/font/google";
 import classNames from "classnames";
-
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+import { ibmPlexMono } from "@/styles/fonts";
 
 export interface WeatherDashboardProps {
   /** Location to request weather for. Defaults to (0, 0) as a placeholder
@@ -67,7 +62,7 @@ export const WeatherDashboard: FC<WeatherDashboardProps> = ({
             )}
             {request.status === "error" && (
               <div className={styles.placeholderCard} role="alert">
-                Não foi possível carregar a previsão.
+                ⚠ Não foi possível carregar a previsão. ⚠
               </div>
             )}
           </div>

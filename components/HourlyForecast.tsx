@@ -3,6 +3,8 @@ import type { IHourly, IHourlyUnits } from "../types/weather.types";
 import { formatHourLabel, getHourlyStartThreshold } from "../helpers/dateTime";
 import { getWeatherAnimatedIcon, getWeatherCategory, getWeatherIcon } from "../helpers/weatherIcons";
 import styles from "./HourlyForecast.module.css";
+import classNames from "classnames";
+import { ibmPlexMono } from "@/styles/fonts";
 
 /** Hourly cards never show more than a day ahead. */
 const MAX_HOURS = 24;
@@ -53,17 +55,16 @@ export const HourlyForecast: FC<HourlyForecastProps> = ({
       <ul className={styles.list}>
         {rows.map((row) => (
           <li key={row.time} className={styles.card}>
-            <span className={styles.hour}>{formatHourLabel(row.time)}</span>
-            
-            {/* <span className={styles.icon}>{getWeatherIcon(row.weatherCode)}</span> */}
+            <span className={classNames(styles.hour, ibmPlexMono.className)}>
+              {formatHourLabel(row.time)}
+            </span>
             {getWeatherAnimatedIcon(row.weatherCode, true, 40, getWeatherCategory(row.weatherCode))}
-
             <span className={styles.temp}>
               {Math.round(row.temperature)}
               {units.temperature_2m}
             </span>
             <span className={styles.feelsLike}>
-              Sensação {Math.round(row.apparentTemperature)}
+              Feels {Math.round(row.apparentTemperature)}
               {units.apparent_temperature}
             </span>
             <span className={styles.precipitation}>

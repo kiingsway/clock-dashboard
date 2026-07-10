@@ -1,13 +1,9 @@
 import type { FC } from "react";
 import { formatClock, formatDateNoYear } from "../helpers/dateTime";
 import styles from "./Clock.module.css";
-import { IBM_Plex_Mono } from "next/font/google";
 import classNames from "classnames";
+import { ibmPlexMono } from "@/styles/fonts";
 
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
 
 export interface ClockProps {
   /** Current time, lifted up so the dashboard can drive both the clock
