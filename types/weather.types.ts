@@ -21,6 +21,7 @@ export interface IWeatherCurrent {
   apparent_temperature: number;
   precipitation: number;
   weather_code: number;
+  is_day: 0 | 1 | "";
 }
 
 export interface IHourlyUnits {

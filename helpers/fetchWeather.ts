@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { WeatherData } from "../types/weather.types";
 
-const url = "https://api.open-meteo.com/v1/forecast?latitude=43.7064&longitude=-79.3986&daily=temperature_2m_max,temperature_2m_min,weather_code&hourly=temperature_2m,precipitation,apparent_temperature,weather_code&current=temperature_2m,apparent_temperature,precipitation,weather_code&timezone=auto"
+const url = "https://api.open-meteo.com/v1/forecast?latitude=43.7064&longitude=-79.3986&daily=temperature_2m_max,temperature_2m_min,weather_code&hourly=temperature_2m,precipitation,apparent_temperature,weather_code&current=temperature_2m,apparent_temperature,precipitation,weather_code,is_day&timezone=auto"
 
 /**
  * Placeholder for the real weather request.

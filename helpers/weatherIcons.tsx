@@ -1,3 +1,4 @@
+import { IWeatherCurrent } from "@/types/weather.types";
 import type { ReactNode } from "react";
 
 /**
@@ -44,6 +45,51 @@ export function getWeatherCategory(weatherCode: number): WeatherCategory {
       return "unknown";
   }
 }
+
+// export function getWeatherAnimatedIcon(current: IWeatherCurrent, category: WeatherCategory, size: number): ReactNode {
+export function getWeatherAnimatedIcon(weatherCode: number, isDay: boolean, size: number, category?: WeatherCategory): ReactNode {
+
+  const uri = `https://cdn.meteocons.com/3.0.0-next.10/svg/fill/`;
+
+  const icons = {
+    clearDay: "clear-day.svg",
+    clearNight: "clear-night.svg",
+    overcast: "overcast.svg",
+    fogDay: "fog-day.svg",
+    fogNight: "fog-night.svg",
+    drizzle: "drizzle.svg",
+    rain: "rain.svg",
+    snow: "snow.svg",
+    showers: "showers.svg",
+    thunderstorm: "thunderstorm.svg",
+
+    unknown: "uv-index-alert.svg",
+  };
+
+  const src = (() => {
+    if (weatherCode === 0) return isDay ? icons.clearDay : icons.clearNight;
+    if (weatherCode >= 1 && weatherCode <= 3) return icons.overcast;
+    if (weatherCode === 45 || weatherCode === 48) return isDay ? icons.fogDay : icons.fogNight;
+    if (weatherCode >= 51 && weatherCode <= 57) return icons.drizzle;
+    if (weatherCode >= 61 && weatherCode <= 67) return icons.rain;
+    if (weatherCode >= 71 && weatherCode <= 77) return icons.snow;
+    if (weatherCode >= 80 && weatherCode <= 82) return icons.showers;
+    if (weatherCode >= 85 && weatherCode <= 86) return icons.snow;
+    if (weatherCode >= 95 && weatherCode <= 99) return icons.thunderstorm;
+
+    return icons.unknown;
+  })();
+
+  return (
+    <img
+      src={`${uri}${src}`}
+      alt={category}
+      title={`Weather code: ${weatherCode}${category ? ` (${category})` : ""}`}
+      style={{ width: size, height: size }}
+    />
+  );
+}
+
 
 /**
  * Placeholder icon lookup. Deliberately returns a labeled glyph rather

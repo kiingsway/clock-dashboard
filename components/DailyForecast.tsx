@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { IDaily, IDailyUnits } from "../types/weather.types";
 import { formatDayLabel } from "../helpers/dateTime";
-import { getWeatherIcon } from "../helpers/weatherIcons";
+import { getWeatherAnimatedIcon, getWeatherCategory, getWeatherIcon } from "../helpers/weatherIcons";
 import styles from "./DailyForecast.module.css";
 
 export interface DailyForecastProps {
@@ -36,7 +36,8 @@ export const DailyForecast: FC<DailyForecastProps> = ({ daily, units }) => {
         {rows.map((row) => (
           <li key={row.date} className={styles.card}>
             <span className={styles.day}>{formatDayLabel(row.date)}</span>
-            <span className={styles.icon}>{getWeatherIcon(row.weatherCode)}</span>
+            {/* <span className={styles.icon}>{getWeatherIcon(row.weatherCode)}</span> */}
+            {getWeatherAnimatedIcon(row.weatherCode, true, 40, getWeatherCategory(row.weatherCode))}
             <span className={styles.temps}>
               <span className={styles.max}>
                 {Math.round(row.temperatureMax)}

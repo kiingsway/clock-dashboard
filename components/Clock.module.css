@@ -29,6 +29,7 @@
 .date {
   margin: 0;
   font-size: 1.7rem;
+  font-size: clamp(1.4rem, 4.5vw, 2.3rem);
   font-weight: 500;
   line-height: 1.2;
   color: #BBB;

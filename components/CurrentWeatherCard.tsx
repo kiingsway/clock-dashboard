@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import type { IWeatherCurrent, IWeatherUnits } from "../types/weather.types";
-import { getWeatherCategory, getWeatherIcon } from "../helpers/weatherIcons";
+import { getWeatherAnimatedIcon, getWeatherCategory, getWeatherIcon } from "../helpers/weatherIcons";
 import styles from "./CurrentWeatherCard.module.css";
 
 export interface CurrentWeatherCardProps {
@@ -26,34 +26,53 @@ export const CurrentWeatherCard: FC<CurrentWeatherCardProps> = ({
 }) => {
   const category = getWeatherCategory(current.weather_code);
 
+  const onDebugClick = () => console.log('Current Weather', { ...current, category });
+
   return (
-    <section className={styles.card} aria-label="Condições atuais">
-      <div className={styles.iconRow}>
-        <div className={styles.icon}>{getWeatherIcon(current.weather_code)}</div>
-        <p className={styles.description}>{categoryLabel[category]}</p>
-      </div>
+    <>
+      <section className={styles.card} aria-label="Condições atuais" onClick={onDebugClick}>
+        <div className={styles.temp}>
 
-      <p className={styles.temperature}>
-        {Math.round(current.temperature_2m)}
-        <span className={styles.unit}>{units.temperature_2m}</span>
-      </p>
+          {getWeatherAnimatedIcon(current.weather_code, Boolean(current.is_day), 100, category)}
 
-      <dl className={styles.meta}>
-        <div className={styles.metaItem}>
-          <dt>Sensação</dt>
-          <dd>
-            {Math.round(current.apparent_temperature)}
-            {units.apparent_temperature}
-          </dd>
+          <p className={styles.temperature}>
+            {Math.round(current.temperature_2m)}
+            <span className={styles.unit}>{units.temperature_2m}</span>
+          </p>
+
+          <span>max min</span>
+
         </div>
-        <div className={styles.metaItem}>
-          <dt>Precipitação</dt>
-          <dd>
-            {current.precipitation}
-            {units.precipitation}
-          </dd>
+      </section>
+
+      <section className={styles.card} aria-label="Condições atuais">
+        <div className={styles.iconRow}>
+          <div className={styles.icon}>{getWeatherIcon(current.weather_code)}</div>
+          <p className={styles.description}>{categoryLabel[category]}</p>
         </div>
-      </dl>
-    </section>
+
+        <p className={styles.temperature}>
+          {Math.round(current.temperature_2m)}
+          <span className={styles.unit}>{units.temperature_2m}</span>
+        </p>
+
+        <dl className={styles.meta}>
+          <div className={styles.metaItem}>
+            <dt>Sensação</dt>
+            <dd>
+              {Math.round(current.apparent_temperature)}
+              {units.apparent_temperature}
+            </dd>
+          </div>
+          <div className={styles.metaItem}>
+            <dt>Precipitação</dt>
+            <dd>
+              {current.precipitation}
+              {units.precipitation}
+            </dd>
+          </div>
+        </dl>
+      </section>
+    </>
   );
 };

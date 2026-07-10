@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { IHourly, IHourlyUnits } from "../types/weather.types";
 import { formatHourLabel, getHourlyStartThreshold } from "../helpers/dateTime";
-import { getWeatherIcon } from "../helpers/weatherIcons";
+import { getWeatherAnimatedIcon, getWeatherCategory, getWeatherIcon } from "../helpers/weatherIcons";
 import styles from "./HourlyForecast.module.css";
 
 /** Hourly cards never show more than a day ahead. */
@@ -54,7 +54,10 @@ export const HourlyForecast: FC<HourlyForecastProps> = ({
         {rows.map((row) => (
           <li key={row.time} className={styles.card}>
             <span className={styles.hour}>{formatHourLabel(row.time)}</span>
-            <span className={styles.icon}>{getWeatherIcon(row.weatherCode)}</span>
+            
+            {/* <span className={styles.icon}>{getWeatherIcon(row.weatherCode)}</span> */}
+            {getWeatherAnimatedIcon(row.weatherCode, true, 40, getWeatherCategory(row.weatherCode))}
+
             <span className={styles.temp}>
               {Math.round(row.temperature)}
               {units.temperature_2m}
