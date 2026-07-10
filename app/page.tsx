@@ -1,13 +1,12 @@
 "use client"
 import { fetchWeather } from "@/helpers/fetchWeather";
 import { WeatherClockApp } from "./WeatherClockApp";
-import WeatherDashboard from "./WeatherDashboard";
-import { WeatherData } from "@/types/weather.types";
 import React from "react";
+import { IWeather } from "@/types2/weather.types";
 
 export default function Home() {
 
-  const [weatherData, setWeatherData] = React.useState<WeatherData | null>(null);
+  const [weatherData, setWeatherData] = React.useState<IWeather | null>(null);
 
   React.useEffect(() => {
     fetchWeather()
@@ -24,7 +23,5 @@ export default function Home() {
     )
   }
 
-  return (
-    <WeatherClockApp weather={weatherData} />
-  )
+  return <WeatherClockApp weather={weatherData} />;
 }
