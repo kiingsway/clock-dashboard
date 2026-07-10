@@ -44,7 +44,7 @@ export const HourlyForecast: FC<HourlyForecastProps> = ({
   if (rows.length === 0) {
     return (
       <section className={styles.section} aria-label="Previsão por hora">
-        <h2 className={styles.heading}>Próximas horas</h2>
+        {/* <h2 className={styles.heading}>Próximas horas</h2> */}
         <p className={styles.empty}>Sem dados por hora no momento.</p>
       </section>
     );
@@ -59,7 +59,7 @@ export const HourlyForecast: FC<HourlyForecastProps> = ({
               {shortHour(formatHourLabel(row.time))}
             </span>
             {getWeatherAnimatedIcon(row.weatherCode, true, 40, getWeatherCategory(row.weatherCode))}
-            
+
             <span className={styles.temp}>
               {Math.round(row.temperature)}
               <span className={styles.tempUnit}>

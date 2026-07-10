@@ -1,7 +1,16 @@
+import { IWeather } from "@/types2/weather.types";
 import axios from "axios";
-import type { WeatherData } from "../types/weather.types";
 
-const url = "https://api.open-meteo.com/v1/forecast?latitude=43.7064&longitude=-79.3986&daily=temperature_2m_max,temperature_2m_min,weather_code&hourly=temperature_2m,precipitation,apparent_temperature,weather_code&current=temperature_2m,apparent_temperature,precipitation,weather_code,is_day&timezone=auto"
+const api = {
+  lat: 43.7064,
+  lon: -79.3986,
+  daily: "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset",
+  hourly: "temperature_2m,precipitation,apparent_temperature,weather_code",
+  current: "temperature_2m,apparent_temperature,precipitation,weather_code,is_day",
+  timezone: "auto"
+}
+
+const url = `https://api.open-meteo.com/v1/forecast?latitude=${api.lat}&longitude=${api.lon}&daily=${api.daily}&hourly=${api.hourly}&current=${api.current}&timezone=${api.timezone}`
 
 /**
  * Placeholder for the real weather request.
@@ -17,12 +26,12 @@ const url = "https://api.open-meteo.com/v1/forecast?latitude=43.7064&longitude=-
 export async function fetchWeather(
   latitude?: number,
   longitude?: number
-): Promise<WeatherData> {
+): Promise<IWeather> {
   // eslint-disable-next-line no-console
   // console.debug("fetchWeather called with", { latitude, longitude });
   // throw new Error("Not implemented.");
 
-  const axiosData = await axios.get<WeatherData>(url);
+  const axiosData = await axios.get<IWeather>(url);
 
   console.log("axiosData", axiosData);
 

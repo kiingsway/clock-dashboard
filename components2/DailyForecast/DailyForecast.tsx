@@ -29,7 +29,7 @@ export function DailyForecast({ daily, dailyUnits, timeZone, locale }: DailyFore
 
   return (
     <section className={styles.section} aria-label={t.nextDays}>
-      <h2 className={styles.heading}>{t.nextDays}</h2>
+      {/* <h2 className={styles.heading}>{t.nextDays}</h2> */}
       <ul className={styles.list}>
         {daily.time.map((iso, i) => {
           const date = new Date(iso);

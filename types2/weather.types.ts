@@ -48,6 +48,8 @@ export interface IDailyUnits {
 
 export interface IDaily {
   time: string[];
+  sunrise: string[];
+  sunset: string[];
   temperature_2m_max: number[];
   temperature_2m_min: number[];
   weather_code: number[];

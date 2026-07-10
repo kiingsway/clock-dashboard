@@ -42,7 +42,7 @@ export function HourlyForecast({
 
   return (
     <section className={styles.section} aria-label={t.nextHours}>
-      <h2 className={styles.heading}>{t.nextHours}</h2>
+      {/* <h2 className={styles.heading}>{t.nextHours}</h2> */}
       <ul className={styles.scroller}>
         {indices.map((i) => {
           const date = new Date(hourly.time[i]);
