@@ -50,7 +50,6 @@ export const HourlyForecast: FC<HourlyForecastProps> = ({
 
   return (
     <section className={styles.section} aria-label="Previsão por hora">
-      <h2 className={styles.heading}>Próximas horas</h2>
       <ul className={styles.list}>
         {rows.map((row) => (
           <li key={row.time} className={styles.card}>

@@ -26,12 +26,6 @@ export const WeatherDashboard: FC<WeatherDashboardProps> = ({
 
   return (
     <div className={`${styles.dashboard} weatherDashboard`} data-daypart={dayPart}>
-      <div className={styles.sky} aria-hidden="true">
-        <div className={`${styles.skyLayer} ${dayPart === "dawn" ? styles.skyLayerActive : ""}`} />
-        <div className={`${styles.skyLayer} ${dayPart === "day" ? styles.skyLayerActive : ""}`} />
-        <div className={`${styles.skyLayer} ${dayPart === "dusk" ? styles.skyLayerActive : ""}`} />
-        <div className={`${styles.skyLayer} ${dayPart === "night" ? styles.skyLayerActive : ""}`} />
-      </div>
 
       <div className={styles.content}>
         <header className={styles.top}>

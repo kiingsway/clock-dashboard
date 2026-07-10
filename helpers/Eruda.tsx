@@ -6,24 +6,20 @@ import { useEffect } from "react";
 export default function Eruda() {
 
     useEffect(() => {
-        alert("executou");
-    }, []);
-
-    useEffect(() => {
-        alert("Eruda component carregou");
+        // alert("Eruda component carregou");
 
         const script = document.createElement("script");
         script.src = "https://cdn.jsdelivr.net/npm/eruda";
 
         script.onload = () => {
-            alert("Script carregou");
+            // alert("Script carregou");
 
             // @ts-ignore
             window.eruda?.init();
         };
 
         script.onerror = () => {
-            alert("Erro carregando Eruda");
+            // alert("Erro carregando Eruda");
         };
 
         document.body.appendChild(script);

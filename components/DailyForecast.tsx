@@ -32,7 +32,6 @@ export const DailyForecast: FC<DailyForecastProps> = ({ daily, units }) => {
 
   return (
     <section className={styles.section} aria-label="Previsão dos próximos dias">
-      <h2 className={styles.heading}>Próximos dias</h2>
       <ul className={styles.list}>
         {rows.map((row) => (
           <li key={row.date} className={styles.card}>

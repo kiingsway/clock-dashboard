@@ -3,7 +3,6 @@
   isolation: isolate;
   min-height: 100%;
   width: 100%;
-  border-radius: var(--wd-radius-lg);
   overflow: hidden;
   font-family: var(--wd-font-body);
   transition: color var(--wd-transition-ambient);
