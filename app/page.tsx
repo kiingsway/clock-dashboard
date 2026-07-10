@@ -1,27 +1,27 @@
 "use client"
 import { fetchWeather } from "@/helpers/fetchWeather";
 import { WeatherClockApp } from "./WeatherClockApp";
-import React from "react";
-import { IWeather } from "@/types2/weather.types";
+import { useWeather } from "@/hooks2/useWeather";
 
 export default function Home() {
+  const { weather, isLoading, error } = useWeather();
 
-  const [weatherData, setWeatherData] = React.useState<IWeather | null>(null);
-
-  React.useEffect(() => {
-    fetchWeather()
-      .then(data => {
-        setWeatherData(data)
-      })
-  }, [])
-
-  if (!weatherData) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <p className="text-2xl">Loading...</p>
       </div>
-    )
+    );
   }
 
-  return <WeatherClockApp weather={weatherData} />;
+  if (error || !weather) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p className="text-2xl">Erro ao carregar o clima.</p>
+        <small>{JSON.stringify(error, null, 2)}</small>
+      </div>
+    );
+  }
+
+  return <WeatherClockApp weather={weather} />;
 }
