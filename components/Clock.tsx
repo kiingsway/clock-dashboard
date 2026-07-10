@@ -17,14 +17,17 @@ export interface ClockProps {
 
 export const Clock: FC<ClockProps> = ({ now }) => {
   const time = formatClock(now);
-  const date = formatDateNoYear(now).toLowerCase();
+  const date = formatDateNoYear(now)
 
   return (
     <div className={styles.clock}>
       <time className={classNames(styles.time, ibmPlexMono.className)} dateTime={now.toISOString()}>
         {time}
       </time>
-      <p className={classNames(styles.date, ibmPlexMono.className)}>{date}</p>
+      <div className={styles.datetime}>
+        <p className={classNames(styles.date, ibmPlexMono.className)}>{date.date}</p>
+        <p className={classNames(styles.date, ibmPlexMono.className)}>{date.weekday}</p>
+      </div>
     </div>
   );
 };

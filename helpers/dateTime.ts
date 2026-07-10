@@ -13,15 +13,18 @@ export function formatClock(date: Date): string {
  * Formats a Date as "weekday, day de month", using the browser locale
  * and deliberately omitting the year.
  */
-export function formatDateNoYear(date: Date, locale?: string): string {
+export function formatDateNoYear(date: Date, locale?: string): { weekday: string, date: string } {
   const resolvedLocale = locale ?? navigator.language;
-  const formatted = new Intl.DateTimeFormat(resolvedLocale, {
+  const weekday = new Intl.DateTimeFormat(resolvedLocale, {
     weekday: "long",
+  }).format(date);
+
+  const d = new Intl.DateTimeFormat(resolvedLocale, {
     day: "numeric",
     month: "long",
   }).format(date);
 
-  return formatted;
+  return { weekday, date: d };
 }
 
 /**
