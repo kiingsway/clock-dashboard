@@ -1,8 +1,13 @@
 .clock {
   display: flex;
-  flex-direction: column;
-  gap: var(--wd-space-1);
+  /* flex-direction: column; */
+  /* gap: var(--wd-space-1); */
   font-variant-numeric: tabular-nums;
+
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .datetime {
@@ -13,7 +18,7 @@
 
 .time {
   font-weight: 600;
-  font-size: clamp(5rem, 9vw, 7rem);
+  font-size: clamp(4.5rem, 9vw, 7rem);
   line-height: 1;
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
@@ -23,7 +28,7 @@
 
 .date {
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.7rem;
   font-weight: 500;
   line-height: 1.2;
   color: #BBB;
