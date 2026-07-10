@@ -5,9 +5,18 @@ import { Clock } from "@/components/Clock";
 import { CurrentWeatherCard } from "@/components/CurrentWeatherCard";
 import { DailyForecast } from "@/components/DailyForecast";
 import { HourlyForecast } from "@/components/HourlyForecast";
-import { getDayPart, formatClock } from "@/helpers/dateTime";
+import { getDayPart, formatClock, formatSmartDate } from "@/helpers/dateTime";
 import { useClock } from "@/helpers/useClock";
 import { useWeatherPolling } from "@/hooks/useWeatherPolling";
+import { LuCloudSun } from "react-icons/lu";
+import { RiDownloadCloud2Line } from "react-icons/ri";
+import { IBM_Plex_Mono } from "next/font/google";
+import classNames from "classnames";
+
+const ibmPlexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export interface WeatherDashboardProps {
   /** Location to request weather for. Defaults to (0, 0) as a placeholder
@@ -39,9 +48,16 @@ export const WeatherDashboard: FC<WeatherDashboardProps> = ({
                   min={request.data.daily.temperature_2m_min[0]}
                   max={request.data.daily.temperature_2m_max[0]}
                 />
-                <p className={styles.updatedAt}>
-                  Atualizado às {formatClock(request.updatedAt)}
-                </p>
+                <div className={classNames(styles.updatedAt, ibmPlexMono.className)}>
+                  <span>
+                    <LuCloudSun fontSize={12} />
+                    {formatSmartDate(request.data.current.time)}
+                  </span>
+                  <span>
+                    <RiDownloadCloud2Line fontSize={12} />
+                    {formatSmartDate(request.updatedAt)}
+                  </span>
+                </div>
               </>
             )}
             {request.status === "loading" && (

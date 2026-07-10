@@ -82,6 +82,21 @@
   transition: color var(--wd-transition-ambient);
 }
 
+.updatedAt {
+  display: flex;
+  flex-direction: row;
+  gap: var(--wd-space-3);
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.updatedAt span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--wd-space-1);
+}
+
 @media (min-width: 720px) {
   .content {
     padding: var(--wd-space-5);

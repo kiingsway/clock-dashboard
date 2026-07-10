@@ -9,6 +9,28 @@ export function formatClock(date: Date): string {
   return `${hours}:${minutes}`;
 }
 
+export function formatSmartDate(input: string | Date): string {
+  const date = input instanceof Date ? input : new Date(input);
+
+  const now = new Date();
+  const isSameDay =
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+
+  const pad = (n: number) => String(n).padStart(2, "0");
+
+  const hhmm = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
+
+  if (isSameDay) {
+    return hhmm;
+  }
+
+  const ddmmyyyy = `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}`;
+  return `${ddmmyyyy} ${hhmm}`;
+}
+
+
 /**
  * Formats a Date as "weekday, day de month", using the browser locale
  * and deliberately omitting the year.
