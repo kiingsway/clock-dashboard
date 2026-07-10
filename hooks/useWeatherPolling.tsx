@@ -38,7 +38,7 @@ export function useWeatherPolling(
 
   const load = useCallback(async () => {
     try {
-      const data = await fetchWeather(latitude, longitude);
+      const data = await fetchWeather(latitude, longitude) as WeatherData;
       if (!isMountedRef.current) return;
       lastFetchAtRef.current = Date.now();
       setRequest({ status: "ready", data, updatedAt: new Date() });
