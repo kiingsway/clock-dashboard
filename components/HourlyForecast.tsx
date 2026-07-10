@@ -56,13 +56,17 @@ export const HourlyForecast: FC<HourlyForecastProps> = ({
         {rows.map((row) => (
           <li key={row.time} className={styles.card}>
             <span className={classNames(styles.hour, ibmPlexMono.className)}>
-              {formatHourLabel(row.time)}
+              {shortHour(formatHourLabel(row.time))}
             </span>
             {getWeatherAnimatedIcon(row.weatherCode, true, 40, getWeatherCategory(row.weatherCode))}
+            
             <span className={styles.temp}>
               {Math.round(row.temperature)}
-              {units.temperature_2m}
+              <span className={styles.tempUnit}>
+                {units.temperature_2m}
+              </span>
             </span>
+
             <span className={styles.feelsLike}>
               Feels {Math.round(row.apparentTemperature)}
               {units.apparent_temperature}
@@ -77,3 +81,8 @@ export const HourlyForecast: FC<HourlyForecastProps> = ({
     </section>
   );
 };
+
+function shortHour(hhmm: string) {
+  const [hour, minute] = hhmm.split(':');
+  return minute === '00' ? `${hour}h` : `${hour}h${minute}`;
+}

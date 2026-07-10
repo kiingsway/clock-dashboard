@@ -44,10 +44,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1px;
+  gap: 4px;
   min-width: 84px;
   padding: var(--wd-space-2) var(--wd-space-2);
-  border-radius: var(--wd-radius-md);
+  border-radius: var(--wd-radius-sm);
   background-color: #131a21;
   box-shadow: var(--wd-shadow-sm);
   backdrop-filter: blur(14px);
@@ -63,7 +63,7 @@
 }
 
 .hour {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #BBB;
 }
@@ -74,14 +74,24 @@
 
 .temp {
   font-family: var(--wd-font-display);
+  font-size: 1.5rem;
+  color: #CCC;
+
+  display: flex;
+  align-items: flex-start;
   font-weight: 600;
-  font-size: 1.1rem;
-  color: #DDD;
+  line-height: 1;
+}
+
+.tempUnit {
+  font-size: 0.45em;
+  margin-left: 0.08em;
+  font-weight: 500;
 }
 
 .feelsLike,
 .precipitation {
   font-size: 0.775rem;
-  color: var(--wd-muted);
+  color: #AAA;
   text-align: center;
 }
