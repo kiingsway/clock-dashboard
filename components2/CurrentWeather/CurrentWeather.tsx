@@ -2,8 +2,9 @@
 import { IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types2/weather.types";
 import styles from "./CurrentWeather.module.css";
 import { getWeatherCategory, getWeatherAnimatedIcon, getSunIcon } from "@/utils/weatherIcons";
-import { formatClockTime, getSunProgress } from "@/utils/formatters";
+import { formatClockTime, getSunWindow } from "@/utils/formatters";
 import { getDictionary } from "@/utils/i18n";
+import { CSSProperties } from "react";
 
 export interface CurrentWeatherProps {
   current: IWeatherCurrent;
@@ -13,9 +14,9 @@ export interface CurrentWeatherProps {
   /** Today's low, taken from `daily.temperature_2m_min[0]`. */
   todayMin: number;
   /** Today's sunrise, taken from `daily.sunrise[0]` (ISO 8601). */
-  sunrise: string;
+  sunrises: string[];
   /** Today's sunset, taken from `daily.sunset[0]` (ISO 8601). */
-  sunset: string;
+  sunsets: string[];
   locale: SupportedLocale;
   timeZone?: string;
 }
@@ -32,8 +33,8 @@ export function CurrentWeather({
   currentUnits,
   todayMax,
   todayMin,
-  sunrise,
-  sunset,
+  sunrises,
+  sunsets,
   locale,
   timeZone,
 }: CurrentWeatherProps) {
@@ -44,9 +45,15 @@ export function CurrentWeather({
   const tempUnit = currentUnits.temperature_2m;
   const precipUnit = currentUnits.precipitation;
   const hasPrecipitation = current.precipitation > 0;
-  const sunProgress = getSunProgress(current.time, sunrise, sunset);
-  const sunriseLabel = formatClockTime(new Date(sunrise), timeZone);
-  const sunsetLabel = formatClockTime(new Date(sunset), timeZone);
+
+  const sunWindow = getSunWindow(current.time, sunrises, sunsets);
+  const startLabel = formatClockTime(sunWindow.start, timeZone);
+  const endLabel = formatClockTime(sunWindow.end, timeZone);
+
+  const sunTrackColor = isDay ? "#F4B860" : "#2944bd";
+  const sunTrackStyle = {
+    "--wc-accent": sunTrackColor,
+  } as CSSProperties;
 
   return (
     <section className={styles.current} aria-label="Clima atual">
@@ -79,20 +86,24 @@ export function CurrentWeather({
         </div>
       </dl>
 
-      <div className={styles.sunArc} aria-label={`${t.sunrise} ${sunriseLabel}, ${t.sunset} ${sunsetLabel}`}>
+      <div className={styles.sunArc} aria-label={`${t[sunWindow.startKind]} ${startLabel}, ${t[sunWindow.endKind]} ${endLabel}`}>
         <div className={styles.sunPoint}>
-          {getSunIcon("sunrise", 18)}
-          <span>{sunriseLabel}</span>
+          {getSunIcon(sunWindow.startKind, 18)}
+          <span>{startLabel}</span>
         </div>
 
-        <div className={styles.sunTrack} aria-hidden="true">
-          <div className={styles.sunTrackFill} style={{ width: `${sunProgress * 100}%` }} />
-          <div className={styles.sunMarker} style={{ left: `${sunProgress * 100}%` }} />
+        <div
+          className={styles.sunTrack}
+          aria-hidden="true"
+          style={sunTrackStyle}
+        >
+          <div className={styles.sunTrackFill} style={{ width: `${sunWindow.progress * 100}%` }} />
+          <div className={styles.sunMarker} style={{ left: `${sunWindow.progress * 100}%` }} />
         </div>
 
         <div className={styles.sunPoint}>
-          {getSunIcon("sunset", 18)}
-          <span>{sunsetLabel}</span>
+          {getSunIcon(sunWindow.endKind, 18)}
+          <span>{endLabel}</span>
         </div>
       </div>
     </section>

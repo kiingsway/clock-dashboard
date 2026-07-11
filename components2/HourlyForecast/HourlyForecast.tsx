@@ -1,7 +1,7 @@
 import { IHourly, IHourlyUnits, SupportedLocale } from "@/types2/weather.types";
 import styles from "./HourlyForecast.module.css";
 import { getDictionary } from "@/utils/i18n";
-import { formatHourLabel, inferIsDayFromHour, isDaytimeBySunrises, isSameHour } from "@/utils/formatters";
+import { formatHourLabel, isDaytimeBySunrises, isSameHour } from "@/utils/formatters";
 import { getWeatherAnimatedIcon } from "@/utils/weatherIcons";
 
 export interface HourlyForecastProps {
@@ -50,7 +50,6 @@ export function HourlyForecast({
         {indices.map((i) => {
           const date = new Date(hourly.time[i]);
           const isNow = isSameHour(date, now, timeZone);
-          // const isDay = inferIsDayFromHour(date, timeZone);
           const isDay = isDaytimeBySunrises(date, sunrises, sunsets);
           const precip = hourly.precipitation[i];
 

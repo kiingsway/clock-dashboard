@@ -27,12 +27,13 @@ export function DailyForecast({ daily, dailyUnits, timeZone, locale }: DailyFore
   const weekMax = Math.max(...daily.temperature_2m_max);
   const span = weekMax - weekMin || 1;
 
+  const onDebugClick = () => console.log("Daily forecast data:", { daily, dailyUnits, timeZone, locale });
+
   return (
-    <section className={styles.section} aria-label={t.nextDays}>
-      {/* <h2 className={styles.heading}>{t.nextDays}</h2> */}
+    <section className={styles.section} aria-label={t.nextDays} onDoubleClick={onDebugClick}>
       <ul className={styles.list}>
         {daily.time.map((iso, i) => {
-          const date = new Date(iso);
+          const date = new Date(iso.includes("T") ? iso : `${iso}T00:00:00`);
           const dayMin = daily.temperature_2m_min[i];
           const dayMax = daily.temperature_2m_max[i];
           const left = ((dayMin - weekMin) / span) * 100;

@@ -83,6 +83,64 @@ export function inferIsDayFromHour(date: Date, timeZone?: string): boolean {
   return hour >= 6 && hour < 18;
 }
 
+export interface SunWindow {
+  start: Date;
+  end: Date;
+  startKind: "sunrise" | "sunset";
+  endKind: "sunrise" | "sunset";
+  /** 0–1 position of `currentTime` between `start` and `end`. */
+  progress: number;
+}
+
+/**
+ * Works out which stretch of the sun cycle "now" is in, and how far through
+ * it we are — so the track always shows a *forward* span:
+ *  - during the day: sunrise → today's sunset
+ *  - during the night: sunset → tomorrow's sunrise
+ *  - in the early hours before today's sunrise: last night's sunset → today's sunrise
+ *
+ * `sunriseTimes` / `sunsetTimes` only need today's entry to work; a second
+ * entry (tomorrow) makes the after-sunset case exact instead of a ±24h
+ * estimate, and there's no equivalent "yesterday" entry available from the
+ * API, so the before-sunrise case always estimates from today's sunset.
+ */
+export function getSunWindow(currentTime: string, sunriseTimes: string[], sunsetTimes: string[]): SunWindow {
+  const DAY_MS = 86_400_000;
+  const now = new Date(currentTime).getTime();
+  // const now = new Date(currentTime).getTime() - 2 * 60 * 60 * 1000;
+  const todaySunrise = new Date(sunriseTimes[0]).getTime();
+  const todaySunset = new Date(sunsetTimes[0]).getTime();
+
+  if (now < todaySunrise) {
+    // Still dark before today's sunrise — no "yesterday" entry is available,
+    // so last night's sunset is estimated as 24h before today's sunset.
+    return buildSunWindow(now, todaySunset - DAY_MS, todaySunrise, "sunset", "sunrise");
+  }
+
+  if (now <= todaySunset) {
+    return buildSunWindow(now, todaySunrise, todaySunset, "sunrise", "sunset");
+  }
+
+  const tomorrowSunrise = sunriseTimes.length > 1 ? new Date(sunriseTimes[1]).getTime() : todaySunrise + DAY_MS;
+  return buildSunWindow(now, todaySunset, tomorrowSunrise, "sunset", "sunrise");
+}
+
+function buildSunWindow(
+  now: number,
+  start: number,
+  end: number,
+  startKind: "sunrise" | "sunset",
+  endKind: "sunrise" | "sunset"
+): SunWindow {
+  const progress = end <= start ? 0 : Math.min(1, Math.max(0, (now - start) / (end - start)));
+  return { start: new Date(start), end: new Date(end), startKind, endKind, progress };
+}
+
+function capitalize(text: string): string {
+  if (!text) return text;
+  return text.charAt(0).toLocaleUpperCase() + text.slice(1);
+}
+
 export function isDaytimeBySunrises(
   date: Date,
   sunrises: string[],
@@ -112,24 +170,4 @@ export function isDaytimeBySunrises(
   const sunset = new Date(sunsets[index]);
 
   return date >= sunrise && date < sunset;
-}
-
-/**
- * How far `current.time` sits between sunrise and sunset, clamped to
- * [0, 1]. Used to place the marker on the sunrise→sunset track. Pinned to
- * 0 or 1 outside daylight hours rather than extrapolated, since "how far
- * past sunset" isn't a meaningful position on a track that represents the
- * daylight span.
- */
-export function getSunProgress(currentTime: string, sunrise: string, sunset: string): number {
-  const now = new Date(currentTime).getTime();
-  const rise = new Date(sunrise).getTime();
-  const set = new Date(sunset).getTime();
-  if (set <= rise) return 0;
-  return Math.min(1, Math.max(0, (now - rise) / (set - rise)));
-}
-
-function capitalize(text: string): string {
-  if (!text) return text;
-  return text.charAt(0).toLocaleUpperCase() + text.slice(1);
 }

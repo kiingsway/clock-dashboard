@@ -162,8 +162,8 @@
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: 2px;
-  background: var(--wc-accent);
   opacity: 0.55;
+  background: var(--wc-accent);
 }
 
 .sunMarker {
