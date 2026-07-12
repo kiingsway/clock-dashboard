@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  justify-content: center;
+}
+
+.location {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: var(--wc-font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--wc-text-faint);
+}
+
+.pin {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}

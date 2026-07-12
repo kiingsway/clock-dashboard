@@ -1,8 +1,8 @@
-import { getDictionary } from "@/utils/i18n";
 import styles from "./DailyForecast.module.css";
 import { getWeatherAnimatedIcon } from "@/utils/weatherIcons";
 import { SupportedLocale, IDaily, IDailyUnits } from "@/types2/weather.types";
 import { formatWeekdayShort } from "@/utils/formatters";
+import { useTranslation } from "react-i18next";
 
 export interface DailyForecastProps {
   daily: IDaily;
@@ -19,7 +19,7 @@ export interface DailyForecastProps {
  * in the week, not just its two numbers.
  */
 export function DailyForecast({ daily, dailyUnits, timeZone, locale }: DailyForecastProps) {
-  const t = getDictionary(locale);
+  const { t } = useTranslation();
 
   if (daily.time.length === 0) return null;
 
@@ -27,10 +27,10 @@ export function DailyForecast({ daily, dailyUnits, timeZone, locale }: DailyFore
   const weekMax = Math.max(...daily.temperature_2m_max);
   const span = weekMax - weekMin || 1;
 
-  const onDebugClick = () => console.log("Daily forecast data:", { daily, dailyUnits, timeZone, locale });
+  const onDebugClick = () => console.info("Daily forecast data:", { daily, dailyUnits, timeZone, locale });
 
   return (
-    <section className={styles.section} aria-label={t.nextDays} onDoubleClick={onDebugClick}>
+    <section className={styles.section} aria-label={t('nextDays')} onDoubleClick={onDebugClick}>
       <ul className={styles.list}>
         {daily.time.map((iso, i) => {
           const date = new Date(iso.includes("T") ? iso : `${iso}T00:00:00`);
@@ -41,7 +41,7 @@ export function DailyForecast({ daily, dailyUnits, timeZone, locale }: DailyFore
 
           return (
             <li key={iso} className={styles.row}>
-              <span className={styles.weekday}>{i === 0 ? t.today : formatWeekdayShort(date, locale, timeZone)}</span>
+              <span className={styles.weekday}>{i === 0 ? t('today') : formatWeekdayShort(date, locale, timeZone)}</span>
               <span className={styles.icon}>{getWeatherAnimatedIcon(daily.weather_code[i], true, 28)}</span>
               <span className={styles.minLabel}>
                 {Math.round(dayMin)}

@@ -1,8 +1,8 @@
 import { IHourly, IHourlyUnits, SupportedLocale } from "@/types2/weather.types";
 import styles from "./HourlyForecast.module.css";
-import { getDictionary } from "@/utils/i18n";
 import { formatHourLabel, isDaytimeBySunrises, isSameHour } from "@/utils/formatters";
 import { getWeatherAnimatedIcon } from "@/utils/weatherIcons";
+import { useTranslation } from "react-i18next";
 
 export interface HourlyForecastProps {
   hourly: IHourly;
@@ -32,7 +32,7 @@ export function HourlyForecast({
   sunsets,
   hoursToShow = 24,
 }: HourlyForecastProps) {
-  const t = getDictionary(locale);
+  const { t } = useTranslation();
   const now = new Date(currentTime);
 
   const startIndex = Math.max(
@@ -45,7 +45,7 @@ export function HourlyForecast({
   if (indices.length === 0) return null;
 
   return (
-    <section className={styles.section} aria-label={t.nextHours}>
+    <section className={styles.section} aria-label={t('nextHours')}>
       <ul className={styles.scroller}>
         {indices.map((i) => {
           const date = new Date(hourly.time[i]);
@@ -55,7 +55,7 @@ export function HourlyForecast({
 
           return (
             <li key={hourly.time[i]} className={styles.card}>
-              <span className={styles.hour}>{isNow ? t.now : formatHourLabel(date, locale, timeZone)}</span>
+              <span className={styles.hour}>{isNow ? t('now') : formatHourLabel(date, locale, timeZone)}</span>
               <span className={styles.icon}>{getWeatherAnimatedIcon(hourly.weather_code[i], isDay, 34)}</span>
               <span className={styles.temp}>
                 {Math.round(hourly.temperature_2m[i])}

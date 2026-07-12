@@ -1,0 +1,55 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 2px;
+}
+
+.row label,
+.staticLabel {
+  font-family: var(--wc-font-body);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--wc-text-muted);
+}
+
+.divider {
+  height: 1px;
+  background: var(--wc-hairline);
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 132px;
+  font-family: var(--wc-font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wc-text);
+  background: var(--wc-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238892a4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+    no-repeat right 12px center;
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-sm);
+  padding: 8px 30px 8px 12px;
+  text-align: right;
+  text-align-last: right;
+}
+
+.select:focus-visible {
+  outline: 2px solid var(--wc-accent);
+  outline-offset: 1px;
+}
+
+.staticValue {
+  font-family: var(--wc-font-body);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wc-text);
+  font-variant-numeric: tabular-nums;
+}

@@ -84,4 +84,11 @@ export type WeatherCategory =
   | "snow"
   | "showers"
   | "thunderstorm"
-  | "unknown";
+  | "unknown"
+  | "error"
+  | "loading";
+
+export interface SelectOption {
+  value: string;
+  label: string;
+}

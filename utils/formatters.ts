@@ -19,7 +19,7 @@ export function formatClockTime(date: Date, timeZone?: string): string {
 }
 
 /** "10 de julho" (pt-BR) or "July 10" (en-US) — no year, locale-native ordering. */
-export function formatLongDate(date: Date, locale: SupportedLocale, timeZone?: string): string {
+export function formatLongDate(date: Date, locale: string, timeZone?: string): string {
   return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
@@ -28,13 +28,13 @@ export function formatLongDate(date: Date, locale: SupportedLocale, timeZone?: s
 }
 
 /** Full weekday name, capitalized ("Sexta-feira" / "Friday"). */
-export function formatWeekdayLong(date: Date, locale: SupportedLocale, timeZone?: string): string {
+export function formatWeekdayLong(date: Date, locale: string, timeZone?: string): string {
   const weekday = new Intl.DateTimeFormat(locale, { weekday: "long", timeZone }).format(date);
   return capitalize(weekday);
 }
 
 /** Short weekday name for compact rows ("qui" / "Thu"). */
-export function formatWeekdayShort(date: Date, locale: SupportedLocale, timeZone?: string): string {
+export function formatWeekdayShort(date: Date, locale: string, timeZone?: string): string {
   const weekday = new Intl.DateTimeFormat(locale, { weekday: "short", timeZone }).format(date);
   return capitalize(weekday.replace(".", ""));
 }
@@ -44,18 +44,37 @@ export function formatWeekdayShort(date: Date, locale: SupportedLocale, timeZone
  * than left to `Intl`'s locale defaults, whose "h" suffix for pt-BR varies
  * across ICU/browser versions — this keeps the output consistent everywhere.
  */
-export function formatHourLabel(date: Date, locale: SupportedLocale, timeZone?: string): string {
+export function formatHourLabel(date: Date, locale: string, timeZone?: string): string {
   const hour24 = Number(
     new Intl.DateTimeFormat("en-GB", { hour: "2-digit", hour12: false, timeZone }).format(date)
   );
 
-  if (locale === "pt-BR") {
-    return `${String(hour24).padStart(2, "0")}h`;
-  }
+  // Normaliza o locale caso venha com região (ex: "pt-BR" -> "pt")
+  const lang = locale.split('-')[0];
 
-  const period = hour24 < 12 ? "AM" : "PM";
-  const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
-  return `${hour12} ${period}`;
+  switch (lang) {
+    case 'pt':
+      return `${hour24}h`;
+
+    case 'fr':
+      return `${hour24} h`;
+
+    case 'es':
+      return `${hour24}:00`; // Espanhol geralmente usa o formato 24h completo
+
+    case 'ko': {
+      const period = hour24 < 12 ? "오전" : "오후";
+      const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+      return `${period} ${hour12}시`;
+    }
+
+    case 'en':
+    default: {
+      const period = hour24 < 12 ? "AM" : "PM";
+      const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+      return `${hour12} ${period}`;
+    }
+  }
 }
 
 /** "Agora" / "Now" label used on the first hourly card when it matches the current hour. */
@@ -170,4 +189,29 @@ export function isDaytimeBySunrises(
   const sunset = new Date(sunsets[index]);
 
   return date >= sunrise && date < sunset;
+}
+
+export function formatIsoTime(isoString: string): string {
+  const date = new Date(isoString);
+  const now = new Date();
+
+  const isToday =
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+
+  const pad = (num: number): string => String(num).padStart(2, '0');
+
+  const hours = pad(date.getHours());
+  const minutes = pad(date.getMinutes());
+
+  if (isToday) {
+    return `${hours}:${minutes}`;
+  }
+
+  const day = pad(date.getDate());
+  const month = pad(date.getMonth() + 1);
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
 }

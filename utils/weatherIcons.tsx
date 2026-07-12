@@ -12,11 +12,13 @@ const ICON_FILES = {
   drizzle: "drizzle.svg",
   rain: "rain.svg",
   snow: "snow.svg",
-  showers: "showers.svg",
-  thunderstorm: "thunderstorm.svg",
-  unknown: "uv-index-alert.svg",
+  showers: "overcast-rain.svg",
+  thunderstorm: "thunderstorms.svg",
   sunrise: "sunrise.svg",
   sunset: "sunset.svg",
+  unknown: "uv-index-alert.svg",
+  error: 'code-red.svg',
+  loading: 'wind-spinner.svg',
 } as const;
 
 /**
@@ -34,6 +36,9 @@ export function getWeatherCategory(weatherCode: number): WeatherCategory {
   if (weatherCode >= 80 && weatherCode <= 82) return "showers";
   if (weatherCode >= 85 && weatherCode <= 86) return "snow";
   if (weatherCode >= 95 && weatherCode <= 99) return "thunderstorm";
+
+  if (weatherCode === -1) return 'error'
+  if (weatherCode === -2) return 'loading'
   return "unknown";
 }
 
@@ -68,6 +73,10 @@ export function getWeatherAnimatedIcon(
         return ICON_FILES.showers;
       case "thunderstorm":
         return ICON_FILES.thunderstorm;
+      case "error":
+        return ICON_FILES.error;
+      case "loading":
+        return ICON_FILES.loading;
       default:
         return ICON_FILES.unknown;
     }

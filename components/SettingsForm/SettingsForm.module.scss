@@ -1,0 +1,48 @@
+.container {
+  width: 100%;
+  max-width: 480px; 
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+
+  label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333333;
+  }
+
+  span {
+    color: #666666;
+  }
+
+  select {
+    font-size: 15px;
+    color: #666666;
+    padding: 6px 10px;
+    border: 1px solid #cccccc;
+    border-radius: 6px;
+    background-color: #fafafa;
+    max-width: 60%;
+    cursor: pointer;
+    transition: border-color 0.2s;
+
+    &:focus {
+      outline: none;
+      border-color: #0070f3;
+    }
+  }
+}

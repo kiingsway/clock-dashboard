@@ -30,7 +30,7 @@ export const CurrentWeatherCard: FC<CurrentWeatherCardProps> = ({
 }) => {
   const category = getWeatherCategory(current.weather_code);
 
-  const onDebugClick = () => console.log('Current Weather', { ...current, category });
+  const onDebugClick = () => console.info('Current Weather', { ...current, category });
 
   return (
     <section className={styles.card} aria-label="Condições atuais" onClick={onDebugClick}>

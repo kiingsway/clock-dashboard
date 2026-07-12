@@ -2,15 +2,12 @@ import { IWeather } from "@/types2/weather.types";
 import axios from "axios";
 
 const api = {
-  lat: 43.7064,
-  lon: -79.3986,
   daily: "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset",
   hourly: "temperature_2m,precipitation,apparent_temperature,weather_code",
   current: "temperature_2m,apparent_temperature,precipitation,weather_code,is_day",
   timezone: "auto"
 }
 
-const url = `https://api.open-meteo.com/v1/forecast?latitude=${api.lat}&longitude=${api.lon}&daily=${api.daily}&hourly=${api.hourly}&current=${api.current}&timezone=${api.timezone}`
 
 /**
  * Placeholder for the real weather request.
@@ -19,17 +16,21 @@ const url = `https://api.open-meteo.com/v1/forecast?latitude=${api.lat}&longitud
  * only the seam the rest of the dashboard is built against. Swap the body
  * for a real `fetch`/`axios` call (e.g. to Open-Meteo) once an API is
  * chosen; the return type is already the shape every component expects.
- *
- * @param latitude  - Latitude of the location to fetch weather for.
- * @param longitude - Longitude of the location to fetch weather for.
+*
+* @param latitude  - Latitude of the location to fetch weather for.
+* @param longitude - Longitude of the location to fetch weather for.
  */
 export async function fetchWeather(
   latitude?: number,
   longitude?: number
 ): Promise<IWeather> {
-  // eslint-disable-next-line no-console
-  // console.debug("fetchWeather called with", { latitude, longitude });
-  // throw new Error("Not implemented.");
+  const url = 'https://api.open-meteo.com/v1/forecast?' +
+    `latitude=${latitude}&` +
+    `longitude=${longitude}&` +
+    `daily=${api.daily}&` +
+    `hourly=${api.hourly}&` +
+    `current=${api.current}&` +
+    `timezone=${api.timezone}`;
 
   const axiosData = await axios.get<IWeather>(url);
 
