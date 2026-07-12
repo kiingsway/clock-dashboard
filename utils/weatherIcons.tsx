@@ -1,4 +1,4 @@
-import { WeatherCategory } from "@/types2/weather.types";
+import { WeatherCategory } from "@/types/weather.types";
 import type { ReactNode } from "react";
 
 const ICON_BASE_URI = "https://cdn.meteocons.com/3.0.0-next.10/svg/fill/";

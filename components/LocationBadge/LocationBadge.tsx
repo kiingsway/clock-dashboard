@@ -2,7 +2,7 @@ import { FiMapPin } from "react-icons/fi";
 import styles from "./LocationBadge.module.css";
 import { useState } from "react";
 import { SettingsModal } from "../SettingsModal/SettingsModal";
-import { UseAppSettingsReturn } from "@/hooks2/useAppSettings";
+import { UseAppSettingsReturn } from "@/hooks/useAppSettings";
 
 export interface LocationBadgeProps {
   /**

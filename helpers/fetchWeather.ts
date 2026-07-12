@@ -1,4 +1,4 @@
-import { IWeather } from "@/types2/weather.types";
+import { IWeather } from "@/types/weather.types";
 import axios from "axios";
 
 const api = {

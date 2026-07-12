@@ -1,4 +1,4 @@
-import { IHourly, IHourlyUnits, SupportedLocale } from "@/types2/weather.types";
+import { IHourly, IHourlyUnits, SupportedLocale } from "@/types/weather.types";
 import styles from "./HourlyForecast.module.css";
 import { formatHourLabel, isDaytimeBySunrises, isSameHour } from "@/utils/formatters";
 import { getWeatherAnimatedIcon } from "@/utils/weatherIcons";

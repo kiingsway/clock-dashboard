@@ -2,7 +2,7 @@ import { formatClockTime } from "@/utils/formatters";
 import { Modal } from "./Modal/Modal";
 import styles from "./SettingsModal.module.css";
 import { useTranslation } from "react-i18next";
-import { LOCATION_OPTIONS, UseAppSettingsReturn, Location } from "@/hooks2/useAppSettings";
+import { LOCATION_OPTIONS, UseAppSettingsReturn, Location } from "@/hooks/useAppSettings";
 
 export interface SettingsModalProps {
   open: boolean;

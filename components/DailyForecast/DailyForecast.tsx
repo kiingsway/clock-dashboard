@@ -1,6 +1,6 @@
 import styles from "./DailyForecast.module.css";
 import { getWeatherAnimatedIcon } from "@/utils/weatherIcons";
-import { SupportedLocale, IDaily, IDailyUnits } from "@/types2/weather.types";
+import { SupportedLocale, IDaily, IDailyUnits } from "@/types/weather.types";
 import { formatWeekdayShort } from "@/utils/formatters";
 import { useTranslation } from "react-i18next";
 

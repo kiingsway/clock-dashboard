@@ -1,5 +1,5 @@
 
-import { IWeather, IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types2/weather.types";
+import { IWeather, IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types/weather.types";
 import styles from "./CurrentWeather.module.css";
 import { getWeatherCategory, getWeatherAnimatedIcon, getSunIcon } from "@/utils/weatherIcons";
 import { formatClockTime, getSunWindow } from "@/utils/formatters";

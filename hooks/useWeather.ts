@@ -1,5 +1,5 @@
 import { fetchWeather } from "@/helpers/fetchWeather";
-import { IWeather } from "@/types2/weather.types";
+import { IWeather } from "@/types/weather.types";
 import useSWR from "swr";
 
 export function useWeather(latitude?: number, longitude?: number) {

@@ -1,18 +1,18 @@
-import { IWeather, SupportedLocale } from "@/types2/weather.types";
-import "../styles2/tokens.css";
+import { IWeather, SupportedLocale } from "@/types/weather.types";
+import "../styles/tokens.css";
 import styles from "./WeatherClockApp.module.css";
-import { CurrentWeather } from "@/components2/CurrentWeather/CurrentWeather";
+import { CurrentWeather } from "@/components/CurrentWeather/CurrentWeather";
 import { getAccentColor, getWeatherCategory } from "@/utils/weatherIcons";
-import { Clock } from "@/components2/Clock/Clock";
-import { HourlyForecast } from "@/components2/HourlyForecast/HourlyForecast";
-import { DailyForecast } from "@/components2/DailyForecast/DailyForecast";
-import { useWeather } from "@/hooks2/useWeather";
+import { Clock } from "@/components/Clock/Clock";
+import { HourlyForecast } from "@/components/HourlyForecast/HourlyForecast";
+import { DailyForecast } from "@/components/DailyForecast/DailyForecast";
+import { useWeather } from "@/hooks/useWeather";
 import { type JSX } from "react";
 import classNames from "classnames";
-import { useAppSettings } from "@/hooks2/useAppSettings";
+import { useAppSettings } from "@/hooks/useAppSettings";
 import { useTranslation } from "react-i18next";
-import { LocationBadge } from "@/components2/LocationBadge/LocationBadge";
-import { useAutoScrollToTop } from "@/hooks2/useAutoScrollToTop";
+import { LocationBadge } from "@/components/LocationBadge/LocationBadge";
+import { useAutoScrollToTop } from "@/hooks/useAutoScrollToTop";
 
 /**
  * Mobile, always-dark clock + weather screen. Designed to be read at a

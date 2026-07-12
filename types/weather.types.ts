@@ -1,16 +1,15 @@
 /**
- * Types describing the shape of weather data consumed by the dashboard.
- * Modeled after the Open-Meteo forecast response, but intentionally
- * decoupled from any single provider so the fetch layer can be swapped
- * out later without touching the components.
+ * Types describing the Open-Meteo-style payload consumed by the weather clock app.
+ * These mirror the shape the host app already fetches, so components take this
+ * data as props and never fetch or convert it themselves.
  */
 
 export interface IWeatherUnits {
   time: "iso8601";
   interval: "seconds";
-  temperature_2m: "°C";
-  apparent_temperature: "°C";
-  precipitation: "mm";
+  temperature_2m: "°C" | "°F";
+  apparent_temperature: "°C" | "°F";
+  precipitation: "mm" | "inch";
   weather_code: "wmo code";
 }
 
@@ -26,9 +25,9 @@ export interface IWeatherCurrent {
 
 export interface IHourlyUnits {
   time: "iso8601";
-  temperature_2m: "°C";
-  precipitation: "mm";
-  apparent_temperature: "°C";
+  temperature_2m: "°C" | "°F";
+  precipitation: "mm" | "inch";
+  apparent_temperature: "°C" | "°F";
   weather_code: "wmo code";
 }
 
@@ -42,13 +41,15 @@ export interface IHourly {
 
 export interface IDailyUnits {
   time: "iso8601";
-  temperature_2m_max: "°C";
-  temperature_2m_min: "°C";
+  temperature_2m_max: "°C" | "°F";
+  temperature_2m_min: "°C" | "°F";
   weather_code: "wmo code";
 }
 
 export interface IDaily {
   time: string[];
+  sunrise: string[];
+  sunset: string[];
   temperature_2m_max: number[];
   temperature_2m_min: number[];
   weather_code: number[];
@@ -70,22 +71,24 @@ export interface IWeather {
   daily: IDaily;
 }
 
-/** Alias kept for readability at call sites / future API layer. */
-export type WeatherData = IWeather;
+/** Supported UI languages. Extend here if the host app adds more locales. */
+export type SupportedLocale = "pt-BR" | "en-US";
 
-/** A single normalized hour, derived from IHourly for easy rendering. */
-export interface IHourlyEntry {
-  time: string;
-  temperature: number;
-  apparentTemperature: number;
-  precipitation: number;
-  weatherCode: number;
-}
+/** Grouped WMO weather-code buckets used for both icon selection and the ambient glow accent. */
+export type WeatherCategory =
+  | "clear"
+  | "cloudy"
+  | "fog"
+  | "drizzle"
+  | "rain"
+  | "snow"
+  | "showers"
+  | "thunderstorm"
+  | "unknown"
+  | "error"
+  | "loading";
 
-/** A single normalized day, derived from IDaily for easy rendering. */
-export interface IDailyEntry {
-  date: string;
-  temperatureMax: number;
-  temperatureMin: number;
-  weatherCode: number;
+export interface SelectOption {
+  value: string;
+  label: string;
 }
