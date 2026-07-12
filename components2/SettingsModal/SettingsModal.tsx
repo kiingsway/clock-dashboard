@@ -74,15 +74,11 @@ export function SettingsModal({ open, onClose, settings, timeZone, updatedAt }: 
           </select>
         </div>
 
-        {updatedAt && (
-          <>
-            <div className={styles.divider} />
-            <div className={styles.row}>
-              <span className={styles.staticLabel}>{t('updatedAt')}</span>
-              <span className={styles.staticValue}>{formatClockTime(new Date(updatedAt), timeZone)}</span>
-            </div>
-          </>
-        )}
+        <div className={styles.divider} />
+        <div className={styles.row}>
+          <span className={styles.staticLabel}>{t('updatedAt')}</span>
+          <span className={styles.staticValue}>{!updatedAt ? '-' : formatClockTime(new Date(updatedAt), timeZone)}</span>
+        </div>
       </form>
     </Modal>
   );
