@@ -32,9 +32,5 @@ export async function fetchWeather(
     `current=${api.current}&` +
     `timezone=${api.timezone}`;
 
-  const axiosData = await axios.get<IWeather>(url);
-
-  console.log("axiosData", axiosData);
-
-  return axiosData.data
+  return (await axios.get<IWeather>(url)).data
 }

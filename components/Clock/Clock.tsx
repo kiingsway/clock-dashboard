@@ -18,26 +18,27 @@ export interface ClockProps {
  */
 export function Clock({ timezone }: ClockProps) {
   const { i18n } = useTranslation();
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState<Date>();
 
   useEffect(() => {
+    setNow(new Date());
     const id = window.setInterval(() => setNow(new Date()), 1000);
     return () => window.clearInterval(id);
   }, []);
 
-  const onDebugClick = () => console.info(`Clock tick: ${now.toISOString()} (${now.getTime()}). Timezone?`, timezone);
+  const onDebugClick = () => console.info(`Clock tick: ${now?.toISOString() || 'no date'} (${now?.getTime() || '--:--'}). Timezone:`, timezone);
 
   return (
     <header className={styles.clock} aria-label="Relógio" onDoubleClick={onDebugClick}>
       <p className={styles.time} aria-live="polite">
-        {formatClockTime(now, timezone)}
+        {!now ? '--:--' : formatClockTime(now, timezone)}
       </p>
       <p className={styles.dateLine}>
-        <span className={styles.weekday}>{formatWeekdayLong(now, i18n.language, timezone)}</span>
+        <span className={styles.weekday}>{!now ? '-' : formatWeekdayLong(now, i18n.language, timezone)}</span>
         <span className={styles.dot} aria-hidden="true">
           ·
         </span>
-        <span className={styles.date}>{formatLongDate(now, i18n.language, timezone)}</span>
+        <span className={styles.date}>{!now ? '-' : formatLongDate(now, i18n.language, timezone)}</span>
       </p>
     </header>
   );

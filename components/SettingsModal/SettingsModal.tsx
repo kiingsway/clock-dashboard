@@ -11,17 +11,6 @@ export interface SettingsModalProps {
   timeZone?: string;
   updatedAt?: string;
   settings: UseAppSettingsReturn
-
-  // language: string;
-  // languageOptions: SelectOption[];
-  // onLanguageChange: (language: string) => void;
-
-  // location: string;
-  // locationOptions: SelectOption[];
-  // onLocationChange: (location: string) => void;
-
-  /** ISO 8601 timestamp of the last successful weather fetch — e.g. `weather.current.time`. */
-  // updatedAt?: string;
 }
 
 /**

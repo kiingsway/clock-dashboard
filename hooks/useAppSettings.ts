@@ -35,57 +35,6 @@ export interface WeatherLocationItem {
  * Nem todo timezone tem uma cidade de referência para clima
  * (ex: Pacific/Guadalcanal), então o valor pode ser undefined.
  */
-const LOCATION_TO_WEATHER1: Record<Location, WeatherLocationItem> = {
-  'America/Toronto': {
-    id: 'Toronto',
-    name: 'Toronto',
-    lat: 43.6532,
-    lon: -79.3832,
-  },
-  'America/Sao_Paulo': {
-    id: 'Sao_Paulo',
-    name: 'São Paulo',
-    lat: -23.5505,
-    lon: -46.6333,
-  },
-  'Asia/Seoul': {
-    id: 'Seoul',
-    name: 'Seoul',
-    lat: 37.5665,
-    lon: 126.978,
-  },
-  'America/New_York': {
-    id: 'New_York',
-    name: 'New York',
-    lat: 40.0583,
-    lon: -74.4057,
-  },
-  'America/Bogota': {
-    id: 'Bogota',
-    name: 'Bogotá',
-    lat: 4.711,
-    lon: -74.0721,
-  },
-  'America/Panama': {
-    id: 'Panama_City',
-    name: 'Panama City',
-    lat: 8.9824,
-    lon: -79.5199,
-  },
-  'America/Vancouver': {
-    id: 'Vancouver',
-    name: 'Vancouver',
-    lat: 49.2827,
-    lon: -123.1207,
-  },
-  'Pacific/Guadalcanal': {
-    id: 'Guadalcanal',
-    name: 'Honiara',
-    lat: -9.5427,
-    lon: 160.2167,
-  },
-};
-
 export function getLocationToWeather(t: TFunction): Record<Location, WeatherLocationItem> {
   return {
     "America/Toronto": {
@@ -203,7 +152,7 @@ export interface UseAppSettingsReturn {
  */
 export function useAppSettings(): UseAppSettingsReturn {
   const { t } = useTranslation()
-  const [settings, setSettings] = useState<AppSettings>(() => loadSettings());
+  const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
 
   // Sincroniza com o localStorage sempre que as configurações mudarem
   useEffect(() => {
@@ -212,6 +161,8 @@ export function useAppSettings(): UseAppSettingsReturn {
 
   // Sincroniza entre abas/janelas diferentes
   useEffect(() => {
+    setSettings(loadSettings());
+
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === STORAGE_KEY && event.newValue) {
         try {

@@ -21,7 +21,6 @@ export interface CurrentWeatherProps {
  */
 export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps) {
   const { t } = useTranslation();
-  // const { current, current_units: currentUnits, hourly, hourly_units, daily, daily_units, timezone } = weather;
 
   const current = weather?.current ?? {
     temperature_2m: 0,

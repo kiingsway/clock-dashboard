@@ -7,7 +7,7 @@ export function useWeather(latitude?: number, longitude?: number) {
     ["weather", latitude, longitude],
     () => fetchWeather(latitude, longitude),
     {
-      refreshInterval: 5 * 60 * 1000, // 5 minutos
+      refreshInterval: 5 * 60 * 1000,
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
       dedupingInterval: 60 * 1000,
