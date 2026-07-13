@@ -1,0 +1,83 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: fit-content;
+  border-radius: 999px;
+  font-family: var(--wc-font-body);
+  white-space: nowrap;
+  border: 1px solid transparent;
+  background: none;
+  padding: 0;
+  color: inherit;
+}
+
+/* Sizes */
+
+.sm {
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.md {
+  padding: 5px 13px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Variants — same recipe as the settings sheet's chips (surface fill + hairline border). */
+
+.neutral {
+  background: var(--wc-surface);
+  border-color: var(--wc-hairline);
+  color: var(--wc-text-muted);
+}
+
+.outline {
+  background: transparent;
+  border-color: var(--wc-hairline);
+  color: var(--wc-text-muted);
+}
+
+.accent {
+  background: color-mix(in srgb, var(--wc-accent) 18%, var(--wc-surface));
+  border-color: color-mix(in srgb, var(--wc-accent) 45%, transparent);
+  color: var(--wc-text);
+}
+
+/* Clickable state (rendered as <button>) */
+
+.clickable {
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.clickable:hover {
+  filter: brightness(1.25);
+}
+
+.clickable:focus-visible {
+  outline: 2px solid var(--wc-accent);
+  outline-offset: 2px;
+}
+
+/* Icon + dot */
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1em;
+  line-height: 0;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--wc-accent);
+  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--wc-accent) 70%, transparent);
+  flex-shrink: 0;
+}

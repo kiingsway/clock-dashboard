@@ -1,8 +1,9 @@
-import { formatClockTime } from "@/utils/formatters";
+import { APP_INFO, formatClockTime } from "@/utils/formatters";
 import { Modal } from "./Modal/Modal";
 import styles from "./SettingsModal.module.css";
 import { useTranslation } from "react-i18next";
 import { LOCATION_OPTIONS, UseAppSettingsReturn, Location } from "@/hooks/useAppSettings";
+import { Badge } from "../Badge";
 
 export interface SettingsModalProps {
   open: boolean;
@@ -37,6 +38,8 @@ export function SettingsModal({ open, onClose, settings, timeZone, updatedAt }: 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     i18n.changeLanguage(e.target.value);
   };
+
+  const version = process.env.NEXT_PUBLIC_APP_VERSION;
 
   return (
     <Modal open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>
@@ -79,6 +82,13 @@ export function SettingsModal({ open, onClose, settings, timeZone, updatedAt }: 
           <span className={styles.staticLabel}>{t('updatedAt')}</span>
           <span className={styles.staticValue}>{!updatedAt ? '-' : formatClockTime(new Date(updatedAt), timeZone)}</span>
         </div>
+
+        <div className={styles.divider} />
+        <div className={styles.row}>
+          <span className={styles.staticLabel}>{t('version')}</span>
+          <span className={styles.staticValue}>{APP_INFO.isDev && <Badge variant="accent">DEV</Badge>} {APP_INFO.version}</span>
+        </div>
+
       </form>
     </Modal>
   );

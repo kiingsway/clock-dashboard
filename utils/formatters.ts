@@ -215,3 +215,9 @@ export function formatIsoTime(isoString: string): string {
 
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
+
+export const APP_INFO = {
+  version: process.env.NEXT_PUBLIC_APP_VERSION!,
+  isDev: process.env.NODE_ENV === "development",
+  isProd: process.env.NODE_ENV === "production",
+};

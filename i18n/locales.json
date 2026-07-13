@@ -1,5 +1,6 @@
 {
   "pt": {
+    "version": "Versão",
     "title": "Configurações",
     "settings": "Configurações",
     "close": "Fechar",
@@ -31,6 +32,7 @@
     }
   },
   "en": {
+    "version": "Version",
     "title": "Settings",
     "settings": "Settings",
     "close": "Close",
@@ -62,6 +64,7 @@
     }
   },
   "fr": {
+    "version": "Version",
     "title": "Paramètres",
     "settings": "Paramètres",
     "close": "Fermer",
@@ -93,6 +96,7 @@
     }
   },
   "es": {
+    "version": "Versión",
     "title": "Configuración",
     "settings": "Configuración",
     "close": "Cerrar",
@@ -124,6 +128,7 @@
     }
   },
   "ko": {
+    "version": "버전",
     "title": "설정",
     "settings": "설정",
     "close": "닫기",
