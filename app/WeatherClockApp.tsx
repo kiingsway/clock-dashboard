@@ -24,7 +24,7 @@ export function WeatherClockApp() {
   const appSettings = useAppSettings();
   const { i18n } = useTranslation();
   const { weather, isLoading, error } = useWeather(appSettings.weatherLocation.lat, appSettings.weatherLocation.lon);
-  useAutoScrollToTop(30000);
+  useAutoScrollToTop(12000);
 
   const accent = getAccent(weather);
 
