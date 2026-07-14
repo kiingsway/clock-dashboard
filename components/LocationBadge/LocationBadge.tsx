@@ -31,6 +31,7 @@ export function LocationBadge({ settings, weather }: LocationBadgeProps) {
         onClose={() => setIsOpen(false)}
         timeZone={settings.location}
         settings={settings}
+        updatedAt={weather?.current.time}
         onUpdatedAtClick={() => console.info('Weather:', weather)}
       />
     </section>

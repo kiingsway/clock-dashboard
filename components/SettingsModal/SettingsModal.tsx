@@ -10,8 +10,8 @@ export interface SettingsModalProps {
   open: boolean;
   onClose: () => void;
   timeZone?: string;
-  updatedAt?: string;
   settings: UseAppSettingsReturn
+  updatedAt?: string;
   onUpdatedAtClick: () => void
 }
 
