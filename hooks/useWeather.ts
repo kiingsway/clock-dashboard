@@ -1,4 +1,4 @@
-import { fetchWeather } from "@/helpers/fetchWeather";
+import { fetchWeather } from "@/services/fetchWeather";
 import { IWeather } from "@/types/weather.types";
 import useSWR from "swr";
 

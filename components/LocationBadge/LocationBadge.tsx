@@ -3,6 +3,7 @@ import styles from "./LocationBadge.module.css";
 import { useState } from "react";
 import { SettingsModal } from "../SettingsModal/SettingsModal";
 import { UseAppSettingsReturn } from "@/hooks/useAppSettings";
+import { IWeather } from "@/types/weather.types";
 
 export interface LocationBadgeProps {
   /**
@@ -11,12 +12,11 @@ export interface LocationBadgeProps {
    * have your `useAppSettings`-equivalent hook ready to plug in.
    */
   settings: UseAppSettingsReturn;
-  timezone: string
-  updatedAt?: string
+  weather: IWeather | undefined
 }
 
 /** Small pin + city label shown between the date and the weather icon. */
-export function LocationBadge({ settings, timezone, updatedAt }: LocationBadgeProps) {
+export function LocationBadge({ settings, weather }: LocationBadgeProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -29,9 +29,9 @@ export function LocationBadge({ settings, timezone, updatedAt }: LocationBadgePr
       <SettingsModal
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        timeZone={timezone}
+        timeZone={settings.location}
         settings={settings}
-        updatedAt={updatedAt}
+        onUpdatedAtClick={() => console.info('Weather:', weather)}
       />
     </section>
   );

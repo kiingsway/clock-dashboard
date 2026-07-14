@@ -5,6 +5,7 @@
   text-align: center;
   gap: 6px;
   padding: 28px 16px 8px;
+  cursor: default;
 }
 
 .time {

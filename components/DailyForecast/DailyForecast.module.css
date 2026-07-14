@@ -1,6 +1,7 @@
 .section {
   padding: 18px 0 24px;
   border-top: 1px solid var(--wc-hairline);
+  cursor: default;
 }
 
 .heading {
@@ -50,6 +51,27 @@
 .icon {
   display: flex;
   align-items: center;
+  justify-content: center;
+  background: (circle, var(--wc-accent) 0%, transparent 50%);
+  position: relative;
+}
+
+.icon::before {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--wc-accent) 90%, transparent),
+    transparent 70%
+  );
+  filter: blur(18px);
+  z-index: 1;
 }
 
 .minLabel {

@@ -81,7 +81,7 @@ export function getLocationToWeather(t: TFunction): Record<Location, WeatherLoca
     },
     "Pacific/Guadalcanal": {
       id: "Guadalcanal",
-      name: t("cities.Honiara"),
+      name: t("cities.Guadalcanal"),
       lat: -9.5427,
       lon: 160.2167,
     },
@@ -95,7 +95,7 @@ export interface AppSettings {
 const STORAGE_KEY = 'app-settings';
 
 const DEFAULT_SETTINGS: AppSettings = {
-  location: 'America/New_York',
+  location: 'America/Toronto',
 };
 
 /**
@@ -153,16 +153,22 @@ export interface UseAppSettingsReturn {
 export function useAppSettings(): UseAppSettingsReturn {
   const { t } = useTranslation()
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Sincroniza com o localStorage sempre que as configurações mudarem
-  useEffect(() => {
-    persistSettings(settings);
-  }, [settings]);
-
-  // Sincroniza entre abas/janelas diferentes
+  /* 1. Carrega do localStorage só depois de montado no cliente */
   useEffect(() => {
     setSettings(loadSettings());
+    setIsLoaded(true);
+  }, []);
 
+  /* 2. Só persiste depois que já carregou — evita sobrescrever com o default */
+  useEffect(() => {
+    if (!isLoaded) return;
+    persistSettings(settings);
+  }, [settings, isLoaded]);
+
+  /* Sincronização entre abas */
+  useEffect(() => {
     const handleStorageChange = (event: StorageEvent) => {
       if (event.key === STORAGE_KEY && event.newValue) {
         try {

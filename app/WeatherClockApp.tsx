@@ -2,7 +2,6 @@ import { IWeather, SupportedLocale } from "@/types/weather.types";
 import "../styles/tokens.css";
 import styles from "./WeatherClockApp.module.css";
 import { CurrentWeather } from "@/components/CurrentWeather/CurrentWeather";
-import { getAccentColor, getWeatherCategory } from "@/utils/weatherIcons";
 import { Clock } from "@/components/Clock/Clock";
 import { HourlyForecast } from "@/components/HourlyForecast/HourlyForecast";
 import { DailyForecast } from "@/components/DailyForecast/DailyForecast";
@@ -13,6 +12,8 @@ import { useAppSettings } from "@/hooks/useAppSettings";
 import { useTranslation } from "react-i18next";
 import { LocationBadge } from "@/components/LocationBadge/LocationBadge";
 import { useAutoScrollToTop } from "@/hooks/useAutoScrollToTop";
+import getAccentColor, { getAccent } from "@/utils/weatherIcons/getAccentColor";
+import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
 
 /**
  * Mobile, always-dark clock + weather screen. Designed to be read at a
@@ -26,28 +27,7 @@ export function WeatherClockApp() {
   const { weather, isLoading, error } = useWeather(appSettings.weatherLocation.lat, appSettings.weatherLocation.lon);
   useAutoScrollToTop(12000);
 
-  const accent = getAccent(weather);
-
-  const WithWeather = ({ weather }: { weather: IWeather }): JSX.Element => {
-
-    const { current, hourly, hourly_units, daily, daily_units, timezone } = weather;
-
-    return (
-      <>
-        <HourlyForecast
-          hourly={hourly}
-          hourlyUnits={hourly_units}
-          currentTime={current.time}
-          timeZone={timezone}
-          sunrises={daily.sunrise}
-          sunsets={daily.sunset}
-          locale={i18n.language as SupportedLocale}
-        />
-
-        <DailyForecast daily={daily} dailyUnits={daily_units} timeZone={timezone} locale={i18n.language as SupportedLocale} />
-      </>
-    )
-  }
+  const accent = getAccent(weather?.current.weather_code, weather?.current.is_day);
 
   return (
     <div
@@ -55,17 +35,20 @@ export function WeatherClockApp() {
       style={{ ["--wc-accent" as string]: accent }}
     >
       <Clock timezone={appSettings.location} />
-      <LocationBadge settings={appSettings} timezone={appSettings.location} updatedAt={weather?.current.time} />
+
+      <LocationBadge settings={appSettings} weather={weather} />
+
       <CurrentWeather weather={weather} loading={isLoading} error={error} />
-      {weather && <WithWeather weather={weather} />}
+
+      {weather && (
+        <>
+          <HourlyForecast weather={weather} locale={i18n.language as SupportedLocale} />
+
+          <DailyForecast weather={weather} locale={i18n.language as SupportedLocale} />
+        </>
+      )}
     </div>
   );
 }
 
 
-function getAccent(weather?: IWeather): string {
-  if (!weather) return "#6b7280";
-  const category = getWeatherCategory(weather.current.weather_code);
-  const isDay = weather.current.is_day !== 0;
-  return getAccentColor(category, isDay);
-}

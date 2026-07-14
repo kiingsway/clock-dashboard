@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import styles from "./Clock.module.css";
-import { formatClockTime, formatWeekdayLong, formatLongDate } from "@/utils/formatters";
 import { useTranslation } from "react-i18next";
+import { DateTime } from "luxon";
 
 export interface ClockProps {
   /**
@@ -18,27 +18,51 @@ export interface ClockProps {
  */
 export function Clock({ timezone }: ClockProps) {
   const { i18n } = useTranslation();
-  const [now, setNow] = useState<Date>();
+
+  const [now, setNow] = useState<DateTime>();
+
+  const locale =
+    {
+      pt: "pt-BR",
+      en: "en-US",
+      fr: "fr-FR",
+      es: "es-ES",
+      ko: "ko-KR",
+    }[i18n.language.split("-")[0]] ?? "en-US";
 
   useEffect(() => {
-    setNow(new Date());
-    const id = window.setInterval(() => setNow(new Date()), 1000);
-    return () => window.clearInterval(id);
-  }, []);
+    setNow(DateTime.now().setZone(timezone));
 
-  const onDebugClick = () => console.info(`Clock tick: ${now?.toISOString() || 'no date'} (${now?.getTime() || '--:--'}). Timezone:`, timezone);
+    const id = window.setInterval(() => setNow(DateTime.now().setZone(timezone)), 1000);
+
+    return () => window.clearInterval(id);
+  }, [timezone]);
+
+  const onDebugClick = () =>
+    console.info("Clock:", now?.toISO(), "Timezone:", timezone);
 
   return (
     <header className={styles.clock} aria-label="Relógio" onDoubleClick={onDebugClick}>
       <p className={styles.time} aria-live="polite">
-        {!now ? '--:--' : formatClockTime(now, timezone)}
+        {now?.toFormat("HH:mm") ?? "--:--"}
       </p>
+
       <p className={styles.dateLine}>
-        <span className={styles.weekday}>{!now ? '-' : formatWeekdayLong(now, i18n.language, timezone)}</span>
+        <span className={styles.weekday}>
+          {now
+            ? now.setLocale(locale).toFormat("cccc").replace(/^./, (c) => c.toUpperCase())
+            : "-"}
+        </span>
+
         <span className={styles.dot} aria-hidden="true">
           ·
         </span>
-        <span className={styles.date}>{!now ? '-' : formatLongDate(now, i18n.language, timezone)}</span>
+
+        <span className={styles.date}>
+          {now
+            ? now.setLocale(locale).toFormat("d 'de' LLLL")
+            : "-"}
+        </span>
       </p>
     </header>
   );

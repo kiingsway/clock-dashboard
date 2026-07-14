@@ -36,6 +36,7 @@ export interface IHourly {
   temperature_2m: number[];
   precipitation: number[];
   apparent_temperature: number[];
+  is_day: number[];
   weather_code: number[];
 }
 
@@ -77,13 +78,27 @@ export type SupportedLocale = "pt-BR" | "en-US";
 /** Grouped WMO weather-code buckets used for both icon selection and the ambient glow accent. */
 export type WeatherCategory =
   | "clear"
+  | "partlyCloudy"
   | "cloudy"
+  | "smoke"
+  | "haze"
+  | "lightFog"
   | "fog"
   | "drizzle"
+  | "freezingDrizzle"
   | "rain"
+  | "freezingRain"
   | "snow"
+  | "snowShowers"
   | "showers"
   | "thunderstorm"
+  | "hail"
+  | "moderateHail"
+  | "heavyHail"
+  | "heavyRain"
+  | "heavySnow"
+  | "sleet"
+  | "heavySleet"
   | "unknown"
   | "error"
   | "loading";

@@ -3,11 +3,10 @@ import axios from "axios";
 
 const api = {
   daily: "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset",
-  hourly: "temperature_2m,precipitation,apparent_temperature,weather_code",
+  hourly: "temperature_2m,precipitation,apparent_temperature,weather_code,is_day",
   current: "temperature_2m,apparent_temperature,precipitation,weather_code,is_day",
   timezone: "auto"
 }
-
 
 /**
  * Placeholder for the real weather request.

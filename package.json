@@ -1,6 +1,6 @@
 {
   "name": "clock-dashboard",
-  "version": "0.12.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -12,6 +12,7 @@
     "axios": "^1.18.1",
     "classnames": "^2.5.1",
     "i18next": "^26.3.6",
+    "luxon": "^3.7.2",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/luxon": "^3.7.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

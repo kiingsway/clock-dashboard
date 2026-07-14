@@ -1,9 +1,10 @@
-import { APP_INFO, formatClockTime } from "@/utils/formatters";
+import { APP_INFO } from "@/utils/formatters";
 import { Modal } from "./Modal/Modal";
 import styles from "./SettingsModal.module.css";
 import { useTranslation } from "react-i18next";
 import { LOCATION_OPTIONS, UseAppSettingsReturn, Location } from "@/hooks/useAppSettings";
 import { Badge } from "../Badge";
+import { DateTime } from "luxon";
 
 export interface SettingsModalProps {
   open: boolean;
@@ -11,6 +12,7 @@ export interface SettingsModalProps {
   timeZone?: string;
   updatedAt?: string;
   settings: UseAppSettingsReturn
+  onUpdatedAtClick: () => void
 }
 
 /**
@@ -20,7 +22,7 @@ export interface SettingsModalProps {
  * whatever the host app already uses for that (e.g. the `useAppSettings`
  * hook and `i18n.changeLanguage` in the reference `SettingsForm`).
  */
-export function SettingsModal({ open, onClose, settings, timeZone, updatedAt }: SettingsModalProps) {
+export function SettingsModal({ open, onClose, onUpdatedAtClick, settings, timeZone, updatedAt }: SettingsModalProps) {
   const { t, i18n } = useTranslation();
   const { location, setLocation } = settings;
 
@@ -28,7 +30,7 @@ export function SettingsModal({ open, onClose, settings, timeZone, updatedAt }: 
     i18n.changeLanguage(e.target.value);
   };
 
-  const version = process.env.NEXT_PUBLIC_APP_VERSION;
+  const updatedAtHour = updatedAt ? DateTime.fromISO(updatedAt, { zone: timeZone }).toFormat('HH:mm') : '--:--'
 
   return (
     <Modal open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>
@@ -67,9 +69,9 @@ export function SettingsModal({ open, onClose, settings, timeZone, updatedAt }: 
         </div>
 
         <div className={styles.divider} />
-        <div className={styles.row}>
+        <div className={styles.row} onDoubleClick={onUpdatedAtClick}>
           <span className={styles.staticLabel}>{t('updatedAt')}</span>
-          <span className={styles.staticValue}>{!updatedAt ? '-' : formatClockTime(new Date(updatedAt), timeZone)}</span>
+          <span className={styles.staticValue}>{updatedAtHour}</span>
         </div>
 
         <div className={styles.divider} />

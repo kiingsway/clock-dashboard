@@ -1,10 +1,12 @@
 
-import { IWeather, IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types/weather.types";
+import { IDaily, IWeather, IWeatherCurrent, IWeatherUnits } from "@/types/weather.types";
 import styles from "./CurrentWeather.module.css";
-import { getWeatherCategory, getWeatherAnimatedIcon, getSunIcon } from "@/utils/weatherIcons";
-import { formatClockTime, getSunWindow } from "@/utils/formatters";
-import { CSSProperties } from "react";
+import { splitCamelCase } from "@/utils/formatters";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import getWeatherAnimatedIcon from "@/utils/weatherIcons/getWeatherAnimatedIcon";
+import SunProgress from "./SunProgress";
+import { DateTime } from "luxon";
 
 export interface CurrentWeatherProps {
   weather: IWeather | undefined
@@ -21,6 +23,8 @@ export interface CurrentWeatherProps {
  */
 export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps) {
   const { t } = useTranslation();
+  const [showWeatherName, setWeatherName] = useState(false)
+  const toggleWeatherName = (): void => setWeatherName(prev => !prev);
 
   const current = weather?.current ?? {
     temperature_2m: 0,
@@ -28,49 +32,49 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
     precipitation: 0,
     weather_code: loading ? -2 : -1,
     is_day: 1,
-    time: new Date().toISOString(),
-  };
+    time: DateTime.now().toISO(),
+  } as IWeatherCurrent;
 
   const currentUnits = weather?.current_units ?? {
     temperature_2m: "°C",
     precipitation: "mm",
-  };
+  } as IWeatherUnits;
 
   const daily = weather?.daily ?? {
-    sunrise: [new Date().toISOString()],
-    sunset: [new Date().toISOString()],
+    sunrise: [DateTime.now().toISO()],
+    sunset: [DateTime.now().toISO()],
     temperature_2m_max: [0],
     temperature_2m_min: [0],
-  };
+  } as IDaily;
 
   const timezone = weather?.timezone ?? "UTC";
 
   const isDay = current.is_day !== 0;
-  const category = getWeatherCategory(current.weather_code);
 
   const tempUnit = currentUnits.temperature_2m;
   const precipUnit = currentUnits.precipitation;
   const hasPrecipitation = current.precipitation > 0;
 
-  const sunWindow = getSunWindow(current.time, daily.sunrise, daily.sunset);
-  const startLabel = formatClockTime(sunWindow.start, timezone);
-  const endLabel = formatClockTime(sunWindow.end, timezone);
-
-  const sunTrackColor = isDay ? "#F4B860" : "#2944bd";
-  const sunTrackStyle = {
-    "--wc-accent": sunTrackColor,
-  } as CSSProperties;
 
   const todayMax = daily.temperature_2m_max[0] ?? current.temperature_2m;
   const todayMin = daily.temperature_2m_min[0] ?? current.temperature_2m;
 
-  const weatherIcon = getWeatherAnimatedIcon(current.weather_code, isDay, 108, category);
+  const weatherIcon = getWeatherAnimatedIcon(current.weather_code, isDay, 108);
+
+  const onDebugClick = (): void => console.log('Current Weather:', weather)
+
+  console.log('Current Weather props:', {
+    timezone: weather?.timezone,
+    current: weather?.current.time,
+    sunrise: weather?.daily.sunrise[0],
+    sunset: weather?.daily.sunset[0],
+  });
 
   return (
-    <section className={styles.current} aria-label="Clima atual">
+    <section className={styles.current} aria-label="Clima atual" onDoubleClick={onDebugClick}>
       <div className={styles.iconStage}>
         <div className={styles.glow} aria-hidden="true" />
-        <div className={styles.icon}>{weatherIcon}</div>
+        <div className={styles.icon}>{weatherIcon.img}</div>
       </div>
 
       <p className={styles.temp}>
@@ -101,9 +105,18 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
               </dd>
             </div>
             <div className={styles.statDivider} aria-hidden="true" />
-            <div className={styles.stat}>
-              <dt>{t('precipitation')}</dt>
-              <dd>{hasPrecipitation ? `${current.precipitation}${precipUnit}` : t('noPrecipitation')}</dd>
+            <div className={styles.stat} id="prec-weather" onClick={toggleWeatherName}>
+              {showWeatherName ? (
+                <>
+                  <dt>{t('weather')}</dt>
+                  <dd>{splitCamelCase(weatherIcon.category)} <small title="Weather Code (WMO)">(#{weather.current.weather_code})</small></dd>
+                </>
+              ) : (
+                <>
+                  <dt>{t('precipitation')}</dt>
+                  <dd>{hasPrecipitation ? `${current.precipitation}${precipUnit}` : t('noPrecipitation')}</dd>
+                </>
+              )}
             </div>
           </>
         ) : (
@@ -118,28 +131,8 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
         )}
       </dl>
 
-      {weather?.current && (
-        <div className={styles.sunArc} aria-label={`${t(sunWindow.startKind)} ${startLabel}, ${t(sunWindow.endKind)} ${endLabel}`}>
-          <div className={styles.sunPoint}>
-            {getSunIcon(sunWindow.startKind, 18)}
-            <span>{startLabel}</span>
-          </div>
+      <SunProgress currentWeather={current} dailyWeather={daily} timezone={timezone} />
 
-          <div
-            className={styles.sunTrack}
-            aria-hidden="true"
-            style={sunTrackStyle}
-          >
-            <div className={styles.sunTrackFill} style={{ width: `${sunWindow.progress * 100}%` }} />
-            <div className={styles.sunMarker} style={{ left: `${sunWindow.progress * 100}%` }} />
-          </div>
-
-          <div className={styles.sunPoint}>
-            {getSunIcon(sunWindow.endKind, 18)}
-            <span>{endLabel}</span>
-          </div>
-        </div>
-      )}
     </section>
   );
 }

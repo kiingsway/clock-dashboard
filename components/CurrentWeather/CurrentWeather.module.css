@@ -4,6 +4,7 @@
   align-items: center;
   text-align: center;
   padding: 4px 16px 20px;
+  cursor: default;
 }
 
 .iconStage {
@@ -60,6 +61,7 @@
   font-size: clamp(40px, 13vw, 56px);
   line-height: 1;
   color: var(--wc-text);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 50%, transparent);
 }
 
 .tempUnit {
@@ -113,6 +115,11 @@
   font-weight: 600;
   color: var(--wc-text);
   white-space: nowrap;
+}
+
+.stat dd small {
+  opacity: 0.6;
+  font-size: 11px;
 }
 
 .statDivider {

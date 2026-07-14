@@ -6,7 +6,7 @@
     "close": "Fechar",
     "language": "Linguagem",
     "timezone": "Fuso horário",
-    "weather": "Local",
+    "weather": "Clima",
     "location": "Localização",
     "updatedAt": "Atualizado em",
     "feelsLike": "Sensação",
@@ -28,7 +28,7 @@
       "Sao_Paulo": "São Paulo",
       "Vancouver": "Vancouver",
       "Seoul": "Seul",
-      "Guadalcanal": "Honiara"
+      "Guadalcanal": "Guadalcanal"
     }
   },
   "en": {
@@ -38,7 +38,7 @@
     "close": "Close",
     "language": "Language",
     "timezone": "Timezone",
-    "weather": "Location",
+    "weather": "Clima",
     "location": "Location",
     "updatedAt": "Updated at",
     "feelsLike": "Feels Like",
@@ -60,7 +60,7 @@
       "Sao_Paulo": "Sao Paulo",
       "Vancouver": "Vancouver",
       "Seoul": "Seoul",
-      "Guadalcanal": "Honiara"
+      "Guadalcanal": "Guadalcanal"
     }
   },
   "fr": {
@@ -70,7 +70,7 @@
     "close": "Fermer",
     "language": "Langue",
     "timezone": "Fuseau horaire",
-    "weather": "Emplacement",
+    "weather": "Climat",
     "location": "Emplacement",
     "updatedAt": "Mis à jour",
     "feelsLike": "Ressenti",
@@ -92,7 +92,7 @@
       "Sao_Paulo": "São Paulo",
       "Vancouver": "Vancouver",
       "Seoul": "Séoul",
-      "Guadalcanal": "Honiara"
+      "Guadalcanal": "Guadalcanal"
     }
   },
   "es": {
@@ -102,7 +102,7 @@
     "close": "Cerrar",
     "language": "Idioma",
     "timezone": "Zona horaria",
-    "weather": "Ubicación",
+    "weather": "Clima",
     "location": "Ubicación",
     "updatedAt": "Actualizado",
     "feelsLike": "Sensación",
@@ -124,7 +124,7 @@
       "Sao_Paulo": "São Paulo",
       "Vancouver": "Vancouver",
       "Seoul": "Seúl",
-      "Guadalcanal": "Honiara"
+      "Guadalcanal": "Guadalcanal"
     }
   },
   "ko": {
@@ -134,7 +134,7 @@
     "close": "닫기",
     "language": "언어",
     "timezone": "시간대",
-    "weather": "위치",
+    "weather": "날씨",
     "location": "위치",
     "updatedAt": "업데이트됨",
     "feelsLike": "체감 온도",
@@ -156,7 +156,7 @@
       "Sao_Paulo": "상파울루",
       "Vancouver": "밴쿠버",
       "Seoul": "서울",
-      "Guadalcanal": "호니아라"
+      "Guadalcanal": "과달카날"
     }
   }
 }
