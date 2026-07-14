@@ -61,14 +61,7 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
 
   const weatherIcon = getWeatherAnimatedIcon(current.weather_code, isDay, 108);
 
-  const onDebugClick = (): void => console.log('Current Weather:', weather)
-
-  console.log('Current Weather props:', {
-    timezone: weather?.timezone,
-    current: weather?.current.time,
-    sunrise: weather?.daily.sunrise[0],
-    sunset: weather?.daily.sunset[0],
-  });
+  const onDebugClick = (): void => console.info('Current Weather:', weather)
 
   return (
     <section className={styles.current} aria-label="Clima atual" onDoubleClick={onDebugClick}>
