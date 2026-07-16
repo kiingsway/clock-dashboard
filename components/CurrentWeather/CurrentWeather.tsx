@@ -104,7 +104,7 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
               {showWeatherName ? (
                 <>
                   <dt>{t('weather')}</dt>
-                  <dd>{splitCamelCase(weatherIcon.category)} <small title="Weather Code (WMO)">(#{weather.current.weather_code})</small></dd>
+                  <dd title={`Weather Code (WMO): #${weather.current.weather_code}`}>{splitCamelCase(weatherIcon.category)}</dd>
                 </>
               ) : (
                 <>

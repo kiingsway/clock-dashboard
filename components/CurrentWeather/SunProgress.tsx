@@ -38,7 +38,7 @@ export default function SunProgress({ currentWeather, dailyWeather, timezone }: 
       </div>
 
       <div className={styles.sunPoint}>
-        {getSunIcon(sunWindow.endKind, 18)}
+        {getSunIcon(sunWindow.endKind, 20)}
         <span>{endLabel}</span>
       </div>
     </div>

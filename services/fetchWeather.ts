@@ -2,11 +2,30 @@ import { IWeather } from "@/types/weather.types";
 import axios from "axios";
 
 const api = {
-  daily: "temperature_2m_max,temperature_2m_min,weather_code,sunrise,sunset",
-  hourly: "temperature_2m,precipitation,apparent_temperature,weather_code,is_day",
-  current: "temperature_2m,apparent_temperature,precipitation,weather_code,is_day",
-  timezone: "auto"
-}
+  past_days: 1,
+  timezone: "auto",
+  daily: [
+    "temperature_2m_max",
+    "temperature_2m_min",
+    "weather_code",
+    "sunrise",
+    "sunset",
+  ],
+  hourly: [
+    "temperature_2m",
+    "precipitation",
+    "apparent_temperature",
+    "weather_code",
+    "is_day",
+  ],
+  current: [
+    "temperature_2m",
+    "apparent_temperature",
+    "precipitation",
+    "weather_code",
+    "is_day",
+  ],
+};
 
 /**
  * Placeholder for the real weather request.
@@ -23,13 +42,17 @@ export async function fetchWeather(
   latitude?: number,
   longitude?: number
 ): Promise<IWeather> {
-  const url = 'https://api.open-meteo.com/v1/forecast?' +
-    `latitude=${latitude}&` +
-    `longitude=${longitude}&` +
-    `daily=${api.daily}&` +
-    `hourly=${api.hourly}&` +
-    `current=${api.current}&` +
-    `timezone=${api.timezone}`;
+  const params = new URLSearchParams({
+    latitude: String(latitude),
+    longitude: String(longitude),
+    past_days: String(api.past_days),
+    daily: api.daily.join(","),
+    hourly: api.hourly.join(","),
+    current: api.current.join(","),
+    timezone: api.timezone,
+  });
+
+  const url = `https://api.open-meteo.com/v1/forecast?${params}`;
 
   return (await axios.get<IWeather>(url)).data
 }

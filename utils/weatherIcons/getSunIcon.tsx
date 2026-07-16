@@ -11,7 +11,11 @@ export default function getSunIcon(kind: "sunrise" | "sunset", size: number): Re
       src={`${ICON_BASE_URI}${ICON_FILES[kind]}.svg`}
       alt={kind}
       loading="lazy"
-      style={{ width: size, height: size, display: "block" }}
+      style={{
+        width: `${size / 16}em`,
+        height: `${size / 16}em`,
+        display: "block"
+      }}
     />
   );
 }

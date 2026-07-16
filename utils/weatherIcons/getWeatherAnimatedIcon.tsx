@@ -72,7 +72,6 @@ export default function getWeatherAnimatedIcon(
     <img
       src={`${ICON_BASE_URI}${src}.svg`}
       alt={category}
-      title={`Weather code: ${weatherCode} (${category})`}
       loading="lazy"
       style={{ width: `${size / 16}em`, height: `${size / 16}em`, display: "block" }}
     />
