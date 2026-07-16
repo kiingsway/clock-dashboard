@@ -15,8 +15,8 @@
   position: relative;
   /* width: 148px;
   height: 148px; */
-  width: 9.25em;
-  height: 9.25em;
+  width: 8.5em;
+  height: 8.5em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -120,7 +120,7 @@
 
 .stat dt {
   font-family: var(--wc-font-body);
-  font-size: 0.6875em;
+  font-size: 0.6em;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;

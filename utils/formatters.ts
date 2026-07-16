@@ -133,3 +133,11 @@ export function splitCamelCase(text: string): string {
 
   return result.charAt(0).toUpperCase() + result.slice(1);
 }
+
+export function capitalizeWords(text: string): string {
+  return text
+    .toLowerCase()
+    .split(" ")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

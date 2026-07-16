@@ -28,6 +28,7 @@ export interface WeatherLocationItem {
   name: string;
   lat: number;
   lon: number;
+  country?: string | "CA" | "BR" | "KR";
 }
 
 /**
@@ -42,12 +43,14 @@ export function getLocationToWeather(t: TFunction): Record<Location, WeatherLoca
       name: t("cities.Toronto"),
       lat: 43.6532,
       lon: -79.3832,
+      country: "CA",
     },
     "America/Sao_Paulo": {
       id: "Sao_Paulo",
       name: t("cities.Sao_Paulo"),
       lat: -23.5505,
       lon: -46.6333,
+      country: "BR",
     },
     "Asia/Seoul": {
       id: "Seoul",
@@ -78,6 +81,7 @@ export function getLocationToWeather(t: TFunction): Record<Location, WeatherLoca
       name: t("cities.Vancouver"),
       lat: 49.2827,
       lon: -123.1207,
+      country: "CA",
     },
     "Pacific/Guadalcanal": {
       id: "Guadalcanal",

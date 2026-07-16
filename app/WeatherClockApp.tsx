@@ -14,6 +14,7 @@ import { LocationBadge } from "@/components/LocationBadge/LocationBadge";
 import { useAutoScrollToTop } from "@/hooks/useAutoScrollToTop";
 import getAccentColor, { getAccent } from "@/utils/weatherIcons/getAccentColor";
 import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
+import useWeatherAlerts from "@/hooks/useWeatherAlerts";
 
 /**
  * Mobile, always-dark clock + weather screen. Designed to be read at a
@@ -24,12 +25,16 @@ import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
 export function WeatherClockApp() {
   const appSettings = useAppSettings();
   const { i18n } = useTranslation();
-  const { weather, isLoading, error } = useWeather(appSettings.weatherLocation.lat, appSettings.weatherLocation.lon);
+  const { weather, isLoading, error } = useWeather(appSettings.weatherLocation);
+  const { alerts, isLoading: alertsLoading, error: alertsError } = useWeatherAlerts(appSettings.weatherLocation);
   useAutoScrollToTop(12000);
+
+  console.log('Alerts:', { alerts, alertsLoading, alertsError })
 
   const [focus, setFocus] = useState(false)
   const toggleFocus = (): void => setFocus(prev => !prev)
 
+  const locale = i18n.language as SupportedLocale;
   const accent = getAccent(weather?.current.weather_code, weather?.current.is_day);
 
   return (
@@ -42,14 +47,19 @@ export function WeatherClockApp() {
 
         <LocationBadge settings={appSettings} weather={weather} />
 
-        <CurrentWeather weather={weather} loading={isLoading} error={error} />
+        <CurrentWeather
+          weather={weather}
+          alerts={alerts}
+          locale={locale}
+          loading={isLoading}
+          error={error} />
       </div>
 
       {weather && (
         <>
-          <HourlyForecast weather={weather} locale={i18n.language as SupportedLocale} />
+          <HourlyForecast weather={weather} locale={locale} />
 
-          <DailyForecast weather={weather} locale={i18n.language as SupportedLocale} />
+          <DailyForecast weather={weather} locale={locale} />
         </>
       )}
     </div>

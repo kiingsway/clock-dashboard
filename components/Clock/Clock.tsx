@@ -63,9 +63,7 @@ export function Clock({ timezone, onClockClick }: ClockProps) {
             : "-"}
         </span>
 
-        <span className={styles.dot} aria-hidden="true">
-          ·
-        </span>
+        <span className={styles.dot} aria-hidden="true">·</span>
 
         <span className={styles.date}>
           {dateText}

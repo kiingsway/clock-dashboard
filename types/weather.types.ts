@@ -107,3 +107,36 @@ export interface SelectOption {
   value: string;
   label: string;
 }
+
+/**
+ * Subset of `IWeatherAlert["alerts"][number]["properties"]` (Environment
+ * Canada's weather-alerts API) that `WeatherAlertCard` actually reads.
+ * You already have the full `IWeatherAlert` type — this isn't meant to
+ * replace it, just to type the single `properties` object the card takes as
+ * a prop. Your real object has more fields than this; TypeScript is fine
+ * with that since it only checks that the ones listed here are present.
+ */
+export interface WeatherAlertData {
+  id: string;
+  alert_type: string;
+  alert_name_en: string;
+  alert_short_name_en: string;
+  alert_text_en: string;
+  /** Environment Canada's risk colour, e.g. "Red" / "Orange" / "Yellow" / "Grey". */
+  risk_colour_en: string;
+  confidence_en: string;
+  impact_en: string;
+  status_en: string;
+  /** ISO 8601 — when the event itself is expected to end. */
+  event_end_datetime: string;
+}
+
+export interface IWeatherAlert {
+  type: string
+  properties: WeatherAlertData
+  geometry: {
+    type: string
+    coordinates: number[][][]
+  }
+  id: string
+}

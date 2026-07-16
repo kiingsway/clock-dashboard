@@ -1,5 +1,5 @@
 
-import { IDaily, IWeather, IWeatherCurrent, IWeatherUnits } from "@/types/weather.types";
+import { IDaily, IWeather, IWeatherAlert, IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types/weather.types";
 import styles from "./CurrentWeather.module.css";
 import { splitCamelCase } from "@/utils/formatters";
 import { useState } from "react";
@@ -7,11 +7,14 @@ import { useTranslation } from "react-i18next";
 import getWeatherAnimatedIcon from "@/utils/weatherIcons/getWeatherAnimatedIcon";
 import SunProgress from "./SunProgress";
 import { DateTime } from "luxon";
+import { WeatherAlertCard } from "../WeatherAlertCard/WeatherAlertCard";
 
 export interface CurrentWeatherProps {
   weather: IWeather | undefined
   loading: boolean
   error: any
+  locale: SupportedLocale
+  alerts: IWeatherAlert[]
 }
 
 /**
@@ -21,7 +24,7 @@ export interface CurrentWeatherProps {
  * gotten. Values and units are rendered exactly as given — no conversion
  * happens in this component.
  */
-export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps) {
+export function CurrentWeather({ weather, locale, alerts, loading, error }: CurrentWeatherProps) {
   const { t } = useTranslation();
   const [showWeatherName, setWeatherName] = useState(false)
   const toggleWeatherName = (): void => setWeatherName(prev => !prev);
@@ -54,7 +57,6 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
   const tempUnit = currentUnits.temperature_2m;
   const precipUnit = currentUnits.precipitation;
   const hasPrecipitation = current.precipitation > 0;
-
 
   const todayMax = daily.temperature_2m_max[0] ?? current.temperature_2m;
   const todayMin = daily.temperature_2m_min[0] ?? current.temperature_2m;
@@ -89,6 +91,10 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
           ) : '-'}
         </p>
       </div>
+
+      {alerts.map(alert => (
+        <WeatherAlertCard key={alert.id} alert={alert.properties} locale={locale} timeZone={timezone} />
+      ))}
 
       <dl className={styles.statRow}>
         {weather?.current ? (
