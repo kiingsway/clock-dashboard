@@ -29,8 +29,6 @@ export function WeatherClockApp() {
   const { alerts, isLoading: alertsLoading, error: alertsError } = useWeatherAlerts(appSettings.weatherLocation);
   useAutoScrollToTop(12000);
 
-  console.log('Alerts:', { alerts, alertsLoading, alertsError })
-
   const [focus, setFocus] = useState(false)
   const toggleFocus = (): void => setFocus(prev => !prev)
 

@@ -20,6 +20,7 @@ export interface WeatherAlertCardProps {
    * explicitly if you're rendering a list and want them all consistent.
    */
   now?: DateTime;
+  autoExpand: boolean
 }
 
 /** How many characters of `alert_text_en` to show before offering "show more". */
@@ -34,9 +35,10 @@ const COLLAPSED_CHARS = 90;
  * with a "show more" toggle since Environment Canada's alert text can run
  * to several paragraphs.
  */
-export function WeatherAlertCard({ alert, locale, timezone: timezone, now = DateTime.now() }: WeatherAlertCardProps) {
+export function WeatherAlertCard({ alert, locale, timezone: timezone, now = DateTime.now(), autoExpand }: WeatherAlertCardProps) {
   const { t } = useTranslation()
-  const [expanded, { toggle: toggleExpand }] = useBoolean()
+  const [expanded, { toggle: toggleExpand }] = useBoolean(autoExpand)
+  const showMore = (): void => autoExpand ? undefined : toggleExpand();
 
   const severityColor = getSeverityColor(alert.risk_colour_en);
   const title = capitalizeWords(alert.alert_name_en || alert.alert_short_name_en);
@@ -44,14 +46,14 @@ export function WeatherAlertCard({ alert, locale, timezone: timezone, now = Date
 
   const text = alert.alert_text_en?.trim() ?? "";
   const isLong = text.length > COLLAPSED_CHARS;
-  const shownText = expanded || !isLong ? text : `${text.slice(0, COLLAPSED_CHARS).trimEnd()}…`;
+  const shownText = autoExpand || expanded || !isLong ? text : `${text.slice(0, COLLAPSED_CHARS).trimEnd()}…`;
 
   return (
     <>
       <div
         className={styles.card}
         style={{ ["--wc-severity" as string]: severityColor }}
-        onClick={toggleExpand}
+        onClick={showMore}
       >
         <div className={styles.stripe} aria-hidden="true" />
 
@@ -79,7 +81,7 @@ export function WeatherAlertCard({ alert, locale, timezone: timezone, now = Date
             </Badge>
           )}
 
-          {(alert.status_en || alert.confidence_en || alert.impact_en) && expanded && (
+          {(alert.status_en || alert.confidence_en || alert.impact_en) && (autoExpand || expanded) && (
             <div className={styles.metaRow}>
 
               {alert.status_en && (
@@ -103,7 +105,7 @@ export function WeatherAlertCard({ alert, locale, timezone: timezone, now = Date
           {shownText && (
             <p className={styles.description}>
               {shownText}{" "}
-              {isLong && (
+              {isLong && !autoExpand && (
                 <button type="button" className={styles.toggle}>
                   {expanded ? t('showLess') : t('showMore')}
                 </button>

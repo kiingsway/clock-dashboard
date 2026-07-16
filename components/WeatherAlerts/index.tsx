@@ -6,6 +6,7 @@ import useBoolean from "@/hooks/useBoolean";
 import sortWeatherAlerts from "@/utils/sortWeatherAlerts";
 import { useTranslation } from "react-i18next";
 import { Modal } from "../SettingsModal/Modal/Modal";
+import { capitalizeWords } from "@/utils/formatters";
 
 interface Props {
   alerts: IWeatherAlert[];
@@ -32,17 +33,17 @@ export default function WeatherAlerts({ alerts, locale, timeZone }: Props) {
   const riskColors = [... new Set(worstAlerts.map(wa => getSeverityColor(wa.properties.risk_colour_en)))].reverse()
   const worstColor = riskColors.at(-1);
 
-  const titles = [...new Set(alerts.map(a => (a.properties.alert_short_name_en || a.properties.alert_name_en)))]
-  const title = titles[0]
+  const titles = [...new Set(worstAlerts.map(a => capitalizeWords(a.properties.alert_short_name_en || a.properties.alert_name_en)))]
+  const title = titles.length === 1 ? capitalizeWords(worstAlerts[0].properties.alert_name_en) : titles[0]
   const titlePlus = titles.length > 1 ? ` + ${titles.length - 1}` : ''
 
-  const onDebugClick = (): void => console.log('Alerts:', alerts)
+  const onDebugClick = (): void => console.info('Alerts:', alerts)
 
   return (
     <>
-      <Modal open={alertsModalOpen} onClose={closeModal} title={t('alerts')} closeLabel={t('close')}>
+      <Modal open={alertsModalOpen} onClose={closeModal} title={t('alert', { count: alerts.length })} closeLabel={t('close')}>
         <div className={styles.modalList} onDoubleClick={onDebugClick}>
-          {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert.properties} locale={locale} />)}
+          {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert.properties} locale={locale} autoExpand={alerts.length === 1} />)}
         </div>
       </Modal>
 
@@ -56,7 +57,11 @@ export default function WeatherAlerts({ alerts, locale, timeZone }: Props) {
 
           <span className={styles.typeTag}>
             {riskColors.map(rc => <span key={rc} style={{ ["--wc-severity" as string]: rc }} className={styles.typeDot} aria-hidden="true" />)}
-            <span>{alerts.length} alerts</span>
+            <span>{alerts.length > 1 ?
+              `${alerts.length} alerts`
+              :
+              worstAlerts[0].properties.alert_type
+            }</span>
           </span>
 
         </div>
