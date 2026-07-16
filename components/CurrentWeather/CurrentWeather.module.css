@@ -5,12 +5,15 @@
   text-align: center;
   padding: 4px 16px 20px;
   cursor: default;
+  gap: 0.6em;
 }
 
 .iconStage {
   position: relative;
-  width: 148px;
-  height: 148px;
+  /* width: 148px;
+  height: 148px; */
+  width: 9.25em;
+  height: 9.25em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -30,11 +33,13 @@
 }
 
 @keyframes breathe {
+
   0%,
   100% {
     transform: scale(0.92);
     opacity: 0.32;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 0.48;
@@ -58,7 +63,8 @@
   margin: 4px 0 0;
   font-family: var(--wc-font-display);
   font-weight: 700;
-  font-size: clamp(40px, 13vw, 56px);
+  /* font-size: clamp(40px, 13vw, 56px); */
+  font-size: clamp(2.5em, 13vw, 3.5em);
   line-height: 1;
   color: var(--wc-text);
   text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 50%, transparent);
@@ -74,7 +80,7 @@
 .feelsLike {
   margin: 6px 0 0;
   font-family: var(--wc-font-body);
-  font-size: 15px;
+  font-size: 0.9em;
   font-weight: 500;
   color: var(--wc-text-muted);
 }
@@ -101,7 +107,7 @@
 
 .stat dt {
   font-family: var(--wc-font-body);
-  font-size: 11px;
+  font-size: 0.6875em;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -111,7 +117,7 @@
 .stat dd {
   margin: 0;
   font-family: var(--wc-font-body);
-  font-size: 15px;
+  font-size: 0.975em;
   font-weight: 600;
   color: var(--wc-text);
   white-space: nowrap;
@@ -131,10 +137,11 @@
 .sunArc {
   margin: 12px 0 0;
   width: 100%;
-  max-width: 320px;
+  max-width: 25em;
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 0 16px;
 }
 
 .sunPoint {
@@ -151,7 +158,7 @@
 
 .sunPoint span {
   font-family: var(--wc-font-body);
-  font-size: 12px;
+  font-size: 0.75em;
   font-weight: 600;
   color: var(--wc-text-muted);
   font-variant-numeric: tabular-nums;

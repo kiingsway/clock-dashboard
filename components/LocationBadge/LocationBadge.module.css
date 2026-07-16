@@ -10,7 +10,7 @@
   justify-content: center;
   gap: 4px;
   font-family: var(--wc-font-body);
-  font-size: 12px;
+  font-size: 0.75em;
   font-weight: 500;
   letter-spacing: 0.02em;
   color: var(--wc-text-faint);

@@ -124,7 +124,10 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
         )}
       </dl>
 
-      <SunProgress currentWeather={current} dailyWeather={daily} timezone={timezone} />
+      <SunProgress
+        currentWeather={current}
+        dailyWeather={daily}
+        timezone={timezone} />
 
     </section>
   );

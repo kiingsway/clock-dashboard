@@ -16,3 +16,19 @@
   outline: 2px solid var(--wc-accent);
   outline-offset: 2px;
 }
+
+.group {
+  --scale-font: 1;
+
+  min-height: 0;
+  font-size: calc(1rem * var(--scale-font));
+
+  transition:
+    min-height .35s ease,
+    font-size .35s ease;
+}
+
+.group.focus {
+  min-height: 100vh;
+  --scale-font: 1.4;
+}

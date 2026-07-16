@@ -4,7 +4,6 @@ import type { JSX } from "react";
 import styles from './CurrentWeather.module.css'
 import { getSunWindow } from "@/utils/formatters";
 import { useTranslation } from "react-i18next";
-import { DateTime } from 'luxon'
 
 interface Props {
   currentWeather: IWeatherCurrent

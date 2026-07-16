@@ -74,7 +74,7 @@ export default function getWeatherAnimatedIcon(
       alt={category}
       title={`Weather code: ${weatherCode} (${category})`}
       loading="lazy"
-      style={{ width: size, height: size, display: "block" }}
+      style={{ width: `${size / 16}em`, height: `${size / 16}em`, display: "block" }}
     />
   )
 

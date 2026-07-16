@@ -12,7 +12,8 @@
   margin: 0;
   font-family: var(--wc-font-clock);
   font-weight: 700;
-  font-size: clamp(56px, 18vw, 88px);
+  /* font-size: clamp(56px, 18vw, 88px); */
+  font-size: clamp(3.5em, 18vw, 5.5em);
   line-height: 1;
   letter-spacing: 0.01em;
   color: var(--wc-text);
@@ -27,7 +28,8 @@
   align-items: center;
   gap: 8px;
   font-family: var(--wc-font-display);
-  font-size: clamp(14px, 4vw, 17px);
+  /* font-size: clamp(14px, 4vw, 17px); */
+  font-size: clamp(0.875em, 4vw, 1.0625em);
   color: var(--wc-text-muted);
 }
 

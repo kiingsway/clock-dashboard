@@ -6,7 +6,7 @@ import { Clock } from "@/components/Clock/Clock";
 import { HourlyForecast } from "@/components/HourlyForecast/HourlyForecast";
 import { DailyForecast } from "@/components/DailyForecast/DailyForecast";
 import { useWeather } from "@/hooks/useWeather";
-import { type JSX } from "react";
+import { useState, type JSX } from "react";
 import classNames from "classnames";
 import { useAppSettings } from "@/hooks/useAppSettings";
 import { useTranslation } from "react-i18next";
@@ -27,6 +27,9 @@ export function WeatherClockApp() {
   const { weather, isLoading, error } = useWeather(appSettings.weatherLocation.lat, appSettings.weatherLocation.lon);
   useAutoScrollToTop(12000);
 
+  const [focus, setFocus] = useState(false)
+  const toggleFocus = (): void => setFocus(prev => !prev)
+
   const accent = getAccent(weather?.current.weather_code, weather?.current.is_day);
 
   return (
@@ -34,11 +37,13 @@ export function WeatherClockApp() {
       className={classNames(styles.root, "weather-clock-root")}
       style={{ ["--wc-accent" as string]: accent }}
     >
-      <Clock timezone={appSettings.location} />
+      <div className={classNames(styles.group, { [styles.focus]: focus })}>
+        <Clock timezone={appSettings.location} onClockClick={toggleFocus} />
 
-      <LocationBadge settings={appSettings} weather={weather} />
+        <LocationBadge settings={appSettings} weather={weather} />
 
-      <CurrentWeather weather={weather} loading={isLoading} error={error} />
+        <CurrentWeather weather={weather} loading={isLoading} error={error} />
+      </div>
 
       {weather && (
         <>

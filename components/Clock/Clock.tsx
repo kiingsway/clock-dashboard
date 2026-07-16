@@ -9,6 +9,7 @@ export interface ClockProps {
    * API payload). When omitted, falls back to the device's local time.
    */
   timezone: string;
+  onClockClick: () => void
 }
 
 /**
@@ -16,7 +17,7 @@ export interface ClockProps {
  * ("10 de julho" / "July 10"). Ticks every second internally so the minute
  * rolls over on its own — the host app never needs to re-render this.
  */
-export function Clock({ timezone }: ClockProps) {
+export function Clock({ timezone, onClockClick }: ClockProps) {
   const { i18n } = useTranslation();
 
   const [now, setNow] = useState<DateTime>();
@@ -51,7 +52,7 @@ export function Clock({ timezone }: ClockProps) {
 
   return (
     <header className={styles.clock} aria-label="Relógio" onDoubleClick={onDebugClick}>
-      <p className={styles.time} aria-live="polite">
+      <p className={styles.time} aria-live="polite" onClick={onClockClick}>
         {now?.toFormat("HH:mm") ?? "--:--"}
       </p>
 
