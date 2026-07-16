@@ -41,6 +41,14 @@ export function Clock({ timezone }: ClockProps) {
   const onDebugClick = () =>
     console.info("Clock:", now?.toISO(), "Timezone:", timezone);
 
+  const dateText = ((): string => {
+    if (!now) return '-'
+    return now.setLocale(locale).toLocaleString({
+      day: "numeric",
+      month: "long",
+    });
+  })()
+
   return (
     <header className={styles.clock} aria-label="Relógio" onDoubleClick={onDebugClick}>
       <p className={styles.time} aria-live="polite">
@@ -59,9 +67,7 @@ export function Clock({ timezone }: ClockProps) {
         </span>
 
         <span className={styles.date}>
-          {now
-            ? now.setLocale(locale).toFormat("d 'de' LLLL")
-            : "-"}
+          {dateText}
         </span>
       </p>
     </header>
