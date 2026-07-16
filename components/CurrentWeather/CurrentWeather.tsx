@@ -83,8 +83,8 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
         <p className={styles.feelsLike}>
           {weather?.current ? (
             <>
-              {t('feelsLike')} {Math.round(current.apparent_temperature)}
-              {tempUnit}
+              {t('feelsLike')} <span>{Math.round(current.apparent_temperature)}</span>
+              <small>{tempUnit}</small>
             </>
           ) : '-'}
         </p>

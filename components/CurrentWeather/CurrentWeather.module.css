@@ -67,7 +67,8 @@
   font-family: var(--wc-font-display);
   font-weight: 700;
   /* font-size: clamp(40px, 13vw, 56px); */
-  font-size: clamp(2.5em, 13vw, 3.5em);
+  /* font-size: clamp(2.5em, 13vw, 3.5em); */
+  font-size: 4em;
   line-height: 1;
   color: var(--wc-text);
   text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 50%, transparent);
@@ -83,9 +84,18 @@
 .feelsLike {
   margin: 6px 0 0;
   font-family: var(--wc-font-body);
-  font-size: 0.9em;
+  font-size: 1em;
   font-weight: 500;
   color: var(--wc-text-muted);
+}
+
+.feelsLike span {
+  color: var(--wc-text);
+  font-weight: 600;
+}
+
+.feelsLike small {
+  font-size: 0.8em;
 }
 
 .statRow {
