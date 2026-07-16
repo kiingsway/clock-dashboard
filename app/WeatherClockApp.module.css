@@ -18,6 +18,8 @@
 }
 
 .group {
+  display: flex;
+  flex-direction: column;
   --scale-font: 1;
 
   min-height: 0;

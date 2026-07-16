@@ -59,7 +59,7 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
   const todayMax = daily.temperature_2m_max[0] ?? current.temperature_2m;
   const todayMin = daily.temperature_2m_min[0] ?? current.temperature_2m;
 
-  const weatherIcon = getWeatherAnimatedIcon(current.weather_code, isDay, 108);
+  const weatherIcon = getWeatherAnimatedIcon(current.weather_code, isDay, 130);
 
   const onDebugClick = (): void => console.info('Current Weather:', weather)
 
@@ -70,23 +70,25 @@ export function CurrentWeather({ weather, loading, error }: CurrentWeatherProps)
         <div className={styles.icon}>{weatherIcon.img}</div>
       </div>
 
-      <p className={styles.temp}>
-        {weather?.current ? (
-          <>
-            {Math.round(current.temperature_2m)}
-            <span className={styles.tempUnit}>{tempUnit}</span>
-          </>
-        ) : '-'}
-      </p>
+      <div>
+        <p className={styles.temp}>
+          {weather?.current ? (
+            <>
+              {Math.round(current.temperature_2m)}
+              <span className={styles.tempUnit}>{tempUnit}</span>
+            </>
+          ) : '-'}
+        </p>
 
-      <p className={styles.feelsLike}>
-        {weather?.current ? (
-          <>
-            {t('feelsLike')} {Math.round(current.apparent_temperature)}
-            {tempUnit}
-          </>
-        ) : '-'}
-      </p>
+        <p className={styles.feelsLike}>
+          {weather?.current ? (
+            <>
+              {t('feelsLike')} {Math.round(current.apparent_temperature)}
+              {tempUnit}
+            </>
+          ) : '-'}
+        </p>
+      </div>
 
       <dl className={styles.statRow}>
         {weather?.current ? (
