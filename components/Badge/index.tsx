@@ -1,7 +1,7 @@
 import type { MouseEventHandler, ReactNode } from "react";
 import styles from "./Badge.module.css";
 
-export type BadgeVariant = "neutral" | "accent" | "outline";
+export type BadgeVariant = "neutral" | "accent" | "outline" | "ghost";
 export type BadgeSize = "sm" | "md";
 
 export interface BadgeProps {

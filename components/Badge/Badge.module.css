@@ -48,6 +48,12 @@
   color: var(--wc-text);
 }
 
+.accent {
+  background: color-mix(in srgb, var(--wc-accent) 18%, var(--wc-surface));
+  /* border-color: color-mix(in srgb, var(--wc-accent) 45%, transparent); */
+  color: var(--wc-text);
+}
+
 /* Clickable state (rendered as <button>) */
 
 .clickable {

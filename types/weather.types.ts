@@ -122,6 +122,7 @@ export interface WeatherAlertData {
   alert_name_en: string;
   alert_short_name_en: string;
   alert_text_en: string;
+  feature_name_en: string;
   /** Environment Canada's risk colour, e.g. "Red" / "Orange" / "Yellow" / "Grey". */
   risk_colour_en: string;
   confidence_en: string;
@@ -132,11 +133,11 @@ export interface WeatherAlertData {
 }
 
 export interface IWeatherAlert {
+  id: string
   type: string
   properties: WeatherAlertData
   geometry: {
     type: string
     coordinates: number[][][]
   }
-  id: string
 }

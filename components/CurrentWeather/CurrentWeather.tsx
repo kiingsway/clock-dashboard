@@ -8,6 +8,7 @@ import getWeatherAnimatedIcon from "@/utils/weatherIcons/getWeatherAnimatedIcon"
 import SunProgress from "./SunProgress";
 import { DateTime } from "luxon";
 import { WeatherAlertCard } from "../WeatherAlertCard/WeatherAlertCard";
+import WeatherAlerts from "../WeatherAlerts";
 
 export interface CurrentWeatherProps {
   weather: IWeather | undefined
@@ -92,9 +93,7 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
         </p>
       </div>
 
-      {alerts.map(alert => (
-        <WeatherAlertCard key={alert.id} alert={alert.properties} locale={locale} timeZone={timezone} />
-      ))}
+      <WeatherAlerts alerts={alerts} locale={locale} />
 
       <dl className={styles.statRow}>
         {weather?.current ? (
