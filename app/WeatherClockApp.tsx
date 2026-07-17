@@ -12,9 +12,9 @@ import { useAppSettings } from "@/hooks/useAppSettings";
 import { useTranslation } from "react-i18next";
 import { LocationBadge } from "@/components/LocationBadge/LocationBadge";
 import { useAutoScrollToTop } from "@/hooks/useAutoScrollToTop";
-import getAccentColor, { getAccent } from "@/utils/weatherIcons/getAccentColor";
-import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
+import { getAccent } from "@/utils/weatherIcons/getAccentColor";
 import useWeatherAlerts from "@/hooks/useWeatherAlerts";
+import MoonStatus from "@/components/MoonStatus";
 
 /**
  * Mobile, always-dark clock + weather screen. Designed to be read at a
@@ -60,6 +60,8 @@ export function WeatherClockApp() {
           <DailyForecast weather={weather} locale={locale} />
         </>
       )}
+
+      {/* <MoonStatus /> */}
     </div>
   );
 }

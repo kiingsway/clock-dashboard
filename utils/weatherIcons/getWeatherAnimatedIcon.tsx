@@ -4,15 +4,10 @@ import type { ReactNode } from "react";
 import getWeatherCategory from "./getWeatherCategory";
 
 
-function getWeatherIconFile(
+export function getWeatherIconFile(
   category: WeatherCategory,
   isDay: boolean
 ) {
-  // const unknownIcon = isDay === true
-  //   ? ICON_FILES.unknownDay
-  //   : isDay === false
-  //     ? ICON_FILES.unknownNight
-  //     : ICON_FILES.unknown
   const unknownIcon = ICON_FILES.unknown
 
   const map: Record<WeatherCategory, string> = {

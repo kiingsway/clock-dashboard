@@ -2,13 +2,18 @@
 import { IDaily, IWeather, IWeatherAlert, IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types/weather.types";
 import styles from "./CurrentWeather.module.css";
 import { splitCamelCase } from "@/utils/formatters";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import getWeatherAnimatedIcon from "@/utils/weatherIcons/getWeatherAnimatedIcon";
 import SunProgress from "./SunProgress";
 import { DateTime } from "luxon";
 import { WeatherAlertCard } from "../WeatherAlertCard/WeatherAlertCard";
 import WeatherAlerts from "../WeatherAlerts";
+import getMoonPhase from "@/utils/weatherIcons/getMoonPhase";
+import WeatherIcon from "../WeatherIcon";
+import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
+
+type WeatherInfoMode = "precipitation" | "weather" | "moon";
 
 export interface CurrentWeatherProps {
   weather: IWeather | undefined
@@ -27,8 +32,16 @@ export interface CurrentWeatherProps {
  */
 export function CurrentWeather({ weather, locale, alerts, loading, error }: CurrentWeatherProps) {
   const { t } = useTranslation();
-  const [showWeatherName, setWeatherName] = useState(false)
-  const toggleWeatherName = (): void => setWeatherName(prev => !prev);
+  const [lat, lon] = [weather?.latitude, weather?.longitude];
+  const [moonPhase, setMoonPhase] = useState(() => getMoonPhase({ size: 130, lat, lon }));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMoonPhase(getMoonPhase({ size: 130, lat, lon }));
+    }, 10 * 60 * 1000); // atualiza a cada 10min
+
+    return () => clearInterval(interval);
+  }, []);
 
   const current = weather?.current ?? {
     temperature_2m: 0,
@@ -55,14 +68,29 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
 
   const isDay = current.is_day !== 0;
 
+  const todayMax = daily.temperature_2m_max[0] ?? current.temperature_2m;
+  const todayMin = daily.temperature_2m_min[0] ?? current.temperature_2m;
+
+  const weatherCategory = getWeatherCategory(current.weather_code)
+
   const tempUnit = currentUnits.temperature_2m;
   const precipUnit = currentUnits.precipitation;
   const hasPrecipitation = current.precipitation > 0;
 
-  const todayMax = daily.temperature_2m_max[0] ?? current.temperature_2m;
-  const todayMin = daily.temperature_2m_min[0] ?? current.temperature_2m;
+  const [weatherInfoMode, setWeatherInfoMode] = useState<WeatherInfoMode>(hasPrecipitation ? "precipitation" : "weather");
 
-  const weatherIcon = getWeatherAnimatedIcon(current.weather_code, isDay, 130);
+  const toggleWeatherInfo = (): void => {
+    setWeatherInfoMode(prev => {
+      switch (prev) {
+        case "weather":
+          return "precipitation";
+        case "precipitation":
+          return "moon";
+        default:
+          return "weather";
+      }
+    });
+  };
 
   const onDebugClick = (): void => console.info('Current Weather:', weather)
 
@@ -70,7 +98,15 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
     <section className={styles.current} aria-label="Clima atual" onDoubleClick={onDebugClick}>
       <div className={styles.iconStage}>
         <div className={styles.glow} aria-hidden="true" />
-        <div className={styles.icon}>{weatherIcon.img}</div>
+
+        <WeatherIcon
+          weatherCode={current.weather_code}
+          date={DateTime.now()}
+          isDay={isDay}
+          lat={lat}
+          lon={lon}
+          size={100}
+        />
       </div>
 
       <div>
@@ -105,16 +141,21 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
               </dd>
             </div>
             <div className={styles.statDivider} aria-hidden="true" />
-            <div className={styles.stat} id="prec-weather" onClick={toggleWeatherName}>
-              {showWeatherName ? (
+            <div className={styles.stat} id="prec-weather" onClick={toggleWeatherInfo}>
+              {weatherInfoMode === 'weather' ? (
                 <>
                   <dt>{t('weather')}</dt>
-                  <dd title={`Weather Code (WMO): #${weather.current.weather_code}`}>{splitCamelCase(weatherIcon.category)}</dd>
+                  <dd title={`Weather Code (WMO): #${weather.current.weather_code}`}>{splitCamelCase(weatherCategory)}</dd>
                 </>
-              ) : (
+              ) : weatherInfoMode === 'precipitation' ? (
                 <>
                   <dt>{t('precipitation')}</dt>
                   <dd>{hasPrecipitation ? `${current.precipitation}${precipUnit}` : t('noPrecipitation')}</dd>
+                </>
+              ) : (
+                <>
+                  <dt>{t('moon')}</dt>
+                  <dd>{moonPhase.title} ({(moonPhase.phase * 100).toFixed(1)}%)</dd>
                 </>
               )}
             </div>

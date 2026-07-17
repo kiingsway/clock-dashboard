@@ -1,0 +1,30 @@
+import type { JSX } from 'react'
+import Image from 'next/image'
+import styles from './WeatherIcon.module.scss'
+import getWeatherIcon from '@/utils/weatherIcons/getWeatherIcon'
+import { DateTime } from 'luxon'
+
+interface Props {
+  weatherCode: number
+  date: DateTime
+  isDay: boolean
+  size: number
+  lat?: number
+  lon?: number
+}
+
+export default function WeatherIcon({ weatherCode, date, isDay, lat, lon, size = 34 }: Props): JSX.Element {
+  const weatherIcon = getWeatherIcon({ weatherCode, date, isDay, lat, lon })
+
+  return (
+    <div className={styles.icon}>
+      <Image
+        src={weatherIcon.current.src}
+        alt={weatherIcon.current.alt}
+        title={weatherIcon.current.alt}
+        width={size}
+        height={size}
+      />
+    </div>
+  )
+}

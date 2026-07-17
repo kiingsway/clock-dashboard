@@ -11,7 +11,6 @@ interface WeatherAlert {
 
 export default async function fetchCanadaWeatherAlerts(lat: number, lon: number): Promise<IWeatherAlert[]> {
   const delta = 0.05;
-  // const delta = 10;
 
   const url = "https://api.weather.gc.ca/collections/weather-alerts/items";
 

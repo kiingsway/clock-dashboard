@@ -21,7 +21,7 @@ interface Props {
  * only one alert would be overkill, so with a single alert it renders the
  * card directly, no wrapper chrome.
  */
-export default function WeatherAlerts({ alerts, locale, timeZone }: Props) {
+export default function WeatherAlerts({ alerts, locale }: Props) {
   const { t } = useTranslation();
 
   const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean()
