@@ -32,5 +32,44 @@
 
 .group.focus {
   min-height: 100vh;
+   /* --scale-font: clamp(1.15, 0.9 + 1vh, 1.4); */
+  /* --scale-font: 1.4; */
+  /* --scale-font: clamp(1.2, 0.7rem + 1.2dvh, 1.4); */
+  /* --scale-font: clamp(1.2, 0.9rem + 0.9dvh, 1.4); */
+  /* --scale-font: clamp(1.2, 1.65 - 0.03 * (100dvh - 800px), 1.4); */
+  /* font-size: clamp(1.15rem, 2.2vh, 1.4rem); */
+}
+
+.group.focus {
   --scale-font: 1.4;
+}
+
+@media (max-height: 850px) {
+  .group.focus {
+    --scale-font: 1.35;
+  }
+}
+
+@media (max-height: 800px) {
+  .group.focus {
+    --scale-font: 1.25;
+  }
+}
+
+@media (max-height: 750px) {
+  .group.focus {
+    --scale-font: 1.15;
+  }
+}
+
+@media (max-height: 700px) {
+  .group.focus {
+    --scale-font: 1.05;
+  }
+}
+
+@media (max-height: 650px) {
+  .group.focus {
+    --scale-font: 1;
+  }
 }

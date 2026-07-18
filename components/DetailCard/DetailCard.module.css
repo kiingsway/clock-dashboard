@@ -1,0 +1,42 @@
+.card {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 14px;
+  background: var(--wc-surface);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-md);
+  overflow: hidden;
+}
+
+.title {
+  font-family: var(--wc-font-body);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wc-text-faint);
+}
+
+.center {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 34px;
+  font-family: var(--wc-font-display);
+  font-weight: 700;
+  color: var(--wc-text);
+}
+
+.description {
+  font-family: var(--wc-font-body);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--wc-text-muted);
+}
