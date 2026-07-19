@@ -13,7 +13,7 @@ interface Props {
   lon?: number;
 }
 
-type WeatherIconInfo = Record<'moon' | 'weather' | 'current', { alt: string, src: string }>;
+export type WeatherIconInfo = Record<'moon' | 'weather' | 'current', { alt: string, src: string }>;
 
 export default function getWeatherIcon({ weatherCode, isDay, date, lat, lon }: Props): WeatherIconInfo {
 

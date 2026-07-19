@@ -28,3 +28,25 @@ export default function WeatherIcon({ weatherCode, date, isDay, lat, lon, size =
     </div>
   )
 }
+
+interface WeatherIconImageProps {
+  src: string
+  alt: string
+  title: string
+  size: number
+}
+
+export function WeatherIconImage({ src, alt, title, size = 34 }: WeatherIconImageProps): JSX.Element {
+
+  return (
+    <div className={styles.icon}>
+      <Image
+        src={src}
+        alt={alt}
+        title={title}
+        width={size}
+        height={size}
+      />
+    </div>
+  )
+}

@@ -10,6 +10,9 @@ const api = {
     "weather_code",
     "sunrise",
     "sunset",
+    "uv_index_max",
+    "wind_gusts_10m_mean",
+    "wind_speed_10m_mean",
   ],
   hourly: [
     "temperature_2m",
@@ -17,6 +20,10 @@ const api = {
     "apparent_temperature",
     "weather_code",
     "is_day",
+    "wind_speed_10m",
+    "wind_direction_10m",
+    "wind_gusts_10m",
+    "visibility",
   ],
   current: [
     "temperature_2m",

@@ -14,7 +14,15 @@ import { LocationBadge } from "@/components/LocationBadge/LocationBadge";
 import { useAutoScrollToTop } from "@/hooks/useAutoScrollToTop";
 import { getAccent } from "@/utils/weatherIcons/getAccentColor";
 import useWeatherAlerts from "@/hooks/useWeatherAlerts";
-import MoonStatus from "@/components/MoonStatus";
+import { DetailCard } from "@/components/DetailCard/DetailCard";
+import getMoonPhase from "@/utils/weatherIcons/getMoonPhase";
+import { DateTime } from "luxon";
+import WeatherIcon, { WeatherIconImage } from "@/components/WeatherIcon";
+import getWeatherIcon from "@/utils/weatherIcons/getWeatherIcon";
+import { ICON_BASE_URI } from "@/utils/weatherIcons/iconFiles";
+import getUVIcon from "@/utils/weatherIcons/getUVIcon";
+import getWindInfo from "@/utils/weatherIcons/getWindInfo";
+import getVisibilityInfo from "@/utils/getVisibilityInfo";
 
 /**
  * Mobile, always-dark clock + weather screen. Designed to be read at a
@@ -27,13 +35,29 @@ export function WeatherClockApp() {
   const { i18n } = useTranslation();
   const { weather, isLoading, error } = useWeather(appSettings.weatherLocation);
   const { alerts, isLoading: alertsLoading, error: alertsError } = useWeatherAlerts(appSettings.weatherLocation);
-  useAutoScrollToTop(12000);
+  useAutoScrollToTop(12000 * 999);
 
   const [focus, setFocus] = useState(false)
   const toggleFocus = (): void => setFocus(prev => !prev)
 
   const locale = i18n.language as SupportedLocale;
   const accent = getAccent(weather?.current.weather_code, weather?.current.is_day);
+
+  const moonPhase = getMoonPhase({ lat: weather?.latitude, lon: weather?.longitude })
+  const uvIcon = weather ? getUVIcon(weather.daily, weather.timezone) : undefined;
+  const windInfo = weather ? getWindInfo(weather.daily, weather.hourly, weather.timezone) : undefined;
+  const weatherIcon = weather && getWeatherIcon({
+    weatherCode: weather?.current.weather_code,
+    date: DateTime.fromISO(weather.current.time),
+    isDay: weather.current.is_day === 1,
+    lat: weather.latitude,
+    lon: weather.longitude,
+  })
+
+  const visibility = weather ? getVisibilityInfo(weather?.hourly, weather?.timezone) : undefined
+  const visibilityMeters = !visibility ? '' : new Intl.NumberFormat('pt-BR', {
+    maximumFractionDigits: 0 // Garante que não vai colocar vírgula e centavos
+  }).format(visibility.value);
 
   return (
     <div
@@ -61,7 +85,63 @@ export function WeatherClockApp() {
         </>
       )}
 
-      {/* <MoonStatus /> */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <DetailCard
+          title="Moon"
+          description={`${moonPhase.title} (${(moonPhase.phase * 100).toFixed(2)}%)`}
+          icon={weatherIcon && (
+            <WeatherIconImage
+              src={moonPhase.iconSrc}
+              title={moonPhase.title}
+              alt={moonPhase.title}
+              size={120}
+            />
+          )}
+        />
+        <DetailCard
+          title="UV Index"
+          description={uvIcon?.desc}
+          icon={uvIcon && (
+            <WeatherIconImage
+              src={uvIcon?.src}
+              title={uvIcon?.alt}
+              alt={uvIcon?.alt}
+              size={120}
+            />
+          )} />
+
+        <DetailCard
+          title="Wind Gusts Now"
+          bigText={`${windInfo?.hourly.gusts}km/h`}
+          description={`Média de ${windInfo?.daily?.gusts}km/h no dia`}
+        />
+        <DetailCard
+          title="Wind"
+          description={`${windInfo?.hourly.desc} Sentido ${windInfo?.hourly.direction.name?.toLowerCase()}.`}
+          icon={windInfo?.hourly.beaufortSrc && windInfo?.hourly.direction.src && (
+            <>
+              <WeatherIconImage
+                src={windInfo?.hourly.direction.src}
+                title={`Vento ${windInfo?.hourly.direction.name}`}
+                alt={`Vento ${windInfo?.hourly.direction.name}`}
+                size={80}
+              />
+              <WeatherIconImage
+                src={windInfo.hourly.beaufortSrc}
+                title={`Vento ${windInfo?.hourly.direction.name}`}
+                alt={`Vento ${windInfo?.hourly.direction.name}`}
+                size={80}
+              />
+            </>
+          )}
+        />
+
+        <DetailCard
+          title="Visibility"
+          bigText={`${visibilityMeters}m`}
+          description={visibility?.desc}
+        />
+      </div>
     </div>
   );
 }

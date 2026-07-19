@@ -29,6 +29,9 @@ export interface IHourlyUnits {
   precipitation: "mm" | "inch";
   apparent_temperature: "°C" | "°F";
   weather_code: "wmo code";
+  wind_speed_10m: "km/h",
+  wind_direction_10m: "°",
+  wind_gusts_10m: "km/h"
 }
 
 export interface IHourly {
@@ -38,6 +41,10 @@ export interface IHourly {
   apparent_temperature: number[];
   is_day: number[];
   weather_code: number[];
+  wind_direction_10m: number[];
+  wind_gusts_10m: number[];
+  wind_speed_10m: number[];
+  visibility: number[];
 }
 
 export interface IDailyUnits {
@@ -45,6 +52,8 @@ export interface IDailyUnits {
   temperature_2m_max: "°C" | "°F";
   temperature_2m_min: "°C" | "°F";
   weather_code: "wmo code";
+  wind_gusts_10m_mean: "km/h";
+  wind_speed_10m_mean: "km/h";
 }
 
 export interface IDaily {
@@ -54,6 +63,9 @@ export interface IDaily {
   temperature_2m_max: number[];
   temperature_2m_min: number[];
   weather_code: number[];
+  uv_index_max: number[];
+  wind_gusts_10m_mean: number[];
+  wind_speed_10m_mean: number[];
 }
 
 export interface IWeather {

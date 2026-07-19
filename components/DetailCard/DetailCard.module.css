@@ -9,6 +9,8 @@
   border: 1px solid var(--wc-hairline);
   border-radius: var(--wc-radius-md);
   overflow: hidden;
+  cursor: default;
+  user-select: none;
 }
 
 .title {
