@@ -35,10 +35,11 @@ export function WeatherClockApp() {
   const { i18n } = useTranslation();
   const { weather, isLoading, error } = useWeather(appSettings.weatherLocation);
   const { alerts, isLoading: alertsLoading, error: alertsError } = useWeatherAlerts(appSettings.weatherLocation);
-  useAutoScrollToTop(30000);
 
   const [focus, setFocus] = useState(false)
   const toggleFocus = (): void => setFocus(prev => !prev)
+
+  useAutoScrollToTop(focus ? 12000 : 60000);
 
   const locale = i18n.language as SupportedLocale;
   const accent = getAccent(weather?.current.weather_code, weather?.current.is_day);
