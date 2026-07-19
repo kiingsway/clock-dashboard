@@ -141,3 +141,10 @@ export function capitalizeWords(text: string): string {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+export function hexToRgb(hex: string) {
+  const bigint = parseInt(hex.replace('#', ''), 16);
+  return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
+}
+
+export const lerp = (start: number, end: number, t: number) => Math.round(start + (end - start) * t);

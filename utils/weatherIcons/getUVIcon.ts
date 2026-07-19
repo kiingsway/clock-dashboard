@@ -1,9 +1,13 @@
-import { IDaily } from "@/types/weather.types"
+import { IDaily, IWeather } from "@/types/weather.types"
 import { ICON_BASE_URI } from "./iconFiles"
 import { DateTime } from "luxon"
 import { getTodayDailyValue } from "../getValueFromDate"
 
-export default function getUVIcon(daily: IDaily, timezone: string) {
+export default function getUVIcon(weather?: IWeather) {
+
+  if (!weather) return undefined
+
+  const { daily, timezone } = weather;
 
   const uvNumber = getTodayDailyValue(daily.time, daily.uv_index_max, timezone)
 

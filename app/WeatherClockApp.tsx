@@ -35,7 +35,7 @@ export function WeatherClockApp() {
   const { i18n } = useTranslation();
   const { weather, isLoading, error } = useWeather(appSettings.weatherLocation);
   const { alerts, isLoading: alertsLoading, error: alertsError } = useWeatherAlerts(appSettings.weatherLocation);
-  useAutoScrollToTop(12000 * 999);
+  useAutoScrollToTop(30000);
 
   const [focus, setFocus] = useState(false)
   const toggleFocus = (): void => setFocus(prev => !prev)
@@ -44,8 +44,8 @@ export function WeatherClockApp() {
   const accent = getAccent(weather?.current.weather_code, weather?.current.is_day);
 
   const moonPhase = getMoonPhase({ lat: weather?.latitude, lon: weather?.longitude })
-  const uvIcon = weather ? getUVIcon(weather.daily, weather.timezone) : undefined;
-  const windInfo = weather ? getWindInfo(weather.daily, weather.hourly, weather.timezone) : undefined;
+  const uvIcon = getUVIcon(weather);
+  const windInfo = getWindInfo(weather);
   const weatherIcon = weather && getWeatherIcon({
     weatherCode: weather?.current.weather_code,
     date: DateTime.fromISO(weather.current.time),
@@ -54,10 +54,7 @@ export function WeatherClockApp() {
     lon: weather.longitude,
   })
 
-  const visibility = weather ? getVisibilityInfo(weather?.hourly, weather?.timezone) : undefined
-  const visibilityMeters = !visibility ? '' : new Intl.NumberFormat('pt-BR', {
-    maximumFractionDigits: 0 // Garante que não vai colocar vírgula e centavos
-  }).format(visibility.value);
+  const visibility = getVisibilityInfo(weather)
 
   return (
     <div
@@ -112,6 +109,7 @@ export function WeatherClockApp() {
 
         <DetailCard
           title="Wind Gusts Now"
+          textColor={windInfo?.hourly.gustsColor}
           bigText={`${windInfo?.hourly.gusts}km/h`}
           description={`Média de ${windInfo?.daily?.gusts}km/h no dia`}
         />
@@ -121,13 +119,13 @@ export function WeatherClockApp() {
           icon={windInfo?.hourly.beaufortSrc && windInfo?.hourly.direction.src && (
             <>
               <WeatherIconImage
-                src={windInfo?.hourly.direction.src}
+                src={windInfo.hourly.beaufortSrc}
                 title={`Vento ${windInfo?.hourly.direction.name}`}
                 alt={`Vento ${windInfo?.hourly.direction.name}`}
                 size={80}
               />
               <WeatherIconImage
-                src={windInfo.hourly.beaufortSrc}
+                src={windInfo?.hourly.direction.src}
                 title={`Vento ${windInfo?.hourly.direction.name}`}
                 alt={`Vento ${windInfo?.hourly.direction.name}`}
                 size={80}
@@ -138,7 +136,8 @@ export function WeatherClockApp() {
 
         <DetailCard
           title="Visibility"
-          bigText={`${visibilityMeters}m`}
+          bigText={visibility?.title}
+          textColor={visibility?.color}
           description={visibility?.desc}
         />
       </div>

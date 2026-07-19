@@ -31,7 +31,8 @@ export interface IHourlyUnits {
   weather_code: "wmo code";
   wind_speed_10m: "km/h",
   wind_direction_10m: "°",
-  wind_gusts_10m: "km/h"
+  wind_gusts_10m: "km/h",
+  visibility: "m"
 }
 
 export interface IHourly {
