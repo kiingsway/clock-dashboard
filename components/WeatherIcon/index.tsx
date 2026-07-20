@@ -6,14 +6,14 @@ import { DateTime } from 'luxon'
 
 interface Props {
   weatherCode: number
-  date: DateTime
-  isDay: boolean
-  size: number
+  size?: number
+  isDay?: boolean
+  date?: DateTime
   lat?: number
   lon?: number
 }
 
-export default function WeatherIcon({ weatherCode, date, isDay, lat, lon, size = 34 }: Props): JSX.Element {
+export default function WeatherIcon({ weatherCode, date, isDay = true, lat, lon, size = 34 }: Props): JSX.Element {
   const weatherIcon = getWeatherIcon({ weatherCode, date, isDay, lat, lon })
 
   return (

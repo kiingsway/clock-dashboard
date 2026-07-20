@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Image from 'next/image'
 import ICON_FILES, { ICON_BASE_URI } from "./iconFiles";
 
 /**
@@ -6,6 +7,7 @@ import ICON_FILES, { ICON_BASE_URI } from "./iconFiles";
  * `getWeatherAnimatedIcon`).
  */
 export default function getSunIcon(kind: "sunrise" | "sunset", size: number): ReactNode {
+
   return (
     <img
       src={`${ICON_BASE_URI}${ICON_FILES[kind]}.svg`}

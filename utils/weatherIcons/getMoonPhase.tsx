@@ -1,4 +1,4 @@
-import { getMoonIllumination, getMoonPosition } from "suncalc";
+import { getMoonIllumination, getMoonPosition, getMoonTimes } from "suncalc";
 import { ICON_BASE_URI } from "./iconFiles";
 import { ReactNode } from "react";
 import { DateTime } from "luxon";
@@ -12,6 +12,8 @@ interface IMoonPhase extends IMoonInfo {
   phase: number
   isVisible: boolean | undefined
   iconSrc: string
+  moonrise?: DateTime
+  moonset?: DateTime
 }
 
 const MOON_PHASES: Record<string, IMoonInfo> = {
@@ -106,10 +108,14 @@ export default function getMoonPhase({
 
   const isVisible = lat && lon ? isMoonVisible(lat, lon, date) : undefined;
 
+  const moonTimes = lat && lon ? getMoonTimes(date.toJSDate(), lat, lon) : undefined;
+
   return {
     title: moon.title,
     phase,
     icon,
+    moonrise: moonTimes?.rise ? DateTime.fromJSDate(moonTimes?.rise) : undefined,
+    moonset: moonTimes?.set ? DateTime.fromJSDate(moonTimes?.set) : undefined,
     iconSrc: `${ICON_BASE_URI}${moon.icon}.svg`,
     isVisible,
   };

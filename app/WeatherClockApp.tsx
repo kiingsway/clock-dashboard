@@ -97,6 +97,11 @@ export function WeatherClockApp() {
           )}
         />
         <DetailCard
+          title="Moonrise/Moonset"
+          bigText={`${moonPhase.moonrise?.toFormat('HH:mm')} - ${moonPhase.moonset?.toFormat('HH:mm')}`}
+        />
+
+        <DetailCard
           title="UV Index"
           description={uvIcon?.desc}
           icon={uvIcon && (

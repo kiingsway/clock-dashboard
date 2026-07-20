@@ -84,8 +84,8 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
       switch (prev) {
         case "weather":
           return "precipitation";
-        case "precipitation":
-          return "moon";
+        // case "precipitation":
+        // return "moon";
         default:
           return "weather";
       }
@@ -152,12 +152,7 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
                   <dt>{t('precipitation')}</dt>
                   <dd>{hasPrecipitation ? `${current.precipitation}${precipUnit}` : t('noPrecipitation')}</dd>
                 </>
-              ) : (
-                <>
-                  <dt>{t('moon')}</dt>
-                  <dd>{moonPhase.title} ({(moonPhase.phase * 100).toFixed(1)}%)</dd>
-                </>
-              )}
+              ) : <></>}
             </div>
           </>
         ) : (

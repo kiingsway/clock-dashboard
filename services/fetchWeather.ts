@@ -4,6 +4,7 @@ import axios from "axios";
 const api = {
   past_days: 1,
   timezone: "auto",
+  forecast_days: 14,
   daily: [
     "temperature_2m_max",
     "temperature_2m_min",
@@ -13,6 +14,8 @@ const api = {
     "uv_index_max",
     "wind_gusts_10m_mean",
     "wind_speed_10m_mean",
+    "apparent_temperature_mean",
+    "temperature_2m_mean",
   ],
   hourly: [
     "temperature_2m",
@@ -49,14 +52,16 @@ export async function fetchWeather(
   latitude?: number,
   longitude?: number
 ): Promise<IWeather> {
+  const { current, daily, hourly, timezone, past_days, forecast_days } = api
   const params = new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
-    past_days: String(api.past_days),
-    daily: api.daily.join(","),
-    hourly: api.hourly.join(","),
-    current: api.current.join(","),
-    timezone: api.timezone,
+    past_days: String(past_days),
+    forecast_days: String(forecast_days),
+    daily: daily.join(","),
+    hourly: hourly.join(","),
+    current: current.join(","),
+    timezone: timezone,
   });
 
   const url = `https://api.open-meteo.com/v1/forecast?${params}`;

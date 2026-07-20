@@ -8,14 +8,14 @@ import { splitCamelCase } from "../formatters";
 interface Props {
   weatherCode: number;
   isDay: boolean;
-  date: DateTime
+  date?: DateTime
   lat?: number;
   lon?: number;
 }
 
 export type WeatherIconInfo = Record<'moon' | 'weather' | 'current', { alt: string, src: string }>;
 
-export default function getWeatherIcon({ weatherCode, isDay, date, lat, lon }: Props): WeatherIconInfo {
+export default function getWeatherIcon({ weatherCode, isDay, date = DateTime.now(), lat, lon }: Props): WeatherIconInfo {
 
   const category = getWeatherCategory(weatherCode)
   const currentWeatherIcon = getWeatherIconFile(category, isDay)

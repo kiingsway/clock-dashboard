@@ -55,6 +55,7 @@ export interface IDailyUnits {
   weather_code: "wmo code";
   wind_gusts_10m_mean: "km/h";
   wind_speed_10m_mean: "km/h";
+  apparent_temperature_mean: "°C" | "°F";
 }
 
 export interface IDaily {
@@ -67,6 +68,8 @@ export interface IDaily {
   uv_index_max: number[];
   wind_gusts_10m_mean: number[];
   wind_speed_10m_mean: number[];
+  apparent_temperature_mean: number[];
+  temperature_2m_mean: number[];
 }
 
 export interface IWeather {
