@@ -110,6 +110,7 @@ export function WeatherClockApp() {
               title={uvIcon?.alt}
               alt={uvIcon?.alt}
               size={120}
+              duration={uvIcon.iconDuration}
             />
           )} />
 
@@ -128,12 +129,14 @@ export function WeatherClockApp() {
                 src={windInfo.hourly.beaufortSrc}
                 title={`Vento ${windInfo?.hourly.direction.name}`}
                 alt={`Vento ${windInfo?.hourly.direction.name}`}
+                duration={windInfo.hourly.beaufortDur}
                 size={80}
               />
               <WeatherIconImage
                 src={windInfo?.hourly.direction.src}
                 title={`Vento ${windInfo?.hourly.direction.name}`}
                 alt={`Vento ${windInfo?.hourly.direction.name}`}
+                duration={windInfo.hourly.beaufortDur}
                 size={80}
               />
             </>

@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from './WeatherIcon.module.scss'
 import getWeatherIcon from '@/utils/weatherIcons/getWeatherIcon'
 import { DateTime } from 'luxon'
+import AnimatedWeatherIcon from '../AnimatedWeatherIcon'
 
 interface Props {
   weatherCode: number
@@ -34,19 +35,20 @@ interface WeatherIconImageProps {
   alt: string
   title: string
   size: number
+  duration?: number
 }
 
-export function WeatherIconImage({ src, alt, title, size = 34 }: WeatherIconImageProps): JSX.Element {
+export function WeatherIconImage({ src, alt, title, size = 34, duration }: WeatherIconImageProps): JSX.Element {
 
   return (
     <div className={styles.icon}>
-      <Image
+      <AnimatedWeatherIcon
         src={src}
         alt={alt}
+        size={size}
         title={title}
-        width={size}
-        height={size}
+        duration={duration}
       />
     </div>
-  )
+  );
 }

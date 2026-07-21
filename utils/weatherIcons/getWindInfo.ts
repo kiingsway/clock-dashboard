@@ -40,6 +40,7 @@ export default function getWindInfo(weather?: IWeather) {
         src: `${ICON_BASE_URI}wind-direction-${windDirectionCompass?.abbreviation.toLowerCase()}.svg`
       },
       beaufortSrc: beaufort ? `${ICON_BASE_URI}wind-beaufort-${beaufort}.svg` : undefined,
+      beaufortDur: windGusts ? getWindGustAnimationDuration(windGusts) : undefined,
       gusts: windGusts,
       gustsColor: getWindGustColor(windGusts),
       speed: windSpeed,
@@ -95,4 +96,18 @@ export function getWindGustColor(gustKmH?: number): string | undefined {
   const B = lerp(c1.b, c2.b, factor);
 
   return `rgb(${R}, ${G}, ${B})`;
+}
+
+function getWindGustAnimationDuration(windGust: number): number {
+  const MIN_GUST = 0;
+  const MAX_GUST = 100;
+
+  const MIN_DURATION = 1.5; // 100 km/h
+  const MAX_DURATION = 15;  // 0 km/h
+
+  const gust = Math.min(Math.max(windGust, MIN_GUST), MAX_GUST);
+
+  const t = (gust - MIN_GUST) / (MAX_GUST - MIN_GUST);
+
+  return MAX_DURATION - t * (MAX_DURATION - MIN_DURATION);
 }
