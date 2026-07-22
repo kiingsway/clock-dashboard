@@ -139,4 +139,7 @@
 
 .badge  {
   color: var(--wc-text-muted) !important;
+  white-space: wrap !important;
+  text-align: left !important;
+  gap: 8px !important;
 }

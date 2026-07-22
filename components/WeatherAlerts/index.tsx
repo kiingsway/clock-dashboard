@@ -41,7 +41,7 @@ export default function WeatherAlerts({ alerts, locale }: Props) {
 
   return (
     <>
-      <Modal open={alertsModalOpen} onClose={closeModal} title={t('alert', { count: alerts.length })} closeLabel={t('close')}>
+      <Modal open={alertsModalOpen} onClose={closeModal} title={t('alert', { count: alerts.length })} closeLabel={t('close')} onTitleClick={onDebugClick}>
         <div className={styles.modalList} onDoubleClick={onDebugClick}>
           {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert.properties} locale={locale} autoExpand={alerts.length === 1} />)}
         </div>

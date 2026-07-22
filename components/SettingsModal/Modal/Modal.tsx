@@ -8,6 +8,7 @@ export interface ModalProps {
   /** Accessible label for the close button. */
   closeLabel: string;
   children: ReactNode;
+  onTitleClick: () => void
 }
 
 /**
@@ -16,7 +17,7 @@ export interface ModalProps {
  * Escape. Not tied to any weather/settings content, so it's reusable for
  * anything else the app grows into.
  */
-export function Modal({ open, onClose, title, closeLabel, children }: ModalProps) {
+export function Modal({ open, onClose, title, closeLabel, children, onTitleClick }: ModalProps) {
   useEffect(() => {
     if (!open) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -39,7 +40,7 @@ export function Modal({ open, onClose, title, closeLabel, children }: ModalProps
       >
         <div className={styles.grabber} aria-hidden="true" />
         <div className={styles.header}>
-          <h2 className={styles.title}>{title}</h2>
+          <h2 className={styles.title} onDoubleClick={onTitleClick}>{title}</h2>
           <button type="button" className={styles.closeButton} onClick={onClose} aria-label={closeLabel}>
             ✕
           </button>
