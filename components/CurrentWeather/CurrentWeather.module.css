@@ -8,7 +8,7 @@
   padding: 4px 16px 20px;
   cursor: default;
   user-select: none;
-  /* gap: 0.6em; */
+  gap: 0.6em;
 }
 
 .iconStage {
@@ -63,7 +63,7 @@
 }
 
 .temp {
-  margin: 4px 0 0;
+  /* margin: 4px 0 0; */
   font-family: var(--wc-font-display);
   font-weight: 700;
   /* font-size: clamp(40px, 13vw, 56px); */
@@ -82,7 +82,7 @@
 }
 
 .feelsLike {
-  margin: 6px 0 0;
+  /* margin: 6px 0 0; */
   font-family: var(--wc-font-body);
   font-size: 1em;
   font-weight: 500;
@@ -99,7 +99,7 @@
 }
 
 .statRow {
-  margin: 20px 0 0;
+  /* margin: 20px 0 0; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -148,7 +148,7 @@
 }
 
 .sunArc {
-  margin: 12px 0 0;
+  /* margin: 12px 0 0; */
   width: 100%;
   max-width: 25em;
   display: flex;

@@ -2,18 +2,15 @@
 import { IDaily, IWeather, IWeatherAlert, IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types/weather.types";
 import styles from "./CurrentWeather.module.css";
 import { splitCamelCase } from "@/utils/formatters";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import getWeatherAnimatedIcon from "@/utils/weatherIcons/getWeatherAnimatedIcon";
 import SunProgress from "./SunProgress";
 import { DateTime } from "luxon";
-import { WeatherAlertCard } from "../WeatherAlertCard/WeatherAlertCard";
 import WeatherAlerts from "../WeatherAlerts";
-import getMoonPhase from "@/utils/weatherIcons/getMoonPhase";
 import WeatherIcon from "../WeatherIcon";
 import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
 
-type WeatherInfoMode = "precipitation" | "weather" | "moon";
+type WeatherInfoMode = "precipitation" | "weather";
 
 export interface CurrentWeatherProps {
   weather: IWeather | undefined
@@ -33,15 +30,6 @@ export interface CurrentWeatherProps {
 export function CurrentWeather({ weather, locale, alerts, loading, error }: CurrentWeatherProps) {
   const { t } = useTranslation();
   const [lat, lon] = [weather?.latitude, weather?.longitude];
-  const [moonPhase, setMoonPhase] = useState(() => getMoonPhase({ size: 130, lat, lon }));
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMoonPhase(getMoonPhase({ size: 130, lat, lon }));
-    }, 10 * 60 * 1000); // atualiza a cada 10min
-
-    return () => clearInterval(interval);
-  }, []);
 
   const current = weather?.current ?? {
     temperature_2m: 0,
@@ -84,8 +72,6 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
       switch (prev) {
         case "weather":
           return "precipitation";
-        // case "precipitation":
-        // return "moon";
         default:
           return "weather";
       }
@@ -105,7 +91,7 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
           isDay={isDay}
           lat={lat}
           lon={lon}
-          size={100}
+          size={160}
         />
       </div>
 
