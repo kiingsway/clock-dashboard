@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 
+const events = ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "wheel"] as const;
+
 export function useAutoScrollToTop(delay = 30000) {
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
@@ -17,14 +19,6 @@ export function useAutoScrollToTop(delay = 30000) {
       }, delay);
     };
 
-    const events = [
-      "mousemove",
-      "mousedown",
-      "keydown",
-      "touchstart",
-      "scroll",
-      "wheel",
-    ] as const;
 
     events.forEach((event) => {
       window.addEventListener(event, resetTimer, { passive: true });

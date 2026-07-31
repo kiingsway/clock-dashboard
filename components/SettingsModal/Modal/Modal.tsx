@@ -8,7 +8,7 @@ export interface ModalProps {
   /** Accessible label for the close button. */
   closeLabel: string;
   children: ReactNode;
-  onTitleClick: () => void
+  onTitleClick?: () => void
 }
 
 /**

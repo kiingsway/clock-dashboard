@@ -1,19 +1,14 @@
 import { IWeather, SupportedLocale } from "@/types/weather.types";
 import styles from "./HourlyForecast.module.css";
-import { formatHourLabel, splitCamelCase } from "@/utils/formatters";
+import { formatHourLabel } from "@/utils/formatters";
 import { useTranslation } from "react-i18next";
-import getWeatherAnimatedIcon from "@/utils/weatherIcons/getWeatherAnimatedIcon";
 import { DateTime } from "luxon";
 import { getAccent } from "@/utils/weatherIcons/getAccentColor";
-import getMoonPhase from "@/utils/weatherIcons/getMoonPhase";
-import { getMoonPosition } from "suncalc";
-import getWeatherIcon from "@/utils/weatherIcons/getWeatherIcon";
-import Image from "next/image";
 import WeatherIcon from "../WeatherIcon";
 
 export interface HourlyForecastProps {
   weather: IWeather
-  locale: SupportedLocale;
+  locale: string;
   /** How many upcoming hours to render. Defaults to 24. */
   hoursToShow?: number;
 }

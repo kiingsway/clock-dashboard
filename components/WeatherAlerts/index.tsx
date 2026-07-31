@@ -10,7 +10,7 @@ import { capitalizeWords } from "@/utils/formatters";
 
 interface Props {
   alerts: IWeatherAlert[];
-  locale: SupportedLocale;
+  locale: string;
   timeZone?: string;
 }
 

@@ -12,7 +12,15 @@ const getUvSrc = (uv?: number): string => {
   return `${ICON_BASE_URI}${name}.svg`
 }
 
-export default function getUVIcon(weather?: IWeather) {
+export interface IUVIcon {
+  alt: string;
+  src: string;
+  desc: string;
+  uv?: number;
+  iconDuration?: number;
+}
+
+export default function getUVIcon(weather?: IWeather): IUVIcon | undefined {
 
   if (!weather) return undefined
 

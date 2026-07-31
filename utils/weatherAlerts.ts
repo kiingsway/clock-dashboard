@@ -32,7 +32,7 @@ export function getSeverityColor(riskColourEn: string): string {
 export function formatAlertUntil(
   endTime: string,
   now: DateTime,
-  locale: SupportedLocale,
+  locale: string,
   timeZone?: string
 ): string {
   const end = DateTime.fromISO(endTime, { zone: timeZone });

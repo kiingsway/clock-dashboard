@@ -5,7 +5,7 @@
   border-radius: var(--wc-radius-md);
   overflow: hidden;
   margin-top: 1em;
-  width: 70%;
+  width: 19em;
   cursor: pointer;
 
   transition:
@@ -31,7 +31,7 @@
 .body {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: var(--wc-space-xs);
   justify-content: space-between;
   width: 100%;
   padding: 14px 16px;
@@ -40,7 +40,7 @@
 .bodyLeft {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--wc-space-xs);
 }
 
 .stripe {
@@ -52,7 +52,7 @@
 .title {
   margin: 0;
   font-family: var(--wc-font-display);
-  font-size: 15px;
+  font-size: var(--wc-text-2xs);
   font-weight: 700;
   line-height: 1.3;
   color: var(--wc-text);
@@ -65,7 +65,7 @@
 .desc {
   margin: 2px 0 0;
   font-family: var(--wc-font-body);
-  font-size: 12px;
+  font-size: var(--wc-text-2xs);
   font-weight: 600;
   color: var(--wc-text-faint);
   max-width: 110px;
@@ -78,10 +78,10 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--wc-space-xs);
   margin-top: 2px;
   font-family: var(--wc-font-body);
-  font-size: 10.5px;
+  font-size: var(--wc-text-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -93,10 +93,10 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--wc-space-xs);
   margin-top: 2px;
   font-family: var(--wc-font-body);
-  font-size: 10.5px;
+  font-size: var(--wc-text-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -107,7 +107,7 @@
 .typeDot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: var(--wc-radius-full);
   background: var(--wc-severity);
   box-shadow: 0 0 6px 1px color-mix(in srgb, var(--wc-severity) 70%, transparent);
 }
@@ -116,5 +116,5 @@
   display: flex;
   flex-direction: column;
   padding: 0 10px;
-  gap: 1em;
+  gap: var(--wc-space-lg);
 }

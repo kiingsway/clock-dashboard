@@ -1,12 +1,38 @@
 import { IDaily, IHourly, IWeather } from "@/types/weather.types"
 import { ICON_BASE_URI } from "./iconFiles"
-import { DateTime } from "luxon"
+import { DateTime, Duration } from "luxon"
 import { getCurrentHourlyValue, getTodayDailyValue } from "../getValueFromDate"
-import getBeaufortScale from "../getBeaufortScale"
+import getBeaufortScale, { BeaufortLevel } from "../getBeaufortScale"
 import { getCompassDirection } from "../getCompassDirection"
 import { hexToRgb, lerp } from "../formatters"
 
-export default function getWindInfo(weather?: IWeather) {
+export interface IWindInfo {
+  daily?: {
+    speed: number;
+    gusts: number;
+    gustsColor?: string;
+    desc: string;
+  };
+  hourly: {
+    direction: {
+      name?: string;
+      src: string;
+    };
+    beaufort?: {
+      src: string;
+      value: BeaufortLevel
+      duration: number
+    };
+    // beaufortSrc?: string;
+    // beaufortDur?: number;
+    gusts?: number;
+    gustsColor?: string;
+    speed?: number;
+    desc?: string;
+  };
+};
+
+export default function getWindInfo(weather?: IWeather): IWindInfo | undefined {
 
   if (!weather) return undefined
 
@@ -25,7 +51,16 @@ export default function getWindInfo(weather?: IWeather) {
   const hasDaily = !windSpeedMean || !windGustsMean || !windGustsMeanDesc
 
   const windDirectionCompass = windDirection ? getCompassDirection(windDirection) : undefined
-  const beaufort = typeof windSpeed === 'number' ? getBeaufortScale(windSpeed).level : undefined
+
+  const beaufort = (() => {
+    if (typeof windSpeed !== 'number') return undefined
+
+    const value = getBeaufortScale(windSpeed).level;
+    const src = `${ICON_BASE_URI}wind-beaufort-${value}.svg`
+    const duration = getWindGustAnimationDuration(windSpeed)
+
+    return { src, value, duration }
+  })()
 
   return {
     daily: hasDaily ? undefined : {
@@ -39,8 +74,9 @@ export default function getWindInfo(weather?: IWeather) {
         name: windDirectionCompass?.name,
         src: `${ICON_BASE_URI}wind-direction-${windDirectionCompass?.abbreviation.toLowerCase()}.svg`
       },
-      beaufortSrc: beaufort ? `${ICON_BASE_URI}wind-beaufort-${beaufort}.svg` : undefined,
-      beaufortDur: windGusts ? getWindGustAnimationDuration(windGusts) : undefined,
+      beaufort,
+      // beaufortSrc: beaufort ? `${ICON_BASE_URI}wind-beaufort-${beaufort}.svg` : undefined,
+      // beaufortDur: windGusts ? getWindGustAnimationDuration(windGusts) : undefined,
       gusts: windGusts,
       gustsColor: getWindGustColor(windGusts),
       speed: windSpeed,

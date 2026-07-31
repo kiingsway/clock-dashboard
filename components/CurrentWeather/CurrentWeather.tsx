@@ -1,7 +1,7 @@
 
 import { IDaily, IWeather, IWeatherAlert, IWeatherCurrent, IWeatherUnits, SupportedLocale } from "@/types/weather.types";
 import styles from "./CurrentWeather.module.css";
-import { splitCamelCase } from "@/utils/formatters";
+import { getSunWindow, isXMinBefore, splitCamelCase } from "@/utils/formatters";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import SunProgress from "./SunProgress";
@@ -12,11 +12,11 @@ import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
 
 type WeatherInfoMode = "precipitation" | "weather";
 
-export interface CurrentWeatherProps {
+interface Props {
   weather: IWeather | undefined
   loading: boolean
   error: any
-  locale: SupportedLocale
+  locale: string
   alerts: IWeatherAlert[]
 }
 
@@ -27,9 +27,10 @@ export interface CurrentWeatherProps {
  * gotten. Values and units are rendered exactly as given — no conversion
  * happens in this component.
  */
-export function CurrentWeather({ weather, locale, alerts, loading, error }: CurrentWeatherProps) {
+export function CurrentWeather({ weather, locale, alerts, loading, error }: Props) {
   const { t } = useTranslation();
-  const [lat, lon] = [weather?.latitude, weather?.longitude];
+
+  const now = DateTime.now();
 
   const current = weather?.current ?? {
     temperature_2m: 0,
@@ -37,7 +38,7 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
     precipitation: 0,
     weather_code: loading ? -2 : -1,
     is_day: 1,
-    time: DateTime.now().toISO(),
+    time: now.toISO(),
   } as IWeatherCurrent;
 
   const currentUnits = weather?.current_units ?? {
@@ -46,8 +47,8 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
   } as IWeatherUnits;
 
   const daily = weather?.daily ?? {
-    sunrise: [DateTime.now().toISO()],
-    sunset: [DateTime.now().toISO()],
+    sunrise: [now.toISO()],
+    sunset: [now.toISO()],
     temperature_2m_max: [0],
     temperature_2m_min: [0],
   } as IDaily;
@@ -78,21 +79,32 @@ export function CurrentWeather({ weather, locale, alerts, loading, error }: Curr
     });
   };
 
+  const sunWindow = getSunWindow(current.time, daily.sunrise, daily.sunset, timezone);
+  const isBeforeSunRiseSet = isXMinBefore(now, sunWindow.end, 30);
+
   const onDebugClick = (): void => console.info('Current Weather:', weather)
 
   return (
     <section className={styles.current} aria-label="Clima atual" onDoubleClick={onDebugClick}>
+
       <div className={styles.iconStage}>
         <div className={styles.glow} aria-hidden="true" />
 
-        <WeatherIcon
-          weatherCode={current.weather_code}
-          date={DateTime.now()}
-          isDay={isDay}
-          lat={lat}
-          lon={lon}
-          size={160}
-        />
+        {weatherCategory === 'clear' && isBeforeSunRiseSet ? (
+          <WeatherIcon
+            category={sunWindow.endKind}
+            size={160}
+          />
+        ) : (
+          <WeatherIcon
+            weatherCode={current.weather_code}
+            date={DateTime.now()}
+            isDay={isDay}
+            lat={weather?.latitude}
+            lon={weather?.longitude}
+            size={160}
+          />
+        )}
       </div>
 
       <div>

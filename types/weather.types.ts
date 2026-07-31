@@ -92,7 +92,7 @@ export interface IWeather {
 export type SupportedLocale = "pt-BR" | "en-US";
 
 /** Grouped WMO weather-code buckets used for both icon selection and the ambient glow accent. */
-export type WeatherCategory =
+export type WeatherCategoryName =
   | "clear"
   | "partlyCloudy"
   | "cloudy"
@@ -115,9 +115,18 @@ export type WeatherCategory =
   | "heavySnow"
   | "sleet"
   | "heavySleet"
+
+  | "sunrise"
+  | "sunset"
+
   | "unknown"
   | "error"
   | "loading";
+
+export interface WeatherCategory {
+  name: WeatherCategoryName;
+  title: string;
+}
 
 export interface SelectOption {
   value: string;

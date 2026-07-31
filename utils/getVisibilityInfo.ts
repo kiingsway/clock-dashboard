@@ -1,7 +1,14 @@
 import { IHourly, IWeather } from "@/types/weather.types";
 import { getCurrentHourlyValue } from "./getValueFromDate";
 
-export default function getVisibilityInfo(weather?: IWeather) {
+export interface IVisibilityInfo {
+  value: number;
+  title: string;
+  color: string;
+  desc: string;
+}
+
+export default function getVisibilityInfo(weather?: IWeather): IVisibilityInfo | undefined {
 
   if (!weather) return undefined
 

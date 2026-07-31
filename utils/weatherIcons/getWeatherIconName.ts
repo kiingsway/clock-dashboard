@@ -1,13 +1,10 @@
-import { WeatherCategoryName } from "@/types/weather.types";
+import { WeatherCategory } from "@/types/weather.types";
 import ICON_FILES, { ICON_BASE_URI } from "./iconFiles";
-import type { ReactNode } from "react";
-import getWeatherCategory from "./getWeatherCategory";
 
-
-export function getWeatherIconFile(category: WeatherCategoryName, isDay: boolean): string {
+export default function getWeatherIconName(category: WeatherCategory, isDay: boolean): string {
   const unknownIcon = ICON_FILES.unknown
 
-  const map: Record<WeatherCategoryName, string> = {
+  const map: Record<WeatherCategory['name'], string> = {
     clear: isDay ? ICON_FILES.clearDay : ICON_FILES.clearNight,
     partlyCloudy: isDay
       ? ICON_FILES.partlyCloudyDay
@@ -47,31 +44,24 @@ export function getWeatherIconFile(category: WeatherCategoryName, isDay: boolean
     unknown: unknownIcon
   };
 
-  return category ? map[category] : unknownIcon;
+  return category ? map[category.name] : unknownIcon;
 }
 
-/**
- * Resolves a WMO weather code (+ day/night flag) to an animated Meteocons icon.
- * `category` is optional and only used for the alt/title text — pass it if you
- * already computed it upstream (e.g. for the accent color) to avoid recomputing.
- */
-export default function getWeatherAnimatedIcon(
-  weatherCode: number,
-  isDay: boolean,
-  size: number,
-): { img: ReactNode, category: WeatherCategoryName } {
-  const category = getWeatherCategory(weatherCode);
+interface GetWeatherIconUrlIconName {
+  category?: never
+  isDay?: never;
 
-  const src = getWeatherIconFile(category, isDay)
+  iconName: string;
+}
 
-  const img = (
-    <img
-      src={`${ICON_BASE_URI}${src}.svg`}
-      alt={category}
-      loading="lazy"
-      style={{ width: `${size / 16}em`, height: `${size / 16}em`, display: "block" }}
-    />
-  )
+interface GetWeatherIconUrlCategory {
+  category: WeatherCategory
+  isDay: boolean;
 
-  return { img, category }
+  iconName?: never;
+}
+
+export function getWeatherIconUrl({ category, iconName, isDay = true }: GetWeatherIconUrlIconName | GetWeatherIconUrlCategory) {
+  if (category) return `${ICON_BASE_URI}${getWeatherIconName(category, isDay)}.svg`
+  return `${ICON_BASE_URI}${iconName}.svg`
 }

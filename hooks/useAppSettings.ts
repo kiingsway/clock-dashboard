@@ -21,7 +21,7 @@ export const LOCATION_OPTIONS: Location[] = [
   'America/Panama',
   'America/Vancouver',
   'Pacific/Guadalcanal',
-];
+] as const;
 
 export interface WeatherLocationItem {
   id: string;
@@ -137,7 +137,7 @@ function persistSettings(settings: AppSettings): void {
   }
 }
 
-export interface UseAppSettingsReturn {
+export interface UseAppSettings {
   settings: AppSettings;
   location: Location;
   weatherLocation: WeatherLocationItem;
@@ -154,7 +154,7 @@ export interface UseAppSettingsReturn {
  * @example
  * const { location, weatherLocation, setLocation } = useAppSettings();
  */
-export function useAppSettings(): UseAppSettingsReturn {
+export function useAppSettings(): UseAppSettings {
   const { t } = useTranslation()
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [isLoaded, setIsLoaded] = useState(false);

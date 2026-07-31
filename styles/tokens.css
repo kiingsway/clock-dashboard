@@ -14,22 +14,74 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap");
 
 .weather-clock-root {
+  /* Surfaces & Borders */
   --wc-ink: #0b0e14;
   --wc-surface: #12161f;
   --wc-surface-raised: #171c27;
   --wc-hairline: #232838;
+
+  /* Typography */
   --wc-text: #e8ecf4;
   --wc-text-muted: #8892a4;
   --wc-text-faint: #565f72;
 
-  --wc-font-clock: "Space Mono", "SFMono-Regular", ui-monospace, monospace;
-  --wc-font-display: "Sora", "Inter", system-ui, sans-serif;
-  --wc-font-body: "Inter", system-ui, sans-serif;
+  /* Fonts */
+  --wc-font-clock: var(--font-space-mono), "SFMono-Regular", ui-monospace, monospace;
+  --wc-font-display: var(--font-sora), var(--font-inter), system-ui, sans-serif;
+  --wc-font-body: var(--font-inter), system-ui, sans-serif;
 
-  --wc-radius-sm: 10px;
-  --wc-radius-md: 16px;
-  --wc-radius-lg: 24px;
+  /* Font Sizes */
+  --wc-text-3xs: 0.4em;
+  /* 11px */
+  --wc-text-2xs: 0.6875em;
+  /* 11px */
+  --wc-text-xs: 0.75em;
+  /* 12px */
+  --wc-text-sm: 0.875em;
+  /* 14px */
+  --wc-text-md: 1em;
+  /* 16px */
+  --wc-text-lg: 1.125em;
+  /* 18px */
+  --wc-text-xl: 1.25em;
+  /* 20px */
+  --wc-text-2xl: 1.5em;
+  /* 24px */
+  --wc-text-3xl: 2em;
+  /* 32px */
+  --wc-text-4xl: 4em;
+  --wc-text-5xl: 5.5em;
 
-  /* Overridden per-instance via inline style with the live accent color. */
+  /* Spacing */
+  --wc-space-2xs: 2px;
+  --wc-space-xs: 4px;
+  --wc-space-sm: 8px;
+  --wc-space-md: 12px;
+  --wc-space-lg: 16px;
+  --wc-space-xl: 24px;
+  --wc-space-2xl: 32px;
+
+  /* Border Radius */
+  --wc-radius-xs: 4px;
+  --wc-radius-sm: 8px;
+  --wc-radius-md: 12px;
+  --wc-radius-lg: 16px;
+  --wc-radius-xl: 24px;
+  --wc-radius-full: 9999px;
+
+  /* Dynamic Accent & Shadows. wc-accent overridden per-instance via inline style with the live accent color. */
   --wc-accent: #8695f0;
+  --wc-accent-muted: color-mix(in srgb, var(--wc-accent) 15%, transparent);
+  --wc-highlight: rgba(255, 255, 255, 0.05);
+
+  /* Shadows */
+  --wc-shadow-sm: 0 3px 8px color-mix(in srgb, var(--wc-hairline) 45%, transparent);
+  --wc-shadow-md: 0 3px 8px color-mix(in srgb, var(--wc-hairline) 60%, transparent);
+  --wc-shadow-lg: 0 8px 20px color-mix(in srgb, var(--wc-hairline) 75%, transparent);
+
+  /* Semantic Status Colors */
+  --wc-success: #3ecf8e;
+  --wc-warning: #e6b800;
+  --wc-danger: #e0554f;
+  --wc-info: #4da3ff;
 }

@@ -37,6 +37,17 @@ const api = {
   ],
 };
 
+const getParams = (latitude: number, longitude: number) => new URLSearchParams({
+  latitude: String(latitude),
+  longitude: String(longitude),
+  past_days: String(api.past_days),
+  forecast_days: String(api.forecast_days),
+  daily: api.daily.join(","),
+  hourly: api.hourly.join(","),
+  current: api.current.join(","),
+  timezone: api.timezone,
+});
+
 /**
  * Placeholder for the real weather request.
  *
@@ -48,21 +59,8 @@ const api = {
 * @param latitude  - Latitude of the location to fetch weather for.
 * @param longitude - Longitude of the location to fetch weather for.
  */
-export async function fetchWeather(
-  latitude?: number,
-  longitude?: number
-): Promise<IWeather> {
-  const { current, daily, hourly, timezone, past_days, forecast_days } = api
-  const params = new URLSearchParams({
-    latitude: String(latitude),
-    longitude: String(longitude),
-    past_days: String(past_days),
-    forecast_days: String(forecast_days),
-    daily: daily.join(","),
-    hourly: hourly.join(","),
-    current: current.join(","),
-    timezone: timezone,
-  });
+export async function fetchWeather(latitude: number, longitude: number): Promise<IWeather> {
+  const params = getParams(latitude, longitude)
 
   const url = `https://api.open-meteo.com/v1/forecast?${params}`;
 

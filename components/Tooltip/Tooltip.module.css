@@ -1,0 +1,97 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.trigger {
+  display: inline-flex;
+}
+
+.wrapperFullWidth {
+  display: block;
+  width: 100%;
+}
+
+.triggerFullWidth {
+  display: block;
+  width: 100%;
+}
+
+.tooltip {
+  z-index: 9999;
+  width: max-content;
+  max-width: 220px;
+  padding: var(--wc-space-xs) var(--wc-space-sm);
+  background: var(--wc-surface-raised);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-sm);
+  box-shadow: var(--wc-shadow-md);
+  color: var(--wc-text);
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-sm);
+  line-height: 1.4;
+  pointer-events: none;
+  animation: wcTooltipFade 0.12s ease-out;
+}
+
+/*
+ * .top/.bottom/.left/.right não definem mais posição — o left/top/
+ * transform de cada instância vem inline via JS (getPortalStyle),
+ * calculado a partir do getBoundingClientRect() do gatilho. As classes
+ * seguem existindo só para selecionar a seta certa abaixo.
+ */
+.top,
+.bottom,
+.left,
+.right {
+  position: fixed;
+}
+
+.arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--wc-surface-raised);
+  transform: rotate(45deg);
+}
+
+.top .arrow {
+  bottom: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-right: 1px solid var(--wc-hairline);
+  border-bottom: 1px solid var(--wc-hairline);
+}
+
+.bottom .arrow {
+  top: -5px;
+  left: 50%;
+  margin-left: -4px;
+  border-left: 1px solid var(--wc-hairline);
+  border-top: 1px solid var(--wc-hairline);
+}
+
+.left .arrow {
+  right: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-top: 1px solid var(--wc-hairline);
+  border-right: 1px solid var(--wc-hairline);
+}
+
+.right .arrow {
+  left: -5px;
+  top: 50%;
+  margin-top: -4px;
+  border-bottom: 1px solid var(--wc-hairline);
+  border-left: 1px solid var(--wc-hairline);
+}
+
+@keyframes wcTooltipFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

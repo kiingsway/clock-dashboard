@@ -9,10 +9,11 @@ import { capitalizeWords } from "@/utils/formatters";
 import useBoolean from "@/hooks/useBoolean";
 import { RiMapPin4Fill } from "react-icons/ri";
 import { TbMapPin } from "react-icons/tb";
+import AlertCardHeader from "./AlertCardHeader";
 
 export interface WeatherAlertCardProps {
   alert: WeatherAlertData;
-  locale: SupportedLocale;
+  locale: string;
   timezone?: string;
   /**
    * Reference "now" used to decide whether `event_end_datetime` needs a
@@ -58,22 +59,11 @@ export function WeatherAlertCard({ alert, locale, timezone: timezone, now = Date
         <div className={styles.stripe} aria-hidden="true" />
 
         <div className={styles.body}>
-          <div className={styles.headerRow}>
-            <div className={styles.headerInfo}>
-              <h3 className={styles.title} title={title}>{title}</h3>
-              <span className={styles.dot} aria-hidden="true">·</span>
-              <span className={styles.until} title={until}>
-                {t('until')} {until}
-              </span>
-            </div>
 
-            {alert.alert_type && (
-              <span className={styles.typeTag}>
-                <span className={styles.typeDot} aria-hidden="true" />
-                {alert.alert_type}
-              </span>
-            )}
-          </div>
+          <AlertCardHeader
+            alertType={alert.alert_type}
+            title={title}
+            until={until} />
 
           {alert.feature_name_en && (
             <Badge size="sm" variant="ghost" icon={<TbMapPin />} className={styles.badge}>

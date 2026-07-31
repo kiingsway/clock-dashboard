@@ -2,13 +2,14 @@ import { getMoonIllumination, getMoonPosition, getMoonTimes } from "suncalc";
 import { ICON_BASE_URI } from "./iconFiles";
 import { ReactNode } from "react";
 import { DateTime } from "luxon";
+import Image from "next/image";
 
 interface IMoonInfo {
   title: string;
   icon: ReactNode;
 }
 
-interface IMoonPhase extends IMoonInfo {
+export interface IMoonPhase extends IMoonInfo {
   phase: number
   isVisible: boolean | undefined
   iconSrc: string
@@ -65,35 +66,35 @@ interface MoonPhaseOptions {
 }
 
 export default function getMoonPhase({
-  size = 100,
-  date = DateTime.now(),
   lat,
   lon,
+  date = DateTime.now(),
+  size = 100,
 }: MoonPhaseOptions = {}): IMoonPhase {
   const { phase } = getMoonIllumination(date.toJSDate());
 
   let moon: IMoonInfo;
 
-  if (phase < 0.03 || phase > 0.97) {
+  if (phase < 1 / 16 || phase >= 15 / 16) {
     moon = MOON_PHASES.new;
-  } else if (phase < 0.22) {
+  } else if (phase < 3 / 16) {
     moon = MOON_PHASES.waxingCrescent;
-  } else if (phase < 0.28) {
+  } else if (phase < 5 / 16) {
     moon = MOON_PHASES.firstQuarter;
-  } else if (phase < 0.47) {
+  } else if (phase < 7 / 16) {
     moon = MOON_PHASES.waxingGibbous;
-  } else if (phase < 0.53) {
+  } else if (phase < 9 / 16) {
     moon = MOON_PHASES.full;
-  } else if (phase < 0.72) {
+  } else if (phase < 11 / 16) {
     moon = MOON_PHASES.waningGibbous;
-  } else if (phase < 0.78) {
+  } else if (phase < 13 / 16) {
     moon = MOON_PHASES.lastQuarter;
   } else {
     moon = MOON_PHASES.waningCrescent;
   }
 
   const icon = (
-    <img
+    <Image
       src={`${ICON_BASE_URI}${moon.icon}.svg`}
       alt={moon.title}
       title={moon.title}

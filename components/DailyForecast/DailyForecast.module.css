@@ -7,7 +7,7 @@
   margin: 0 0 10px;
   padding: 0 16px;
   font-family: var(--wc-font-body);
-  font-size: 12px;
+  font-size: var(--wc-text-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -28,15 +28,15 @@
   mask-image: linear-gradient(to bottom, transparent 0, black 10px, black calc(100% - 10px), transparent 100%);
 }
 
-.dayItem + .dayItem {
+.dayItem+.dayItem {
   border-top: 1px solid var(--wc-hairline);
 }
 
 .row {
   display: grid;
-  grid-template-columns: 44px 30px 34px 1fr 38px 16px;
+  grid-template-columns: 80px 28px 32px 1fr 32px 14px;
   align-items: center;
-  gap: 10px;
+  gap: var(--wc-space-lg);
   width: 100%;
   padding: 11px 12px;
   background: none;
@@ -49,7 +49,7 @@
 
 .weekday {
   font-family: var(--wc-font-body);
-  font-size: 13px;
+  font-size: var(--wc-text-xs);
   font-weight: 600;
   color: var(--wc-text);
 }
@@ -61,7 +61,7 @@
 
 .minLabel {
   font-family: var(--wc-font-body);
-  font-size: 13px;
+  font-size: var(--wc-text-xs);
   font-weight: 500;
   color: var(--wc-text-faint);
   text-align: right;
@@ -69,7 +69,7 @@
 
 .maxLabel {
   font-family: var(--wc-font-body);
-  font-size: 13px;
+  font-size: var(--wc-text-xs);
   font-weight: 700;
   color: var(--wc-text);
   text-align: right;
@@ -78,7 +78,7 @@
 .range {
   position: relative;
   height: 4px;
-  border-radius: 2px;
+  border-radius: var(--wc-radius-xs);
   background: var(--wc-hairline);
 }
 
@@ -86,7 +86,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  border-radius: 2px;
+  border-radius: var(--wc-radius-xs);
   background: linear-gradient(90deg, #4fa0e0, #f4b860);
 }
 
@@ -106,7 +106,7 @@
 .details {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1px;
+  gap: var(--wc-space-2xs);
   background: var(--wc-hairline);
   border-top: 1px solid var(--wc-hairline);
 }
@@ -114,7 +114,7 @@
 .detailItem {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--wc-space-xs);
   padding: 10px 12px;
   background: var(--wc-surface-raised);
 }
@@ -128,14 +128,14 @@
 .detailLabel {
   flex: 1;
   font-family: var(--wc-font-body);
-  font-size: 12px;
+  font-size: var(--wc-text-xs);
   font-weight: 500;
   color: var(--wc-text-muted);
 }
 
 .detailValue {
   font-family: var(--wc-font-body);
-  font-size: 12px;
+  font-size: var(--wc-text-xs);
   font-weight: 700;
   color: var(--wc-text);
   white-space: nowrap;

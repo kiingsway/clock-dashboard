@@ -77,13 +77,10 @@ export function getSunWindow(currentTime: string, sunriseTimes: string[], sunset
     })),
   ].sort((a, b) => a.time.toMillis() - b.time.toMillis());
 
-
   const now = DateTime.fromISO(currentTime, { zone: timezone });
-
 
   let previous = events[0];
   let next = events[events.length - 1];
-
 
   for (const event of events) {
     if (event.time <= now) {
@@ -95,7 +92,6 @@ export function getSunWindow(currentTime: string, sunriseTimes: string[], sunset
       break;
     }
   }
-
 
   return buildSunWindow(
     now,
@@ -148,3 +144,10 @@ export function hexToRgb(hex: string) {
 }
 
 export const lerp = (start: number, end: number, t: number) => Math.round(start + (end - start) * t);
+
+export function isXMinBefore(timeA: DateTime, timeB: DateTime, minutes: number): boolean {
+  const diffInMinutes = timeB.diff(timeA, 'minutes').minutes;
+  return diffInMinutes >= 0 && diffInMinutes <= minutes;
+}
+
+export const roundValues = (...values: number[]) => values.map(Math.round);

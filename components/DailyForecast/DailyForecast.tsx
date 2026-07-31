@@ -1,19 +1,17 @@
-import { getAccent } from "@/utils/weatherIcons/getAccentColor";
 import styles from "./DailyForecast.module.css";
-import { SupportedLocale, IDaily, IDailyUnits, IWeather } from "@/types/weather.types";
-import getWeatherAnimatedIcon from "@/utils/weatherIcons/getWeatherAnimatedIcon";
+import { IWeather } from "@/types/weather.types";
 import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
-import getSunIcon from "@/utils/weatherIcons/getSunIcon";
 import { FiChevronDown } from "react-icons/fi";
-import getWeatherIcon from "@/utils/weatherIcons/getWeatherIcon";
 import WeatherIcon from "../WeatherIcon";
-import getIcon from "@/utils/weatherIcons/getIcon";
+import getWeatherCategory from "@/utils/weatherIcons/getWeatherCategory";
+import { getAccent } from "@/utils/getAccentColor";
+import { roundValues } from "@/utils/formatters";
 
 export interface DailyForecastProps {
   weather: IWeather
-  locale: SupportedLocale;
+  locale: string;
 }
 
 /**
@@ -27,12 +25,28 @@ export function DailyForecast({ weather, locale }: DailyForecastProps) {
   const { t } = useTranslation();
   const [expandedIndex, setExpandedIndex] = useState<number>();
 
-  const { current, daily, daily_units, hourly, timezone } = weather
+  const { daily, daily_units, timezone } = weather;
 
   if (daily.time.length === 0) return null;
 
-  const weekMin = Math.min(...daily.temperature_2m_min);
-  const weekMax = Math.max(...daily.temperature_2m_max);
+  const today = DateTime.now().setZone(timezone).startOf("day");
+
+  const forecastIndexes = daily.time.reduce<number[]>((acc, iso, index) => {
+    const date = DateTime.fromISO(iso, { zone: timezone });
+
+    if (date >= today) {
+      acc.push(index);
+    }
+
+    return acc;
+  }, []);
+
+  if (forecastIndexes.length === 0) return null;
+
+  const [weekMin, weekMax] = roundValues(
+    Math.min(...forecastIndexes.map(i => daily.temperature_2m_min[i])),
+    Math.max(...forecastIndexes.map(i => daily.temperature_2m_max[i]))
+  );
   const span = weekMax - weekMin || 1;
   const windUnit = daily_units.wind_speed_10m_mean ?? daily_units.wind_gusts_10m_mean ?? "km/h";
 
@@ -42,22 +56,47 @@ export function DailyForecast({ weather, locale }: DailyForecastProps) {
   return (
     <section className={styles.section} aria-label={t("nextDays")} onDoubleClick={onDebugClick}>
       <ul className={styles.list}>
-        {daily.time.map((iso, i) => {
+        {forecastIndexes.map((i) => {
+          const iso = daily.time[i];
           const isExpanded = expandedIndex === i;
           const date = DateTime.fromISO(iso, { zone: timezone });
+          const isToday = date.hasSame(today, "day");
 
           const weatherCode = daily.weather_code[i]
-          const dayMin = daily.temperature_2m_min[i];
-          const dayMax = daily.temperature_2m_max[i];
-          const feelsLike = daily.apparent_temperature_mean[i];
-          const temp = daily.temperature_2m_mean[i];
+          const categoryName = getWeatherCategory(weatherCode)
+          const accent = getAccent({ categoryName });
+
+          const [dayMin, dayMax, feelsLike, temp, uvIndex, windGusts, windSpeed] = roundValues(
+            daily.temperature_2m_min[i],
+            daily.temperature_2m_max[i],
+            daily.apparent_temperature_mean[i],
+            daily.temperature_2m_mean[i],
+            daily.uv_index_max[i],
+            daily.wind_gusts_10m_mean[i],
+            daily.wind_speed_10m_mean[i]
+          );
 
           const left = ((dayMin - weekMin) / span) * 100;
           const width = ((dayMax - dayMin) / span) * 100;
 
-          const accent = getAccent(weatherCode);
+          const isFeelsBiggerThanTemp = feelsLike > temp;
 
-          const isFeelsBiggerThanTemp = feelsLike > temp
+          const dateText = ((): string => {
+            if (isToday) return t("today");
+
+            const now = DateTime.now().startOf("day");
+            const targetDate = date.startOf("day");
+            const diffInDays = Math.abs(targetDate.diff(now, "days").days);
+
+            const localDate = date.setLocale(locale);
+
+            // Até 7 dias: exibe apenas o dia da semana curto (ex: "ter.")
+            if (diffInDays <= 7) return localDate.toFormat("cccc");
+
+            // Mais de 7 dias: exibe o dia da semana curto + dia e mês formatados para a locale atual
+            // Ex (pt-BR): "ter., 15 de ago." ou "ter., 15/08"
+            return `${localDate.toLocaleString({ day: "numeric", month: "short" })}`;
+          })()
 
           return (
             <li key={iso} className={styles.dayItem} style={{ ["--wc-accent" as string]: accent }}>
@@ -69,13 +108,13 @@ export function DailyForecast({ weather, locale }: DailyForecastProps) {
                 aria-expanded={isExpanded}
               >
                 <span className={styles.weekday}>
-                  {i === 0 ? t("today") : date.setLocale(locale).toFormat("ccc")}
+                  {dateText}
                 </span>
                 <span className={styles.icon}>
                   <WeatherIcon weatherCode={weatherCode} size={28} />
                 </span>
                 <span className={styles.minLabel}>
-                  {Math.round(dayMin)}
+                  {dayMin}
                   {daily_units.temperature_2m_min}
                 </span>
                 <span className={styles.range}>
@@ -85,7 +124,7 @@ export function DailyForecast({ weather, locale }: DailyForecastProps) {
                   />
                 </span>
                 <span className={styles.maxLabel}>
-                  {Math.round(dayMax)}
+                  {dayMax}
                   {daily_units.temperature_2m_max}
                 </span>
                 <FiChevronDown className={styles.chevron} data-expanded={isExpanded} aria-hidden="true" />
@@ -93,38 +132,40 @@ export function DailyForecast({ weather, locale }: DailyForecastProps) {
 
               {isExpanded && (
                 <div className={styles.details}>
-                  <div className={styles.detailItem} title={`Mean Temp: ${temp}ºC | Mean App Temp: ${feelsLike}ºC`}>
-                    <span className={styles.detailIcon}>{getIcon(isFeelsBiggerThanTemp ? 'thermometer-mercury' : 'thermometer-mercury-cold', 16)}</span>
+                  <div className={styles.detailItem} title={`Mean Temp: ${temp}ºC | Mean Feels Like: ${feelsLike}ºC`}>
+                    <span className={styles.detailIcon}>
+                      <WeatherIcon iconName={isFeelsBiggerThanTemp ? 'thermometer-mercury' : 'thermometer-mercury-cold'} size={18} />
+                    </span>
                     <span className={styles.detailLabel}>{t('feelsLike')}</span>
-                    <span className={styles.detailValue}>{Math.round(feelsLike)}{daily_units.apparent_temperature_mean}</span>
+                    <span className={styles.detailValue}>{feelsLike}{daily_units.apparent_temperature_mean}</span>
                   </div>
                   <div className={styles.detailItem}>
-                    <span className={styles.detailIcon}>{getIcon(`uv-index-${Math.round(daily.uv_index_max[i])}`, 16)}</span>
+                    <WeatherIcon iconName={`uv-index-${uvIndex}`} size={18} />
                     <span className={styles.detailLabel}>{t('uvIndex')}</span>
-                    <span className={styles.detailValue}>{Math.round(daily.uv_index_max[i])}</span>
+                    <span className={styles.detailValue}>{uvIndex}</span>
                   </div>
                   <div className={styles.detailItem}>
-                    <span className={styles.detailIcon}>{getSunIcon("sunrise", 16)}</span>
+                    <span className={styles.detailIcon}><WeatherIcon size={18} category="sunrise" /></span>
                     <span className={styles.detailLabel}>{t('sunrise')}</span>
                     <span className={styles.detailValue}>{DateTime.fromISO(daily.sunrise[i]).toFormat('HH:mm')}</span>
                   </div>
                   <div className={styles.detailItem}>
-                    <span className={styles.detailIcon}>{getSunIcon("sunset", 16)}</span>
+                    <span className={styles.detailIcon}><WeatherIcon size={18} category="sunset" /></span>
                     <span className={styles.detailLabel}>{t('sunset')}</span>
                     <span className={styles.detailValue}>{DateTime.fromISO(daily.sunset[i]).toFormat('HH:mm')}</span>
                   </div>
                   <div className={styles.detailItem}>
-                    <span className={styles.detailIcon}>{getIcon("wind", 16)}</span>
+                    <span className={styles.detailIcon}><WeatherIcon size={18} iconName="wind" /></span>
                     <span className={styles.detailLabel}>{t('windGusts')}</span>
                     <span className={styles.detailValue}>
-                      {Math.round(daily.wind_gusts_10m_mean[i])} {windUnit}
+                      {windGusts} {windUnit}
                     </span>
                   </div>
                   <div className={styles.detailItem}>
-                    <span className={styles.detailIcon}>{getIcon("wind", 16)}</span>
+                    <span className={styles.detailIcon}><WeatherIcon size={18} iconName="wind" /></span>
                     <span className={styles.detailLabel}>{t('windSpeed')}</span>
                     <span className={styles.detailValue}>
-                      {Math.round(daily.wind_speed_10m_mean[i])} {windUnit}
+                      {windSpeed} {windUnit}
                     </span>
                   </div>
                 </div>

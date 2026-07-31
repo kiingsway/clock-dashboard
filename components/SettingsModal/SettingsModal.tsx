@@ -2,17 +2,16 @@ import { APP_INFO } from "@/utils/formatters";
 import { Modal } from "./Modal/Modal";
 import styles from "./SettingsModal.module.css";
 import { useTranslation } from "react-i18next";
-import { LOCATION_OPTIONS, UseAppSettingsReturn, Location } from "@/hooks/useAppSettings";
+import { LOCATION_OPTIONS, UseAppSettings, Location } from "@/hooks/useAppSettings";
 import { Badge } from "../Badge";
 import { DateTime } from "luxon";
 
-export interface SettingsModalProps {
+interface Props {
   open: boolean;
   onClose: () => void;
-  timeZone?: string;
-  settings: UseAppSettingsReturn
+  settings: UseAppSettings
   updatedAt?: string;
-  onUpdatedAtClick: () => void
+  onUpdatedAtClick?: () => void
 }
 
 /**
@@ -22,7 +21,7 @@ export interface SettingsModalProps {
  * whatever the host app already uses for that (e.g. the `useAppSettings`
  * hook and `i18n.changeLanguage` in the reference `SettingsForm`).
  */
-export function SettingsModal({ open, onClose, onUpdatedAtClick, settings, timeZone, updatedAt }: SettingsModalProps) {
+export function SettingsModal({ open, onClose, onUpdatedAtClick, settings, updatedAt }: Props) {
   const { t, i18n } = useTranslation();
   const { location, setLocation } = settings;
 
@@ -30,7 +29,7 @@ export function SettingsModal({ open, onClose, onUpdatedAtClick, settings, timeZ
     i18n.changeLanguage(e.target.value);
   };
 
-  const updatedAtHour = updatedAt ? DateTime.fromISO(updatedAt, { zone: timeZone }).toFormat('HH:mm') : '--:--'
+  const updatedAtHour = updatedAt ? DateTime.fromISO(updatedAt, { zone: settings.location }).toFormat('HH:mm') : '--:--'
 
   return (
     <Modal open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>

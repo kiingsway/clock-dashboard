@@ -1,11 +1,11 @@
-import { WeatherCategory } from "@/types/weather.types";
+import { WeatherCategoryName } from "@/types/weather.types";
 
 /**
  * Buckets a WMO weather code into a coarse category.
  * Shared by the icon picker and by `getAccentColor`, so the two always agree
  * on what a given code "means".
  */
-export default function getWeatherCategory(weatherCode: number): WeatherCategory {
+export default function getWeatherCategory(weatherCode: number): WeatherCategoryName {
   switch (weatherCode) {
     case 0:
     case 1:

@@ -5,6 +5,7 @@
   border-radius: var(--wc-radius-md);
   overflow: hidden;
   cursor: pointer;
+  font-size: 18px;
 
   transition:
     background-color .2s ease,
@@ -38,27 +39,27 @@
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--wc-space-sm);
 }
 
 .headerRow {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--wc-space-sm);
 }
 
 .headerInfo {
   display: flex;
   align-items: center;
   line-height: 10px;
-  gap: 6px;
+  gap: var(--wc-space-xs);
 }
 
 .title {
   margin: 0;
   font-family: var(--wc-font-display);
-  font-size: 15px;
+  font-size: var(--wc-text-sm);
   font-weight: 700;
   line-height: 1.3;
   color: var(--wc-text);
@@ -76,10 +77,10 @@
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: var(--wc-space-xs);
   margin-top: 2px;
   font-family: var(--wc-font-body);
-  font-size: 10.5px;
+  font-size: var(--wc-text-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -90,7 +91,7 @@
 .typeDot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: var(--wc-radius-full);
   background: var(--wc-severity);
   box-shadow: 0 0 6px 1px color-mix(in srgb, var(--wc-severity) 70%, transparent);
 }
@@ -98,13 +99,13 @@
 .metaRow {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: var(--wc-space-xs);
 }
 
 .description {
   margin: 0;
   font-family: var(--wc-font-body);
-  font-size: 13px;
+  font-size: var(--wc-text-xs);
   line-height: 1.5;
   color: var(--wc-text-muted);
 }
@@ -114,7 +115,7 @@
   background: none;
   padding: 0;
   font-family: var(--wc-font-body);
-  font-size: 13px;
+  font-size: var(--wc-text-xs);
   font-weight: 700;
   color: var(--wc-text);
   cursor: pointer;
@@ -128,7 +129,7 @@
 .until {
   margin: 2px 0 0;
   font-family: var(--wc-font-body);
-  font-size: 12px;
+  font-size: var(--wc-text-xs);
   font-weight: 600;
   color: var(--wc-text-faint);
   max-width: 110px;
@@ -141,5 +142,5 @@
   color: var(--wc-text-muted) !important;
   white-space: wrap !important;
   text-align: left !important;
-  gap: 8px !important;
+  gap: var(--wc-space-sm) !important;
 }

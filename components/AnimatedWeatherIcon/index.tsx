@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 interface Props {
   src: string;
   alt: string;
-  title: string;
+  title?: string;
   size: number;
   duration?: number;
 }
