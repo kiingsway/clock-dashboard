@@ -1,52 +1,4 @@
 import { IWeather } from "@/types/weather.types";
-import axios from "axios";
-
-const api = {
-  past_days: 1,
-  timezone: "auto",
-  forecast_days: 14,
-  daily: [
-    "temperature_2m_max",
-    "temperature_2m_min",
-    "weather_code",
-    "sunrise",
-    "sunset",
-    "uv_index_max",
-    "wind_gusts_10m_mean",
-    "wind_speed_10m_mean",
-    "apparent_temperature_mean",
-    "temperature_2m_mean",
-  ],
-  hourly: [
-    "temperature_2m",
-    "precipitation",
-    "apparent_temperature",
-    "weather_code",
-    "is_day",
-    "wind_speed_10m",
-    "wind_direction_10m",
-    "wind_gusts_10m",
-    "visibility",
-  ],
-  current: [
-    "temperature_2m",
-    "apparent_temperature",
-    "precipitation",
-    "weather_code",
-    "is_day",
-  ],
-};
-
-const getParams = (latitude: number, longitude: number) => new URLSearchParams({
-  latitude: String(latitude),
-  longitude: String(longitude),
-  past_days: String(api.past_days),
-  forecast_days: String(api.forecast_days),
-  daily: api.daily.join(","),
-  hourly: api.hourly.join(","),
-  current: api.current.join(","),
-  timezone: api.timezone,
-});
 
 /**
  * Placeholder for the real weather request.
@@ -60,9 +12,9 @@ const getParams = (latitude: number, longitude: number) => new URLSearchParams({
 * @param longitude - Longitude of the location to fetch weather for.
  */
 export async function fetchWeather(latitude: number, longitude: number): Promise<IWeather> {
-  const params = getParams(latitude, longitude)
+  const res = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`);
 
-  const url = `https://api.open-meteo.com/v1/forecast?${params}`;
+  if (!res.ok) throw new Error("Failed to fetch weather.");
 
-  return (await axios.get<IWeather>(url)).data
+  return res.json();
 }

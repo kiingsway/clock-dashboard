@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Sora, Space_Mono } from "next/font/google";
 import "./globals.css";
-import "@/styles/tokens.css";
+import '@/styles/tokens.css';
 
 export const inter = Inter({
   subsets: ["latin"],

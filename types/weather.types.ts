@@ -56,6 +56,9 @@ export interface IDailyUnits {
   wind_gusts_10m_mean: "km/h";
   wind_speed_10m_mean: "km/h";
   apparent_temperature_mean: "°C" | "°F";
+  precipitation_sum: "mm";
+  precipitation_hours: "h";
+  precipitation_probability_max: "%";
 }
 
 export interface IDaily {
@@ -70,6 +73,9 @@ export interface IDaily {
   wind_speed_10m_mean: number[];
   apparent_temperature_mean: number[];
   temperature_2m_mean: number[];
+  precipitation_sum: number[];
+  precipitation_hours: number[];
+  precipitation_probability_max: number[];
 }
 
 export interface IWeather {
@@ -141,7 +147,7 @@ export interface SelectOption {
  * a prop. Your real object has more fields than this; TypeScript is fine
  * with that since it only checks that the ones listed here are present.
  */
-export interface WeatherAlertData {
+export interface IWeatherAlertCanadaProps {
   id: string;
   alert_type: string;
   alert_name_en: string;
@@ -157,12 +163,14 @@ export interface WeatherAlertData {
   event_end_datetime: string;
 }
 
-export interface IWeatherAlert {
+export interface IWeatherAlertCanada {
   id: string
   type: string
-  properties: WeatherAlertData
+  properties: IWeatherAlertCanadaProps
   geometry: {
     type: string
     coordinates: number[][][]
   }
 }
+
+export type WeatherIconInfo = Record<'moon' | 'weather' | 'current', { alt: string, src: string }>;

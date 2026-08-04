@@ -1,0 +1,66 @@
+.root {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--wc-ink);
+  color: var(--wc-text);
+  font-family: var(--wc-font-body);
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: 24px;
+  /* Transition the accent smoothly on data refresh instead of snapping. */
+  transition: color 0.4s ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--wc-accent);
+    outline-offset: 2px;
+  }
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  --scale-font: 1;
+
+  min-height: 0;
+  font-size: calc(1rem * var(--scale-font));
+
+  transition:
+    min-height .35s ease,
+    font-size .35s ease;
+
+  &.focus {
+    min-height: 100vh;
+    --scale-font: 1.4;
+  }
+}
+
+@media (max-height: 850px) {
+  .group.focus {
+    --scale-font: 1.35;
+  }
+}
+
+@media (max-height: 800px) {
+  .group.focus {
+    --scale-font: 1.25;
+  }
+}
+
+@media (max-height: 750px) {
+  .group.focus {
+    --scale-font: 1.15;
+  }
+}
+
+@media (max-height: 700px) {
+  .group.focus {
+    --scale-font: 1.05;
+  }
+}
+
+@media (max-height: 650px) {
+  .group.focus {
+    --scale-font: 1;
+  }
+}

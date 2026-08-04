@@ -1,0 +1,22 @@
+.dateLine {
+  margin: 4px 0 0;
+  display: flex;
+  align-items: center;
+  gap: var(--wc-space-sm);
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-lg);
+  color: var(--wc-text-muted);
+}
+
+.weekday {
+  font-weight: 600;
+  color: var(--wc-text);
+}
+
+.dot {
+  color: var(--wc-text-faint);
+}
+
+.date {
+  font-weight: 500;
+}

@@ -1,0 +1,20 @@
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: calc(20px + (50px - var(--size, 34px)) * 0.4);
+    height: calc(20px + (50px - var(--size, 34px)) * 0.4);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: var(--wc-radius-full);
+    background: radial-gradient(circle, color-mix(in srgb, var(--wc-accent) 40%, transparent), transparent 70%);
+    filter: blur(18px);
+    z-index: 1;
+  }
+}

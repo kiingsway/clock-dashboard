@@ -1,0 +1,41 @@
+.iconStage {
+  position: relative;
+  width: 8.5em;
+  height: 8.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Signature element: a dim, weather-tinted halo that breathes slowly.
+   Kept low-opacity and heavily blurred so it reads as atmosphere, not
+   a bright light source, on a phone screen at night. */
+.glow {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--wc-radius-full);
+  background: radial-gradient(circle, var(--wc-accent) 0%, transparent 68%);
+  opacity: 0.4;
+  filter: blur(14px);
+  animation: breathe 6s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.32;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.48;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow {
+    animation: none;
+    opacity: 0.36;
+  }
+}

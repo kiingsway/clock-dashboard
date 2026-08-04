@@ -1,0 +1,15 @@
+.temp {
+  font-family: var(--wc-font-display);
+  font-weight: 700;
+  font-size: var(--wc-text-4xl);
+  line-height: 1;
+  color: var(--wc-text);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 50%, transparent);
+}
+
+.tempUnit {
+  font-size: var(--wc-text-3xs);
+  font-weight: 600;
+  color: var(--wc-text-muted);
+  margin-left: 2px;
+}

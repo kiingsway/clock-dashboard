@@ -1,0 +1,12 @@
+.time {
+  margin: 0;
+  font-family: var(--wc-font-clock);
+  font-weight: 700;
+  font-size: var(--wc-text-5xl);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--wc-text);
+  font-variant-numeric: tabular-nums;
+  /* Faint glow keeps the digits legible without turning the room bright. */
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 35%, transparent);
+}

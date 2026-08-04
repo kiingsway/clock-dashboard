@@ -1,24 +1,28 @@
+import { CACHE_KEY } from "@/constants/keys";
 import { fetchWeather } from "@/services/fetchWeather";
-import { IWeather } from "@/types/weather.types";
-import useSWR, { KeyedMutator } from "swr";
-import { WeatherLocationItem } from "./useAppSettings";
-import getMoonPhase, { IMoonPhase } from "@/utils/weatherIcons/getMoonPhase";
-import getUVIcon, { IUVIcon } from "@/utils/weatherIcons/getUVIcon";
-import getWeatherIcon, { WeatherIconInfo } from "@/utils/weatherIcons/getWeatherIcon";
-import getWindInfo, { IWindInfo } from "@/utils/weatherIcons/getWindInfo";
+import { IWeatherLocationItem } from "@/types/location.types";
+import { IWeather, WeatherCategory, WeatherIconInfo } from "@/types/weather.types";
+import { IMoonPhase, IUVIcon, IVisibilityInfo, IWindInfo } from "@/types/weatherInfo.types";
+import { getAccent } from "@/utils/weather/getAccentColor";
+import getMoonPhase from "@/utils/weather/getMoonPhase";
+import getUVIcon from "@/utils/weather/getUVIcon";
+import getVisibilityInfo from "@/utils/weather/getVisibilityInfo";
+import getWeatherCategory from "@/utils/weather/getWeatherCategory";
+import getWeatherIcon from "@/utils/weather/getWeatherIcon";
+import getWindInfo from "@/utils/weather/getWindInfo";
 import { DateTime } from "luxon";
-import getVisibilityInfo, { IVisibilityInfo } from "@/utils/getVisibilityInfo";
-import { getAccent } from "@/utils/weatherIcons/getAccentColor";
+import useSWR, { KeyedMutator } from "swr";
 
 export interface IUseWeather {
   data: {
     weather: IWeather | undefined;
     accent: string
-    moonPhase: IMoonPhase;
+    moonPhase: IMoonPhase | undefined;
     uvIcon: IUVIcon | undefined;
     windInfo: IWindInfo | undefined;
     weatherIcon: WeatherIconInfo | undefined;
-    visibility: IVisibilityInfo | undefined
+    visibility: IVisibilityInfo | undefined;
+    category: WeatherCategory;
   }
   error: any;
   isLoading: boolean;
@@ -26,9 +30,9 @@ export interface IUseWeather {
   refresh: KeyedMutator<IWeather>;
 }
 
-export function useWeather(location: WeatherLocationItem): IUseWeather {
+export function useWeather(location: IWeatherLocationItem, locale: string): IUseWeather {
   const { data: weather, error, isLoading, isValidating, mutate } = useSWR<IWeather>(
-    ["weather", location.lat, location.lon],
+    [CACHE_KEY.WEATHER, location.lat, location.lon],
     () => fetchWeather(location.lat, location.lon),
     {
       refreshInterval: 5 * 60 * 1000,
@@ -38,19 +42,22 @@ export function useWeather(location: WeatherLocationItem): IUseWeather {
     }
   );
 
-  const accent = getAccent(weather?.current.weather_code, weather?.current.is_day);
-  const moonPhase = getMoonPhase({ lat: weather?.latitude, lon: weather?.longitude })
+  const { lat, lon, weatherCode, isDay, date } = {
+    lat: weather?.latitude,
+    lon: weather?.longitude,
+    weatherCode: weather?.current.weather_code,
+    isDay: weather?.current.is_day === 1,
+    date: !weather ? undefined : DateTime.fromISO(weather?.current.time)
+  }
+
+  const category = getWeatherCategory(weatherCode)
+  const accent = getAccent({ category, isDay });
+  const moonPhase = getMoonPhase({ lat, lon })
+  const weatherIcon = !weatherCode ? undefined : getWeatherIcon({ weatherCode, isDay, lat, lon });
+  const visibility = getVisibilityInfo(weather, locale)
   const uvIcon = getUVIcon(weather);
   const windInfo = getWindInfo(weather);
-  const visibility = getVisibilityInfo(weather)
-  const weatherIcon = weather && getWeatherIcon({
-    weatherCode: weather?.current.weather_code,
-    date: DateTime.fromISO(weather.current.time),
-    isDay: weather.current.is_day === 1,
-    lat: weather.latitude,
-    lon: weather.longitude,
-  })
-
+  
   return {
     data: {
       weather,
@@ -60,6 +67,7 @@ export function useWeather(location: WeatherLocationItem): IUseWeather {
       windInfo,
       weatherIcon,
       visibility,
+      category,
     },
     error,
     isLoading,

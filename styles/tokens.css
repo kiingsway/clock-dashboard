@@ -13,7 +13,7 @@
  */
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap");
 
-.weather-clock-root {
+.root {
   /* Surfaces & Borders */
   --wc-ink: #0b0e14;
   --wc-surface: #12161f;
@@ -32,23 +32,14 @@
 
   /* Font Sizes */
   --wc-text-3xs: 0.4em;
-  /* 11px */
   --wc-text-2xs: 0.6875em;
-  /* 11px */
   --wc-text-xs: 0.75em;
-  /* 12px */
   --wc-text-sm: 0.875em;
-  /* 14px */
   --wc-text-md: 1em;
-  /* 16px */
   --wc-text-lg: 1.125em;
-  /* 18px */
   --wc-text-xl: 1.25em;
-  /* 20px */
   --wc-text-2xl: 1.5em;
-  /* 24px */
   --wc-text-3xl: 2em;
-  /* 32px */
   --wc-text-4xl: 4em;
   --wc-text-5xl: 5.5em;
 

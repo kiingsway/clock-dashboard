@@ -1,0 +1,91 @@
+.main {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 20px;
+
+  opacity: 0.1;
+  
+  font-family: var(--wc-font-body);
+  font-size: var(--wc-text-xs, 0.75em);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.gauge {
+  min-width: 56px;
+
+  opacity: 0.6;
+
+  /* border: 1px solid var(--wc-accent, #8695f0); */
+  border-radius: var(--wc-radius-sm, 9999px);
+
+  overflow: hidden;
+  isolation: isolate;
+
+  font-weight: 600;
+}
+
+/*
+  Invisible — its only job is to occupy real flow space so `.gauge` sizes
+  itself around the text, same as before. `.fill` and `.label` are then both
+  absolutely positioned over that same box, so they share one coordinate
+  system and the fill's edge and the text's color-split always line up
+  exactly, at any text length.
+*/
+.sizer {
+  visibility: hidden;
+  padding: var(--wc-space-xs) 0;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  /* width: var(--fill, 0%); */
+  transition: width 500ms cubic-bezier(0.34, 1.2, 0.4, 1);
+
+  background: linear-gradient(90deg,
+      var(--wc-accent),
+      var(--wc-accent-peak));
+
+  clip-path: inset(0 calc(100% - var(--fill)) 0 0);
+}
+
+.label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(90deg,
+      var(--wc-ink) var(--fill),
+      transparent var(--fill)),
+    linear-gradient(90deg,
+      var(--wc-accent),
+      var(--wc-accent-peak));
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .fill,
+  .label {
+    transition: none;
+  }
+}
+
+/* Fallback for the rare browser without background-clip:text support:
+   falls back to a flat accent-colored label instead of a transparent one. */
+@supports not (background-clip: text) {
+  .label {
+    background: none;
+    color: var(--wc-accent, #8695f0);
+  }
+}

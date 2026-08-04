@@ -1,0 +1,137 @@
+.root {
+  position: fixed;
+  inset: 0;
+  /* z-index is set inline via the `zIndex` prop */
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--wc-ink, #0b0e14) 72%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+
+  background: var(--wc-surface-raised);
+  border-top-left-radius: var(--wc-radius-xl, 24px);
+  border-top-right-radius: var(--wc-radius-xl, 24px);
+  border: 1px solid var(--wc-hairline, #232838);
+  border-bottom: none;
+  box-shadow: var(--wc-shadow-lg, 0 8px 20px rgba(0, 0, 0, 0.45));
+
+  color: var(--wc-text, #e8ecf4);
+  font-family: var(--wc-font-body, system-ui, sans-serif);
+
+  /* Transform is written directly to this element from the drag/spring loop. */
+  transform: translate3d(0, 100%, 0);
+  will-change: transform;
+
+  touch-action: none;
+  outline: none;
+}
+
+.sheet:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--wc-accent, #8695f0),
+    var(--wc-shadow-lg, 0 8px 20px rgba(0, 0, 0, 0.45));
+}
+
+.handleArea {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--wc-space-md, 12px) 0 var(--wc-space-sm, 8px);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dragging .handleArea,
+.dragging .header {
+  cursor: grabbing;
+}
+
+.handle {
+  width: 36px;
+  height: 4px;
+  border-radius: var(--wc-radius-full, 9999px);
+  background: var(--wc-text-faint, #565f72);
+  opacity: 0.6;
+  transition: opacity 150ms ease;
+}
+
+.dragging .handle {
+  opacity: 0.95;
+}
+
+.header {
+  flex: 0 0 auto;
+  padding: 0 var(--wc-space-xl, 24px) var(--wc-space-md, 12px);
+  border-bottom: 1px solid var(--wc-hairline, #232838);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--wc-font-display, system-ui, sans-serif);
+  font-size: var(--wc-text-lg, 1.125em);
+  font-weight: 600;
+  color: var(--wc-text, #e8ecf4);
+}
+
+.content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  padding: var(--wc-space-lg, 16px) var(--wc-space-xl, 24px) calc(var(--wc-space-xl, 24px) + env(safe-area-inset-bottom, 0px));
+}
+
+/* Prevent accidental text selection anywhere in the sheet while dragging. */
+.dragging {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dragging .content {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .handle {
+    transition: none;
+  }
+}
+
+/*
+  Dark mode is the default palette above (matches the supplied dark tokens).
+  For apps that swap tokens.css to a light palette at runtime (e.g. via a
+  `data-theme="light"` attribute on a parent), every color here is already
+  driven by var(--wc-*) tokens, so no overrides are needed in this file —
+  the sheet re-themes automatically. A minimal standalone fallback:
+*/
+:global([data-theme="light"]) .sheet {
+  background: var(--wc-surface, #ffffff);
+  color: var(--wc-text, #14161c);
+  border-color: var(--wc-hairline, #e4e6ec);
+}

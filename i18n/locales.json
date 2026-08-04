@@ -9,7 +9,9 @@
     "weather": "Clima",
     "location": "Localização",
     "updatedAt": "Atualizado em",
+    "weatherUpdatedAt": "Clima atualizado em",
     "alert": "Alerta",
+    "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
     "uvIndex": "Índice UV",
     "windGusts": "Rajadas de Vento",
@@ -39,6 +41,42 @@
       "Vancouver": "Vancouver",
       "Seoul": "Seul",
       "Guadalcanal": "Guadalcanal"
+    },
+    "settingsTexts": {
+      "general": {
+        "title": "Geral",
+        "language": "Altere o idioma usado em todo o aplicativo",
+        "location": "Localização usada para a previsão do tempo e fuso horário do relógio"
+      },
+      "alerts": {
+        "title": "Alertas",
+        "radius": {
+          "title": "Raio (KM)",
+          "description": "Distância máxima para buscar alertas meteorológicos"
+        }
+      },
+      "status": {
+        "title": "Status",
+        "updatedAt": "Clima atualizado em",
+        "updatedAtDesc": "Horário da última atualização do clima",
+        "version": "Versão do aplicativo instalada"
+      }
+    },
+    "weatherTexts": {
+      "rain": {
+        "dry": "Seco",
+        "trace": "Gotas",
+        "drizzle": "Chuvisco",
+        "light": "Leve",
+        "moderate": "Moderado",
+        "heavy": "Intenso",
+        "torrential": "Torrencial"
+      }
+    },
+    "precipitationTexts": {
+      "chance": "Chance",
+      "max": "Total",
+      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
     }
   },
   "en": {
@@ -51,7 +89,9 @@
     "weather": "Weather",
     "location": "Location",
     "updatedAt": "Updated at",
+    "weatherUpdatedAt": "Weather updated at",
     "alert": "Alert",
+    "alerts": "Alerts",
     "alert_other": "Alerts ({{count}})",
     "uvIndex": "UV Index",
     "windGusts": "Wind Gusts",
@@ -81,6 +121,42 @@
       "Vancouver": "Vancouver",
       "Seoul": "Seoul",
       "Guadalcanal": "Guadalcanal"
+    },
+    "settingsTexts": {
+      "general": {
+        "title": "General",
+        "language": "Change the language used throughout the app",
+        "location": "Location used for weather and the clock's time zone"
+      },
+      "alerts": {
+        "title": "Alerts",
+        "radius": {
+          "title": "Radius (KM)",
+          "description": "Maximum distance to search for weather alerts"
+        }
+      },
+      "status": {
+        "title": "Status",
+        "updatedAt": "Weather updated at",
+        "updatedAtDesc": "Time of the last weather refresh",
+        "version": "Installed app version"
+      }
+    },
+    "weatherTexts": {
+      "rain": {
+        "dry": "Dry",
+        "trace": "Trace",
+        "drizzle": "Drizzle",
+        "light": "Light",
+        "moderate": "Moderate",
+        "heavy": "Heavy",
+        "torrential": "Torrential"
+      }
+    },
+    "precipitationTexts": {
+      "chance": "Chance",
+      "max": "Total",
+      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
     }
   },
   "fr": {
@@ -94,6 +170,7 @@
     "location": "Emplacement",
     "updatedAt": "Mis à jour",
     "alert": "Alerte",
+    "alerts": "Alertes",
     "alert_other": "Alertes ({{count}})",
     "uvIndex": "Indice UV",
     "windGusts": "Rafales de Vent",
@@ -123,6 +200,42 @@
       "Vancouver": "Vancouver",
       "Seoul": "Séoul",
       "Guadalcanal": "Guadalcanal"
+    },
+    "settingsTexts": {
+      "general": {
+        "title": "Général",
+        "language": "Changer la langue utilisée dans l'application",
+        "location": "Lieu utilisé pour la météo et le fuseau horaire de l'horloge"
+      },
+      "alerts": {
+        "title": "Alertes",
+        "radius": {
+          "title": "Rayon (KM)",
+          "description": "Distance maximale pour rechercher les alertes météo"
+        }
+      },
+      "status": {
+        "title": "Statut",
+        "updatedAt": "Météo mise à jour à",
+        "updatedAtDesc": "Heure de la dernière actualisation météo",
+        "version": "Version de l'application installée"
+      }
+    },
+    "weatherTexts": {
+      "rain": {
+        "dry": "Sec",
+        "trace": "Trace",
+        "drizzle": "Bruine",
+        "light": "Léger",
+        "moderate": "Modéré",
+        "heavy": "Fort",
+        "torrential": "Torrentiel"
+      }
+    },
+    "precipitationTexts": {
+      "chance": "Risque",
+      "max": "Total",
+      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
     }
   },
   "es": {
@@ -136,6 +249,7 @@
     "location": "Ubicación",
     "updatedAt": "Actualizado",
     "alert": "Alerta",
+    "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
     "uvIndex": "Índice UV",
     "windGusts": "Ráfagas de Viento",
@@ -165,6 +279,42 @@
       "Vancouver": "Vancouver",
       "Seoul": "Seúl",
       "Guadalcanal": "Guadalcanal"
+    },
+    "settingsTexts": {
+      "general": {
+        "title": "General",
+        "language": "Cambia el idioma utilizado en la aplicación",
+        "location": "Ubicación utilizada para el clima y la zona horaria del reloj"
+      },
+      "alerts": {
+        "title": "Alertas",
+        "radius": {
+          "title": "Radio (KM)",
+          "description": "Distancia máxima para buscar alertas meteorológicas"
+        }
+      },
+      "status": {
+        "title": "Estado",
+        "updatedAt": "Clima actualizado a las",
+        "updatedAtDesc": "Hora de la última actualización del clima",
+        "version": "Versión instalada de la aplicación"
+      }
+    },
+    "weatherTexts": {
+      "rain": {
+        "dry": "Seco",
+        "trace": "Llovizna ligera",
+        "drizzle": "Llovizna",
+        "light": "Ligero",
+        "moderate": "Moderado",
+        "heavy": "Intenso",
+        "torrential": "Torrencial"
+      }
+    },
+    "precipitationTexts": {
+      "chance": "Prob.",
+      "max": "Total",
+      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
     }
   },
   "ko": {
@@ -178,6 +328,7 @@
     "location": "위치",
     "updatedAt": "업데이트됨",
     "alert": "알림",
+    "alerts": "알림",
     "alert_other": "알림 ({{count}})",
     "uvIndex": "자외선 지수",
     "windGusts": "돌풍",
@@ -207,6 +358,42 @@
       "Vancouver": "밴쿠버",
       "Seoul": "서울",
       "Guadalcanal": "과달카날"
+    },
+    "settingsTexts": {
+      "general": {
+        "title": "일반",
+        "language": "앱 전체에서 사용할 언어 변경",
+        "location": "날씨 및 시계 시간대에 사용되는 위치"
+      },
+      "alerts": {
+        "title": "알림",
+        "radius": {
+          "title": "반경 (KM)",
+          "description": "기상 특보를 검색할 최대 거리"
+        }
+      },
+      "status": {
+        "title": "상태",
+        "updatedAt": "날씨 업데이트 시간:",
+        "updatedAtDesc": "마지막 날씨 새로고침 시간",
+        "version": "설치된 앱 버전"
+      }
+    },
+    "weatherTexts": {
+      "rain": {
+        "dry": "건조",
+        "trace": "미세한",
+        "drizzle": "이슬비",
+        "light": "약함",
+        "moderate": "보통",
+        "heavy": "강함",
+        "torrential": "집중호우"
+      }
+    },
+    "precipitationTexts": {
+      "chance": "확률",
+      "max": "강수량",
+      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
     }
   }
 }
