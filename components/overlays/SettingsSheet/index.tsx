@@ -10,6 +10,7 @@ import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon } from "./I
 import { ALERT_RADIUS_KM } from "@/constants/alerts";
 import { LOCATION_OPTIONS } from "@/constants/locations";
 import { BottomSheet } from "@/components/ui/BottomSheet";
+import { usePortalContainer } from "@/hooks/usePortalContainer";
 
 interface Props {
   open: boolean;
@@ -37,6 +38,8 @@ export function SettingsSheet({
 
   const [draftRadius, setDraftRadius] = useState(alertRadiusKm);
 
+  const portalContainer = usePortalContainer(".root");
+
   // se o valor mudar por fora (ex: carregado do storage depois), sincroniza
   useEffect(() => {
     setDraftRadius(alertRadiusKm);
@@ -63,7 +66,7 @@ export function SettingsSheet({
       snapPoints={[0.6, 0.9]}
       initialSnap={0}
       dismissible
-      container={document.querySelector(".root")}
+      container={portalContainer}
     >
       <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
         <SettingsSection title={t("settingsTexts.general.title")}>

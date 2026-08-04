@@ -8,6 +8,8 @@ import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
 import sortWeatherAlerts from "@/utils/weatherAlerts/sortWeatherAlerts";
 import { WeatherAlertCard } from "@/components/ui/weather/WeatherAlertCard/WeatherAlertCard";
 import { BottomSheet } from "@/components/ui/BottomSheet";
+import { useState, useEffect } from "react";
+import { usePortalContainer } from "@/hooks/usePortalContainer";
 
 interface Props {
   alerts: IWeatherAlertCanada[];
@@ -26,6 +28,8 @@ export default function WeatherAlerts({ alerts, locale }: Props) {
   const { t } = useTranslation();
 
   const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean()
+
+  const portalContainer = usePortalContainer(".root");
 
   if (alerts.length === 0) return null;
 
@@ -50,7 +54,7 @@ export default function WeatherAlerts({ alerts, locale }: Props) {
         snapPoints={[0.6, 0.95]}
         initialSnap={0}
         dismissible
-        container={document.querySelector(".root")}
+        container={portalContainer}
       >
         <div className={styles.modalList} onDoubleClick={onDebugClick}>
           {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert.properties} locale={locale} autoExpand={alerts.length === 1} />)}

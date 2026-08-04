@@ -25,13 +25,13 @@ interface Props {
  */
 export function SettingsModal({ open, onClose, onUpdatedAtClick, settings, updatedAt }: Props) {
   const { t, i18n } = useTranslation();
-  const { location, setLocation } = settings;
+  const { set, get: { location } } = settings;
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     i18n.changeLanguage(e.target.value);
   };
 
-  const updatedAtHour = updatedAt ? DateTime.fromISO(updatedAt, { zone: settings.location }).toFormat('HH:mm') : '--:--'
+  const updatedAtHour = updatedAt ? DateTime.fromISO(updatedAt, { zone: location }).toFormat('HH:mm') : '--:--'
 
   return (
     <Modal open={open} onClose={onClose} title={t('settings')} closeLabel={t('close')}>
@@ -60,7 +60,7 @@ export function SettingsModal({ open, onClose, onUpdatedAtClick, settings, updat
             id="location"
             className={styles.select}
             value={location}
-            onChange={(e) => setLocation(e.target.value as TLocation)}>
+            onChange={(e) => set.location(e.target.value as TLocation)}>
             {LOCATION_OPTIONS.map((loc) => (
               <option key={loc} value={loc}>
                 {t(`cities.${loc.split('/')[1]}`)}

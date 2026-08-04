@@ -12,9 +12,9 @@ export interface ModalProps {
 
   ariaLabel?: string;
   snapPoints?: number[]
-  initialSnap: number;
+  initialSnap?: number;
   dismissible?: boolean;
-  container?: Element | null
+  container?: HTMLElement | Element | null
 }
 
 /**

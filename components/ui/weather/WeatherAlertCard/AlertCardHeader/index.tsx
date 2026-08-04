@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import styles from './AlertCardHeader.module.scss';
 import { IWeatherAlertCanadaProps } from '@/types/weatherAlerts.types';
-import { Tooltip } from '../../Tooltip';
 
 interface Props {
   title: string;

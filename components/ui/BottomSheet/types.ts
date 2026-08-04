@@ -65,7 +65,7 @@ export interface BottomSheetProps {
   * DOM node carrying that class (or one of its descendants) here so the
   * sheet stays inside the token cascade.
   */
-  container?: HTMLElement | null;
+  container?: HTMLElement | Element | null
 }
 
 export interface BottomSheetRef {
