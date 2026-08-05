@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import type { BottomSheetRef, SpringConfig } from "./types";
 import { clamp, rubberband } from "./utils";
-import type { SpringConfig, BottomSheetRef } from "./types";
-
 
 const DEFAULT_SPRING: SpringConfig = { stiffness: 300, damping: 32, mass: 1 };
 
@@ -305,12 +304,24 @@ export function useBottomSheet(args: UseBottomSheetArgs, ref: React.Ref<BottomSh
         }
 
         const contentEl = contentRef.current;
-        const contentScrolledDown = drag.startedInContent && !!contentEl && contentEl.scrollTop > 0;
-        if (contentScrolledDown) {
-          // Let native content scrolling happen; we may take over later if the
-          // user keeps dragging down once the content re-reaches scrollTop 0.
-          drag.isContentScroll = true;
-          return { handled: false };
+        const heights = snapHeightsRef.current;
+        const maxHeight = heights[heights.length - 1] ?? viewportHeightRef.current;
+        // Small tolerance for the sub-pixel rest position the spring settles at.
+        const atMaxSnap = heightRef.current >= maxHeight - 1;
+        const contentIsScrollable = !!contentEl && contentEl.scrollHeight > contentEl.clientHeight + 1;
+        const pullingDown = deltaY > 0;
+
+        if (drag.startedInContent && atMaxSnap && contentIsScrollable) {
+          const alreadyScrolledDown = contentEl!.scrollTop > 0;
+          // Let the browser scroll the content natively when: there's scroll
+          // position to give back (pulling down from mid-scroll), or the user
+          // is pulling up (revealing more content below) — the sheet only
+          // needs to take over when we're pulling down AND already at the
+          // very top of the content, i.e. there's nowhere left to scroll.
+          if (alreadyScrolledDown || !pullingDown) {
+            drag.isContentScroll = true;
+            return { handled: false };
+          }
         }
 
         drag.active = true;
