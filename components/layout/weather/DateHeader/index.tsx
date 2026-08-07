@@ -1,8 +1,4 @@
-import { useEffect, useState } from "react";
 import styles from "./DateHeader.module.scss";
-import { useTranslation } from "react-i18next";
-import { DateTime } from "luxon";
-import getAppLocale from "@/utils/formatters/getAppLocale";
 import Clock from "../Clock";
 import WeekDate from "../WeekDate";
 
@@ -21,23 +17,10 @@ export interface ClockProps {
  * rolls over on its own — the host app never needs to re-render this.
  */
 export function DateHeader({ timezone, onClockClick }: ClockProps) {
-  const [now, setNow] = useState<DateTime>();
-  const { i18n } = useTranslation();
-  const locale = getAppLocale(i18n.language);
-
-  useEffect(() => {
-    setNow(DateTime.now().setZone(timezone));
-
-    const id = window.setInterval(() => setNow(DateTime.now().setZone(timezone)), 1000);
-    return () => window.clearInterval(id);
-  }, [timezone]);
-
-  const onDebugClick = () => console.info("Clock:", now?.toISO(), "Timezone:", timezone);
-
   return (
-    <header className={styles.header} aria-label="Relógio" onDoubleClick={onDebugClick}>
+    <header className={styles.header} aria-label="Relógio">
       <Clock timezone={timezone} onClick={onClockClick} />
-      <WeekDate now={now} locale={locale} />
+      <WeekDate timezone={timezone} />
     </header>
   );
 }

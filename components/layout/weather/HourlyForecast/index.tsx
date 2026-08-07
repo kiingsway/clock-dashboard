@@ -54,7 +54,7 @@ export function HourlyForecast({
         {indices.map((i) => {
           const isoString = weather.hourly.time[i];
           const date = DateTime.fromISO(isoString, { zone: weather.timezone });
-          const isNow = date.hasSame(now, "hour");
+          const isNow = Math.abs(date.diff(now, "minutes").minutes) <= 15;
           const isDay = weather.hourly.is_day[i] === 1;
           const precip = precipitations[i];
           const weatherCode = weather.hourly.weather_code[i];

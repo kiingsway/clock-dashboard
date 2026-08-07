@@ -1,18 +1,14 @@
-import { DateTime } from 'luxon';
 import styles from './WeekDate.module.scss';
+import useNow from '@/hooks/useNow';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
-  now?: DateTime<boolean> | undefined
-  locale?: string;
+  timezone: string;
 }
 
-export default function WeekDate({ now: nowProp, locale }: Props) {
-
-  const now = (() => {
-    const n = nowProp ?? DateTime.now()
-    if (locale) return n.setLocale(locale);
-    return n;
-  })();
+export default function WeekDate({ timezone }: Props) {
+  const { i18n: { language: locale } } = useTranslation();
+  const { now } = useNow({ locale, timezone });
 
   const dateText = ((): string => {
     if (!now) return '-'
