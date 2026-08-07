@@ -33,7 +33,7 @@ export function HourlyForecast({
 
   const startIndex = Math.max(
     0,
-    weather.hourly.time.findIndex((iso) => {
+    (weather.hourly.time || []).findIndex((iso) => {
       const hourlyTime = DateTime.fromISO(iso, { zone: weather.timezone });
       return hourlyTime >= now;
     })
