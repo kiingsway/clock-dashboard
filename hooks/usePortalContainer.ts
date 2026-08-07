@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
  * callers should have a sensible fallback for that (e.g. `BottomSheet`'s
  * `container` prop already falls back to `document.body` when given `null`).
  */
-export function usePortalContainer(selector: string): HTMLElement | null {
+export function usePortalContainer(selector: string = ".root"): HTMLElement | null {
   const [container, setContainer] = useState<HTMLElement | null>(null);
 
   useEffect(() => {

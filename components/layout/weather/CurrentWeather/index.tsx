@@ -11,6 +11,7 @@ import CurrentWeatherIcon from "@/components/ui/weather/CurrentWeatherIcon"
 import CurrentFeelsLike from "@/components/ui/weather/CurrentFeelsLike"
 import CurrentTemperature from "@/components/ui/weather/CurrentTemperature"
 import WeatherAlerts from "@/components/layout/weather/WeatherAlerts"
+import { getTodayDailyValue } from "@/utils/formatters/getValueByArray"
 
 type WeatherInfoMode = "precipitation" | "weather";
 
@@ -60,8 +61,8 @@ export function CurrentWeather({ weather, locale, loading, error, alerts }: Prop
 
   const isDay = current.is_day !== 0;
 
-  const todayMax = daily.temperature_2m_max[0] ?? current.temperature_2m;
-  const todayMin = daily.temperature_2m_min[0] ?? current.temperature_2m;
+  const todayMin = getTodayDailyValue(daily.time, daily.temperature_2m_min, timezone);
+  const todayMax = getTodayDailyValue(daily.time, daily.temperature_2m_max, timezone);
 
   const weatherCategory = getWeatherCategory(current.weather_code)
 
@@ -108,7 +109,7 @@ export function CurrentWeather({ weather, locale, loading, error, alerts }: Prop
             <div className={styles.stat}>
               <dt>{t('maxMin')}</dt>
               <dd>
-                {Math.round(todayMax)}° / {Math.round(todayMin)}°
+                {todayMax ? Math.round(todayMax) : '-'}° / {todayMin ? Math.round(todayMin) : '-'}°
               </dd>
             </div>
             <div className={styles.statDivider} aria-hidden="true" />

@@ -29,7 +29,7 @@ export default function WeatherAlerts({ alerts, locale }: Props) {
 
   const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean()
 
-  const portalContainer = usePortalContainer(".root");
+  const portalContainer = usePortalContainer();
 
   if (alerts.length === 0) return null;
 

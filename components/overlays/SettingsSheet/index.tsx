@@ -38,7 +38,7 @@ export function SettingsSheet({
 
   const [draftRadius, setDraftRadius] = useState(alertRadiusKm);
 
-  const portalContainer = usePortalContainer(".root");
+  const portalContainer = usePortalContainer();
 
   // se o valor mudar por fora (ex: carregado do storage depois), sincroniza
   useEffect(() => {
