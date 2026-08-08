@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next"
 import styles from './CurrentWeather.module.css'
 import { DateTime } from "luxon"
 import SunProgress from "./SunProgress"
-import { useState } from "react"
 import getWeatherCategory from "@/utils/weather/getWeatherCategory"
 import { getSunWindow } from "@/utils/weather/getSunWindow"
 import { IWeatherAlertCanada } from "@/types/weatherAlerts.types"
@@ -12,13 +11,12 @@ import CurrentFeelsLike from "@/components/ui/weather/CurrentFeelsLike"
 import CurrentTemperature from "@/components/ui/weather/CurrentTemperature"
 import WeatherAlerts from "@/components/layout/weather/WeatherAlerts"
 import { getTodayDailyValue } from "@/utils/formatters/getValueByArray"
-
-type WeatherInfoMode = "precipitation" | "weather";
+import { useAutoToggle } from "@/hooks/useAutoToggle"
 
 interface Props {
   weather: IWeather | undefined
   loading: boolean
-  error: any
+  error: unknown
   locale: string
   weatherCategory: WeatherCategory
   alerts: IWeatherAlertCanada[]
@@ -69,18 +67,7 @@ export function CurrentWeather({ weather, locale, loading, error, alerts }: Prop
   const precipUnit = currentUnits.precipitation;
   const hasPrecipitation = current.precipitation > 0;
 
-  const [weatherInfoMode, setWeatherInfoMode] = useState<WeatherInfoMode>(hasPrecipitation ? "precipitation" : "weather");
-
-  const toggleWeatherInfo = (): void => {
-    setWeatherInfoMode(prev => {
-      switch (prev) {
-        case "weather":
-          return "precipitation";
-        default:
-          return "weather";
-      }
-    });
-  };
+  const [showPrecip, toggleWeatherInfoMode] = useAutoToggle({ intervalMs: hasPrecipitation ? 4000 : 0, pauseDurationMs: 8000 });
 
   const sunWindow = getSunWindow(current.time, daily.sunrise, daily.sunset, timezone);
 
@@ -113,18 +100,18 @@ export function CurrentWeather({ weather, locale, loading, error, alerts }: Prop
               </dd>
             </div>
             <div className={styles.statDivider} aria-hidden="true" />
-            <div className={styles.stat} id="prec-weather" onClick={toggleWeatherInfo}>
-              {weatherInfoMode === 'weather' ? (
+            <div className={styles.stat} id="prec-weather" onClick={() => toggleWeatherInfoMode()}>
+              {showPrecip ? (
                 <>
                   <dt>{t('weather')}</dt>
                   <dd title={`Weather Code (WMO): #${weather.current.weather_code}`}>{weatherCategory.title}</dd>
                 </>
-              ) : weatherInfoMode === 'precipitation' ? (
+              ) : (
                 <>
                   <dt>{t('precipitation')}</dt>
                   <dd>{hasPrecipitation ? `${current.precipitation}${precipUnit}` : t('noPrecipitation')}</dd>
                 </>
-              ) : <></>}
+              )}
             </div>
           </>
         ) : (
