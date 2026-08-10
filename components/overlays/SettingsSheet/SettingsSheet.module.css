@@ -200,3 +200,9 @@
   font-size: var(--wc-text-2xs, 0.6875em);
   color: var(--wc-text-faint, #565f72);
 }
+
+.version {
+  display: flex;
+  flex-direction: row;
+  gap: var(--wc-space-sm);
+}

@@ -28,7 +28,12 @@ function buildSunWindow(now: DateTime, start: DateTime, end: DateTime, startKind
  * API, so the before-sunrise case always estimates from today's sunset.
  */
 
-export function getSunWindow(currentTime: string, sunriseTimes: string[], sunsetTimes: string[], timezone: string): SunWindow {
+export function getSunWindow(
+  sunriseTimes: string[],
+  sunsetTimes: string[],
+  timezone: string,
+  currentTime?: string
+): SunWindow {
   const events: SunEvent[] = [
     ...sunriseTimes.map((t) => ({
       time: DateTime.fromISO(t, { zone: timezone }),
@@ -41,27 +46,66 @@ export function getSunWindow(currentTime: string, sunriseTimes: string[], sunset
     })),
   ].sort((a, b) => a.time.toMillis() - b.time.toMillis());
 
-  const now = DateTime.fromISO(currentTime, { zone: timezone });
+  // "now" is always the actual current moment.
+  const now = DateTime.now().setZone(timezone);
 
-  let previous = events[0];
-  let next = events[events.length - 1];
+  // The requested date determines which sunrise/sunset
+  // window should be displayed.
+  const targetDate = currentTime
+    ? DateTime.fromISO(currentTime, { zone: timezone })
+    : now;
 
-  for (const event of events) {
-    if (event.time <= now) {
-      previous = event;
-    }
+  const sunrise = events.find(
+    (event) =>
+      event.kind === "sunrise" &&
+      event.time.hasSame(targetDate, "day")
+  );
 
-    if (event.time > now) {
-      next = event;
-      break;
-    }
+  const sunset = events.find(
+    (event) =>
+      event.kind === "sunset" &&
+      event.time.hasSame(targetDate, "day")
+  );
+
+  if (!sunrise || !sunset) {
+    return {
+      start: sunrise?.time ?? events[0].time,
+      end: sunset?.time ?? events[events.length - 1].time,
+      startKind: "sunrise",
+      endKind: "sunset",
+      progress: 0,
+    };
   }
 
-  return buildSunWindow(
-    now,
-    previous.time,
-    next.time,
-    previous.kind,
-    next.kind
-  );
+  // Compare the requested day with today.
+  const targetDay = targetDate.startOf("day");
+  const today = now.startOf("day");
+
+  let progress = 0;
+
+  if (targetDay < today) {
+    // Past day
+    progress = 1;
+  } else if (targetDay > today) {
+    // Future day
+    progress = 0;
+  } else {
+    // Today
+    progress = Math.min(
+      1,
+      Math.max(
+        0,
+        (now.toMillis() - sunrise.time.toMillis()) /
+          (sunset.time.toMillis() - sunrise.time.toMillis())
+      )
+    );
+  }
+
+  return {
+    start: sunrise.time,
+    end: sunset.time,
+    startKind: "sunrise",
+    endKind: "sunset",
+    progress,
+  };
 }

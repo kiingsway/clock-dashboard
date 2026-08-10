@@ -1,0 +1,43 @@
+.card {
+  display: flex;
+  align-items: center;
+  gap: var(--wc-space-lg);
+  padding: var(--wc-space-md);
+  background: var(--wc-surface);
+  border: 1px solid var(--wc-highlight);
+  border-radius: var(--wc-radius-lg);
+  box-shadow: var(--wc-shadow-md);
+  overflow: hidden;
+  cursor: default;
+  user-select: none;
+}
+
+.icon {
+  flex: 0 0 auto;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  gap: var(--wc-space-xs);
+
+  .title {
+    font-family: var(--wc-font-display);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .desc {
+    opacity: 0.7;
+    font-size: var(--wc-text-sm);
+  }
+}
+
+.iconStack {
+  position: relative;
+}
+
+.iconLayer {
+  position: absolute;
+}

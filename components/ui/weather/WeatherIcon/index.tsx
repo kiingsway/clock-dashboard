@@ -72,7 +72,7 @@ interface WeatherCodeProps extends Props {
   duration?: never;
 }
 
-type WeatherIconProps = WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps
+export type WeatherIconProps = WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps
 
 export default function WeatherIcon({
   category,

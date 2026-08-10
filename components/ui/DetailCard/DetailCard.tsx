@@ -12,6 +12,7 @@ export interface DetailCardProps {
   description?: ReactNode;
   className?: string;
   textColor?: string;
+  onDoubleClick?: () => void;
 }
 
 /**
@@ -25,11 +26,11 @@ export interface DetailCardProps {
  * un-broken square (just visually blank), so a card with missing data
  * never collapses the grid or throws.
  */
-export function DetailCard({ title, icon, bigText, textColor, description, className }: DetailCardProps) {
+export function DetailCard({ title, icon, bigText, textColor, description, className, onDoubleClick }: DetailCardProps) {
   const center = icon ?? bigText;
 
   return (
-    <div className={[styles.card, className].filter(Boolean).join(" ")}>
+    <div className={[styles.card, className].filter(Boolean).join(" ")} onDoubleClick={onDoubleClick}>
       {title && <span className={styles.title}>{title}</span>}
       <div className={styles.center} style={{ color: textColor }}>{center}</div>
       {description && <div className={styles.description}>{description}</div>}

@@ -30,7 +30,7 @@ export default function SunProgress({ currentWeather, dailyWeather, timezone, su
 
   if (!currentWeather && !sunWindowData) return <></>;
 
-  const sunWindow = sunWindowData || getSunWindow(currentWeather.time, dailyWeather.sunrise, dailyWeather.sunset, timezone);
+  const sunWindow = sunWindowData || getSunWindow(dailyWeather.sunrise, dailyWeather.sunset, timezone);
   const startLabel = sunWindow.start.toFormat("HH:mm");
   const endLabel = sunWindow.end.toFormat("HH:mm");
 

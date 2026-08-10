@@ -1,19 +1,18 @@
 import { ICON_BASE_URI } from "@/constants/iconFiles";
 import { IWeather } from "@/types/weather.types";
 import { IWindInfo } from "@/types/weatherInfo.types";
-import { getTodayDailyValue, getCurrentHourlyValue } from "../formatters/getValueByArray";
-import { hexToRgb, lerp } from "../formatters/textFormatters";
+import { getCurrentHourlyValue, getDailyValue } from "../formatters/getValueByArray";
 import getBeaufortScale from "../geo/getBeaufortScale";
 import { getCompassDirection } from "../geo/getCompassDirection";
+import { DateTime } from "luxon";
+import { hexToRgb, lerp } from "../formatters/textFormatters";
 
-export default function getWindInfo(weather?: IWeather): IWindInfo | undefined {
-
-  if (!weather) return undefined
+export default function getWindInfo(weather: IWeather, date = DateTime.now() as DateTime<boolean>): IWindInfo | undefined {
 
   const { daily, hourly, timezone } = weather
 
-  const windSpeedMean = getTodayDailyValue(daily.time, daily.wind_speed_10m_mean, timezone)
-  const windGustsMean = getTodayDailyValue(daily.time, daily.wind_gusts_10m_mean, timezone)
+  const windSpeedMean = getDailyValue(daily.time, daily.wind_speed_10m_mean, timezone, date)
+  const windGustsMean = getDailyValue(daily.time, daily.wind_gusts_10m_mean, timezone, date)
 
   const windDirection = getCurrentHourlyValue(hourly.time, hourly.wind_direction_10m, timezone)
   const windGusts = getCurrentHourlyValue(hourly.time, hourly.wind_gusts_10m, timezone)

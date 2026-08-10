@@ -25,8 +25,8 @@ export function getCurrentHourlyValue<T>(
     : values[closestIndex];
 }
 
-export function getTodayDailyValue<T>(time: string[], values: T[], timezone: string): T | undefined {
-  const today = DateTime.now().setZone(timezone).toISODate();
+export function getDailyValue<T>(time: string[], values: T[], timezone: string, date = DateTime.now() as DateTime<boolean>): T | undefined {
+  const today = date.setZone(timezone).toISODate();
 
   if (!Array.isArray(time) || !time?.length) return undefined;
 

@@ -10,7 +10,7 @@ import CurrentWeatherIcon from "@/components/ui/weather/CurrentWeatherIcon"
 import CurrentFeelsLike from "@/components/ui/weather/CurrentFeelsLike"
 import CurrentTemperature from "@/components/ui/weather/CurrentTemperature"
 import WeatherAlerts from "@/components/layout/weather/WeatherAlerts"
-import { getTodayDailyValue } from "@/utils/formatters/getValueByArray"
+import { getDailyValue } from "@/utils/formatters/getValueByArray"
 import { useAutoToggle } from "@/hooks/useAutoToggle"
 
 interface Props {
@@ -58,9 +58,9 @@ export function CurrentWeather({ weather, locale, loading, error, alerts }: Prop
   const timezone = weather?.timezone ?? "UTC";
 
   const isDay = current.is_day !== 0;
-
-  const todayMin = getTodayDailyValue(daily.time, daily.temperature_2m_min, timezone);
-  const todayMax = getTodayDailyValue(daily.time, daily.temperature_2m_max, timezone);
+  
+  const todayMin = getDailyValue(daily.time, daily.temperature_2m_min, timezone);
+  const todayMax = getDailyValue(daily.time, daily.temperature_2m_max, timezone);
 
   const weatherCategory = getWeatherCategory(current.weather_code)
 
@@ -69,7 +69,7 @@ export function CurrentWeather({ weather, locale, loading, error, alerts }: Prop
 
   const [showPrecip, toggleWeatherInfoMode] = useAutoToggle({ intervalMs: hasPrecipitation ? 4000 : 0, pauseDurationMs: 8000 });
 
-  const sunWindow = getSunWindow(current.time, daily.sunrise, daily.sunset, timezone);
+  const sunWindow = getSunWindow(daily.sunrise, daily.sunset, timezone);
 
   const onDebugClick = (): void => console.info('Current Weather:', weather)
 

@@ -1,6 +1,8 @@
 import ICON_FILES, { ICON_BASE_URI } from "@/constants/iconFiles";
 import { IWeather } from "@/types/weather.types"
-import { getTodayDailyValue } from "../formatters/getValueByArray";
+import { IUVIcon } from "@/types/weatherInfo.types";
+import { DateTime } from "luxon";
+import { getDailyValue } from "../formatters/getValueByArray";
 
 const getUvSrc = (uv?: number): string => {
   let name: string = 'uv-index';
@@ -12,27 +14,17 @@ const getUvSrc = (uv?: number): string => {
   return `${ICON_BASE_URI}${name}.svg`
 }
 
-export interface IUVIcon {
-  alt: string;
-  src: string;
-  desc: string;
-  uv?: number;
-  iconDuration?: number;
-}
-
-export default function getUVIcon(weather?: IWeather): IUVIcon | undefined {
-
-  if (!weather) return undefined
+export default function getUVIcon(weather: IWeather, date = DateTime.now() as DateTime<boolean>, isDay?: boolean): IUVIcon | undefined {
 
   const { current, daily, timezone } = weather;
 
-  if (current.is_day !== 1) return {
+  if (current.is_day !== 1 && !isDay) return {
     alt: `UV Index: 0 (night)`,
     src: `${ICON_BASE_URI}${ICON_FILES.clearNight}.svg`,
     desc: 'Tá de noite'
   }
 
-  const uvNumber = getTodayDailyValue(daily.time, daily.uv_index_max, timezone)
+  const uvNumber = getDailyValue(daily.time, daily.uv_index_max, timezone, date)
 
   if (!uvNumber) return undefined
 

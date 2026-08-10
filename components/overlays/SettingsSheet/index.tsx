@@ -6,10 +6,10 @@ import { TLocation } from "@/types/location.types";
 import { APP_INFO } from "@/constants/appInfo";
 import { Badge } from "@/components/ui/Badge";
 import styles from "./SettingsSheet.module.css";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon } from "./Icons";
 import { ALERT_RADIUS_KM } from "@/constants/alerts";
 import { LOCATION_OPTIONS } from "@/constants/locations";
-import { BottomSheet } from "@/components/ui/BottomSheet";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
 
 interface Props {
@@ -37,11 +37,11 @@ export function SettingsSheet({
   const { get: { alertRadiusKm, location } } = settings;
 
   const [draftRadius, setDraftRadius] = useState(alertRadiusKm);
-
-  const portalContainer = usePortalContainer();
+  const portalContainer = usePortalContainer(".root");
 
   // se o valor mudar por fora (ex: carregado do storage depois), sincroniza
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDraftRadius(alertRadiusKm);
   }, [alertRadiusKm]);
 
@@ -56,6 +56,7 @@ export function SettingsSheet({
   const updatedAtHour = updatedAt
     ? DateTime.fromISO(updatedAt, { zone: location }).toFormat("HH:mm")
     : "--:--";
+
 
   return (
     <BottomSheet
@@ -161,11 +162,7 @@ export function SettingsSheet({
             icon={<InfoIcon />}
             title={t("version")}
             description={t("settingsTexts.status.version")}
-            value={
-              <>
-                {APP_INFO.isDev && <Badge variant="accent">DEV</Badge>} {APP_INFO.version}
-              </>
-            }
+            value={<VersionBadge />}
           />
         </SettingsSection>
       </form>
@@ -214,4 +211,17 @@ function SettingRow({ icon, title, description, value, control, htmlFor, onDoubl
       {control && <div className={styles.rowControl}>{control}</div>}
     </div>
   );
+}
+
+function VersionBadge() {
+
+  const isBeta = (process.env.NEXT_PUBLIC_APP_NAME || "")?.toLowerCase().includes('beta')
+
+  return (
+    <div className={styles.version}>
+      {isBeta && <Badge variant="accent">BETA</Badge>}
+      {APP_INFO.isDev && <Badge variant="accent">DEV</Badge>}
+      {APP_INFO.version}
+    </div>
+  )
 }

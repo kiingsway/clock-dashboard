@@ -141,3 +141,10 @@
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
+
+.modalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--wc-space-md);
+  margin-bottom: var(--wc-space-md);
+}
