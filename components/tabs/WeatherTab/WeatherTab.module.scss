@@ -17,6 +17,12 @@
   }
 }
 
+.weatherInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wc-space-xl);
+}
+
 .group {
   display: flex;
   flex-direction: column;

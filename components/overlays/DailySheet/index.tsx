@@ -11,6 +11,8 @@ import TempFeelsLikeWidget from '@/components/ui/weather/widgets/TempFeelsLikeWi
 import RainWidget from '@/components/ui/weather/widgets/RainWidget';
 import UVIndexWidget from '@/components/ui/weather/widgets/UVIndex';
 import WindWidget from '@/components/ui/weather/widgets/WindWidget';
+import CurrentWeatherWidget from '@/components/ui/weather/widgets/CurrentWeatherWidget';
+import { HourlyForecast } from '@/components/layout/weather/HourlyForecast';
 
 interface Props {
   weather: IWeather | undefined
@@ -28,6 +30,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
   const { daily, timezone, latitude, longitude } = weather;
 
   const iso = daily.time[index];
+  const weatherCode = daily.weather_code[index];
   const feelsLike = daily.apparent_temperature_mean[index];
   const tempMean = daily.temperature_2m_mean[index];
   const tempMax = daily.temperature_2m_max[index];
@@ -61,8 +64,12 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
       <div className={styles.main}>
         <SunProgressBar sunWindow={sunWindow} />
 
-        <TempFeelsLikeWidget tempMin={tempMin} tempMax={tempMax} feelsLike={feelsLike} tempMean={tempMean} size={60} />
+        <CurrentWeatherWidget weatherCode={weatherCode} tempMin={tempMin} tempMax={tempMax} size={60} />
+        <TempFeelsLikeWidget feelsLike={feelsLike} tempMean={tempMean} size={60} />
         <RainWidget precipMM={precipSum} chance={precipChance} hoursOfRain={precipHours} size={60} />
+
+        {/* <HourlyForecast weather={weather} hoursToShow={24} /> */}
+
         <MoonWidget date={indexDate} lat={latitude} lon={longitude} size={60} miniCard />
         <UVIndexWidget date={indexDate} weather={weather} size={60} miniCard />
         <WindWidget date={indexDate} weather={weather} size={60} miniCard />

@@ -36,20 +36,19 @@ export default function WeatherTab({ appSettings }: Props) {
           weather={weather}
           weatherCategory={category}
           alerts={alerts}
-          locale={locale}
           loading={isLoading}
           error={weatherError || alertsError}
         />
       </div>
 
       {weather && (
-        <>
-          <HourlyForecast weather={weather} locale={locale} />
+        <div className={styles.weatherInfo}>
+          <HourlyForecast weather={weather} />
 
-          <DailyForecast weather={weather} locale={locale} />
+          <DailyForecast weather={weather} />
 
           <WeatherWidgets data={data} />
-        </>
+        </div>
       )}
     </div>
   )

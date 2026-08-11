@@ -11,13 +11,13 @@ interface Props {
 
 export default function RainWidget({ precipMM, chance, hoursOfRain, size = 120 }: Props) {
 
-  const desc = getRainSummary({ chanceMax: chance, precipitationMm: precipMM, hoursOfRain });
+  const { description, iconName } = getRainSummary({ chanceMax: chance, precipitationMm: precipMM, hoursOfRain });
 
   return (
     <MiniCard
       title={`${precipMM}mm - ${chance}% chance`}
-      desc={desc}
-      icon={<WeatherIcon category={'drizzle'} size={size} />}
+      desc={description}
+      icon={<WeatherIcon iconName={iconName} size={size} />}
     />
   )
 }

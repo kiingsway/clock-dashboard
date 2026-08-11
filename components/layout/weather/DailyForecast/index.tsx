@@ -10,7 +10,6 @@ import DailySheet from "@/components/overlays/DailySheet";
 
 export interface DailyForecastProps {
   weather: IWeather
-  locale: string;
 }
 
 /**
@@ -20,8 +19,8 @@ export interface DailyForecastProps {
  * the whole forecast window, so a glance at the bar shows where a day sits
  * in the week, not just its two numbers.
  */
-export function DailyForecast({ weather, locale }: DailyForecastProps) {
-  const { t } = useTranslation();
+export function DailyForecast({ weather }: DailyForecastProps) {
+  const { t, i18n: { language: locale } } = useTranslation();
   const [expandedIndex, setExpandedIndex] = useState<number>();
   const [dailySheetOpen, { setTrue: openDaily, setFalse: closeDaily }] = useBoolean();
 

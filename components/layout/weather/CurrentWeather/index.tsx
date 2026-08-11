@@ -17,7 +17,6 @@ interface Props {
   weather: IWeather | undefined
   loading: boolean
   error: unknown
-  locale: string
   weatherCategory: WeatherCategory
   alerts: IWeatherAlertCanada[]
 }
@@ -29,8 +28,8 @@ interface Props {
  * gotten. Values and units are rendered exactly as given — no conversion
  * happens in this component.
  */
-export function CurrentWeather({ weather, locale, loading, error, alerts }: Props) {
-  const { t } = useTranslation();
+export function CurrentWeather({ weather, loading, error, alerts }: Props) {
+  const { t, i18n: { language: locale } } = useTranslation();
 
   const now = DateTime.now();
 
