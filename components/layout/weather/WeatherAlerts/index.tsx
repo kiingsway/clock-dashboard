@@ -1,4 +1,3 @@
-import { Modal } from "@/components/ui/Modal";
 import useBoolean from "@/hooks/useBoolean";
 import { IWeatherAlertCanada } from "@/types/weatherAlerts.types";
 import { useTranslation } from "react-i18next";
@@ -8,7 +7,6 @@ import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
 import sortWeatherAlerts from "@/utils/weatherAlerts/sortWeatherAlerts";
 import { WeatherAlertCard } from "@/components/ui/weather/WeatherAlertCard/WeatherAlertCard";
 import { BottomSheet } from "@/components/ui/BottomSheet";
-import { useState, useEffect } from "react";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
 
 interface Props {

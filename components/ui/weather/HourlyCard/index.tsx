@@ -6,8 +6,10 @@ interface Props {
   hour: string;
   hourTooltip: string;
   icon: ReactNode;
-  temp: string;
-  feels: string;
+  temp: number;
+  tempUnit?: string;
+  feelsLike: number;
+  feelsLikeUnit?: string;
   desc: ReactNode;
   accent: string;
   accentPeak: string;
@@ -15,7 +17,9 @@ interface Props {
 
 export default function HourlyCard({
   as: Component = 'div',
-  desc, icon, feels, hour, temp,
+  desc, icon, feelsLike, hour, temp,
+  tempUnit = 'ºC',
+  feelsLikeUnit = 'ºC',
   hourTooltip,
   accent, accentPeak
 }: Props) {
@@ -31,11 +35,11 @@ export default function HourlyCard({
       {icon}
 
       <span className={styles.temp}>
-        {temp}
+        {temp + tempUnit}
       </span>
 
       <span className={styles.feels}>
-        {feels}
+        {feelsLike + feelsLikeUnit}
       </span>
 
       {desc}

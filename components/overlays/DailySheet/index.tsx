@@ -12,7 +12,7 @@ import RainWidget from '@/components/ui/weather/widgets/RainWidget';
 import UVIndexWidget from '@/components/ui/weather/widgets/UVIndex';
 import WindWidget from '@/components/ui/weather/widgets/WindWidget';
 import CurrentWeatherWidget from '@/components/ui/weather/widgets/CurrentWeatherWidget';
-import { HourlyForecast } from '@/components/layout/weather/HourlyForecast';
+import HourlyList from '@/components/ui/weather/HourlyList';
 
 interface Props {
   weather: IWeather | undefined
@@ -50,6 +50,11 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
 
   const title = getForecastTitle(indexDate, locale);
 
+  const startIndex = weather.hourly.time.findIndex((time) => {
+    const dateTime = DateTime.fromISO(time, { zone: timezone });
+    return dateTime.hasSame(indexDate, 'day');
+  });
+
   return (
     <BottomSheet
       open={open && typeof index === 'number'}
@@ -68,7 +73,20 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
         <TempFeelsLikeWidget feelsLike={feelsLike} tempMean={tempMean} size={60} />
         <RainWidget precipMM={precipSum} chance={precipChance} hoursOfRain={precipHours} size={60} />
 
-        {/* <HourlyForecast weather={weather} hoursToShow={24} /> */}
+        <HourlyList
+          startIndex={startIndex}
+          times={weather.hourly.time}
+          weatherCodes={weather.hourly.weather_code}
+          temps={weather.hourly.temperature_2m}
+          tempUnit={weather.hourly_units.temperature_2m}
+          feelsLikes={weather.hourly.apparent_temperature}
+          feelsLikeUnit={weather.hourly_units.apparent_temperature}
+          precipitations={weather.hourly.precipitation}
+          isDays={weather.hourly.is_day}
+          latitude={weather.latitude}
+          longitude={weather.longitude}
+          timezone={weather.timezone}
+        />
 
         <MoonWidget date={indexDate} lat={latitude} lon={longitude} size={60} miniCard />
         <UVIndexWidget date={indexDate} weather={weather} size={60} miniCard />

@@ -2,7 +2,6 @@ import { FiMapPin } from "react-icons/fi";
 import styles from "./Location.module.css";
 import { UseAppSettings } from "@/types/app.types";
 import useBoolean from "@/hooks/useBoolean";
-import { SettingsModal } from "@/components/overlays/SettingsModal";
 import { SettingsSheet } from "@/components/overlays/SettingsSheet";
 
 interface Props {

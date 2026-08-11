@@ -27,6 +27,7 @@ export function useAppSettings(): UseAppSettings {
   useEffect(() => {
     setSettings(loadSettings());
     setLoaded();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /* 2. Só persiste depois que já carregou — evita sobrescrever com o default */

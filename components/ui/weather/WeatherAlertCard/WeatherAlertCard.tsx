@@ -1,9 +1,7 @@
-import { useState } from "react";
 import styles from "./WeatherAlertCard.module.css";
 import { useTranslation } from "react-i18next";
 import { DateTime } from "luxon";
 import useBoolean from "@/hooks/useBoolean";
-import { RiMapPin4Fill } from "react-icons/ri";
 import { TbMapPin } from "react-icons/tb";
 import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
 import { IWeatherAlertCanadaProps } from "@/types/weatherAlerts.types";
