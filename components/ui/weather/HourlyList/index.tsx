@@ -8,10 +8,9 @@ import { DateTime } from 'luxon';
 import { getAccent } from '@/utils/weather/getAccentColor';
 import { getRainColor } from '@/utils/weather/getRainIntensityLabel';
 import getWeatherCategory from '@/utils/weather/getWeatherCategory';
-import { isXMinBefore } from '@/utils/formatters/mathDateFormatters';
+import { useNow } from '@/contexts/NowContext';
 
 interface Props {
-  // date: DateTime
   startIndex: number;
   times: string[];
   weatherCodes: number[];
@@ -28,7 +27,6 @@ interface Props {
 }
 
 export default function HourlyList({
-  // date,
   startIndex,
   times,
   weatherCodes,
@@ -44,15 +42,7 @@ export default function HourlyList({
   hoursToShow = 24,
 }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
-  // const targetDate = date.setZone(timezone).startOf('day');
-
-  const now = DateTime.now().setZone(timezone);
-
-  // const startIndex = times.findIndex((time) => {
-  //   const dateTime = DateTime.fromISO(time, { zone: timezone });
-
-  //   return dateTime.hasSame(targetDate, 'day');
-  // });
+  const { now } = useNow();
 
   const indexes =
     startIndex === -1
@@ -67,18 +57,12 @@ export default function HourlyList({
         (_, index) => startIndex + index
       );
 
-  const onDebugClick = (): void => console.log('Hourly List: ', {
-    startIndex,
-    rawTimes: times,
-    dateTimes: times.map(time => DateTime.fromISO(time).toFormat('dd/LL/yy HH:mm'))
-  })
-
   return (
-    <ul className={styles.scroller} onDoubleClick={onDebugClick}>
+    <ul className={styles.scroller}>
       {indexes.map((index) => {
-        const time = times[index];
+        const indexDateString = times[index];
 
-        const dateTime = DateTime.fromISO(time, { zone: timezone, });
+        const indexDate = DateTime.fromISO(indexDateString, { zone: timezone });
 
         const weatherCode = weatherCodes[index];
         const temp = Math.round(temps[index]);
@@ -90,14 +74,25 @@ export default function HourlyList({
         const accent = getAccent({ category, isDay });
         const accentPeak = getRainColor(precip);
 
+        const difference = indexDate
+          .startOf('day')
+          .diff(now.startOf('day'), 'days')
+          .days;
+        const subhour = `+${difference}`
+
+        const minDiff = indexDate.diff(now, 'minutes').minutes;
+        const within20Minutes = Math.abs(minDiff) <= 25;
+
         return (
           <HourlyCard
-            key={time}
+            key={indexDateString}
             as="li"
-            hour={isXMinBefore(now, dateTime, 15)
+            hour={within20Minutes
               ? t('now')
-              : formatHourLabel(dateTime, locale)}
-            hourTooltip={dateTime.toFormat('dd/LL/yyyy HH:mm')}
+              : formatHourLabel(indexDate, locale)}
+            subhour={subhour}
+            hideSubhour={difference < 1}
+            hourTooltip={indexDate.toFormat('dd/LL/yyyy HH:mm')}
             temp={temp}
             tempUnit={tempUnit}
             feelsLike={feelsLike}
@@ -108,11 +103,10 @@ export default function HourlyList({
             icon={
               <WeatherIcon
                 weatherCode={weatherCode}
-                date={dateTime}
                 isDay={isDay}
                 lat={latitude}
                 lon={longitude}
-                size={34}
+                size={40}
               />
             }
           />

@@ -1,13 +1,14 @@
 import { DetailCard } from '@/components/ui/DetailCard/DetailCard'
 import MiniCard from '@/components/ui/MiniCard';
 import { IWeather } from '@/types/weather.types';
-import { IWindInfo } from '@/types/weatherInfo.types'
-import getWindInfo from '@/utils/weather/getWindInfo';
 import { DateTime } from 'luxon';
 import WeatherIcon from '../WeatherIcon';
+import { useTranslation } from 'react-i18next';
+import getWindInfo, { WindData } from '@/utils/weather/getWindInfo';
+import { capitalizeWords } from '@/utils/formatters/textFormatters';
 
 type WindProps = {
-  windInfo: IWindInfo;
+  windInfo: WindData;
 
   weather?: never;
   date?: never;
@@ -17,7 +18,7 @@ type WeatherProps = {
   windInfo?: never;
 
   weather: IWeather;
-  date?: DateTime
+  date: DateTime
 };
 
 export type Props = (WindProps | WeatherProps) & {
@@ -26,33 +27,37 @@ export type Props = (WindProps | WeatherProps) & {
 };
 
 export default function WindWidget({ windInfo: windInfoProps, date, weather, miniCard, size = 120 }: Props) {
+  const { t } = useTranslation();
 
-  const windInfo = windInfoProps || getWindInfo(weather, date);
+  // Mudar para windInfo depois
+  const windInfo = windInfoProps || getWindInfo(weather, date, t);
   if (!windInfo) return null;
 
-  const onDebugClick = (): void => console.info('Wind Info:', windInfo);
+  const onDebugClick = (): void => console.info('Wind Info:', { windInfo });
+
+  const { day, now } = windInfo;
 
   if (miniCard) {
     return (
       <MiniCard
-        desc={windInfo.daily?.desc}
-        title={`Speed: ${windInfo.daily?.speed}km/h - Gusts ${windInfo.daily?.gusts}km/h`}
+        title={`${t('windSpeed')}: ${now.speed} - ${t('windGusts')}: ${now.gusts}`}
+        desc={now.speedDesc}
         onDoubleClick={onDebugClick}
         size={size}
         icons={[
           <WeatherIcon
             key="beaufort"
-            src={windInfo.hourly.beaufort?.src || ""}
-            title={`Vento ${windInfo.hourly.direction.name}`}
-            alt={`Vento ${windInfo.hourly.direction.name}`}
-            duration={windInfo.hourly.beaufort?.duration}
+            src={now.beaufort?.src || ''}
+            title={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
+            alt={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
+            duration={now.beaufort?.duration}
           />,
           <WeatherIcon
             key="direction"
-            src={windInfo.hourly.direction.src}
-            title={`Vento ${windInfo.hourly.direction.name}`}
-            alt={`Vento ${windInfo.hourly.direction.name}`}
-            duration={windInfo.hourly.beaufort?.duration}
+            src={now.direction?.src || ''}
+            title={`${capitalizeWords(t('wind'))} ${now.direction?.name}`}
+            alt={`${capitalizeWords(t('wind'))} ${now.direction?.name}`}
+            duration={now.beaufort?.duration}
           />,
         ]}
       />
@@ -62,35 +67,35 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
   return (
     <>
       <DetailCard
-        title="Wind Gusts Now"
-        textColor={windInfo.hourly.gustsColor}
-        bigText={`${windInfo.hourly.gusts}km/h`}
-        description={`Média de ${windInfo.daily?.gusts}km/h no dia`}
-      />
-
-      <DetailCard
         onDoubleClick={onDebugClick}
-        title="Wind"
-        description={`${windInfo.hourly.desc} Sentido ${windInfo.hourly.direction.name?.toLowerCase()}.`}
-        icon={windInfo.hourly.beaufort?.src && windInfo.hourly.direction.src && (
+        title={t('windSpeed')}
+        description={now.speedDesc}
+        icon={now.beaufort?.src && now.direction?.src && (
           <>
             <WeatherIcon
-              src={windInfo.hourly.beaufort?.src}
-              title={`Vento ${windInfo.hourly.direction.name}`}
-              alt={`Vento ${windInfo.hourly.direction.name}`}
-              duration={windInfo.hourly.beaufort.duration}
+              src={now.beaufort.src}
+              title={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
+              alt={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
+              duration={now.beaufort?.duration}
               size={80}
             />
             <WeatherIcon
-              src={windInfo.hourly.direction.src}
-              title={`Vento ${windInfo.hourly.direction.name}`}
-              alt={`Vento ${windInfo.hourly.direction.name}`}
-              duration={windInfo.hourly.beaufort.duration}
+              src={now.direction.src}
+              title={`${capitalizeWords(t('wind'))} ${now.direction?.name}`}
+              alt={`${capitalizeWords(t('wind'))} ${now.direction?.name}`}
+              duration={now.beaufort?.duration}
               size={80}
             />
           </>
         )}
       />
+
+      {now.gusts && <DetailCard
+        title={t('windGusts')}
+        textColor={now.gustsColor}
+        bigText={now.gusts}
+        description={t('averageSpeedForDay', { speed: day.gusts })}
+      />}
     </>
   )
 }

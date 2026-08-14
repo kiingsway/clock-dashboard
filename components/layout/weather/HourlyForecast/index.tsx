@@ -3,6 +3,7 @@ import styles from "./HourlyForecast.module.css";
 import { useTranslation } from "react-i18next";
 import { DateTime } from "luxon";
 import HourlyList from "@/components/ui/weather/HourlyList";
+import { useNow } from "@/contexts/NowContext";
 
 export interface HourlyForecastProps {
   weather: IWeather
@@ -17,8 +18,7 @@ export interface HourlyForecastProps {
  */
 export function HourlyForecast({ weather, hoursToShow = 24 * 3 }: HourlyForecastProps) {
   const { t } = useTranslation();
-
-  const now = DateTime.now().setZone(weather.timezone);
+    const { now } = useNow();
 
   const startIndex = Math.max(
     0,

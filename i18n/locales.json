@@ -14,16 +14,23 @@
     "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
     "uvIndex": "Índice UV",
+    "wind": "Vento",
     "windGusts": "Rajadas de Vento",
     "windSpeed": "Velocidade do Vento",
+    "averageSpeedForDay": "Média de {{speed}} no dia",
     "feelsLike": "Sensação",
     "maxMin": "Máx/Mín",
     "precipitation": "Precipitação",
+    "visibility": "Visibilidade",
     "noPrecipitation": "Sem chuva",
     "sunrise": "Nascer do sol",
     "sunset": "Pôr do sol",
+    "moonrise": "Nascer da lua",
+    "moonset": "Pôr da lua",
+    "moon": "Lua",
     "now": "Agora",
     "today": "Hoje",
+    "tomorrow": "Amanhã",
     "nextHours": "Próximas horas",
     "noData": "Sem dados",
     "status": "Status",
@@ -73,10 +80,91 @@
         "torrential": "Torrencial"
       }
     },
+    "moonPhases": {
+      "new": "Lua Nova",
+      "waxingCrescent": "Lua Crescente",
+      "firstQuarter": "Primeiro Quarto",
+      "waxingGibbous": "Gibosa Crescente",
+      "full": "Lua Cheia",
+      "waningGibbous": "Gibosa Minguante",
+      "lastQuarter": "Último Quarto",
+      "waningCrescent": "Lua Minguante"
+    },
+    "uvIndexes": {
+      "noUvIndex": "Sem luz solar. A exposição UV é mínima.",
+      "low": "Baixo. Proteção mínima.",
+      "moderate": "Moderado. Use protetor.",
+      "high": "Alto. FPS 30+ e sombra.",
+      "veryHigh": "Muito alto. Evite exposição.",
+      "extreme": "Extremo. Evite o sol."
+    },
+    "windTextes": {
+      "summary": "{{current}} agora, {{average}} média. {{direction}}. {{impact}}",
+      "impact": {
+        "calm": "Efeito pouco perceptível.",
+        "light": "Confortável para a maioria das atividades ao ar livre.",
+        "moderate": "Vento perceptível que pode afetar o conforto.",
+        "strong": "Pode dificultar caminhar e atividades ao ar livre.",
+        "veryStrong": "Pode afetar significativamente o movimento e as atividades ao ar livre."
+      }
+    },
     "precipitationTexts": {
       "chance": "Chance",
       "max": "Total",
-      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
+      "precipInHours": "{{precip}}mm ({{chance}}% de chance)"
+    },
+    "compass": {
+      "north": "Norte",
+      "northeast": "Nordeste",
+      "east": "Leste",
+      "southeast": "Sudeste",
+      "south": "Sul",
+      "southwest": "Sudoeste",
+      "west": "Oeste",
+      "northwest": "Noroeste"
+    },
+    "feelsLikeDifferenceTextes": {
+      "none": "Sente-se próxima da temperatura real.",
+      "warmer": {
+        "verySmall": "Sente-se um pouco mais quente.",
+        "small": "Sente-se mais quente do que o esperado.",
+        "moderate": "Sente-se notavelmente mais quente.",
+        "large": "Sente-se muito mais quente.",
+        "extreme": "Sente-se significativamente mais quente."
+      },
+      "cooler": {
+        "verySmall": "Sente-se um pouco mais frio.",
+        "small": "Sente-se mais frio do que o esperado.",
+        "moderate": "Sente-se notavelmente mais frio.",
+        "large": "Sente-se muito mais frio.",
+        "extreme": "Sente-se significativamente mais frio."
+      }
+    },
+    "rainTextes": {
+      "hoursPrefix": "{{hours}}h de chuva no dia. ",
+      "noRain": "Sem previsão de chuva. Pode sair tranquilo sem guarda-chuva.",
+      "veryLowChance": "Possibilidade de chuva muito baixa.",
+      "drizzle": "Possibilidade de garoa ou chuva fraca.",
+      "lightLowChance": "Possibilidade de chuva leve e passageira.",
+      "lightPossible": "Chuva leve possível ao longo do dia.",
+      "lightExpected": "Chuva leve prevista. É recomendável levar um guarda-chuva.",
+      "moderateLowChance": "Possibilidade de chuva moderada, embora a chance seja baixa.",
+      "moderatePossible": "Chuva moderada pode ocorrer ao longo do dia.",
+      "moderateExpected": "Chuva moderada prevista. Leve um guarda-chuva.",
+      "heavyLowChance": "Possibilidade de chuva forte, embora a chance seja baixa.",
+      "heavyPossible": "Chuva forte pode ocorrer ao longo do dia.",
+      "heavyExpected": "Chuva forte prevista. Evite ficar exposto à chuva.",
+      "veryHeavyLowChance": "Possibilidade de chuva muito intensa, embora a chance seja baixa.",
+      "veryHeavyPossible": "Chuva muito intensa pode ocorrer ao longo do dia.",
+      "veryHeavyExpected": "Chuva muito intensa prevista. Se possível, evite sair."
+    },
+    "visibilityTextes": {
+      "excellent": "Excelente. Sem impactos.",
+      "good": "Boa. Pequena redução no horizonte.",
+      "moderate": "Moderada. Atenção ao dirigir.",
+      "low": "Baixa. Reduza a velocidade.",
+      "veryLow": "Névoa intensa. Cuidado nas estradas.",
+      "critical": "Crítica. Evite deslocamentos."
     }
   },
   "en": {
@@ -94,16 +182,23 @@
     "alerts": "Alerts",
     "alert_other": "Alerts ({{count}})",
     "uvIndex": "UV Index",
+    "wind": "Wind",
     "windGusts": "Wind Gusts",
     "windSpeed": "Wind Speed",
+    "averageSpeedForDay": "Average {{speed}} for the day",
     "feelsLike": "Feels Like",
     "maxMin": "Max/Min",
     "precipitation": "Precipitation",
+    "visibility": "Visibility",
     "noPrecipitation": "No rain",
     "sunrise": "Sunrise",
     "sunset": "Sunset",
+    "moonrise": "Moonrise",
+    "moonset": "Moonset",
+    "moon": "Moon",
     "now": "Now",
     "today": "Today",
+    "tomorrow": "Tomorrow",
     "nextHours": "Next hours",
     "noData": "No data",
     "status": "Status",
@@ -153,10 +248,91 @@
         "torrential": "Torrential"
       }
     },
+    "moonPhases": {
+      "new": "New Moon",
+      "waxingCrescent": "Waxing Crescent",
+      "firstQuarter": "First Quarter",
+      "waxingGibbous": "Waxing Gibbous",
+      "full": "Full Moon",
+      "waningGibbous": "Waning Gibbous",
+      "lastQuarter": "Last Quarter",
+      "waningCrescent": "Waning Crescent"
+    },
+    "uvIndexes": {
+      "noUvIndex": "No sunlight. UV exposure is minimal.",
+      "low": "Low. Minimal protection.",
+      "moderate": "Moderate. Use sunscreen.",
+      "high": "High. SPF 30+ and shade.",
+      "veryHigh": "Very high. Avoid exposure.",
+      "extreme": "Extreme. Avoid the sun."
+    },
+    "windTextes": {
+      "summary": "{{current}} current, {{average}} average. {{direction}}. {{impact}}",
+      "impact": {
+        "calm": "Little noticeable effect.",
+        "light": "Comfortable for most outdoor activities.",
+        "moderate": "Noticeable wind that may affect comfort.",
+        "strong": "May make walking and outdoor activities difficult.",
+        "veryStrong": "Can significantly affect movement and outdoor activities."
+      }
+    },
     "precipitationTexts": {
       "chance": "Chance",
       "max": "Total",
-      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
+      "precipInHours": "{{precip}}mm ({{chance}}% chance)"
+    },
+    "compass": {
+      "north": "North",
+      "northeast": "Northeast",
+      "east": "East",
+      "southeast": "Southeast",
+      "south": "South",
+      "southwest": "Southwest",
+      "west": "West",
+      "northwest": "Northwest"
+    },
+    "feelsLikeDifferenceTextes": {
+      "none": "Feels close to the actual temperature.",
+      "warmer": {
+        "verySmall": "Feels slightly warmer.",
+        "small": "Feels warmer than expected.",
+        "moderate": "Feels noticeably warmer.",
+        "large": "Feels much warmer.",
+        "extreme": "Feels significantly warmer."
+      },
+      "cooler": {
+        "verySmall": "Feels slightly cooler.",
+        "small": "Feels cooler than expected.",
+        "moderate": "Feels noticeably cooler.",
+        "large": "Feels much cooler.",
+        "extreme": "Feels significantly cooler."
+      }
+    },
+    "rainTextes": {
+      "hoursPrefix": "{{hours}}h of rain in the day. ",
+      "noRain": "No rain expected. You can go out without an umbrella.",
+      "veryLowChance": "Very low chance of rain.",
+      "drizzle": "Chance of drizzle or light rain.",
+      "lightLowChance": "Low chance of light, passing rain.",
+      "lightPossible": "Light rain possible throughout the day.",
+      "lightExpected": "Light rain expected. It's recommended to take an umbrella.",
+      "moderateLowChance": "Possibility of moderate rain, although the chance is low.",
+      "moderatePossible": "Moderate rain may occur during the day.",
+      "moderateExpected": "Moderate rain expected. Take an umbrella.",
+      "heavyLowChance": "Possibility of heavy rain, although the chance is low.",
+      "heavyPossible": "Heavy rain may occur during the day.",
+      "heavyExpected": "Heavy rain expected. Avoid staying exposed to the rain.",
+      "veryHeavyLowChance": "Possibility of very intense rain, although the chance is low.",
+      "veryHeavyPossible": "Very intense rain may occur during the day.",
+      "veryHeavyExpected": "Very intense rain expected. If possible, avoid going out."
+    },
+    "visibilityTextes": {
+      "excellent": "Excellent. No impact.",
+      "good": "Good. Slight reduction in visibility.",
+      "moderate": "Moderate. Use caution while driving.",
+      "low": "Low. Reduce speed.",
+      "veryLow": "Heavy fog. Use caution on the roads.",
+      "critical": "Critical. Avoid travel."
     }
   },
   "fr": {
@@ -173,16 +349,23 @@
     "alerts": "Alertes",
     "alert_other": "Alertes ({{count}})",
     "uvIndex": "Indice UV",
+    "wind": "Vent",
     "windGusts": "Rafales de Vent",
     "windSpeed": "Vitesse du Vent",
+    "averageSpeedForDay": "Moyenne de {{speed}} sur la journée",
     "feelsLike": "Ressenti",
     "maxMin": "Max/Min",
     "precipitation": "Précipitation",
+    "visibility": "Visibilité",
     "noPrecipitation": "Pas de pluie",
     "sunrise": "Lever du soleil",
     "sunset": "Coucher du soleil",
+    "moonrise": "Lever de la lune",
+    "moonset": "Coucher de la lune",
+    "moon": "Lune",
     "now": "Maintenant",
     "today": "Aujourd'hui",
+    "tomorrow": "Demain",
     "nextHours": "Prochaines heures",
     "noData": "Aucune donnée",
     "status": "Statut",
@@ -232,10 +415,91 @@
         "torrential": "Torrentiel"
       }
     },
+    "moonPhases": {
+      "new": "Nouvelle lune",
+      "waxingCrescent": "Premier croissant",
+      "firstQuarter": "Premier quartier",
+      "waxingGibbous": "Gibbeuse croissante",
+      "full": "Pleine lune",
+      "waningGibbous": "Gibbeuse décroissante",
+      "lastQuarter": "Dernier quartier",
+      "waningCrescent": "Dernier croissant"
+    },
+    "uvIndexes": {
+      "noUvIndex": "Pas de soleil. L'exposition aux UV est minimale.",
+      "low": "Faible. Protection minimale.",
+      "moderate": "Modéré. Utilisez une protection solaire.",
+      "high": "Élevé. FPS 30+ et ombre.",
+      "veryHigh": "Très élevé. Évitez l'exposition.",
+      "extreme": "Extrême. Évitez le soleil."
+    },
+    "windTextes": {
+      "summary": "{{current}} actuellement, {{average}} en moyenne. {{direction}}. {{impact}}",
+      "impact": {
+        "calm": "Effet peu perceptible.",
+        "light": "Confortable pour la plupart des activités en plein air.",
+        "moderate": "Vent perceptible qui peut affecter le confort.",
+        "strong": "Peut rendre la marche et les activités en plein air difficiles.",
+        "veryStrong": "Peut affecter significativement le mouvement et les activités en plein air."
+      }
+    },
     "precipitationTexts": {
       "chance": "Risque",
       "max": "Total",
-      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
+      "precipInHours": "{{precip}}mm ({{chance}}% de probabilité)"
+    },
+    "compass": {
+      "north": "Nord",
+      "northeast": "Nord-Est",
+      "east": "Est",
+      "southeast": "Sud-Est",
+      "south": "Sud",
+      "southwest": "Sud-Ouest",
+      "west": "Ouest",
+      "northwest": "Nord-Ouest"
+    },
+    "feelsLikeDifferenceTextes": {
+      "none": "La sensation est proche de la température réelle.",
+      "warmer": {
+        "verySmall": "Ressenti légèrement plus chaud.",
+        "small": "Ressenti plus chaud que prévu.",
+        "moderate": "Ressenti sensiblement plus chaud.",
+        "large": "Ressenti beaucoup plus chaud.",
+        "extreme": "Ressenti significativement plus chaud."
+      },
+      "cooler": {
+        "verySmall": "Ressenti légèrement plus frais.",
+        "small": "Ressenti plus frais que prévu.",
+        "moderate": "Ressenti sensiblement plus frais.",
+        "large": "Ressenti beaucoup plus frais.",
+        "extreme": "Ressenti significativement plus frais."
+      }
+    },
+    "rainTextes": {
+      "hoursPrefix": "{{hours}}h de pluie dans la journée. ",
+      "noRain": "Pas de pluie prévue. Vous pouvez sortir sans parapluie.",
+      "veryLowChance": "Possibilité de pluie très faible.",
+      "drizzle": "Possibilité de bruine ou de pluie légère.",
+      "lightLowChance": "Possibilité de pluie légère et passagère.",
+      "lightPossible": "Pluie légère possible au cours de la journée.",
+      "lightExpected": "Pluie légère prévue. Il est recommandé de prendre un parapluie.",
+      "moderateLowChance": "Possibilité de pluie modérée, bien que la probabilité soit faible.",
+      "moderatePossible": "Pluie modérée possible au cours de la journée.",
+      "moderateExpected": "Pluie modérée prévue. Prenez un parapluie.",
+      "heavyLowChance": "Possibilité de fortes pluies, bien que la probabilité soit faible.",
+      "heavyPossible": "Fortes pluies possibles au cours de la journée.",
+      "heavyExpected": "Fortes pluies prévues. Évitez de rester exposé à la pluie.",
+      "veryHeavyLowChance": "Possibilité de pluies très intenses, bien que la probabilité soit faible.",
+      "veryHeavyPossible": "Pluies très intenses possibles au cours de la journée.",
+      "veryHeavyExpected": "Pluies très intenses prévues. Si possible, évitez de sortir."
+    },
+    "visibilityTextes": {
+      "excellent": "Excellente. Aucun impact.",
+      "good": "Bonne. Légère réduction de l'horizon.",
+      "moderate": "Moyenne. Faites attention en conduisant.",
+      "low": "Faible. Réduisez votre vitesse.",
+      "veryLow": "Brouillard dense. Prudence sur les routes.",
+      "critical": "Critique. Évitez les déplacements."
     }
   },
   "es": {
@@ -252,16 +516,23 @@
     "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
     "uvIndex": "Índice UV",
+    "wind": "Viento",
     "windGusts": "Ráfagas de Viento",
     "windSpeed": "Velocidad del Viento",
+    "averageSpeedForDay": "Promedio de {{speed}} durante el día",
     "feelsLike": "Sensación",
     "maxMin": "Máx/Mín",
     "precipitation": "Precipitación",
+    "visibility": "Visibilidad",
     "noPrecipitation": "Sin lluvia",
     "sunrise": "Amanecer",
     "sunset": "Atardecer",
+    "moonrise": "Salida de la luna",
+    "moonset": "Puesta de la luna",
+    "moon": "Luna",
     "now": "Ahora",
     "today": "Hoy",
+    "tomorrow": "Mañana",
     "nextHours": "Próximas horas",
     "noData": "Sin datos",
     "status": "Estado",
@@ -311,10 +582,91 @@
         "torrential": "Torrencial"
       }
     },
+    "moonPhases": {
+      "new": "Luna nueva",
+      "waxingCrescent": "Luna creciente",
+      "firstQuarter": "Cuarto creciente",
+      "waxingGibbous": "Gibosa creciente",
+      "full": "Luna llena",
+      "waningGibbous": "Gibosa menguante",
+      "lastQuarter": "Cuarto menguante",
+      "waningCrescent": "Luna menguante"
+    },
+    "uvIndexes": {
+      "noUvIndex": "Sin luz solar. La exposición UV es mínima.",
+      "low": "Bajo. Protección mínima.",
+      "moderate": "Moderado. Usa protector solar.",
+      "high": "Alto. SPF 30+ y sombra.",
+      "veryHigh": "Muy alto. Evita la exposición.",
+      "extreme": "Extremo. Evita el sol."
+    },
+    "windTextes": {
+      "summary": "{{current}} actual, {{average}} promedio. {{direction}}. {{impact}}",
+      "impact": {
+        "calm": "Efecto poco perceptible.",
+        "light": "Cómodo para la mayoría de las actividades al aire libre.",
+        "moderate": "Viento notable que puede afectar la comodidad.",
+        "strong": "Puede dificultar caminar y las actividades al aire libre.",
+        "veryStrong": "Puede afectar significativamente el movimiento y las actividades al aire libre."
+      }
+    },
     "precipitationTexts": {
       "chance": "Prob.",
       "max": "Total",
-      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
+      "precipInHours": "{{precip}}mm ({{chance}}% de probabilidad)"
+    },
+    "compass": {
+      "north": "Norte",
+      "northeast": "Noreste",
+      "east": "Este",
+      "southeast": "Sureste",
+      "south": "Sur",
+      "southwest": "Suroeste",
+      "west": "Oeste",
+      "northwest": "Noroeste"
+    },
+    "feelsLikeDifferenceTextes": {
+      "none": "Se siente cercano a la temperatura real.",
+      "warmer": {
+        "verySmall": "Se siente un poco más cálido.",
+        "small": "Se siente más cálido de lo esperado.",
+        "moderate": "Se siente notablemente más cálido.",
+        "large": "Se siente mucho más cálido.",
+        "extreme": "Se siente significativamente más cálido."
+      },
+      "cooler": {
+        "verySmall": "Se siente un poco más frío.",
+        "small": "Se siente más frío de lo esperado.",
+        "moderate": "Se siente notablemente más frío.",
+        "large": "Se siente mucho más frío.",
+        "extreme": "Se siente significativamente más frío."
+      }
+    },
+    "rainTextes": {
+      "hoursPrefix": "{{hours}}h de lluvia en el día. ",
+      "noRain": "Sin previsión de lluvia. Puedes salir sin paraguas.",
+      "veryLowChance": "Probabilidad de lluvia muy baja.",
+      "drizzle": "Posibilidad de llovizna o lluvia ligera.",
+      "lightLowChance": "Posibilidad de lluvia ligera y pasajera.",
+      "lightPossible": "Lluvia ligera posible a lo largo del día.",
+      "lightExpected": "Lluvia ligera prevista. Se recomienda llevar paraguas.",
+      "moderateLowChance": "Posibilidad de lluvia moderada, aunque la probabilidad sea baja.",
+      "moderatePossible": "Lluvia moderada puede ocurrir durante el día.",
+      "moderateExpected": "Lluvia moderada prevista. Lleva un paraguas.",
+      "heavyLowChance": "Posibilidad de lluvia fuerte, aunque la probabilidad sea baja.",
+      "heavyPossible": "Lluvia fuerte puede ocurrir durante el día.",
+      "heavyExpected": "Lluvia fuerte prevista. Evita permanecer expuesto a la lluvia.",
+      "veryHeavyLowChance": "Posibilidad de lluvia muy intensa, aunque la probabilidad sea baja.",
+      "veryHeavyPossible": "Puede ocurrir lluvia muy intensa durante el día.",
+      "veryHeavyExpected": "Se prevé lluvia muy intensa. Si es posible, evita salir."
+    },
+    "visibilityTextes": {
+      "excellent": "Excelente. Sin impactos.",
+      "good": "Buena. Pequeña reducción en el horizonte.",
+      "moderate": "Moderada. Tenga cuidado al conducir.",
+      "low": "Baja. Reduzca la velocidad.",
+      "veryLow": "Niebla intensa. Cuidado en la carretera.",
+      "critical": "Crítica. Evite desplazarse."
     }
   },
   "ko": {
@@ -331,16 +683,23 @@
     "alerts": "알림",
     "alert_other": "알림 ({{count}})",
     "uvIndex": "자외선 지수",
+    "wind": "바람",
     "windGusts": "돌풍",
     "windSpeed": "풍속",
+    "averageSpeedForDay": "하루 평균 {{speed}}",
     "feelsLike": "체감 온도",
     "maxMin": "최고/최저",
     "precipitation": "강수량",
+    "visibility": "가시거리",
     "noPrecipitation": "강수 없음",
     "sunrise": "일출",
     "sunset": "일몰",
+    "moonrise": "월출",
+    "moonset": "월몰",
+    "moon": "달",
     "now": "지금",
     "today": "오늘",
+    "tomorrow": "내일",
     "nextHours": "다음 시간대",
     "noData": "데이터 없음",
     "status": "상태",
@@ -390,10 +749,91 @@
         "torrential": "집중호우"
       }
     },
+    "moonPhases": {
+      "new": "신월",
+      "waxingCrescent": "초승달",
+      "firstQuarter": "상현",
+      "waxingGibbous": "상현달",
+      "full": "보름달",
+      "waningGibbous": "하현달",
+      "lastQuarter": "하현",
+      "waningCrescent": "그믐달"
+    },
+    "uvIndexes": {
+      "noUvIndex": "햇빛 없음. 자외선 노출이 최소입니다.",
+      "low": "낮음. 최소 보호가 필요합니다.",
+      "moderate": "보통. 자외선 차단제를 사용하세요.",
+      "high": "높음. SPF 30+ 및 그늘을 이용하세요.",
+      "veryHigh": "매우 높음. 노출을 피하세요.",
+      "extreme": "극심함. 태양 노출을 피하세요."
+    },
+    "windTextes": {
+      "summary": "{{current}} 현재, {{average}} 평균. {{direction}}. {{impact}}",
+      "impact": {
+        "calm": "눈에 띄는 영향이 거의 없습니다.",
+        "light": "대부분의 야외 활동에 편안합니다.",
+        "moderate": "불쾌감을 줄 수 있는 느껴지는 바람입니다.",
+        "strong": "걷기와 야외 활동을 어렵게 만들 수 있습니다.",
+        "veryStrong": "이동과 야외 활동에 큰 영향을 줄 수 있습니다."
+      }
+    },
     "precipitationTexts": {
       "chance": "확률",
       "max": "강수량",
-      "precipInHours": "{{precip}}{{precipUnit}} · {{hours}}{{hoursUnit}}"
+      "precipInHours": "{{precip}}mm ({{chance}}% 확률)"
+    },
+    "compass": {
+      "north": "북",
+      "northeast": "북동",
+      "east": "동",
+      "southeast": "남동",
+      "south": "남",
+      "southwest": "남서",
+      "west": "서",
+      "northwest": "북서"
+    },
+    "feelsLikeDifferenceTextes": {
+      "none": "실제 온도와 거의 비슷하게 느껴집니다.",
+      "warmer": {
+        "verySmall": "약간 더 따뜻하게 느껴집니다.",
+        "small": "기대보다 더 따뜻하게 느껴집니다.",
+        "moderate": "눈에 띄게 더 따뜻하게 느껴집니다.",
+        "large": "훨씬 더 따뜻하게 느껴집니다.",
+        "extreme": "현저히 더 따뜻하게 느껴집니다."
+      },
+      "cooler": {
+        "verySmall": "약간 더 시원하게 느껴집니다.",
+        "small": "기대보다 더 시원하게 느껴집니다.",
+        "moderate": "눈에 띄게 더 시원하게 느껴집니다.",
+        "large": "훨씬 더 시원하게 느껴집니다.",
+        "extreme": "현저히 더 시원하게 느껴집니다."
+      }
+    },
+    "rainTextes": {
+      "hoursPrefix": "{{hours}}시간의 강우가 예상됩니다. ",
+      "noRain": "예보된 비 없음. 우산 없이 나가도 됩니다.",
+      "veryLowChance": "비가 올 확률이 매우 낮음.",
+      "drizzle": "이슬비 또는 약한 비가 내릴 가능성.",
+      "lightLowChance": "약한 비가 잠깐 올 가능성.",
+      "lightPossible": "약한 비가 하루 종일 내릴 수 있습니다.",
+      "lightExpected": "약한 비가 예상됩니다. 우산을 챙기세요.",
+      "moderateLowChance": "보통 수준의 비가 올 가능성은 있으나 확률은 낮음.",
+      "moderatePossible": "보통 비가 하루 동안 내릴 수 있습니다.",
+      "moderateExpected": "보통 비가 예상됩니다. 우산을 챙기세요.",
+      "heavyLowChance": "강한 비가 올 가능성은 있으나 확률은 낮음.",
+      "heavyPossible": "강한 비가 하루 동안 내릴 수 있습니다.",
+      "heavyExpected": "강한 비가 예상됩니다. 비에 노출되지 않도록 하세요.",
+      "veryHeavyLowChance": "매우 강한 비가 올 가능성은 있으나 확률은 낮음.",
+      "veryHeavyPossible": "매우 강한 비가 하루 동안 내릴 수 있습니다.",
+      "veryHeavyExpected": "매우 강한 비가 예상됩니다. 가능하면 외출을 피하세요."
+    },
+    "visibilityTextes": {
+      "excellent": "탁월함. 영향 없음.",
+      "good": "좋음. 지평선이 약간 감소합니다.",
+      "moderate": "보통. 운전 시 주의하세요.",
+      "low": "낮음. 속도를 줄이세요.",
+      "veryLow": "짙은 안개. 도로에서 주의하세요.",
+      "critical": "매우 위험. 이동을 피하세요."
     }
   }
 }

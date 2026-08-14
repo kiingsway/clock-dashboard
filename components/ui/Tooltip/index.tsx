@@ -176,11 +176,13 @@ export function Tooltip({
   const [open, setOpen] = useState(false);
   const [hoverCapable, setHoverCapable] = useState(false);
   const [rect, setRect] = useState<DOMRect | null>(null);
-  const wrapperRef = useRef<HTMLSpanElement>(null);
   const tooltipId = useId();
+  const wrapperRef = useRef<HTMLSpanElement>(null);
+  const [wrapperElement, setWrapperElement] = useState<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     const query = window.matchMedia("(hover: hover) and (pointer: fine)");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setHoverCapable(query.matches);
 
     const handleChange = (event: MediaQueryListEvent) => setHoverCapable(event.matches);
@@ -238,7 +240,10 @@ export function Tooltip({
 
   return (
     <span
-      ref={wrapperRef}
+      ref={(element) => {
+        wrapperRef.current = element;
+        setWrapperElement(element);
+      }}
       className={cx(styles.wrapper, fullWidth && styles.wrapperFullWidth)}
       onClick={() => setOpen(true)}
       onFocus={() => setOpen(true)}
@@ -254,7 +259,7 @@ export function Tooltip({
 
       {open &&
         rect &&
-        wrapperRef.current &&
+        wrapperElement &&
         createPortal(
           <span
             id={tooltipId}
@@ -263,7 +268,7 @@ export function Tooltip({
             style={{
               position: "fixed",
               ...getPortalStyle(rect, placement),
-              ...getTokenStyle(wrapperRef.current),
+              ...getTokenStyle(wrapperElement),
             }}
           >
             {content}

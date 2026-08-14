@@ -1,4 +1,4 @@
-.sunArc {
+.arc {
   width: 100%;
   max-width: 25em;
   display: flex;
@@ -8,7 +8,7 @@
   align-self: center;
 }
 
-.sunPoint {
+.point {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,19 +16,20 @@
   flex: 0 0 auto;
 }
 
-.sunPoint img {
+.point img {
   opacity: 0.85;
 }
 
-.sunPoint span {
+.point span {
   font-family: var(--wc-font-body);
   font-size: var(--wc-text-xs);
   font-weight: 600;
   color: var(--wc-text-muted);
   font-variant-numeric: tabular-nums;
+  line-height: 1.2;
 }
 
-.sunTrack {
+.track {
   position: relative;
   flex: 1 1 auto;
   height: 3px;
@@ -36,7 +37,7 @@
   background: var(--wc-hairline);
 }
 
-.sunTrackFill {
+.trackFill {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: var(--wc-radius-xs);
@@ -44,7 +45,7 @@
   background: var(--wc-accent);
 }
 
-.sunMarker {
+.marker {
   position: absolute;
   top: 50%;
   width: 9px;

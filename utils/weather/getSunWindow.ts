@@ -15,25 +15,48 @@ function buildSunWindow(now: DateTime, start: DateTime, end: DateTime, startKind
   };
 }
 
-/**
- * Works out which stretch of the sun cycle "now" is in, and how far through
- * it we are — so the track always shows a *forward* span:
- *  - during the day: sunrise → today's sunset
- *  - during the night: sunset → tomorrow's sunrise
- *  - in the early hours before today's sunrise: last night's sunset → today's sunrise
- *
- * `sunriseTimes` / `sunsetTimes` only need today's entry to work; a second
- * entry (tomorrow) makes the after-sunset case exact instead of a ±24h
- * estimate, and there's no equivalent "yesterday" entry available from the
- * API, so the before-sunrise case always estimates from today's sunset.
- */
+interface GetSunWindowAttr {
+  sunriseTimes: string[]
+  sunsetTimes: string[]
+  timezone: string
+  date: DateTime<boolean>
+  includeNight?: boolean
+}
 
-export function getSunWindow(
-  sunriseTimes: string[],
-  sunsetTimes: string[],
-  timezone: string,
-  currentTime?: string
-): SunWindow {
+/**
+ * Returns the sunrise/sunset window for a given date and time.
+ *
+ * By default, the function returns the daytime window (sunrise → sunset)
+ * for the target date. When `includeNight` is enabled, it instead returns
+ * the current solar-cycle window, which may span sunset → next sunrise.
+ *
+ * `currentTime` is optional and defaults to the current time in the
+ * specified timezone. It is used both to determine the target date and,
+ * when applicable, the progress within the sunrise/sunset window.
+ *
+ * For daytime mode:
+ * - Past days return `progress: 1`.
+ * - Future days return `progress: 0`.
+ * - Today calculates progress between sunrise and sunset.
+ *
+ * @param sunriseTimes ISO 8601 sunrise times without timezone information.
+ * @param sunsetTimes ISO 8601 sunset times without timezone information.
+ * @param timezone IANA timezone used to interpret the provided times.
+ * @param now Optional ISO 8601 date/time used as the target moment.
+ * @param includeNight Whether to allow the window to span sunset → sunrise.
+ */
+export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
+  const { date, sunriseTimes, sunsetTimes, timezone, includeNight = false } = p;
+
+  if (
+    !sunriseTimes ||
+    !sunsetTimes ||
+    sunriseTimes.length <= 2 ||
+    sunsetTimes.length <= 2
+  ) {
+    return undefined;
+  }
+
   const events: SunEvent[] = [
     ...sunriseTimes.map((t) => ({
       time: DateTime.fromISO(t, { zone: timezone }),
@@ -46,25 +69,53 @@ export function getSunWindow(
     })),
   ].sort((a, b) => a.time.toMillis() - b.time.toMillis());
 
-  // "now" is always the actual current moment.
-  const now = DateTime.now().setZone(timezone);
+  if (!events.length) throw new Error("No sunrise or sunset events available.");
 
-  // The requested date determines which sunrise/sunset
-  // window should be displayed.
-  const targetDate = currentTime
-    ? DateTime.fromISO(currentTime, { zone: timezone })
-    : now;
+  /**
+   * includeNight
+   * Usa o currentTime para determinar em qual trecho
+   * do ciclo solar estamos:
+   * 
+   * sunrise → sunset
+   * sunset  → sunrise
+   */
+  if (includeNight) {
+    let previous = events[0];
+    let next = events[events.length - 1];
+
+    for (const event of events) {
+      if (event.time.toMillis() <= date.toMillis()) previous = event;
+      if (event.time.toMillis() > date.toMillis()) {
+        next = event;
+        break;
+      }
+    }
+
+    return buildSunWindow(
+      date,
+      previous.time,
+      next.time,
+      previous.kind,
+      next.kind
+    );
+  }
+
+  /*
+   * includeNight = false
+   *
+   * Sempre mostra sunrise → sunset do dia de now.
+   */
 
   const sunrise = events.find(
     (event) =>
       event.kind === "sunrise" &&
-      event.time.hasSame(targetDate, "day")
+      event.time.hasSame(date, "day")
   );
 
   const sunset = events.find(
     (event) =>
       event.kind === "sunset" &&
-      event.time.hasSame(targetDate, "day")
+      event.time.hasSame(date, "day")
   );
 
   if (!sunrise || !sunset) {
@@ -77,28 +128,30 @@ export function getSunWindow(
     };
   }
 
-  // Compare the requested day with today.
-  const targetDay = targetDate.startOf("day");
-  const today = now.startOf("day");
+  const targetDay = date.startOf("day");
+  const today = date.startOf("day");
 
   let progress = 0;
 
   if (targetDay < today) {
-    // Past day
     progress = 1;
   } else if (targetDay > today) {
-    // Future day
     progress = 0;
   } else {
-    // Today
-    progress = Math.min(
-      1,
-      Math.max(
-        0,
-        (now.toMillis() - sunrise.time.toMillis()) /
-          (sunset.time.toMillis() - sunrise.time.toMillis())
-      )
-    );
+    const total =
+      sunset.time.toMillis() - sunrise.time.toMillis();
+
+    progress =
+      total <= 0
+        ? 0
+        : Math.min(
+          1,
+          Math.max(
+            0,
+            (date.toMillis() - sunrise.time.toMillis()) /
+            total
+          )
+        );
   }
 
   return {

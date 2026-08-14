@@ -1,6 +1,8 @@
 import { IWeather } from "@/types/weather.types";
 import { hexToRgb, lerp } from "../formatters/textFormatters";
 import { getCurrentHourlyValue } from "../formatters/getValueByArray";
+import { DateTime } from "luxon";
+import { TFunction } from "i18next";
 
 export interface IVisibilityInfo {
   value: number;
@@ -9,13 +11,11 @@ export interface IVisibilityInfo {
   desc: string;
 }
 
-export default function getVisibilityInfo(weather?: IWeather, locale?: string): IVisibilityInfo | undefined {
-
-  if (!weather) return undefined
+export default function getVisibilityInfo(weather: IWeather, date: DateTime<boolean>, locale: string, t: TFunction): IVisibilityInfo | undefined {
 
   const { hourly, hourly_units, timezone } = weather
 
-  const visibility = getCurrentHourlyValue(hourly.time, hourly.visibility, timezone);
+  const visibility = getCurrentHourlyValue({ date, time: hourly.time, values: hourly.visibility, timezone });
 
   if (!visibility) return undefined
 
@@ -26,12 +26,12 @@ export default function getVisibilityInfo(weather?: IWeather, locale?: string): 
   const percentage = getVisibilityPercentage(visibility)
 
   const desc = (() => {
-    if (visibility >= 10000) return `Visibilidade excelente. Sem impactos esperados. (${percentage}%)`;
-    if (visibility >= 5000) return `Boa visibilidade. Pequenas reduções no horizonte. (${percentage}%)`;
-    if (visibility >= 2000) return `Visibilidade moderada. Atenção em estradas e áreas abertas. (${percentage}%)`;
-    if (visibility >= 1000) return `Visibilidade baixa. Dirija com cuidado e reduza a velocidade. (${percentage}%)`;
-    if (visibility >= 500) return `Névoa intensa. Possíveis atrasos e baixa visibilidade nas pistas. (${percentage}%)`;
-    return `Visibilidade crítica. Evite deslocamentos e tenha extremo cuidado. (${percentage}%)`;
+    if (visibility >= 10000) return t("visibilityTextes.excellent") + ` (${percentage}%)`;
+    if (visibility >= 5000) return t("visibilityTextes.good") + ` (${percentage}%)`;
+    if (visibility >= 2000) return t("visibilityTextes.moderate") + ` (${percentage}%)`;
+    if (visibility >= 1000) return t("visibilityTextes.low") + ` (${percentage}%)`;
+    if (visibility >= 500) return t("visibilityTextes.veryLow") + ` (${percentage}%)`;
+    return t("visibilityTextes.critical") + ` (${percentage}%)`;
   })();
 
   return { value: visibility, title, color, desc }

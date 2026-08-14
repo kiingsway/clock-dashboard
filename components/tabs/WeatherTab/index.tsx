@@ -1,7 +1,5 @@
 import { useFocusMode } from "@/hooks/useFocusMode";
-import { UseAppSettings } from "@/types/app.types";
 import classNames from "classnames";
-import { useTranslation } from "react-i18next";
 import styles from './WeatherTab.module.scss';
 import { useWeather } from "@/hooks/useWeather";
 import { DateHeader } from "@/components/layout/weather/DateHeader";
@@ -11,45 +9,49 @@ import useWeatherAlerts from "@/hooks/useWeatherAlerts";
 import { HourlyForecast } from "@/components/layout/weather/HourlyForecast";
 import { DailyForecast } from "@/components/layout/weather/DailyForecast";
 import WeatherWidgets from "@/components/layout/weather/WeatherWidgets";
+import { SettingsSheet } from "@/components/overlays/SettingsSheet";
+import useBoolean from "@/hooks/useBoolean";
 
-interface Props {
-  appSettings: UseAppSettings;
-}
-
-export default function WeatherTab({ appSettings }: Props) {
-  const { i18n: { language: locale } } = useTranslation();
+export default function WeatherTab() {
+  const { data: { accent, category, weather }, isLoading, error: weatherError } = useWeather();
+  const { alerts, error: alertsError } = useWeatherAlerts();
   const { focus, toggleFocus } = useFocusMode({ onFocus: 12000, offFocus: 60000 });
+  const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
 
-  const { data, isLoading, error: weatherError } = useWeather(appSettings.weatherLocation, locale);
-  const { accent, category, weather } = data;
-
-  const { alerts, error: alertsError } = useWeatherAlerts(appSettings);
   return (
+    <>
+      <SettingsSheet
+        open={isSettingsOpen}
+        onClose={closeSettings}
+        updatedAt={weather?.current.time}
+        alertsError={alertsError}
+      />
 
-    <div style={{ ["--wc-accent" as string]: accent }}>
-      <div className={classNames(styles.group, { [styles.focus]: focus })}>
-        <DateHeader timezone={appSettings.get.location} onClockClick={toggleFocus} />
+      <div style={{ ["--wc-accent" as string]: accent }}>
+        <div className={classNames(styles.group, { [styles.focus]: focus })}>
+          <DateHeader onClick={toggleFocus} />
 
-        <Location settings={appSettings} updatedAt={weather?.current.time} />
+          <Location onClick={openSettings} showAlert={Boolean(alertsError)} />
 
-        <CurrentWeather
-          weather={weather}
-          weatherCategory={category}
-          alerts={alerts}
-          loading={isLoading}
-          error={weatherError || alertsError}
-        />
-      </div>
-
-      {weather && (
-        <div className={styles.weatherInfo}>
-          <HourlyForecast weather={weather} />
-
-          <DailyForecast weather={weather} />
-
-          <WeatherWidgets data={data} />
+          <CurrentWeather
+            weather={weather}
+            weatherCategory={category}
+            alerts={alerts}
+            loading={isLoading}
+            error={weatherError || alertsError}
+          />
         </div>
-      )}
-    </div>
+
+        {weather && (
+          <div className={styles.weatherInfo}>
+            <HourlyForecast weather={weather} />
+
+            <DailyForecast weather={weather} />
+
+            <WeatherWidgets weather={weather} />
+          </div>
+        )}
+      </div>
+    </>
   )
 }

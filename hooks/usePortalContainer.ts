@@ -13,6 +13,7 @@ export function usePortalContainer(selector: string = ".root"): HTMLElement | nu
   const [container, setContainer] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setContainer(document.querySelector<HTMLElement>(selector));
   }, [selector]);
 

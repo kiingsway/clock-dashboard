@@ -1,35 +1,39 @@
 import { CACHE_KEY } from "@/constants/keys";
+import { useNow } from "@/contexts/NowContext";
 import { fetchWeather } from "@/services/fetchWeather";
-import { IWeatherLocationItem } from "@/types/location.types";
-import { IWeather, WeatherCategory } from "@/types/weather.types";
-import { IMoonPhase, IUVIcon, IWindInfo } from "@/types/weatherInfo.types";
+import { IWeather, WeatherCategory, WeatherIconInfo } from "@/types/weather.types";
+import { IUVIcon } from "@/types/weatherInfo.types";
 import { getAccent } from "@/utils/weather/getAccentColor";
-import getMoonPhase from "@/utils/weather/getMoonPhase";
 import getUVIcon from "@/utils/weather/getUVIcon";
 import getVisibilityInfo, { IVisibilityInfo } from "@/utils/weather/getVisibilityInfo";
 import getWeatherCategory from "@/utils/weather/getWeatherCategory";
-import getWeatherIcon, { WeatherIconInfo } from "@/utils/weather/getWeatherIcon";
-import getWindInfo from "@/utils/weather/getWindInfo";
+import getWeatherIcon from "@/utils/weather/getWeatherIcon";
+import { useTranslation } from "react-i18next";
 import useSWR, { KeyedMutator } from "swr";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
+import getWindInfo, { WindData } from "@/utils/weather/getWindInfo";
 
 export interface IUseWeather {
   data: {
     weather: IWeather | undefined;
-    accent: string
-    moonPhase: IMoonPhase | undefined;
     uvIcon: IUVIcon | undefined;
-    windInfo: IWindInfo | undefined;
+    windInfo: WindData | undefined;
     weatherIcon: WeatherIconInfo | undefined;
     visibility: IVisibilityInfo | undefined;
     category: WeatherCategory;
+    accent: string
   }
-  error: unknown;
+  error?: { error?: string; message?: string };
   isLoading: boolean;
   isRefreshing: boolean;
   refresh: KeyedMutator<IWeather>;
 }
 
-export function useWeather(location: IWeatherLocationItem, locale: string): IUseWeather {
+export function useWeather(): IUseWeather {
+  const { now } = useNow();
+  const { weatherLocation: location } = useAppSettings();
+  const { t, i18n: { language: locale } } = useTranslation();
+
   const { data: weather, error, isLoading, isValidating, mutate } = useSWR<IWeather>(
     [CACHE_KEY.WEATHER, location.lat, location.lon],
     () => fetchWeather(location.lat, location.lon),
@@ -41,26 +45,37 @@ export function useWeather(location: IWeatherLocationItem, locale: string): IUse
     }
   );
 
-  const { lat, lon, weatherCode, isDay } = {
-    lat: weather?.latitude,
-    lon: weather?.longitude,
-    weatherCode: weather?.current.weather_code,
-    isDay: weather?.current.is_day === 1,
-  }
+  const category = getWeatherCategory(weather?.current.weather_code)
+  const accent = getAccent({ category, isDay: weather?.current.is_day === 1 });
 
-  const category = getWeatherCategory(weatherCode)
-  const accent = getAccent({ category, isDay });
-  const moonPhase = getMoonPhase({ lat, lon })
-  const weatherIcon = !weatherCode ? undefined : getWeatherIcon({ weatherCode, isDay, lat, lon });
-  const visibility = getVisibilityInfo(weather, locale)
-  const uvIcon = weather ? getUVIcon(weather) : undefined;
-  const windInfo = weather ? getWindInfo(weather) : undefined;
+  let weatherIcon: WeatherIconInfo | undefined;
+  let uvIcon: IUVIcon | undefined;
+  let windInfo: WindData | undefined;
+  let visibility: IVisibilityInfo | undefined;
+
+  if (weather) {
+    const {
+      timezone,
+      latitude: lat,
+      longitude: lon,
+      current: {
+        is_day,
+        weather_code: weatherCode
+      }
+    } = weather;
+
+    const isDay = is_day === 1;
+
+    weatherIcon = getWeatherIcon({ weatherCode, isDay, lat, lon, now, timezone });
+    uvIcon = getUVIcon({ weather, date: now, kind: 'day', t });
+    windInfo = getWindInfo(weather, now, t);
+    visibility = getVisibilityInfo(weather, now, locale, t)
+  }
 
   return {
     data: {
       weather,
       accent,
-      moonPhase,
       uvIcon,
       windInfo,
       weatherIcon,

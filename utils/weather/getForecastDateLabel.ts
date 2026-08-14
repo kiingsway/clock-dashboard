@@ -1,9 +1,9 @@
 import { DateTime } from "luxon";
 
-export default function getForecastDateLabel(date: DateTime, locale: string) {
-  const now = DateTime.now().startOf("day");
+export default function getForecastDateLabel(now: DateTime, date: DateTime, locale: string) {
+  const initialNow = now.startOf("day");
   const targetDate = date.startOf("day");
-  const diffInDays = Math.abs(targetDate.diff(now, "days").days);
+  const diffInDays = Math.abs(targetDate.diff(initialNow, "days").days);
 
   const localDate = date.setLocale(locale);
 

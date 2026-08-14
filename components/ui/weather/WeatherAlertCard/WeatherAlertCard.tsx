@@ -1,6 +1,5 @@
 import styles from "./WeatherAlertCard.module.css";
 import { useTranslation } from "react-i18next";
-import { DateTime } from "luxon";
 import useBoolean from "@/hooks/useBoolean";
 import { TbMapPin } from "react-icons/tb";
 import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
@@ -9,17 +8,16 @@ import formatAlertUntil from "@/utils/weatherAlerts/formatAlertUntil";
 import AlertCardHeader from "./AlertCardHeader";
 import { capitalizeWords } from "@/utils/formatters/textFormatters";
 import { Badge } from "../../Badge";
+import { useNow } from "@/contexts/NowContext";
 
 export interface WeatherAlertCardProps {
   alert: IWeatherAlertCanadaProps;
-  locale: string;
   timezone?: string;
   /**
    * Reference "now" used to decide whether `event_end_datetime` needs a
    * weekday prefix or just a time. Defaults to the render time — pass it
    * explicitly if you're rendering a list and want them all consistent.
    */
-  now?: DateTime;
   autoExpand: boolean
 }
 
@@ -35,8 +33,9 @@ const COLLAPSED_CHARS = 90;
  * with a "show more" toggle since Environment Canada's alert text can run
  * to several paragraphs.
  */
-export function WeatherAlertCard({ alert, locale, timezone: timezone, now = DateTime.now(), autoExpand }: WeatherAlertCardProps) {
-  const { t } = useTranslation()
+export function WeatherAlertCard({ alert, timezone: timezone, autoExpand }: WeatherAlertCardProps) {
+  const { t, i18n: { language: locale } } = useTranslation();
+  const { now } = useNow();
   const [expanded, { toggle: toggleExpand }] = useBoolean(autoExpand)
   const showMore = (): void => autoExpand ? undefined : toggleExpand();
 

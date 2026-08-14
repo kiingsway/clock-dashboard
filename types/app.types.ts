@@ -4,6 +4,8 @@ import { WeatherIconProps } from "@/components/ui/weather/WeatherIcon";
 
 export type TTabs = keyof typeof TABS;
 
+export type ImageInfo = { alt: string, src: string };
+
 export interface AppSettings {
   location: TLocation;
   alertRadiusKm: number;

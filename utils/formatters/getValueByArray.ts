@@ -1,31 +1,26 @@
 import { DateTime } from "luxon";
 
-export function getCurrentHourlyValue<T>(
-  time: string[],
-  values: T[],
-  timezone: string
-): T | undefined {
-  const now = DateTime.now().setZone(timezone);
-
-  let closestIndex = -1;
-  let smallestDiff = Infinity;
-
-  time.forEach((item, index) => {
-    const date = DateTime.fromISO(item, { zone: timezone });
-    const diff = Math.abs(date.diff(now).as("milliseconds"));
-
-    if (diff < smallestDiff) {
-      smallestDiff = diff;
-      closestIndex = index;
-    }
-  });
-
-  return closestIndex === -1
-    ? undefined
-    : values[closestIndex];
+interface GetCurrentHourlyValueProps<T> {
+  date: DateTime;
+  time: string[];
+  values: T[];
+  timezone: string;
 }
 
-export function getDailyValue<T>(time: string[], values: T[], timezone: string, date = DateTime.now() as DateTime<boolean>): T | undefined {
+export function getCurrentHourlyValue<T>({ date, time, values, timezone }: GetCurrentHourlyValueProps<T>): T | undefined {
+  const current = date.setZone(timezone).startOf("hour");
+  const currentKey = current.toFormat('yyyy-MM-dd-HH');
+
+  const index = time.findIndex((timeString) => {
+    const date = DateTime.fromISO(timeString, { zone: timezone });
+
+    return date.toFormat('yyyy-MM-dd-HH') === currentKey;
+  });
+
+  return index >= 0 ? values[index] : undefined;
+}
+
+export function getDailyValue<T>(date: DateTime, time: string[], values: T[], timezone: string): T | undefined {
   const today = date.setZone(timezone).toISODate();
 
   if (!Array.isArray(time) || !time?.length) return undefined;
@@ -33,4 +28,21 @@ export function getDailyValue<T>(time: string[], values: T[], timezone: string, 
   const index = time.findIndex(date => date === today);
 
   return index === -1 ? undefined : values[index];
+}
+
+export function getCurrentValue<T>({ date, time, values }: Omit<GetCurrentHourlyValueProps<T>, 'timezone'>): T | undefined {
+
+  const isHourlyTime = time[0].includes('T');
+  const keyFormat = `yyyy-MM-dd${isHourlyTime ? 'THH:00' : ''}`;
+
+  const current = date.startOf("hour");
+  const currentKey = current.toFormat(keyFormat);
+
+  const index = time.findIndex((timeString) => {
+    const date = DateTime.fromISO(timeString);
+
+    return date.toFormat(keyFormat) === currentKey;
+  });
+
+  return index >= 0 ? values[index] : undefined;
 }

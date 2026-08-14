@@ -1,36 +1,36 @@
-import { IMoonInfo } from "@/types/weatherInfo.types";
+import { NameIcon } from "@/types/weatherInfo.types";
 
-const MOON_PHASES: Record<string, IMoonInfo> = {
+const MOON_PHASES: Record<string, NameIcon> = {
   new: {
-    title: "New Moon",
+    name: "moonPhases.new",
     icon: "moon-new",
   },
   waxingCrescent: {
-    title: "Waxing Crescent",
+    name: "moonPhases.waxingCrescent",
     icon: "moon-waxing-crescent",
   },
   firstQuarter: {
-    title: "First Quarter",
+    name: "moonPhases.firstQuarter",
     icon: "moon-first-quarter",
   },
   waxingGibbous: {
-    title: "Waxing Gibbous",
+    name: "moonPhases.waxingGibbous",
     icon: "moon-waxing-gibbous",
   },
   full: {
-    title: "Full Moon",
+    name: "moonPhases.full",
     icon: "moon-full",
   },
   waningGibbous: {
-    title: "Waning Gibbous",
+    name: "moonPhases.waningGibbous",
     icon: "moon-waning-gibbous",
   },
   lastQuarter: {
-    title: "Last Quarter",
+    name: "moonPhases.lastQuarter",
     icon: "moon-last-quarter",
   },
   waningCrescent: {
-    title: "Waning Crescent",
+    name: "moonPhases.waningCrescent",
     icon: "moon-waning-crescent",
   },
 } as const;

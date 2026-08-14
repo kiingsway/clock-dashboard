@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useBoolean from "./useBoolean";
 
 const events = ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "wheel"] as const;

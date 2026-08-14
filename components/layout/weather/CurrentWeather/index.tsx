@@ -1,8 +1,6 @@
 import { IDaily, IWeather, IWeatherCurrent, IWeatherUnits, WeatherCategory } from "@/types/weather.types"
 import { useTranslation } from "react-i18next"
 import styles from './CurrentWeather.module.css'
-import { DateTime } from "luxon"
-import SunProgress from "./SunProgress"
 import getWeatherCategory from "@/utils/weather/getWeatherCategory"
 import { getSunWindow } from "@/utils/weather/getSunWindow"
 import { IWeatherAlertCanada } from "@/types/weatherAlerts.types"
@@ -10,8 +8,10 @@ import CurrentWeatherIcon from "@/components/ui/weather/CurrentWeatherIcon"
 import CurrentFeelsLike from "@/components/ui/weather/CurrentFeelsLike"
 import CurrentTemperature from "@/components/ui/weather/CurrentTemperature"
 import WeatherAlerts from "@/components/layout/weather/WeatherAlerts"
-import { getDailyValue } from "@/utils/formatters/getValueByArray"
+import { getCurrentValue } from "@/utils/formatters/getValueByArray"
 import { useAutoToggle } from "@/hooks/useAutoToggle"
+import SunProgressBar from "@/components/ui/weather/SunProgressBar"
+import { useNow } from "@/contexts/NowContext"
 
 interface Props {
   weather: IWeather | undefined
@@ -29,9 +29,10 @@ interface Props {
  * happens in this component.
  */
 export function CurrentWeather({ weather, loading, error, alerts }: Props) {
-  const { t, i18n: { language: locale } } = useTranslation();
+  const { t } = useTranslation();
+  const { now } = useNow();
 
-  const now = DateTime.now();
+  const timezone = weather?.timezone ?? "UTC";
 
   const current = weather?.current ?? {
     temperature_2m: 0,
@@ -48,29 +49,38 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
   } as IWeatherUnits;
 
   const daily = weather?.daily ?? {
+    time: [now.toISO()],
     sunrise: [now.toISO()],
     sunset: [now.toISO()],
     temperature_2m_max: [0],
     temperature_2m_min: [0],
   } as IDaily;
 
-  const timezone = weather?.timezone ?? "UTC";
-
   const isDay = current.is_day !== 0;
-  
-  const todayMin = getDailyValue(daily.time, daily.temperature_2m_min, timezone);
-  const todayMax = getDailyValue(daily.time, daily.temperature_2m_max, timezone);
+
+  const todayMin = getCurrentValue({ date: now, time: daily.time, values: daily.temperature_2m_min });
+  const todayMax = getCurrentValue({ date: now, time: daily.time, values: daily.temperature_2m_max });
 
   const weatherCategory = getWeatherCategory(current.weather_code)
 
   const precipUnit = currentUnits.precipitation;
   const hasPrecipitation = current.precipitation > 0;
 
-  const [showPrecip, toggleWeatherInfoMode] = useAutoToggle({ intervalMs: hasPrecipitation ? 4000 : 0, pauseDurationMs: 8000 });
+  const [showPrecip, toggleWeatherInfoMode] = useAutoToggle({
+    intervalMs: hasPrecipitation ? 4000 : 0,
+    pauseDurationMs: 8000,
+    initialValue: true
+  });
 
-  const sunWindow = getSunWindow(daily.sunrise, daily.sunset, timezone);
+  const sunWindow = getSunWindow({
+    includeNight: true,
+    sunriseTimes: daily.sunrise,
+    sunsetTimes: daily.sunset,
+    timezone,
+    date: now,
+  });
 
-  const onDebugClick = (): void => console.info('Current Weather:', weather)
+  const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow })
 
   return (
     <section className={styles.current} aria-label="Clima atual" onDoubleClick={onDebugClick}>
@@ -87,10 +97,10 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
         <CurrentFeelsLike temp={current.apparent_temperature} unit={weather?.current_units.apparent_temperature || "ºC"} />
       </div>
 
-      <WeatherAlerts alerts={alerts} locale={locale} />
+      <WeatherAlerts alerts={alerts} />
 
       <dl className={styles.statRow}>
-        {weather?.current ? (
+        {current ? (
           <>
             <div className={styles.stat}>
               <dt>{t('maxMin')}</dt>
@@ -103,7 +113,7 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
               {showPrecip ? (
                 <>
                   <dt>{t('weather')}</dt>
-                  <dd title={`Weather Code (WMO): #${weather.current.weather_code}`}>{weatherCategory.title}</dd>
+                  <dd title={`Weather Code (WMO): #${current.weather_code}`}>{weatherCategory.title}</dd>
                 </>
               ) : (
                 <>
@@ -118,14 +128,14 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
             <div className={styles.stat}>
               <dt>{t('status')}</dt>
               <dd style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                {loading && <>Loading... {error && <><br /><br /></>}</>}{JSON.stringify(error)}
+                {loading && <>Loading... {error && <><br /><br /></>}</>}{error ? String(error) : ''}
               </dd>
             </div>
           </>
         )}
       </dl>
 
-      <SunProgress sunWindow={sunWindow} />
+      {sunWindow && <SunProgressBar sunWindow={sunWindow} includeNight />}
 
     </section>
   );

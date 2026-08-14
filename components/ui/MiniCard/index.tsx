@@ -16,7 +16,6 @@ export default function MiniCard({ icon, icons, size = 48, title, desc, onDouble
   const renderIconStack = () => {
     if (!icons?.length) return null;
 
-    // const slice = size / icons.length; // soma das partes = size total do card
     const slice = size / 1.3; // soma das partes = size total do card
 
     return (

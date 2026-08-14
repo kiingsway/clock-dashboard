@@ -1,9 +1,12 @@
 import { CSSProperties, ReactNode } from 'react';
 import styles from './HourlyCard.module.scss';
+import { Tooltip } from '../../Tooltip';
 
 interface Props {
   as?: 'li' | 'div';
   hour: string;
+  subhour?: string | number;
+  hideSubhour?: boolean;
   hourTooltip: string;
   icon: ReactNode;
   temp: number;
@@ -17,7 +20,7 @@ interface Props {
 
 export default function HourlyCard({
   as: Component = 'div',
-  desc, icon, feelsLike, hour, temp,
+  desc, icon, feelsLike, hour, temp, subhour, hideSubhour,
   tempUnit = 'ºC',
   feelsLikeUnit = 'ºC',
   hourTooltip,
@@ -28,11 +31,17 @@ export default function HourlyCard({
       "--wc-accent": accent,
       "--wc-accent-peak": accentPeak,
     } as CSSProperties}>
-      <span className={styles.hour} title={hourTooltip}>
-        {hour}
-      </span>
+      <Tooltip content={hourTooltip}>
+        <div className={styles.hour} title={hourTooltip}>
 
-      {icon}
+          <span>{hour}</span>
+          {subhour && <small style={{ visibility: hideSubhour ? 'hidden' : undefined }}>{subhour}</small>}
+        </div>
+      </Tooltip>
+
+      <div className={styles.icon}>
+        {icon}
+      </div>
 
       <span className={styles.temp}>
         {temp + tempUnit}

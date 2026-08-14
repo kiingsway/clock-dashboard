@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
-import { UseAppSettings } from "@/types/app.types";
 import { TLocation } from "@/types/location.types";
 import { APP_INFO } from "@/constants/appInfo";
 import { Badge } from "@/components/ui/Badge";
@@ -11,13 +10,16 @@ import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon } from "./I
 import { ALERT_RADIUS_KM } from "@/constants/alerts";
 import { LOCATION_OPTIONS } from "@/constants/locations";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
+import Alert from "@/components/ui/Alert";
 
 interface Props {
   open: boolean;
   onClose: () => void;
-  settings: UseAppSettings;
   updatedAt?: string;
   onUpdatedAtClick?: () => void;
+
+  alertsError: unknown;
 }
 
 /**
@@ -29,12 +31,12 @@ interface Props {
 export function SettingsSheet({
   open,
   onClose,
-  settings,
   updatedAt,
   onUpdatedAtClick,
+  alertsError
 }: Props) {
   const { t, i18n } = useTranslation();
-  const { get: { alertRadiusKm, location } } = settings;
+  const { set, get: { alertRadiusKm, location } } = useAppSettings();
 
   const [draftRadius, setDraftRadius] = useState(alertRadiusKm);
   const portalContainer = usePortalContainer(".root");
@@ -46,7 +48,7 @@ export function SettingsSheet({
   }, [alertRadiusKm]);
 
   const commitRadius = (raw: number) => {
-    if (raw !== alertRadiusKm) settings.set.alertRadiusKm(raw);
+    if (raw !== alertRadiusKm) set.alertRadiusKm(raw);
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -56,7 +58,6 @@ export function SettingsSheet({
   const updatedAtHour = updatedAt
     ? DateTime.fromISO(updatedAt, { zone: location }).toFormat("HH:mm")
     : "--:--";
-
 
   return (
     <BottomSheet
@@ -70,6 +71,12 @@ export function SettingsSheet({
       container={portalContainer}
     >
       <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+        {Boolean(alertsError) && (
+          <Alert
+            title="Failed to fetch weather alerts"
+            message={String(alertsError)}
+            variant="danger" />
+        )}
         <SettingsSection title={t("settingsTexts.general.title")}>
           <SettingRow
             icon={<LanguageIcon />}
@@ -101,7 +108,7 @@ export function SettingsSheet({
                 id="location"
                 className={styles.select}
                 value={location}
-                onChange={(e) => settings.set.location(e.target.value as TLocation)}
+                onChange={(e) => set.location(e.target.value as TLocation)}
               >
                 {LOCATION_OPTIONS.map((loc) => (
                   <option key={loc} value={loc}>

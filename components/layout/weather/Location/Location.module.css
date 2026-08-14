@@ -21,3 +21,31 @@
   height: 12px;
   flex-shrink: 0;
 }
+
+.locationText {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -7px;
+
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+
+    background: var(--wc-danger);
+
+    opacity: 0;
+    transform: scale(0);
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease;
+  }
+}
+
+.hasAlert::after {
+  opacity: 1;
+  transform: scale(1);
+}

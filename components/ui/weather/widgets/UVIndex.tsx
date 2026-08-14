@@ -5,6 +5,7 @@ import { IUVIcon } from '@/types/weatherInfo.types';
 import getUVIcon from '@/utils/weather/getUVIcon';
 import { DateTime } from 'luxon';
 import WeatherIcon from '../WeatherIcon';
+import { useTranslation } from 'react-i18next';
 
 type UVIndexProps = {
   uvIcon: IUVIcon;
@@ -17,17 +18,19 @@ type WeatherProps = {
   uvIcon?: never;
 
   weather: IWeather;
-  date?: DateTime
+  date: DateTime
 };
 
 export type Props = (UVIndexProps | WeatherProps) & {
+  kind: 'now' | 'day';
   size?: number; // Tamanho do ícone
   miniCard?: boolean; // Se deve renderizar um MiniCard em vez de DetailCard
 };
 
-export default function UVIndexWidget({ uvIcon: uvIconProp, weather, date, miniCard, size = 120 }: Props) {
+export default function UVIndexWidget({ uvIcon: uvIconProp, weather, date, miniCard, kind = 'day', size = 120 }: Props) {
+  const { t } = useTranslation();
 
-  const uvIcon = uvIconProp || getUVIcon(weather, date, true);
+  const uvIcon = uvIconProp || getUVIcon({ date, weather, kind, t });
   if (!uvIcon) return null;
 
   const onDebugClick = (): void => console.info('UV Index:', uvIcon);
@@ -35,8 +38,8 @@ export default function UVIndexWidget({ uvIcon: uvIconProp, weather, date, miniC
   if (miniCard) {
     return (
       <MiniCard
-        title={`UV Index ${uvIcon.uv}`}
-        desc={uvIcon.desc}
+        title={`${t('uvIndex')}: ${uvIcon.uv || 0}`}
+        desc={t(uvIcon.desc)}
         onDoubleClick={onDebugClick}
         icon={(
           <WeatherIcon
@@ -53,8 +56,8 @@ export default function UVIndexWidget({ uvIcon: uvIconProp, weather, date, miniC
   return (
     <DetailCard
       onDoubleClick={onDebugClick}
-      title="UV Index"
-      description={uvIcon.desc}
+      title={t('uvIndex')}
+      description={t(uvIcon.desc)}
       icon={(
         <WeatherIcon
           src={uvIcon.src}

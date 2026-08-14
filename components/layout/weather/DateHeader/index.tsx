@@ -3,12 +3,7 @@ import Clock from "../Clock";
 import WeekDate from "../WeekDate";
 
 export interface ClockProps {
-  /**
-   * IANA timezone of the forecast location (e.g. `weather.timezone` from the
-   * API payload). When omitted, falls back to the device's local time.
-   */
-  timezone: string;
-  onClockClick?: () => void
+  onClick?: () => void
 }
 
 /**
@@ -16,11 +11,11 @@ export interface ClockProps {
  * ("10 de julho" / "July 10"). Ticks every second internally so the minute
  * rolls over on its own — the host app never needs to re-render this.
  */
-export function DateHeader({ timezone, onClockClick }: ClockProps) {
+export function DateHeader({ onClick }: ClockProps) {
   return (
-    <header className={styles.header} aria-label="Relógio">
-      <Clock timezone={timezone} onClick={onClockClick} />
-      <WeekDate timezone={timezone} />
+    <header className={styles.header} aria-label="Relógio" onClick={onClick}>
+      <Clock />
+      <WeekDate />
     </header>
   );
 }

@@ -1,68 +1,109 @@
 import { ICON_BASE_URI } from "@/constants/iconFiles";
 import { IWeather } from "@/types/weather.types";
-import { IWindInfo } from "@/types/weatherInfo.types";
-import { getCurrentHourlyValue, getDailyValue } from "../formatters/getValueByArray";
+import { BeaufortLevel } from "@/types/weatherInfo.types";
+import { getCurrentValue } from "../formatters/getValueByArray";
 import getBeaufortScale from "../geo/getBeaufortScale";
 import { getCompassDirection } from "../geo/getCompassDirection";
 import { DateTime } from "luxon";
 import { hexToRgb, lerp } from "../formatters/textFormatters";
+import { TFunction } from "i18next";
 
-export default function getWindInfo(weather: IWeather, date = DateTime.now() as DateTime<boolean>): IWindInfo | undefined {
-
-  const { daily, hourly, timezone } = weather
-
-  const windSpeedMean = getDailyValue(daily.time, daily.wind_speed_10m_mean, timezone, date)
-  const windGustsMean = getDailyValue(daily.time, daily.wind_gusts_10m_mean, timezone, date)
-
-  const windDirection = getCurrentHourlyValue(hourly.time, hourly.wind_direction_10m, timezone)
-  const windGusts = getCurrentHourlyValue(hourly.time, hourly.wind_gusts_10m, timezone)
-  const windSpeed = getCurrentHourlyValue(hourly.time, hourly.wind_speed_10m, timezone)
-
-  const windGustsDesc = getWindGustDescription(windGusts)
-  const windGustsMeanDesc = getWindGustDescription(windGustsMean)
-
-  const hasDaily = !windSpeedMean || !windGustsMean || !windGustsMeanDesc
-
-  const windDirectionCompass = windDirection ? getCompassDirection(windDirection) : undefined
-
-  const beaufort = (() => {
-    if (typeof windSpeed !== 'number') return undefined
-
-    const value = getBeaufortScale(windSpeed).level;
-    const src = `${ICON_BASE_URI}wind-beaufort-${value}.svg`
-    const duration = getWindGustAnimationDuration(windSpeed)
-
-    return { src, value, duration }
-  })()
-
-  return {
-    daily: hasDaily ? undefined : {
-      speed: windSpeedMean,
-      gusts: windGustsMean,
-      gustsColor: getWindGustColor(windGustsMean),
-      desc: windGustsMeanDesc
-    },
-    hourly: {
-      direction: {
-        name: windDirectionCompass?.name,
-        src: `${ICON_BASE_URI}wind-direction-${windDirectionCompass?.abbreviation.toLowerCase()}.svg`
-      },
-      beaufort,
-      gusts: windGusts,
-      gustsColor: getWindGustColor(windGusts),
-      speed: windSpeed,
-      desc: windGustsDesc
-    }
-  }
+interface WindDirection {
+  name: string;
+  src: string;
 }
 
-const getWindGustDescription = (gust?: number) => {
-  if (typeof gust !== 'number') return undefined
-  if (gust < 20) return "Vento calmo. Sem impacto significativo.";
-  if (gust < 40) return "Vento moderado. Cuidado ao ar livre.";
-  if (gust < 60) return "Vento forte. Possíveis impactos.";
-  if (gust < 80) return "Vento muito forte. Evite áreas expostas.";
-  return "Vento extremo. Risco de danos e quedas.";
+interface WindMetric {
+  direction?: WindDirection;
+  gusts: string;
+  gustsColor: string | undefined;
+  gustsDesc: string | undefined;
+  speed: string;
+  speedColor: string | undefined;
+  speedDesc: string | undefined;
+  beaufort: undefined | {
+    src: string;
+    value: BeaufortLevel;
+    duration: number;
+  };
+}
+
+export interface WindData {
+  now: WindMetric;
+  day: WindMetric;
+}
+
+export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunction): WindData {
+
+  const { daily, hourly } = weather;
+
+  const windGustsNow = getCurrentValue({ date, time: hourly.time, values: hourly.wind_gusts_10m });
+  const windGustsDay = getCurrentValue({ date, time: daily.time, values: daily.wind_gusts_10m_mean });
+
+  const windSpeedNow = getCurrentValue({ date, time: hourly.time, values: hourly.wind_speed_10m });
+  const windSpeedDay = getCurrentValue({ date, time: daily.time, values: daily.wind_speed_10m_mean });
+
+  const windDirectionNow = getCurrentValue({ date, time: hourly.time, values: hourly.wind_direction_10m });
+  const windDirectionDay = getCurrentValue({ date, time: daily.time, values: daily.wind_direction_10m_dominant });
+
+  const windCompassNow = windDirectionNow ? getCompassDirection(windDirectionNow) : undefined;
+  const windCompassDay = windDirectionDay ? getCompassDirection(windDirectionDay) : undefined;
+
+  const windSpeedNowSummary = windSpeedNow && windSpeedDay && windCompassNow ?
+    getWindSummary({ currentSpeed: windSpeedNow, averageSpeed: windSpeedDay, direction: t(`compass.${windCompassNow.name}`) }, t)
+    : undefined
+
+  const windGustsNowSummary = windGustsNow && windGustsDay && windCompassNow ?
+    getWindSummary({ currentSpeed: windGustsNow, averageSpeed: windGustsDay, direction: t(`compass.${windCompassNow.name}`) }, t)
+    : undefined
+
+  const beaufortNow = getBeaufortInfo(windSpeedNow)
+  const beaufortDay = getBeaufortInfo(windSpeedDay)
+
+  return {
+    now: {
+      direction: !windCompassNow ? undefined : {
+        name: t(`compass.${windCompassNow.name}`),
+        src: `${ICON_BASE_URI}wind-direction-${windCompassNow.abbreviation.toLowerCase()}.svg`
+      },
+
+      gusts: windGustsNow + weather.hourly_units.wind_gusts_10m,
+      gustsColor: windColor(windGustsNow, 'gusts'),
+      gustsDesc: windGustsNowSummary,
+
+      speed: windSpeedNow + weather.hourly_units.wind_speed_10m,
+      speedColor: windColor(windSpeedNow, 'speed'),
+      speedDesc: windSpeedNowSummary,
+      beaufort: beaufortNow,
+    },
+
+
+    day: {
+      direction: !windCompassDay ? undefined : {
+        name: t(`compass.${windCompassDay.name}`),
+        src: `${ICON_BASE_URI}wind-direction-${windCompassDay.abbreviation.toLowerCase()}.svg`
+      },
+
+      gusts: windGustsDay + weather.daily_units.wind_gusts_10m_mean,
+      gustsColor: windColor(windGustsDay, 'gusts'),
+      gustsDesc: undefined,
+
+      speed: windSpeedDay + weather.daily_units.wind_speed_10m_mean,
+      speedColor: windColor(windSpeedDay, 'speed'),
+      speedDesc: undefined,
+      beaufort: beaufortDay,
+    },
+  };
+}
+
+const getBeaufortInfo = (windSpeed: number | undefined) => {
+  if (typeof windSpeed !== 'number') return undefined
+
+  const value = getBeaufortScale(windSpeed).level;
+  const src = `${ICON_BASE_URI}wind-beaufort-${value}.svg`
+  const duration = getWindGustAnimationDuration(windSpeed)
+
+  return { src, value, duration }
 }
 
 /**
@@ -117,4 +158,100 @@ function getWindGustAnimationDuration(windGust: number): number {
   const t = (gust - MIN_GUST) / (MAX_GUST - MIN_GUST);
 
   return MAX_DURATION - t * (MAX_DURATION - MIN_DURATION);
+}
+
+type WindType = "speed" | "gusts";
+
+/**
+ * Retorna uma cor baseada no impacto/percepção do vento para o ser humano.
+ *
+ * "speed"  → velocidade sustentada do vento.
+ * "gusts"  → rajadas de vento, com limites mais altos.
+ *
+ * As faixas de rajadas são mais tolerantes porque uma rajada é
+ * momentânea, enquanto a velocidade sustentada afeta continuamente
+ * o conforto e as atividades ao ar livre.
+ */
+function windColor(windKmH?: number, type: WindType = "speed"): string | undefined {
+  if (windKmH == null || !Number.isFinite(windKmH)) return undefined;
+
+  const stops = type === "speed" ?
+    [
+      { value: 0, hex: "#E0F2F1" },   // Calmo
+      { value: 10, hex: "#D9F99D" },  // Brisa leve
+      { value: 20, hex: "#FFF59D" },  // Perceptível
+      { value: 30, hex: "#FFD180" },  // Incômodo
+      { value: 40, hex: "#FFAB91" },  // Forte
+      { value: 55, hex: "#FF7043" },  // Muito forte
+      { value: 70, hex: "#D32F2F" },  // Severo
+      { value: 90, hex: "#6A1B9A" },  // Extremo
+    ]
+    : [
+      { value: 0, hex: "#E0F2F1" },   // Sem rajadas relevantes
+      { value: 20, hex: "#D9F99D" },  // Leve
+      { value: 40, hex: "#FFF59D" },  // Perceptível
+      { value: 60, hex: "#FFD180" },  // Moderada
+      { value: 80, hex: "#FFAB91" },  // Forte
+      { value: 100, hex: "#FF7043" }, // Muito forte
+      { value: 120, hex: "#D32F2F" }, // Severa
+      { value: 140, hex: "#6A1B9A" }, // Extrema
+    ];
+
+  const max = stops[stops.length - 1].value;
+  const value = Math.max(0, Math.min(max, windKmH));
+
+  let lower = stops[0];
+  let upper = stops[stops.length - 1];
+
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (value >= stops[i].value && value <= stops[i + 1].value) {
+      lower = stops[i];
+      upper = stops[i + 1];
+      break;
+    }
+  }
+
+  const range = upper.value - lower.value;
+  const factor =
+    range === 0
+      ? 0
+      : (value - lower.value) / range;
+
+  const c1 = hexToRgb(lower.hex);
+  const c2 = hexToRgb(upper.hex);
+
+  const R = Math.round(lerp(c1.r, c2.r, factor));
+  const G = Math.round(lerp(c1.g, c2.g, factor));
+  const B = Math.round(lerp(c1.b, c2.b, factor));
+
+  return `rgb(${R}, ${G}, ${B})`;
+}
+
+interface WindSummaryData {
+  currentSpeed: number;
+  averageSpeed: number;
+  direction: string;
+}
+
+export function getWindSummary({ currentSpeed, averageSpeed, direction }: WindSummaryData, t: TFunction): string {
+  let impact: string;
+
+  if (currentSpeed < 10) {
+    impact = t("windTextes.impact.calm");
+  } else if (currentSpeed < 20) {
+    impact = t("windTextes.impact.light");
+  } else if (currentSpeed < 30) {
+    impact = t("windTextes.impact.moderate");
+  } else if (currentSpeed < 50) {
+    impact = t("windTextes.impact.strong");
+  } else {
+    impact = t("windTextes.impact.veryStrong");
+  }
+
+  return t("windTextes.summary", {
+    current: `${currentSpeed}km/h`,
+    average: `${averageSpeed}km/h`,
+    direction,
+    impact,
+  });
 }

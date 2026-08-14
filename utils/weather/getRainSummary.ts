@@ -1,3 +1,6 @@
+import { RAIN_DESCRIPTIONS } from "@/constants/rainDescriptions";
+import { TFunction } from "i18next";
+
 interface RainData {
   hoursOfRain?: number;
   precipitationMm?: number;
@@ -7,27 +10,32 @@ interface RainData {
 interface RainSummary {
   description: string;
   iconName:
-    | 'umbrella-closed'
-    | 'umbrella'
-    | 'umbrella-wind'
-    | 'umbrella-wind-alt';
+  | 'umbrella-closed'
+  | 'umbrella'
+  | 'umbrella-wind'
+  | 'umbrella-wind-alt';
 }
 
-export function getRainSummary({
-  hoursOfRain = 0,
-  precipitationMm = 0,
-  chanceMax = 0,
-}: RainData): RainSummary {
+export function getRainSummary(
+  t: TFunction,
+  {
+    hoursOfRain = 0,
+    precipitationMm = 0,
+    chanceMax = 0,
+  }: RainData
+): RainSummary {
   const hoursPrefix =
     hoursOfRain > 0
-      ? `${hoursOfRain}h de chuva no dia. `
-      : '';
+      ? t(RAIN_DESCRIPTIONS.prefix, { hours: hoursOfRain })
+      : "";
+
+  const description = (key: keyof typeof RAIN_DESCRIPTIONS) => `${hoursPrefix}${t(RAIN_DESCRIPTIONS[key])}`;
 
   // Sem chuva
   if (precipitationMm <= 0 && hoursOfRain <= 0) {
     return {
-      description: 'Sem previsão de chuva. Pode sair tranquilo sem guarda-chuva.',
-      iconName: 'umbrella-closed',
+      description: t(RAIN_DESCRIPTIONS.noRain),
+      iconName: "umbrella-closed",
     };
   }
 
@@ -35,14 +43,14 @@ export function getRainSummary({
   if (precipitationMm < 1) {
     if (chanceMax < 30) {
       return {
-        description: `${hoursPrefix}Possibilidade de chuva muito baixa.`,
-        iconName: 'umbrella-closed',
+        description: description("veryLowChance"),
+        iconName: "umbrella-closed",
       };
     }
 
     return {
-      description: `${hoursPrefix}Possibilidade de garoa ou chuva fraca.`,
-      iconName: 'umbrella',
+      description: description("drizzle"),
+      iconName: "umbrella",
     };
   }
 
@@ -50,21 +58,21 @@ export function getRainSummary({
   if (precipitationMm < 5) {
     if (chanceMax < 30) {
       return {
-        description: `${hoursPrefix}Possibilidade de chuva leve e passageira.`,
-        iconName: 'umbrella',
+        description: description("lightLowChance"),
+        iconName: "umbrella",
       };
     }
 
     if (chanceMax < 60) {
       return {
-        description: `${hoursPrefix}Chuva leve possível ao longo do dia.`,
-        iconName: 'umbrella',
+        description: description("lightPossible"),
+        iconName: "umbrella",
       };
     }
 
     return {
-      description: `${hoursPrefix}Chuva leve prevista. É recomendável levar um guarda-chuva.`,
-      iconName: 'umbrella',
+      description: description("lightExpected"),
+      iconName: "umbrella",
     };
   }
 
@@ -72,21 +80,21 @@ export function getRainSummary({
   if (precipitationMm < 15) {
     if (chanceMax < 30) {
       return {
-        description: `${hoursPrefix}Possibilidade de chuva moderada, embora a chance seja baixa.`,
-        iconName: 'umbrella',
+        description: description("moderateLowChance"),
+        iconName: "umbrella",
       };
     }
 
     if (chanceMax < 60) {
       return {
-        description: `${hoursPrefix}Chuva moderada pode ocorrer ao longo do dia.`,
-        iconName: 'umbrella',
+        description: description("moderatePossible"),
+        iconName: "umbrella",
       };
     }
 
     return {
-      description: `${hoursPrefix}Chuva moderada prevista. Leve um guarda-chuva.`,
-      iconName: 'umbrella',
+      description: description("moderateExpected"),
+      iconName: "umbrella",
     };
   }
 
@@ -94,41 +102,41 @@ export function getRainSummary({
   if (precipitationMm < 30) {
     if (chanceMax < 30) {
       return {
-        description: `${hoursPrefix}Possibilidade de chuva forte, embora a chance seja baixa.`,
-        iconName: 'umbrella-wind',
+        description: description("heavyLowChance"),
+        iconName: "umbrella-wind",
       };
     }
 
     if (chanceMax < 60) {
       return {
-        description: `${hoursPrefix}Chuva forte pode ocorrer ao longo do dia.`,
-        iconName: 'umbrella-wind',
+        description: description("heavyPossible"),
+        iconName: "umbrella-wind",
       };
     }
 
     return {
-      description: `${hoursPrefix}Chuva forte prevista. Evite ficar exposto à chuva.`,
-      iconName: 'umbrella-wind',
+      description: description("heavyExpected"),
+      iconName: "umbrella-wind",
     };
   }
 
   // Chuva muito forte
   if (chanceMax < 30) {
     return {
-      description: `${hoursPrefix}Possibilidade de chuva muito intensa, embora a chance seja baixa.`,
-      iconName: 'umbrella-wind-alt',
+      description: description("veryHeavyLowChance"),
+      iconName: "umbrella-wind-alt",
     };
   }
 
   if (chanceMax < 60) {
     return {
-      description: `${hoursPrefix}Chuva muito intensa pode ocorrer ao longo do dia.`,
-      iconName: 'umbrella-wind-alt',
+      description: description("veryHeavyPossible"),
+      iconName: "umbrella-wind-alt",
     };
   }
 
   return {
-    description: `${hoursPrefix}Chuva muito intensa prevista. Se possível, evite sair.`,
-    iconName: 'umbrella-wind-alt',
+    description: description("veryHeavyExpected"),
+    iconName: "umbrella-wind-alt",
   };
 }

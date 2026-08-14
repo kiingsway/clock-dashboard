@@ -1,10 +1,9 @@
 import { CACHE_KEY } from "@/constants/keys";
 import { DEFAULT_SETTINGS } from "@/constants/settings";
-import fetchCanadaWeatherAlerts from "@/services/fetchCanadaWeatherAlerts";
-import { UseAppSettings } from "@/types/app.types";
 import { IWeatherLocationItem } from "@/types/location.types";
-import { IWeatherAlertCanada } from "@/types/weather.types";
+import { IWeatherAlertCanada } from "@/types/weatherAlerts.types";
 import useSWR from "swr";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
 
 function getWeatherAlertKey(location: IWeatherLocationItem) {
   if (location.country !== "CA") return null;
@@ -12,9 +11,8 @@ function getWeatherAlertKey(location: IWeatherLocationItem) {
   return [CACHE_KEY.WEATHER_ALERTS, location.lat, location.lon];
 }
 
-export default function useWeatherAlerts(settings: UseAppSettings) {
-
-  const { weatherLocation: location, get: { alertRadiusKm } } = settings;
+export default function useWeatherAlerts() {
+  const { weatherLocation: location, get: { alertRadiusKm } } = useAppSettings();
 
   const { data, error, isLoading } = useSWR(
     [getWeatherAlertKey(location), location.lat, location.lon, alertRadiusKm],
@@ -24,7 +22,9 @@ export default function useWeatherAlerts(settings: UseAppSettings) {
       );
 
       if (!res.ok) {
-        throw new Error("Failed to fetch weather alerts.");
+        const error = await res.json().catch(() => null);
+
+        throw new Error((error?.message || error?.error || `Request failed with status ${res.status}`));
       }
 
       return res.json() as Promise<IWeatherAlertCanada[]>;

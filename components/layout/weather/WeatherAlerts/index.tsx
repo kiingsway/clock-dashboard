@@ -11,7 +11,6 @@ import { usePortalContainer } from "@/hooks/usePortalContainer";
 
 interface Props {
   alerts: IWeatherAlertCanada[];
-  locale: string;
   timeZone?: string;
 }
 
@@ -22,7 +21,7 @@ interface Props {
  * only one alert would be overkill, so with a single alert it renders the
  * card directly, no wrapper chrome.
  */
-export default function WeatherAlerts({ alerts, locale }: Props) {
+export default function WeatherAlerts({ alerts }: Props) {
   const { t } = useTranslation();
 
   const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean()
@@ -55,7 +54,7 @@ export default function WeatherAlerts({ alerts, locale }: Props) {
         container={portalContainer}
       >
         <div className={styles.modalList} onDoubleClick={onDebugClick}>
-          {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert.properties} locale={locale} autoExpand={alerts.length === 1} />)}
+          {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert.properties} autoExpand={alerts.length === 1} />)}
         </div>
       </BottomSheet>
 

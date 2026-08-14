@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { DateTime } from "luxon";
-import { IWeatherAlertCanada } from "@/types/weather.types";
+import { IWeatherAlertCanada } from "@/types/weatherAlerts.types";
 
 interface WeatherAlert {
   properties: {
@@ -66,9 +66,9 @@ export async function GET(request: NextRequest) {
         "Cache-Control": "s-maxage=300, stale-while-revalidate=600",
       },
     });
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { error: "Failed to fetch weather alerts." },
+      { error: `Failed to fetch weather alerts. ${String(e)}` },
       { status: 500 }
     );
   }

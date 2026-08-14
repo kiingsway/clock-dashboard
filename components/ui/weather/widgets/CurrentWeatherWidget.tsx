@@ -1,6 +1,7 @@
 import MiniCard from '@/components/ui/MiniCard'
 import WeatherIcon from '../WeatherIcon';
 import getWeatherCategory from '@/utils/weather/getWeatherCategory';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   weatherCode: number
@@ -10,13 +11,14 @@ interface Props {
 }
 
 export default function CurrentWeatherWidget({ weatherCode, tempMax, tempMin, size }: Props) {
+  const { t } = useTranslation();
 
   const category = getWeatherCategory(weatherCode);
 
   return (
     <MiniCard
       title={`${category.title}`}
-      desc={`Max: ${tempMax}ºC | Min: ${tempMin}ºC`}
+      desc={`${t('maxMin')}: ${Math.round(tempMax)}ºC / ${Math.round(tempMin)}ºC`}
       icon={<WeatherIcon category={category.name} size={size} />
       }
     />

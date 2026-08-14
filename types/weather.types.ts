@@ -4,6 +4,8 @@
  * data as props and never fetch or convert it themselves.
  */
 
+import { ImageInfo } from "./app.types";
+
 export interface IWeatherUnits {
   time: "iso8601";
   interval: "seconds";
@@ -46,6 +48,7 @@ export interface IHourly {
   wind_gusts_10m: number[];
   wind_speed_10m: number[];
   visibility: number[];
+  uv_index: number[];
 }
 
 export interface IDailyUnits {
@@ -59,6 +62,7 @@ export interface IDailyUnits {
   precipitation_sum: "mm";
   precipitation_hours: "h";
   precipitation_probability_max: "%";
+  wind_direction_10m_dominant: "°"
 }
 
 export interface IDaily {
@@ -76,6 +80,18 @@ export interface IDaily {
   precipitation_sum: number[];
   precipitation_hours: number[];
   precipitation_probability_max: number[];
+  wind_direction_10m_dominant: Array<number>
+}
+
+export interface IMoonDaily {
+  name: string;
+  iconName: string;
+  date: string;
+  moonrise: string | undefined;
+  moonset: string | undefined;
+  alwaysUp: boolean;
+  alwaysDown: boolean;
+  phase: number;
 }
 
 export interface IWeather {
@@ -92,6 +108,7 @@ export interface IWeather {
   hourly: IHourly;
   daily_units: IDailyUnits;
   daily: IDaily;
+  daily_moon: IMoonDaily[];
 }
 
 /** Supported UI languages. Extend here if the host app adds more locales. */
@@ -139,38 +156,8 @@ export interface SelectOption {
   label: string;
 }
 
-/**
- * Subset of `IWeatherAlert["alerts"][number]["properties"]` (Environment
- * Canada's weather-alerts API) that `WeatherAlertCard` actually reads.
- * You already have the full `IWeatherAlert` type — this isn't meant to
- * replace it, just to type the single `properties` object the card takes as
- * a prop. Your real object has more fields than this; TypeScript is fine
- * with that since it only checks that the ones listed here are present.
- */
-export interface IWeatherAlertCanadaProps {
-  id: string;
-  alert_type: string;
-  alert_name_en: string;
-  alert_short_name_en: string;
-  alert_text_en: string;
-  feature_name_en: string;
-  /** Environment Canada's risk colour, e.g. "Red" / "Orange" / "Yellow" / "Grey". */
-  risk_colour_en: string;
-  confidence_en: string;
-  impact_en: string;
-  status_en: string;
-  /** ISO 8601 — when the event itself is expected to end. */
-  event_end_datetime: string;
+export interface WeatherIconInfo {
+  moon: undefined | ImageInfo;
+  weather: ImageInfo;
+  current: ImageInfo;
 }
-
-export interface IWeatherAlertCanada {
-  id: string
-  type: string
-  properties: IWeatherAlertCanadaProps
-  geometry: {
-    type: string
-    coordinates: number[][][]
-  }
-}
-
-export type WeatherIconInfo = Record<'moon' | 'weather' | 'current', { alt: string, src: string }>;

@@ -1,4 +1,4 @@
-import { IWeatherAlertCanada } from "@/types/weather.types";
+import { IWeatherAlertCanada } from "@/types/weatherAlerts.types";
 
 export default async function fetchCanadaWeatherAlerts(
   lat: number,
@@ -6,7 +6,7 @@ export default async function fetchCanadaWeatherAlerts(
   radiusKm: number,
 ): Promise<IWeatherAlertCanada[]> {
   const res = await fetch(
-    `/api/weather-alerts?lat=${lat}&lon=${lon}&radiusKm=${radiusKm}`,
+    `/api/z/weather-alerts?lat=${lat}&lon=${lon}&radiusKm=${radiusKm}`,
   );
 
   if (!res.ok) {

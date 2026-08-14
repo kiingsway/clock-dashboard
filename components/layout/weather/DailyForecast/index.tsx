@@ -7,6 +7,7 @@ import useBoolean from "@/hooks/useBoolean";
 import ForecastDay from "./ForecastDay";
 import { roundValues } from "@/utils/formatters/mathDateFormatters";
 import DailySheet from "@/components/overlays/DailySheet";
+import { useNow } from "@/contexts/NowContext";
 
 export interface DailyForecastProps {
   weather: IWeather
@@ -20,7 +21,8 @@ export interface DailyForecastProps {
  * in the week, not just its two numbers.
  */
 export function DailyForecast({ weather }: DailyForecastProps) {
-  const { t, i18n: { language: locale } } = useTranslation();
+  const { t } = useTranslation();
+  const { now } = useNow();
   const [expandedIndex, setExpandedIndex] = useState<number>();
   const [dailySheetOpen, { setTrue: openDaily, setFalse: closeDaily }] = useBoolean();
 
@@ -34,7 +36,7 @@ export function DailyForecast({ weather }: DailyForecastProps) {
 
   if (daily.time.length === 0) return null;
 
-  const today = DateTime.now().setZone(timezone).startOf("day");
+  const today = now.startOf("day");
 
   const forecastIndexes = daily.time.reduce<number[]>((acc, iso, index) => {
     const date = DateTime.fromISO(iso, { zone: timezone });
@@ -49,7 +51,7 @@ export function DailyForecast({ weather }: DailyForecastProps) {
     Math.max(...forecastIndexes.map(i => daily.temperature_2m_max[i]))
   );
 
-  const onDebugClick = () => console.info("Daily forecast data:", { weather, locale, weekMin, weekMax });
+  const onDebugClick = () => console.info("Daily forecast data:", { weather, weekMin, weekMax });
 
   return (
     <section className={styles.section} aria-label={t("nextDays")} onDoubleClick={onDebugClick}>
@@ -68,7 +70,6 @@ export function DailyForecast({ weather }: DailyForecastProps) {
             daily={daily}
             dailyUnits={daily_units}
             timezone={timezone}
-            locale={locale}
             weekMin={weekMin}
             weekMax={weekMax}
             today={today}

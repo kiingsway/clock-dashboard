@@ -1,3 +1,5 @@
+import { TFunction } from "i18next";
+
 export type FeelsLikeDifferenceLevel =
   | "none"
   | "verySmall"
@@ -16,20 +18,20 @@ export interface FeelsLikeDifference {
 
 const recommendations: Record<Direction, Record<FeelsLikeDifferenceLevel, string>> = {
   warmer: {
-    none: "Feels close to the actual temperature.",
-    verySmall: "Feels slightly warmer.",
-    small: "Feels warmer than expected.",
-    moderate: "Feels noticeably warmer.",
-    large: "Feels much warmer.",
-    extreme: "Feels significantly warmer.",
+    none: 'feelsLikeDifferenceTextes.none',
+    verySmall: 'feelsLikeDifferenceTextes.warmer.verySmall',
+    small: 'feelsLikeDifferenceTextes.warmer.small',
+    moderate: 'feelsLikeDifferenceTextes.warmer.moderate',
+    large: 'feelsLikeDifferenceTextes.warmer.large',
+    extreme: 'feelsLikeDifferenceTextes.warmer.extreme',
   },
   cooler: {
-    none: "Feels close to the actual temperature.",
-    verySmall: "Feels slightly cooler.",
-    small: "Feels cooler than expected.",
-    moderate: "Feels noticeably cooler.",
-    large: "Feels much cooler.",
-    extreme: "Feels significantly cooler.",
+    none: 'feelsLikeDifferenceTextes.none',
+    verySmall: 'feelsLikeDifferenceTextes.cooler.verySmall',
+    small: 'feelsLikeDifferenceTextes.cooler.small',
+    moderate: 'feelsLikeDifferenceTextes.cooler.moderate',
+    large: 'feelsLikeDifferenceTextes.cooler.large',
+    extreme: 'feelsLikeDifferenceTextes.cooler.extreme',
   },
 };
 
@@ -52,12 +54,10 @@ export function getFeelsLikeDifference(temperature: number, feelsLike: number): 
   return { level, direction, delta };
 }
 
-export function getFeelsLikeRecommendation(temperature: number, feelsLike: number): string {
+export function getFeelsLikeRecommendation(temperature: number, feelsLike: number, t: TFunction): string {
   const { level, direction } = getFeelsLikeDifference(temperature, feelsLike);
 
-  const temp = Math.round(temperature);
+  if (direction === "same") return t(`feelsLikeDifferenceTextes.none`);
 
-  if (direction === "same") return `Feels close to the actual mean temperature (${temp}ºC).`;
-
-  return recommendations[direction][level] + ` (${temp}ºC).`;
+  return t(recommendations[direction][level]);
 }

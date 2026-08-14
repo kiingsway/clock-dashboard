@@ -10,12 +10,8 @@ interface Props {
 export default function CurrentTemperature({ temp, unit, style }: Props) {
   return (
     <p className={styles.temp} style={style}>
-      {!temp ? '-' : (
-        <>
-          {Math.round(temp)}
-          <span className={styles.tempUnit}>{unit}</span>
-        </>
-      )}
+      {temp ? Math.round(temp) : '-'}
+      <span className={styles.tempUnit}>{unit}</span>
     </p>
   )
 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { IWeather } from "@/types/weather.types";
+import { getMoonDays } from "./getMoonDays";
+import { DateTime } from "luxon";
 
 const api = {
   past_days: 1,
@@ -15,6 +17,7 @@ const api = {
     "uv_index_max",
     "wind_gusts_10m_mean",
     "wind_speed_10m_mean",
+    "wind_direction_10m_dominant",
     "apparent_temperature_mean",
     "temperature_2m_mean",
     "precipitation_sum",
@@ -31,6 +34,7 @@ const api = {
     "wind_direction_10m",
     "wind_gusts_10m",
     "visibility",
+    "uv_index",
   ],
   current: [
     "temperature_2m",
@@ -53,7 +57,13 @@ const getParams = (latitude: number, longitude: number) =>
     timezone: api.timezone,
   });
 
-export async function GET(request: NextRequest) {
+type TApiWeather = Promise<
+  NextResponse<IWeather | {
+    error: string;
+    message?: string;
+  }>>
+
+export async function GET(request: NextRequest): TApiWeather {
   const { searchParams } = new URL(request.url);
 
   const latitude = Number(searchParams.get("latitude"));
@@ -71,17 +81,24 @@ export async function GET(request: NextRequest) {
   const url = `https://api.open-meteo.com/v1/forecast?${params}`;
 
   try {
-    const { data } = await axios.get<IWeather>(url);
+    const { data: weather } = await axios.get<IWeather>(url);
 
-    return NextResponse.json(data, {
+    const daily_moon = getMoonDays({
+      latitude,
+      longitude,
+      timezone: weather.timezone,
+      startDate: DateTime.now().setZone(weather.timezone),
+    });
+
+    return NextResponse.json({ ...weather, daily_moon }, {
       status: 200,
       headers: {
         "Cache-Control": "s-maxage=300, stale-while-revalidate=600",
       },
     });
-  } catch {
+  } catch (e) {
     return NextResponse.json(
-      { error: "Failed to fetch weather." },
+      { error: "Failed to fetch weather.", message: String(e) },
       { status: 500 }
     );
   }

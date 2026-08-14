@@ -1,14 +1,8 @@
+import { useNow } from '@/contexts/NowContext';
 import styles from './WeekDate.module.scss';
-import useNow from '@/hooks/useNow';
-import { useTranslation } from 'react-i18next';
 
-interface Props {
-  timezone: string;
-}
-
-export default function WeekDate({ timezone }: Props) {
-  const { i18n: { language: locale } } = useTranslation();
-  const { now } = useNow({ locale, timezone });
+export default function WeekDate() {
+  const { now } = useNow();
 
   const dateText = ((): string => {
     if (!now) return '-'

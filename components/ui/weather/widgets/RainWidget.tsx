@@ -1,6 +1,7 @@
 import MiniCard from '@/components/ui/MiniCard'
 import WeatherIcon from '../WeatherIcon';
 import { getRainSummary } from '@/utils/weather/getRainSummary';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   precipMM: number;
@@ -10,12 +11,12 @@ interface Props {
 }
 
 export default function RainWidget({ precipMM, chance, hoursOfRain, size = 120 }: Props) {
-
-  const { description, iconName } = getRainSummary({ chanceMax: chance, precipitationMm: precipMM, hoursOfRain });
+  const { t } = useTranslation();
+  const { description, iconName } = getRainSummary(t, { chanceMax: chance, precipitationMm: precipMM, hoursOfRain });
 
   return (
     <MiniCard
-      title={`${precipMM}mm - ${chance}% chance`}
+      title={t('precipitationTexts.precipInHours', { precip: precipMM, chance })}
       desc={description}
       icon={<WeatherIcon iconName={iconName} size={size} />}
     />

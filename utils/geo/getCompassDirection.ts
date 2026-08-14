@@ -6,14 +6,14 @@ export interface CompassInfo {
 }
 
 export const compassMap: Record<CompassDirection, CompassInfo> = {
-  N:  { abbreviation: 'N',  name: 'North' },
-  NE: { abbreviation: 'NE', name: 'Northeast' },
-  E:  { abbreviation: 'E',  name: 'East' },
-  SE: { abbreviation: 'SE', name: 'Southeast' },
-  S:  { abbreviation: 'S',  name: 'South' },
-  SW: { abbreviation: 'SW', name: 'Southwest' },
-  W:  { abbreviation: 'W',  name: 'West' },
-  NW: { abbreviation: 'NW', name: 'Northwest' }
+  N:  { abbreviation: 'N',  name: 'north' },
+  NE: { abbreviation: 'NE', name: 'northeast' },
+  E:  { abbreviation: 'E',  name: 'east' },
+  SE: { abbreviation: 'SE', name: 'southeast' },
+  S:  { abbreviation: 'S',  name: 'south' },
+  SW: { abbreviation: 'SW', name: 'southwest' },
+  W:  { abbreviation: 'W',  name: 'west' },
+  NW: { abbreviation: 'NW', name: 'northwest' }
 };
 
 /**

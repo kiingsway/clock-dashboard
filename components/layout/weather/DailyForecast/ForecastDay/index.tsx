@@ -10,13 +10,13 @@ import WeatherIcon from '@/components/ui/weather/WeatherIcon';
 import { roundValues } from '@/utils/formatters/mathDateFormatters';
 import getForecastDateLabel from '@/utils/weather/getForecastDateLabel';
 import { getForecastDetailItems } from '@/utils/weather/getForecastDetailItems';
+import { useNow } from '@/contexts/NowContext';
 
 interface Props {
   daily: IDaily
   dailyUnits: IDailyUnits
 
   timezone: string
-  locale: string
 
   weekMin: number
   weekMax: number
@@ -28,8 +28,9 @@ interface Props {
 
 }
 
-export default function ForecastDay({ daily, dailyUnits, timezone, locale, weekMin, weekMax, today, index, expandedIndex, setExpandedIndex }: Props) {
-  const { t } = useTranslation();
+export default function ForecastDay({ daily, dailyUnits, timezone, weekMin, weekMax, today, index, expandedIndex, setExpandedIndex }: Props) {
+  const { t, i18n: { language: locale } } = useTranslation();
+  const { now } = useNow();
 
   const unit = {
     wind: dailyUnits.wind_speed_10m_mean ?? dailyUnits.wind_gusts_10m_mean ?? "km/h",
@@ -62,7 +63,7 @@ export default function ForecastDay({ daily, dailyUnits, timezone, locale, weekM
   const rangeStart = ((dayMin - weekMin) / temperatureRange) * 100;
   const rangeWidth = ((dayMax - dayMin) / temperatureRange) * 100;
 
-  const dateText = isToday ? t('today') : getForecastDateLabel(indexDate, locale);
+  const dateText = isToday ? t('today') : getForecastDateLabel(now, indexDate, locale);
 
   const detailItems = getForecastDetailItems({ daily, units: dailyUnits, index, t })
 

@@ -2,7 +2,8 @@ import ICON_FILES, { ICON_BASE_URI } from "@/constants/iconFiles";
 import { IWeather } from "@/types/weather.types"
 import { IUVIcon } from "@/types/weatherInfo.types";
 import { DateTime } from "luxon";
-import { getDailyValue } from "../formatters/getValueByArray";
+import { getCurrentValue } from "../formatters/getValueByArray";
+import { TFunction } from "i18next";
 
 const getUvSrc = (uv?: number): string => {
   let name: string = 'uv-index';
@@ -14,29 +15,46 @@ const getUvSrc = (uv?: number): string => {
   return `${ICON_BASE_URI}${name}.svg`
 }
 
-export default function getUVIcon(weather: IWeather, date = DateTime.now() as DateTime<boolean>, isDay?: boolean): IUVIcon | undefined {
+interface GetUVIconProps {
+  weather: IWeather;
+  date: DateTime;
+  kind: 'now' | 'day';
+  t: TFunction;
+}
 
-  const { current, daily, timezone } = weather;
+export default function getUVIcon({ weather, date, kind, t }: GetUVIconProps): IUVIcon | undefined {
+  const { hourly, daily } = weather;
 
-  if (current.is_day !== 1 && !isDay) return {
-    alt: `UV Index: 0 (night)`,
-    src: `${ICON_BASE_URI}${ICON_FILES.clearNight}.svg`,
-    desc: 'Tá de noite'
+  const time = kind === 'day' ? daily.time : hourly.time;
+  const values = kind === 'day' ? daily.uv_index_max : hourly.uv_index;
+
+  if (kind === 'now') {
+    const isHourlyDay = getCurrentValue({
+      date,
+      time: hourly.time,
+      values: hourly.is_day,
+    });
+
+    if (!isHourlyDay) return {
+      alt: `UV Index: 0 (night)`,
+      src: `${ICON_BASE_URI}${ICON_FILES.clearNight}.svg`,
+      desc: t('uvIndexes.noUvIndex')
+    }
   }
 
-  const uvNumber = getDailyValue(daily.time, daily.uv_index_max, timezone, date)
+  const uvNumber = getCurrentValue({ date, time, values });
 
-  if (!uvNumber) return undefined
+  if (typeof uvNumber !== 'number') return undefined
 
   const uvIndex = Math.round(uvNumber)
   const uvIcon = getUvSrc(uvIndex)
 
   const desc = (() => {
-    if (uvIndex <= 2) return "Baixo risco. Sem proteção especial.";
-    if (uvIndex <= 5) return "Risco moderado. Use protetor e procure sombra.";
-    if (uvIndex <= 7) return "Risco alto. Protetor FPS 30+, chapéu e sombra.";
-    if (uvIndex <= 10) return "Risco muito alto. Evite o sol prolongado.";
-    return "Risco extremo. Evite exposição ao sol.";
+    if (uvIndex <= 2) return t('uvIndexes.low');
+    if (uvIndex <= 5) return t('uvIndexes.moderate');
+    if (uvIndex <= 7) return t('uvIndexes.high');
+    if (uvIndex <= 10) return t('uvIndexes.veryHigh');
+    return t('uvIndexes.extreme');
   })();
 
   return {

@@ -1,4 +1,3 @@
-import { DateTime } from "luxon";
 import { JSX } from "react";
 import Image from 'next/image';
 import styles from './WeatherIcon.module.scss';
@@ -7,12 +6,10 @@ import { WeatherCategoryName } from "@/types/weather.types";
 import { getWeatherIconUrl } from "@/utils/weather/getWeatherIconName";
 import AnimatedWeatherIcon from "./WeatherIconAnimated";
 import { capitalizeWords, splitCamelCase } from "@/utils/formatters/textFormatters";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
+import { useNow } from "@/contexts/NowContext";
 
-interface Props {
-  size?: number;
-}
-
-interface WeatherSrcAltProps extends Props {
+interface WeatherSrcAltProps {
   src: string;
   alt: string;
   title?: string;
@@ -20,19 +17,17 @@ interface WeatherSrcAltProps extends Props {
 
   weatherCode?: never
   isDay?: never
-  date?: never
   lat?: never
   lon?: never
   category?: never
   iconName?: never
 }
 
-interface WeatherIconNameProps extends Props {
+interface WeatherIconNameProps {
   iconName: string
 
   weatherCode?: never
   isDay?: never
-  date?: never
   lat?: never
   lon?: never
   category?: never
@@ -42,12 +37,11 @@ interface WeatherIconNameProps extends Props {
   duration?: never;
 }
 
-interface WeatherCategoryProps extends Props {
+interface WeatherCategoryProps {
   category: WeatherCategoryName | { name: WeatherCategoryName, title?: string }
 
   weatherCode?: never
   isDay?: never
-  date?: never
   lat?: never
   lon?: never
   iconName?: never
@@ -57,10 +51,9 @@ interface WeatherCategoryProps extends Props {
   duration?: never;
 }
 
-interface WeatherCodeProps extends Props {
+interface WeatherCodeProps {
   weatherCode: number
   isDay?: boolean
-  date?: DateTime
   lat?: number
   lon?: number
 
@@ -72,7 +65,11 @@ interface WeatherCodeProps extends Props {
   duration?: never;
 }
 
-export type WeatherIconProps = WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps
+interface Props {
+  size?: number;
+}
+
+export type WeatherIconProps = Props & (WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps)
 
 export default function WeatherIcon({
   category,
@@ -84,10 +81,11 @@ export default function WeatherIcon({
   src,
   title,
   duration,
-  date = DateTime.now(),
   isDay = true,
   size = 34
 }: WeatherIconProps): JSX.Element {
+  const { now } = useNow()
+  const { get: { location: timezone } } = useAppSettings();
 
   if (duration) return <AnimatedWeatherIcon src={src} alt={alt} title={title} size={size} duration={duration} />
 
@@ -101,7 +99,7 @@ export default function WeatherIcon({
     }
 
     if (typeof weatherCode === 'number') {
-      const { current: { src, alt } } = getWeatherIcon({ weatherCode, date, isDay, lat, lon })
+      const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now })
       return { src, alt, title: alt }
     }
 

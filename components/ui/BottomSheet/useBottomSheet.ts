@@ -60,12 +60,24 @@ export function useBottomSheet(args: UseBottomSheetArgs, ref: React.Ref<BottomSh
 
   // Keep latest callbacks in refs so the gesture handlers (created once) never go stale.
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+  // onCloseRef.current = onClose;
   const onSnapRef = useRef(onSnap);
-  onSnapRef.current = onSnap;
+  // onSnapRef.current = onSnap;
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
+    onSnapRef.current = onSnap;
+  }, [onSnap]);
 
   const springConfigRef = useRef<SpringConfig>({ ...DEFAULT_SPRING, ...args.springConfig });
-  springConfigRef.current = { ...DEFAULT_SPRING, ...args.springConfig };
+  // springConfigRef.current = { ...DEFAULT_SPRING, ...args.springConfig };
+
+  useEffect(() => {
+    springConfigRef.current = { ...DEFAULT_SPRING, ...args.springConfig };
+  }, [args.springConfig]);
 
   // --- Layout ------------------------------------------------------------
   const viewportHeightRef = useRef(0);

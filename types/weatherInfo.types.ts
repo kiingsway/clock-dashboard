@@ -1,17 +1,17 @@
-import { DateTime } from "luxon";
 import { ReactNode } from "react";
 
-export interface IMoonInfo {
-  title: string;
-  icon: ReactNode;
+export interface NameIcon {
+  name: string;
+  icon: string;
 }
 
-export interface IMoonPhase extends IMoonInfo {
-  phase: number
-  isVisible: boolean | undefined
-  iconSrc: string
-  moonrise?: DateTime
-  moonset?: DateTime
+export interface IMoonInfo extends Omit<NameIcon, 'icon'> {
+  name: string;
+  phase: number;
+  icon: ReactNode;
+  iconSrc: string;
+  iconName: string;
+  isVisible: boolean;
 }
 
 export interface IUVIcon {

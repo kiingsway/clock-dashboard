@@ -1,81 +1,77 @@
 import { DetailCard } from '@/components/ui/DetailCard/DetailCard';
 import MiniCard from '@/components/ui/MiniCard';
-import { IMoonPhase } from '@/types/weatherInfo.types';
-import getMoonPhase from '@/utils/weather/getMoonPhase';
-import { DateTime } from 'luxon';
 import WeatherIcon from '../WeatherIcon';
+import getMoonInfo, { IMoonInfoWithTimes } from '@/utils/weather/getMoonInfo';
+import { useNow } from '@/contexts/NowContext';
+import { useTranslation } from 'react-i18next';
+import { IWeather } from '@/types/weather.types';
+import { DateTime } from 'luxon';
 
-type MoonPhaseProps = {
-  moonPhase: IMoonPhase;
+type MoonInfoProps = {
+  moonInfo: IMoonInfoWithTimes
 
-  lat?: never;
-  lon?: never;
+  weather?: never;
   date?: never;
 };
 
-type CoordinatesProps = {
-  moonPhase?: never;
+type WeatherProps = {
+  moonInfo?: never;
 
-  lat: number;
-  lon: number;
-  date: DateTime;
+  weather: IWeather;
+  date: DateTime
 };
 
-export type Props = (MoonPhaseProps | CoordinatesProps) & {
+export type Props = (MoonInfoProps | WeatherProps) & {
   size?: number; // Tamanho do ícone
   miniCard?: boolean; // Se deve renderizar um MiniCard em vez de DetailCard
 };
 
-export default function MoonWidget({ moonPhase: moonPhaseProp, date, lat, lon, size = 120, miniCard }: Props) {
+export default function MoonWidget({ moonInfo: moonInfoData, date, weather, miniCard = false, size = 120 }: Props) {
+  const { t } = useTranslation();
+  const { now } = useNow();
 
-  const moonPhase = moonPhaseProp || getMoonPhase({ date, lat, lon });
-  const { title, phase, moonrise, moonset, iconSrc } = moonPhase || {};
+  const moonInfo = moonInfoData || getMoonInfo({
+    now: date,
+    lat: weather.latitude,
+    lon: weather.longitude,
+    dailyMoon: weather.daily_moon,
+  });
 
-  const moonPhaseTitle = `${title} (${(phase * 100).toFixed(2)}%)`;
-  const onDebugClick = (): void => console.info('Moon Phase:', moonPhase);
+  const moonName = t(moonInfo.name)
+  const title = `${moonName} (${(moonInfo.phase * 100).toFixed(2)}%)`;
+  const icon = <WeatherIcon iconName={moonInfo.iconName} size={size} />;
 
-  const moonriseTime = moonrise ? moonrise.toFormat('HH:mm') : '-';
-  const moonsetTime = moonset ? moonset.toFormat('HH:mm') : '-';
+  const moonrise = moonInfo.moonrise
+    ? moonInfo.moonrise.hasSame(now, 'day')
+      ? moonInfo.moonrise.toFormat('HH:mm')
+      : moonInfo.moonrise.toFormat('dd/LL HH:mm')
+    : '--:--';
+
+  const moonset = moonInfo.moonset
+    ? moonInfo.moonset.hasSame(now, 'day')
+      ? moonInfo.moonset.toFormat('HH:mm')
+      : moonInfo.moonset.toFormat('dd/LL HH:mm')
+    : '--:--';
+
+  const onDebugClick = (): void => console.info('Moon Phase:', { moonInfo });
 
   if (miniCard) {
     return (
       <MiniCard
-        desc={`Moonrise: ${moonriseTime} | Moonset: ${moonsetTime}`}
-        title={moonPhaseTitle}
+        desc={`${t('moonrise')}: ${moonrise} | ${t('moonset')}: ${moonset}`}
+        title={title}
         onDoubleClick={onDebugClick}
-        icon={<WeatherIcon
-          src={iconSrc}
-          title={title}
-          alt={title}
-          size={size}
-        />}
+        icon={icon}
       />
     )
   }
 
   return (
-    <>
-      <DetailCard
-        title="Moon"
-        description={moonPhaseTitle}
-        onDoubleClick={onDebugClick}
-        icon={moonPhase && (
-          <WeatherIcon
-            src={iconSrc}
-            title={title}
-            alt={title}
-            size={size}
-          />
-        )}
-      />
-
-      {moonrise && moonset && (
-        <DetailCard
-          title="Moonrise/Moonset"
-          bigText={`${moonrise.toFormat('HH:mm')} - ${moonset.toFormat('HH:mm')}`}
-          onDoubleClick={onDebugClick}
-        />
-      )}
-    </>
+    <DetailCard
+      title={t('moon')}
+      description={title}
+      onDoubleClick={onDebugClick}
+      icon={icon}
+    />
   )
 }
