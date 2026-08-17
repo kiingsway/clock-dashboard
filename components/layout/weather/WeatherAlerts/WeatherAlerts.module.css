@@ -46,7 +46,7 @@
 .stripe {
   width: 4px;
   flex-shrink: 0;
-  background: var(--wc-severity);
+  background: var(--wc-accent);
 }
 
 .title {
@@ -108,8 +108,8 @@
   width: 6px;
   height: 6px;
   border-radius: var(--wc-radius-full);
-  background: var(--wc-severity);
-  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--wc-severity) 70%, transparent);
+  background: var(--wc-accent);
+  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--wc-accent) 70%, transparent);
 }
 
 .modalList {

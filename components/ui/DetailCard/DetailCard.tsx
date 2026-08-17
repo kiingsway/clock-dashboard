@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { PropsWithChildren, ReactNode } from "react";
 import styles from "./DetailCard.module.css";
 
 export interface DetailCardProps {
@@ -12,6 +12,7 @@ export interface DetailCardProps {
   description?: ReactNode;
   className?: string;
   textColor?: string;
+  onClick?: () => void;
   onDoubleClick?: () => void;
 }
 
@@ -26,13 +27,15 @@ export interface DetailCardProps {
  * un-broken square (just visually blank), so a card with missing data
  * never collapses the grid or throws.
  */
-export function DetailCard({ title, icon, bigText, textColor, description, className, onDoubleClick }: DetailCardProps) {
+export function DetailCard({ title, icon, bigText, textColor, description, className, children, onClick, onDoubleClick }: PropsWithChildren<DetailCardProps>) {
   const center = icon ?? bigText;
 
   return (
-    <div className={[styles.card, className].filter(Boolean).join(" ")} onDoubleClick={onDoubleClick}>
+    <div className={[styles.card, className].filter(Boolean).join(" ")} onClick={onClick} onDoubleClick={onDoubleClick}>
       {title && <span className={styles.title}>{title}</span>}
-      <div className={styles.center} style={{ color: textColor }}>{center}</div>
+      {children || (
+        <div className={styles.center} style={{ color: textColor }}>{center}</div>
+      )}
       {description && <div className={styles.description}>{description}</div>}
     </div>
   );

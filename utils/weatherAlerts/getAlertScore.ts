@@ -1,5 +1,5 @@
 import { ALERT_TYPE_ORDER, RISK_COLOR_ORDER } from "@/constants/alerts";
-import { IWeatherAlertCanadaProps } from "@/types/weatherAlerts.types";
+import { IWeatherAlertCanadaProps } from "@/types/WeatherAlerts/canada.types";
 import { DateTime } from "luxon";
 
 export default function getAlertScore(alert: IWeatherAlertCanadaProps) {

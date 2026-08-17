@@ -1,4 +1,5 @@
-import { IWeatherAlertCanada } from "@/types/weatherAlerts.types";
+import { IWeatherAlertCanada } from "@/types/WeatherAlerts/canada.types";
+
 
 export default async function fetchCanadaWeatherAlerts(
   lat: number,

@@ -6,12 +6,12 @@ import { DateTime } from "luxon";
  * into tomorrow without a full date.
  */
 export default function formatAlertUntil(
-  endTime: string,
+  endTime: string | DateTime,
   now: DateTime,
   locale: string,
   timeZone?: string
 ): string {
-  const end = DateTime.fromISO(endTime, { zone: timeZone });
+  const end = typeof endTime === 'string' ? DateTime.fromISO(endTime, { zone: timeZone }) : endTime;
   const current = now.setZone(timeZone);
 
   const sameDay = end.hasSame(current, "day");

@@ -22,28 +22,33 @@ export interface IUVIcon {
   iconDuration?: number;
 }
 
+interface WindMetric {
+  direction?: {
+    name: string;
+    src: string;
+  };
+  gusts: {
+    value: number;
+    unit: string;
+    color: string | undefined;
+    desc: string | undefined;
+  };
+  speed: {
+    value: number;
+    unit: string;
+    color: string | undefined;
+    desc: string | undefined;
+  };
+  beaufort: undefined | {
+    src: string;
+    value: BeaufortLevel;
+    duration: number;
+  };
+}
+
 export interface IWindInfo {
-  daily?: {
-    speed: number;
-    gusts: number;
-    gustsColor?: string;
-    desc: string;
-  };
-  hourly: {
-    direction: {
-      name?: string;
-      src: string;
-    };
-    beaufort?: {
-      src: string;
-      value: BeaufortLevel
-      duration: number
-    };
-    gusts?: number;
-    gustsColor?: string;
-    speed?: number;
-    desc?: string;
-  };
+  now: WindMetric;
+  day: WindMetric;
 };
 
 export type BeaufortLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;

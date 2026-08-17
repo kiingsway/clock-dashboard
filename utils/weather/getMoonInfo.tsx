@@ -148,24 +148,13 @@ function getMoonInfo({
   const progress = ((): number => {
     if (!moonrise?.isValid || !moonset?.isValid) return 0;
 
-    if (now >= moonset) {
-      return 1;
-    } else if (now <= moonrise) {
-      return 0;
-    } else {
-      const total = moonset.toMillis() - moonrise.toMillis();
+    if (now >= moonset) return 1;
+    if (now <= moonrise) return 0;
 
-      return total <= 0 ?
-        0
-        : Math.min(
-          1,
-          Math.max(
-            0,
-            (date.toMillis() - moonrise.toMillis()) /
-            total
-          )
-        );
-    }
+    const elapsed = now.diff(moonrise, "milliseconds").milliseconds;
+    const duration = moonset.diff(moonrise, "milliseconds").milliseconds;
+
+    return elapsed / duration;
   })();
 
   return {

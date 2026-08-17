@@ -23,6 +23,14 @@ export const LOCATION_TO_WEATHER: Record<TLocation, Omit<IWeatherLocationItem, "
     id: "New_York",
     lat: 40.0583,
     lon: -74.4057,
+    country: "US"
+  },
+  "America/Chicago": {
+    id: "Chicago",
+    lat: 40.1163,
+    lon: -88.2435,
+    province: "IL",
+    country: "US"
   },
   "America/Bogota": {
     id: "Bogota",

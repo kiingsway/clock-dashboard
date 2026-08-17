@@ -128,31 +128,17 @@ export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
     };
   }
 
-  const targetDay = date.startOf("day");
-  const today = date.startOf("day");
+  const progress = ((): number => {
+    if (!sunrise.time?.isValid || !sunset.time?.isValid) return 0;
 
-  let progress = 0;
+    if (date >= sunset.time) return 1;
+    if (date <= sunrise.time) return 0;
 
-  if (targetDay < today) {
-    progress = 1;
-  } else if (targetDay > today) {
-    progress = 0;
-  } else {
-    const total =
-      sunset.time.toMillis() - sunrise.time.toMillis();
+    const elapsed = date.diff(sunrise.time, "milliseconds").milliseconds;
+    const duration = sunset.time.diff(sunrise.time, "milliseconds").milliseconds;
 
-    progress =
-      total <= 0
-        ? 0
-        : Math.min(
-          1,
-          Math.max(
-            0,
-            (date.toMillis() - sunrise.time.toMillis()) /
-            total
-          )
-        );
-  }
+    return elapsed / duration;
+  })();
 
   return {
     start: sunrise.time,

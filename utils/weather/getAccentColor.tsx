@@ -1,19 +1,28 @@
 import { IWeatherCurrent, WeatherCategory } from "@/types/weather.types";
+import getWeatherCategory from "./getWeatherCategory";
 
 type GetAccentProps =
   | {
+    weatherCode: number;
+    category?: never;
+    categoryName?: never;
+    isDay?: IWeatherCurrent["is_day"] | boolean;
+  }
+  | {
+    weatherCode?: never;
     category: WeatherCategory;
     categoryName?: never;
     isDay?: IWeatherCurrent["is_day"] | boolean;
   }
   | {
+    weatherCode?: never;
     category?: never;
     categoryName: WeatherCategory["name"];
     isDay?: IWeatherCurrent["is_day"] | boolean;
   };
 
-export function getAccent({ isDay = true, categoryName: cName, category }: GetAccentProps): string {
-  const categoryName = cName || category.name;
+export function getAccent({ isDay = true, categoryName: cName, category, weatherCode }: GetAccentProps): string {
+  const categoryName = cName || category?.name || getWeatherCategory(weatherCode).name;
   if (!categoryName) return "#6b7280";
   return getAccentColor(categoryName, typeof isDay === 'boolean' ? isDay : isDay !== 0);
 }

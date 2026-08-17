@@ -4,11 +4,15 @@ import { IWeather } from '@/types/weather.types';
 import { DateTime } from 'luxon';
 import WeatherIcon from '../WeatherIcon';
 import { useTranslation } from 'react-i18next';
-import getWindInfo, { WindData } from '@/utils/weather/getWindInfo';
+import getWindInfo from '@/utils/weather/getWindInfo';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
+import { IWindInfo } from '@/types/weatherInfo.types';
+import WindGustsGauge from '../Gauges/WindGustsGauge';
+import { WIND_GUSTS_COLORS } from '@/constants/wind';
+import useBoolean from '@/hooks/useBoolean';
 
 type WindProps = {
-  windInfo: WindData;
+  windInfo: IWindInfo;
 
   weather?: never;
   date?: never;
@@ -28,8 +32,8 @@ export type Props = (WindProps | WeatherProps) & {
 
 export default function WindWidget({ windInfo: windInfoProps, date, weather, miniCard, size = 120 }: Props) {
   const { t } = useTranslation();
+  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
 
-  // Mudar para windInfo depois
   const windInfo = windInfoProps || getWindInfo(weather, date, t);
   if (!windInfo) return null;
 
@@ -41,7 +45,7 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
     return (
       <MiniCard
         title={`${t('windSpeed')}: ${now.speed} - ${t('windGusts')}: ${now.gusts}`}
-        desc={now.speedDesc}
+        desc={now.speed.desc}
         onDoubleClick={onDebugClick}
         size={size}
         icons={[
@@ -64,12 +68,14 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
     )
   }
 
+  const colorArray = WIND_GUSTS_COLORS.map(w => w.hex);
+
   return (
     <>
       <DetailCard
         onDoubleClick={onDebugClick}
         title={t('windSpeed')}
-        description={now.speedDesc}
+        description={now.speed.desc}
         icon={now.beaufort?.src && now.direction?.src && (
           <>
             <WeatherIcon
@@ -90,12 +96,25 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
         )}
       />
 
-      {now.gusts && <DetailCard
-        title={t('windGusts')}
-        textColor={now.gustsColor}
-        bigText={now.gusts}
-        description={t('averageSpeedForDay', { speed: day.gusts })}
-      />}
+      {now.gusts && (
+        <DetailCard
+          title={t('windGusts')}
+          textColor={now.gusts.color}
+          bigText={`${now.gusts.value} ${now.gusts.unit}`}
+          description={t('averageSpeedForDay', { speed: day.gusts.value + day.gusts.unit })}
+          onClick={toggleGauge}
+        >
+          {gaugeShowing && (
+            <WindGustsGauge
+              value={now.gusts.value}
+              unit={now.gusts.unit}
+              mean={day.gusts.value}
+              colors={colorArray}
+              max={140}
+            />
+          )}
+        </DetailCard>
+      )}
     </>
   )
 }

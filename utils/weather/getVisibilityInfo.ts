@@ -1,6 +1,6 @@
 import { IWeather } from "@/types/weather.types";
-import { hexToRgb, lerp } from "../formatters/textFormatters";
-import { getCurrentHourlyValue } from "../formatters/getValueByArray";
+import { formatLocaleNumber, hexToRgb, lerp } from "../formatters/textFormatters";
+import { getCurrentValue } from "../formatters/getValueByArray";
 import { DateTime } from "luxon";
 import { TFunction } from "i18next";
 
@@ -9,19 +9,20 @@ export interface IVisibilityInfo {
   title: string;
   color: string;
   desc: string;
+  unit: string;
 }
 
 export default function getVisibilityInfo(weather: IWeather, date: DateTime<boolean>, locale: string, t: TFunction): IVisibilityInfo | undefined {
 
-  const { hourly, hourly_units, timezone } = weather
+  const { hourly, hourly_units } = weather
 
-  const visibility = getCurrentHourlyValue({ date, time: hourly.time, values: hourly.visibility, timezone });
+  const visibility = getCurrentValue({ date, time: hourly.time, values: hourly.visibility });
 
-  if (!visibility) return undefined
+  if (!visibility) return undefined;
 
   const color = getVisibilityColor(visibility)
 
-  const title = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(visibility) + hourly_units.visibility;
+  const title = formatLocaleNumber(visibility, locale) + hourly_units.visibility;
 
   const percentage = getVisibilityPercentage(visibility)
 
@@ -34,7 +35,7 @@ export default function getVisibilityInfo(weather: IWeather, date: DateTime<bool
     return t("visibilityTextes.critical") + ` (${percentage}%)`;
   })();
 
-  return { value: visibility, title, color, desc }
+  return { value: visibility, title, color, desc, unit: hourly_units.visibility }
 
 }
 

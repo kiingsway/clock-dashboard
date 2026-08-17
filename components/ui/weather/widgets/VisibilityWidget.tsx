@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { DetailCard } from '../../DetailCard/DetailCard';
 import MiniCard from '../../MiniCard';
 import WeatherIcon from '../WeatherIcon';
+import { formatLocaleNumber } from '@/utils/formatters/textFormatters';
 
 interface Props {
   weather: IWeather;
@@ -20,25 +21,30 @@ export default function VisibilityWidget({ date, weather, size = 60, miniCard }:
 
   if (!visibility) return null;
 
-  if (miniCard) {
-    return (
-      <MiniCard
-        title={`${t('visibility')}: ${visibility.title}`}
-        desc={visibility.desc}
-        onDoubleClick={() => console.info('Visibility:', visibility)}
-        icon={(
-          <WeatherIcon iconName="rainbow-clear" size={size} />
-        )}
-      />
-    )
-  }
+  const formattedVisibility = (() => {
+    const { value, unit } = visibility;
+    if (value < 1000) return `${formatLocaleNumber(value, locale)} ${unit}`;
+    return `${formatLocaleNumber(value / 1000, locale)} k${unit}`
+  })();
+
+  const onDebugClick = () => console.info('Visibility:', visibility);
+
+  if (miniCard) return (
+    <MiniCard
+      title={`${t('visibility')}: ${formattedVisibility}`}
+      desc={visibility.desc}
+      onDoubleClick={onDebugClick}
+      icon={<WeatherIcon iconName="rainbow-clear" size={size} />}
+    />
+  );
 
   return (
     <DetailCard
       title={t('visibility')}
-      bigText={visibility.title}
+      bigText={formattedVisibility}
       textColor={visibility.color}
       description={visibility.desc}
+      onDoubleClick={onDebugClick}
     />
   )
 }

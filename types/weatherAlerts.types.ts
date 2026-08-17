@@ -1,33 +1,40 @@
-/**
- * Subset of `IWeatherAlert["alerts"][number]["properties"]` (Environment
- * Canada's weather-alerts API) that `WeatherAlertCard` actually reads.
- * You already have the full `IWeatherAlert` type — this isn't meant to
- * replace it, just to type the single `properties` object the card takes as
- * a prop. Your real object has more fields than this; TypeScript is fine
- * with that since it only checks that the ones listed here are present.
- */
-export interface IWeatherAlertCanadaProps {
+import { DateTime } from "luxon";
+import { IWeatherCountry } from "./location.types";
+import { CanadaAlertType } from "./WeatherAlerts/canada.types";
+import { NWSSeverity } from "./WeatherAlerts/usa.types";
+import { WEATHER_ALERT_PROVIDERS } from "@/constants/alerts";
+
+export interface IWeatherAlert {
+  country: IWeatherCountry;
   id: string;
-  alert_type: string;
-  alert_name_en: string;
-  alert_short_name_en: string;
-  alert_text_en: string;
-  feature_name_en: string;
-  /** Environment Canada's risk colour, e.g. "Red" / "Orange" / "Yellow" / "Grey". */
-  risk_colour_en: string;
-  confidence_en: string;
-  impact_en: string;
-  status_en: string;
-  /** ISO 8601 — when the event itself is expected to end. */
-  event_end_datetime: string;
+  title: string;
+  status: CanadaAlertType | NWSSeverity;
+  shortTitle: string;
+  description: string;
+  expires: DateTime;
+  location: string;
+  color: string;
+  descriptions: { label: string, value: string }[];
+  properties: { label: string, value: string }[];
 }
 
-export interface IWeatherAlertCanada {
-  id: string
-  type: string
-  properties: IWeatherAlertCanadaProps
-  geometry: {
-    type: string
-    coordinates: number[][][]
-  }
+export interface WeatherAlertRequestParams {
+  lat: number;
+  lon: number;
+  radiusKm: number;
+}
+
+export interface WeatherAlertProvider<TRaw = unknown> {
+  /** Monta a URL da rota interna (/api/weather-alerts/...) para esse país */
+  buildUrl: (params: WeatherAlertRequestParams) => string;
+  /** Converte a resposta bruta da API do país pro formato comum IWeatherAlert */
+  mapper: (raw: TRaw | undefined) => IWeatherAlert[];
+}
+
+export type WeatherAlertCountryCode = keyof typeof WEATHER_ALERT_PROVIDERS;
+
+export function isSupportedWeatherAlertCountry(
+  country: string
+): country is WeatherAlertCountryCode {
+  return country in WEATHER_ALERT_PROVIDERS;
 }

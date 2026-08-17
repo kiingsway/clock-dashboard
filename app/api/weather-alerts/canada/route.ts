@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { DateTime } from "luxon";
-import { IWeatherAlertCanada } from "@/types/weatherAlerts.types";
+import { IWeatherAlertCanada } from "@/types/WeatherAlerts/canada.types";
 
 interface WeatherAlert {
   properties: {

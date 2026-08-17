@@ -26,3 +26,7 @@ export function capitalizeWords(text: string): string {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
+
+export function formatLocaleNumber(n: number, locale: string) {
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(n);
+}

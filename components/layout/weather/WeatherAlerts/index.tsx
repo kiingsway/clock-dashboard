@@ -1,16 +1,15 @@
 import useBoolean from "@/hooks/useBoolean";
-import { IWeatherAlertCanada } from "@/types/weatherAlerts.types";
 import { useTranslation } from "react-i18next";
 import styles from './WeatherAlerts.module.css'
-import { capitalizeWords } from "@/utils/formatters/textFormatters";
 import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
-import sortWeatherAlerts from "@/utils/weatherAlerts/sortWeatherAlerts";
-import { WeatherAlertCard } from "@/components/ui/weather/WeatherAlertCard/WeatherAlertCard";
+import { sortWeatherAlerts2 } from "@/utils/weatherAlerts/sortWeatherAlerts";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
+import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts";
+import WeatherAlertCard2 from "@/components/ui/weather/WeatherAlertCard2";
 
 interface Props {
-  alerts: IWeatherAlertCanada[];
+  alerts: UseWeatherAlerts['data']
   timeZone?: string;
 }
 
@@ -21,25 +20,27 @@ interface Props {
  * only one alert would be overkill, so with a single alert it renders the
  * card directly, no wrapper chrome.
  */
-export default function WeatherAlerts({ alerts }: Props) {
+export default function WeatherAlerts({ alerts: alertsProps }: Props) {
   const { t } = useTranslation();
 
   const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean()
 
   const portalContainer = usePortalContainer();
 
-  if (alerts.length === 0) return null;
+  const alerts = alertsProps?.mapped || [];
 
-  const worstAlerts = sortWeatherAlerts(alerts);
+  const onDebugClick = (): void => console.info('Alerts:', alertsProps)
 
-  const riskColors = [... new Set(worstAlerts.map(wa => getSeverityColor(wa.properties.risk_colour_en)))].reverse()
+  if (!alerts?.length) return <></>;
+
+  const worstAlerts = sortWeatherAlerts2(alerts);
+
+  const riskColors = [... new Set(worstAlerts.map(wa => getSeverityColor(wa.color)))].reverse()
   const worstColor = riskColors.at(-1);
 
-  const titles = [...new Set(worstAlerts.map(a => capitalizeWords(a.properties.alert_short_name_en || a.properties.alert_name_en)))]
-  const title = titles.length === 1 ? capitalizeWords(worstAlerts[0].properties.alert_name_en) : titles[0]
+  const titles = [...new Set(worstAlerts.map(a => a.title))]
+  const title = titles.length === 1 ? worstAlerts[0].title : titles[0]
   const titlePlus = titles.length > 1 ? ` + ${titles.length - 1}` : ''
-
-  const onDebugClick = (): void => console.info('Alerts:', alerts)
 
   return (
     <>
@@ -54,11 +55,11 @@ export default function WeatherAlerts({ alerts }: Props) {
         container={portalContainer}
       >
         <div className={styles.modalList} onDoubleClick={onDebugClick}>
-          {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert.properties} autoExpand={alerts.length === 1} />)}
+          {worstAlerts.map(alert => <WeatherAlertCard2 key={alert.id} alert={alert} autoExpand={alerts.length === 1} />)}
         </div>
       </BottomSheet>
 
-      <div className={styles.main} style={{ ["--wc-severity" as string]: worstColor }} onClick={openModal}>
+      <div className={styles.main} style={{ ["--wc-accent" as string]: worstColor }} onClick={openModal}>
         <div className={styles.stripe} aria-hidden="true" />
         <div className={styles.body}>
           <div className={styles.bodyLeft}>
@@ -67,16 +68,16 @@ export default function WeatherAlerts({ alerts }: Props) {
           </div>
 
           <span className={styles.typeTag}>
-            {riskColors.map(rc => <span key={rc} style={{ ["--wc-severity" as string]: rc }} className={styles.typeDot} aria-hidden="true" />)}
+            {riskColors.map(rc => <span key={rc} style={{ ["--wc-accent" as string]: rc }} className={styles.typeDot} aria-hidden="true" />)}
             <span>{alerts.length > 1 ?
               `${alerts.length} ${t('alerts')}`
               :
-              worstAlerts[0].properties.alert_type
+              worstAlerts[0].status
             }</span>
           </span>
 
         </div>
       </div>
     </>
-  )
+  );
 }

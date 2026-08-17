@@ -8,7 +8,7 @@ import styles from "./SettingsSheet.module.css";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon } from "./Icons";
 import { ALERT_RADIUS_KM } from "@/constants/alerts";
-import { LOCATION_OPTIONS } from "@/constants/locations";
+import { LOCATION_OPTIONS, LOCATION_TO_WEATHER } from "@/constants/locations";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import Alert from "@/components/ui/Alert";
@@ -58,6 +58,8 @@ export function SettingsSheet({
   const updatedAtHour = updatedAt
     ? DateTime.fromISO(updatedAt, { zone: location }).toFormat("HH:mm")
     : "--:--";
+
+  const loc = LOCATION_TO_WEATHER[location];
 
   return (
     <BottomSheet
@@ -120,7 +122,7 @@ export function SettingsSheet({
           />
         </SettingsSection>
 
-        <SettingsSection title={t("settingsTexts.alerts.title")}>
+        <SettingsSection title={t("settingsTexts.alerts.title")} hide={loc.country !== "CA"}>
           <SettingRow
             icon={<RadiusIcon />}
             title={t("settingsTexts.alerts.radius.title")}
@@ -179,7 +181,8 @@ export function SettingsSheet({
 
 // --- Presentational helpers ------------------------------------------------
 
-function SettingsSection({ title, children }: { title: string; children: React.ReactNode }) {
+function SettingsSection({ title, hide, children }: { title: string; hide?: boolean; children: React.ReactNode }) {
+  if (hide) return <></>;
   return (
     <section className={styles.section}>
       <h3 className={styles.sectionTitle}>{title}</h3>

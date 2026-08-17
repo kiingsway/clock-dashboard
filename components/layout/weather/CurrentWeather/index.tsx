@@ -1,24 +1,23 @@
-import { IDaily, IWeather, IWeatherCurrent, IWeatherUnits, WeatherCategory } from "@/types/weather.types"
+import { IDaily, IWeather, IWeatherCurrent, IWeatherUnits } from "@/types/weather.types"
 import { useTranslation } from "react-i18next"
 import styles from './CurrentWeather.module.css'
 import getWeatherCategory from "@/utils/weather/getWeatherCategory"
 import { getSunWindow } from "@/utils/weather/getSunWindow"
-import { IWeatherAlertCanada } from "@/types/weatherAlerts.types"
 import CurrentWeatherIcon from "@/components/ui/weather/CurrentWeatherIcon"
 import CurrentFeelsLike from "@/components/ui/weather/CurrentFeelsLike"
 import CurrentTemperature from "@/components/ui/weather/CurrentTemperature"
 import WeatherAlerts from "@/components/layout/weather/WeatherAlerts"
-import { getCurrentValue } from "@/utils/formatters/getValueByArray"
+import { getCurrentIndex } from "@/utils/formatters/getValueByArray"
 import { useAutoToggle } from "@/hooks/useAutoToggle"
 import SunProgressBar from "@/components/ui/weather/SunProgressBar"
 import { useNow } from "@/contexts/NowContext"
+import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts"
 
 interface Props {
   weather: IWeather | undefined
   loading: boolean
   error: unknown
-  weatherCategory: WeatherCategory
-  alerts: IWeatherAlertCanada[]
+  alerts: UseWeatherAlerts['data']
 }
 
 /**
@@ -58,8 +57,9 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
 
   const isDay = current.is_day !== 0;
 
-  const todayMin = getCurrentValue({ date: now, time: daily.time, values: daily.temperature_2m_min });
-  const todayMax = getCurrentValue({ date: now, time: daily.time, values: daily.temperature_2m_max });
+  const todayIndex = getCurrentIndex({ date: now, time: daily.time });
+  const todayMin = daily.temperature_2m_min[todayIndex];
+  const todayMax = daily.temperature_2m_max[todayIndex];
 
   const weatherCategory = getWeatherCategory(current.weather_code)
 

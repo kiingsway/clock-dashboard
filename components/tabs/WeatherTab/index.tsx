@@ -11,12 +11,15 @@ import { DailyForecast } from "@/components/layout/weather/DailyForecast";
 import WeatherWidgets from "@/components/layout/weather/WeatherWidgets";
 import { SettingsSheet } from "@/components/overlays/SettingsSheet";
 import useBoolean from "@/hooks/useBoolean";
+import { getAccent } from "@/utils/weather/getAccentColor";
 
 export default function WeatherTab() {
-  const { data: { accent, category, weather }, isLoading, error: weatherError } = useWeather();
-  const { alerts, error: alertsError } = useWeatherAlerts();
+  const { weather, isLoading, error: weatherError } = useWeather();
+  const { data: alerts, error: alertsError } = useWeatherAlerts();
   const { focus, toggleFocus } = useFocusMode({ onFocus: 12000, offFocus: 60000 });
   const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
+
+  const accent = getAccent({ weatherCode: weather?.current.weather_code ?? -1, isDay: weather?.current.is_day === 1 });
 
   return (
     <>
@@ -35,7 +38,6 @@ export default function WeatherTab() {
 
           <CurrentWeather
             weather={weather}
-            weatherCategory={category}
             alerts={alerts}
             loading={isLoading}
             error={weatherError || alertsError}

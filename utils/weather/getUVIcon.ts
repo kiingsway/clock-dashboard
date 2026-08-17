@@ -8,9 +8,10 @@ import { TFunction } from "i18next";
 const getUvSrc = (uv?: number): string => {
   let name: string = 'uv-index';
   if (uv) {
-    const uvInRange = Math.min(Math.max(uv, 1), 12);
-    if (uvInRange >= 12) name = `uv-index-11-plus`
-    else name = `uv-index-${uv}`
+    const uvInRange = Math.min(Math.max(Math.round(uv), 1), 12);
+    if (uvInRange > 11) name = `uv-index-11-plus`;
+    else if (uvInRange > 0 && uvInRange < 0) name = `uv-index-1`;
+    else name = `uv-index-${uvInRange}`;
   }
   return `${ICON_BASE_URI}${name}.svg`
 }
@@ -36,7 +37,7 @@ export default function getUVIcon({ weather, date, kind, t }: GetUVIconProps): I
     });
 
     if (!isHourlyDay) return {
-      alt: `UV Index: 0 (night)`,
+      alt: `${t('uvIndex')}: 0 (${t('night')})`,
       src: `${ICON_BASE_URI}${ICON_FILES.clearNight}.svg`,
       desc: t('uvIndexes.noUvIndex')
     }
@@ -46,8 +47,8 @@ export default function getUVIcon({ weather, date, kind, t }: GetUVIconProps): I
 
   if (typeof uvNumber !== 'number') return undefined
 
+  const uvIcon = getUvSrc(uvNumber)
   const uvIndex = Math.round(uvNumber)
-  const uvIcon = getUvSrc(uvIndex)
 
   const desc = (() => {
     if (uvIndex <= 2) return t('uvIndexes.low');

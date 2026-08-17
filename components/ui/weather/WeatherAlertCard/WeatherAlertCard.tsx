@@ -3,12 +3,12 @@ import { useTranslation } from "react-i18next";
 import useBoolean from "@/hooks/useBoolean";
 import { TbMapPin } from "react-icons/tb";
 import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
-import { IWeatherAlertCanadaProps } from "@/types/weatherAlerts.types";
 import formatAlertUntil from "@/utils/weatherAlerts/formatAlertUntil";
 import AlertCardHeader from "./AlertCardHeader";
 import { capitalizeWords } from "@/utils/formatters/textFormatters";
 import { Badge } from "../../Badge";
 import { useNow } from "@/contexts/NowContext";
+import { IWeatherAlertCanadaProps } from "@/types/WeatherAlerts/canada.types";
 
 export interface WeatherAlertCardProps {
   alert: IWeatherAlertCanadaProps;
@@ -25,7 +25,7 @@ export interface WeatherAlertCardProps {
 const COLLAPSED_CHARS = 90;
 
 /**
- * A single weather alert. The severity color (from `risk_colour_en`) shows
+ * A single weather  The severity color (from `risk_colour_en`) shows
  * up as a left edge stripe and the title color — never as the whole card
  * background, so a red alert doesn't read as more alarming than it is on a
  * screen that's otherwise deliberately dim and dark. Title falls back to
@@ -36,14 +36,27 @@ const COLLAPSED_CHARS = 90;
 export function WeatherAlertCard({ alert, timezone: timezone, autoExpand }: WeatherAlertCardProps) {
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
-  const [expanded, { toggle: toggleExpand }] = useBoolean(autoExpand)
+  const [expanded, { toggle: toggleExpand }] = useBoolean(autoExpand);
   const showMore = (): void => autoExpand ? undefined : toggleExpand();
 
-  const severityColor = getSeverityColor(alert.risk_colour_en);
-  const title = capitalizeWords(alert.alert_name_en || alert.alert_short_name_en);
-  const until = formatAlertUntil(alert.event_end_datetime, now, locale, timezone);
+  const {
+    alert_name_en,
+    alert_short_name_en,
+    alert_text_en,
+    alert_type,
+    confidence_en,
+    event_end_datetime,
+    feature_name_en,
+    impact_en,
+    risk_colour_en,
+    status_en
+  } = alert;
 
-  const text = alert.alert_text_en?.trim() ?? "";
+  const severityColor = getSeverityColor(risk_colour_en);
+  const title = capitalizeWords(alert_name_en || alert_short_name_en);
+  const until = formatAlertUntil(event_end_datetime, now, locale, timezone);
+
+  const text = alert_text_en?.trim() ?? "";
   const isLong = text.length > COLLAPSED_CHARS;
   const shownText = autoExpand || expanded || !isLong ? text : `${text.slice(0, COLLAPSED_CHARS).trimEnd()}…`;
 
@@ -58,32 +71,32 @@ export function WeatherAlertCard({ alert, timezone: timezone, autoExpand }: Weat
 
         <div className={styles.body}>
           <AlertCardHeader
-            alertType={alert.alert_type}
+            alertType={alert_type}
             title={title}
             until={until} />
 
-          {alert.feature_name_en && (
+          {feature_name_en && (
             <Badge size="sm" variant="ghost" icon={<TbMapPin />} className={styles.badge}>
-              {alert.feature_name_en}
+              {feature_name_en}
             </Badge>
           )}
 
-          {(alert.status_en || alert.confidence_en || alert.impact_en) && (autoExpand || expanded) && (
+          {(status_en || confidence_en || impact_en) && (autoExpand || expanded) && (
             <div className={styles.metaRow}>
 
-              {alert.status_en && (
+              {status_en && (
                 <Badge size="sm" variant="outline">
-                  {alert.status_en}
+                  {status_en}
                 </Badge>
               )}
-              {alert.confidence_en && (
+              {confidence_en && (
                 <Badge size="sm" variant="outline">
-                  {t('confidence')}: {alert.confidence_en}
+                  {t('confidence')}: {confidence_en}
                 </Badge>
               )}
-              {alert.impact_en && (
+              {impact_en && (
                 <Badge size="sm" variant="outline">
-                  {t('impact')}: {alert.impact_en}
+                  {t('impact')}: {impact_en}
                 </Badge>
               )}
             </div>
