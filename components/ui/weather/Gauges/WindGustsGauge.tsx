@@ -1,14 +1,15 @@
-import GaugeComponent from '@knowyourdeveloper/react-gauge-component';
+import GaugeComponent, { Arc, Labels, TickLabels } from '@knowyourdeveloper/react-gauge-component';
 
 interface Props {
   value: number;
-  mean: number;
+  valueColor?: string
+  mean?: number;
   unit: string;
-  colors: string[];
   max: number;
+  subArcs: { limit: number; color: string }[]
 }
 
-export default function WindGustsGauge({ value, mean, unit, colors, max }: Props) {
+export default function WindGustsGauge({ value, valueColor, mean, unit, subArcs, max }: Props) {
 
   const formatTextValue = (value: number) => value + unit;
 
@@ -19,32 +20,37 @@ export default function WindGustsGauge({ value, mean, unit, colors, max }: Props
     right: 0.11,
   }
 
+  const arc: Arc = {
+    width: 0.13,
+    padding: 0.003,
+    subArcs
+  }
+
+  const ticks: TickLabels['ticks'] = !mean ? [] : [
+    { value: mean, valueConfig: { formatTextValue: v => `Day: ${v} ${unit}` } }
+  ]
+
+  const labels: Labels = {
+    valueLabel: {
+      style: { fontSize: 40, fill: valueColor },
+      formatTextValue
+    },
+    tickLabels: {
+      type: "inner",
+      ticks,
+      defaultTickValueConfig: {
+        formatTextValue
+      }
+    }
+  }
+
   return (
     <GaugeComponent
-      key={JSON.stringify(marginInPercent)}
+      key={JSON.stringify({ marginInPercent, arc, labels, value, max })}
       type='semicircle'
       marginInPercent={marginInPercent}
-      arc={{
-        nbSubArcs: colors.length,
-        colorArray: colors,
-        width: 0.1,
-        padding: 0.003,
-      }}
-      labels={{
-        valueLabel: {
-          style: { fontSize: 40 },
-          formatTextValue
-        },
-        tickLabels: {
-          type: "inner",
-          ticks: [
-            { value: mean, valueConfig: { formatTextValue: v => `Day: ${v} ${unit}` } }
-          ],
-          defaultTickValueConfig: {
-            formatTextValue
-          }
-        }
-      }}
+      arc={arc}
+      labels={labels}
       value={value}
       maxValue={max}
     />

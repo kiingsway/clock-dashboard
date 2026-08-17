@@ -16,7 +16,7 @@ interface RainSummary {
   | 'umbrella-wind-alt';
 }
 
-export function getRainSummary(
+export default function getRainSummary(
   t: TFunction,
   {
     hoursOfRain = 0,

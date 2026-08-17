@@ -3,6 +3,7 @@ import { formatLocaleNumber, hexToRgb, lerp } from "../formatters/textFormatters
 import { getCurrentValue } from "../formatters/getValueByArray";
 import { DateTime } from "luxon";
 import { TFunction } from "i18next";
+import { MAX_VISIBILITY_METERS, MIN_VISIBILITY_METERS, VISIBILITY_COLORS } from "@/constants/visibility";
 
 export interface IVisibilityInfo {
   value: number;
@@ -48,14 +49,7 @@ export function getVisibilityColor(visibility: number): string {
   const v = Math.max(0, Math.min(10000, visibility));
 
   // Definimos os pontos de parada e suas respectivas cores (as que você gostou)
-  const stops = [
-    { value: 0, hex: "#6E5033" }, // Crítico
-    { value: 500, hex: "#9E7B56" }, // Névoa intensa
-    { value: 1000, hex: "#C4A482" }, // Baixa
-    { value: 2000, hex: "#D9C3A5" }, // Moderada
-    { value: 5000, hex: "#EADCC9" }, // Boa
-    { value: 10000, hex: "#F5F0E6" }  // Excelente
-  ];
+  const stops = VISIBILITY_COLORS
 
   // Encontra entre quais duas paradas o valor atual se encontra
   let lower = stops[0];
@@ -92,17 +86,15 @@ export function getVisibilityColor(visibility: number): string {
  * @returns Porcentagem truncada entre 0 e 100
  */
 export function getVisibilityPercentage(visibilityMeters: number): number {
-  const MIN_METERS = 1;
-  const MAX_METERS = 24140; // Teto padrão do modelo de visibilidade do Open-Meteo
 
   // Se for menor ou igual a 1 metro, a visibilidade é 0%
-  if (visibilityMeters <= MIN_METERS) return 0;
+  if (visibilityMeters <= MIN_VISIBILITY_METERS) return 0;
 
   // Se for maior ou igual ao máximo, a visibilidade é 100%
-  if (visibilityMeters >= MAX_METERS) return 100;
+  if (visibilityMeters >= MAX_VISIBILITY_METERS) return 100;
 
   // Aplica a regra de três dentro do intervalo definido
-  const percentage = ((visibilityMeters - MIN_METERS) / (MAX_METERS - MIN_METERS)) * 100;
+  const percentage = ((visibilityMeters - MIN_VISIBILITY_METERS) / (MAX_VISIBILITY_METERS - MIN_VISIBILITY_METERS)) * 100;
 
   // Retorna o número redondo para exibir direto na UI
   return Math.round(percentage);

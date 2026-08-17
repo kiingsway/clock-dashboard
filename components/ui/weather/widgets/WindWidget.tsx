@@ -68,7 +68,7 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
     )
   }
 
-  const colorArray = WIND_GUSTS_COLORS.map(w => w.hex);
+  const subArcs = WIND_GUSTS_COLORS.map(({ hex: color, value: limit }) => ({ limit, color }));
 
   return (
     <>
@@ -107,10 +107,11 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
           {gaugeShowing && (
             <WindGustsGauge
               value={now.gusts.value}
+              valueColor={now.gusts.color}
               unit={now.gusts.unit}
               mean={day.gusts.value}
-              colors={colorArray}
-              max={140}
+              subArcs={subArcs}
+              max={WIND_GUSTS_COLORS.at(-1)!.value}
             />
           )}
         </DetailCard>

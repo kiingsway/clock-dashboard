@@ -1,4 +1,4 @@
-import styles from './WeatherAlertCard2.module.scss';
+import styles from './WeatherAlertCard.module.scss';
 import { type JSX } from 'react';
 import { TbMapPin } from "react-icons/tb";
 import { Badge } from '../../Badge';
@@ -18,7 +18,7 @@ interface Props {
   autoExpand: boolean
 }
 
-export default function WeatherAlertCard2({ alert, autoExpand }: Props): JSX.Element {
+export default function WeatherAlertCard({ alert, autoExpand }: Props): JSX.Element {
   const { t, i18n: { language: locale } } = useTranslation()
   const { get: { location: timezone } } = useAppSettings()
   const { now } = useNow();

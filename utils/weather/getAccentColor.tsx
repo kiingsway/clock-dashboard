@@ -1,25 +1,32 @@
-import { IWeatherCurrent, WeatherCategory } from "@/types/weather.types";
+import { IWeatherCurrent, WeatherCategory, WeatherCategoryName } from "@/types/weather.types";
 import getWeatherCategory from "./getWeatherCategory";
 
-type GetAccentProps =
-  | {
-    weatherCode: number;
-    category?: never;
-    categoryName?: never;
-    isDay?: IWeatherCurrent["is_day"] | boolean;
-  }
-  | {
-    weatherCode?: never;
-    category: WeatherCategory;
-    categoryName?: never;
-    isDay?: IWeatherCurrent["is_day"] | boolean;
-  }
-  | {
-    weatherCode?: never;
-    category?: never;
-    categoryName: WeatherCategory["name"];
-    isDay?: IWeatherCurrent["is_day"] | boolean;
-  };
+interface InitialProps {
+  isDay?: IWeatherCurrent["is_day"] | boolean;
+}
+
+interface WeatherCodeProps {
+  weatherCode: number;
+
+  category?: never;
+  categoryName?: never;
+}
+
+interface CategoryProps {
+  category: WeatherCategory;
+
+  weatherCode?: never;
+  categoryName?: never;
+}
+
+interface CategoryNameProps {
+  categoryName: WeatherCategoryName;
+
+  weatherCode?: never;
+  category?: never;
+}
+
+type GetAccentProps = (WeatherCodeProps | CategoryProps | CategoryNameProps) & InitialProps;
 
 export function getAccent({ isDay = true, categoryName: cName, category, weatherCode }: GetAccentProps): string {
   const categoryName = cName || category?.name || getWeatherCategory(weatherCode).name;
@@ -32,7 +39,7 @@ export function getAccent({ isDay = true, categoryName: cName, category, weather
  * ambient glow behind the current-weather icon. Day/night shifts a few of
  * these (clear, fog) since the mood genuinely changes; the rest stay stable.
  */
-export default function getAccentColor(categoryName: WeatherCategory['name'], isDay: boolean): string {
+export default function getAccentColor(categoryName: WeatherCategoryName, isDay: boolean): string {
   switch (categoryName) {
     case "clear":
       return isDay ? "#f4b860" : "#8695f0"; // Sol quente / Céu estrelado azulado

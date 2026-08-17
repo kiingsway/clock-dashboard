@@ -32,7 +32,7 @@ export function DailyForecast({ weather }: DailyForecastProps) {
     else closeDaily()
   }
 
-  const { daily, daily_units, timezone } = weather;
+  const { daily, timezone } = weather;
 
   if (daily.time.length === 0) return null;
 
@@ -56,25 +56,24 @@ export function DailyForecast({ weather }: DailyForecastProps) {
   return (
     <section className={styles.section} aria-label={t("nextDays")} onDoubleClick={onDebugClick}>
 
-      <DailySheet
-        weather={weather}
-        open={dailySheetOpen}
-        onClose={closeDaily}
-        index={expandedIndex}
-      />
+      {dailySheetOpen && (
+        <DailySheet
+          weather={weather}
+          open={dailySheetOpen}
+          onClose={closeDaily}
+          index={expandedIndex}
+        />
+      )}
 
       <ul className={styles.list}>
         {forecastIndexes.map((i) => (
           <ForecastDay
             key={daily.time[i]}
-            daily={daily}
-            dailyUnits={daily_units}
-            timezone={timezone}
+            weather={weather}
             weekMin={weekMin}
             weekMax={weekMax}
             today={today}
             index={i}
-            expandedIndex={-1}
             setExpandedIndex={onExpandedIndexChange} />
         ))}
       </ul>

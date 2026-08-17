@@ -7,7 +7,7 @@ export const WIND_SPEED_COLORS = [
   { value: 55, hex: "#FF7043" },  // Muito forte
   { value: 70, hex: "#D32F2F" },  // Severo
   { value: 90, hex: "#6A1B9A" },  // Extremo
-];
+] as const;
 
 export const WIND_GUSTS_COLORS = [
   { value: 0, hex: "#E0F2F1" },   // Sem rajadas relevantes
@@ -18,4 +18,4 @@ export const WIND_GUSTS_COLORS = [
   { value: 100, hex: "#FF7043" }, // Muito forte
   { value: 120, hex: "#D32F2F" }, // Severa
   { value: 140, hex: "#6A1B9A" }, // Extrema
-];
+] as const;

@@ -12,7 +12,8 @@ import { useAutoToggle } from "@/hooks/useAutoToggle"
 import SunProgressBar from "@/components/ui/weather/SunProgressBar"
 import { useNow } from "@/contexts/NowContext"
 import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts"
-import { JSX } from "react/jsx-runtime"
+import { JSX } from "react"
+import InfoPill, { InfoPillProps } from "@/components/ui/weather/InfoPill"
 
 interface Props {
   weather: IWeather | undefined
@@ -28,7 +29,7 @@ interface Props {
  * gotten. Values and units are rendered exactly as given — no conversion
  * happens in this component.
  */
-export function CurrentWeather({ weather, loading, error, alerts }: Props) {
+export function CurrentWeather({ weather, loading, error, alerts }: Props): JSX.Element {
   const { t } = useTranslation();
   const { now } = useNow();
 
@@ -56,7 +57,7 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
     temperature_2m_min: [0],
   } as IDaily;
 
-  const isDay = current.is_day !== 0;
+  const isDay = current.is_day === 1;
 
   const todayIndex = getCurrentIndex({ date: now, time: daily.time });
   const todayMin = daily.temperature_2m_min[todayIndex];
@@ -87,7 +88,7 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
     if (loading || error) return {
       info1: {
         label: t('status'),
-        value: loading ? 'Loading...' : error ? String(error) : 'Unknwon status'
+        value: loading ? 'Loading...' : error ? String(error) : 'Unknwon status (no loading, no errors)'
       }
     }
 
@@ -130,40 +131,5 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
       {sunWindow && <SunProgressBar sunWindow={sunWindow} includeNight />}
 
     </section>
-  );
-}
-
-type TInfoPill = {
-  label: string;
-  value: string;
-  title?: string;
-  onClick?: () => void;
-};
-
-interface InfoPillProps {
-  info1?: TInfoPill
-  info2?: TInfoPill
-}
-
-const InfoPill = ({ info1, info2 }: InfoPillProps): JSX.Element => {
-
-  if (!info1 && !info2) return <></>;
-
-  return (
-    <dl className={styles.statRow}>
-      {info1 && (
-        <div className={styles.stat} title={info1.title} onClick={info1.onClick}>
-          <dt>{info1.label}</dt>
-          <dd>{info1.value}</dd>
-        </div>
-      )}
-      {info1 && info2 && <div className={styles.statDivider} aria-hidden="true" />}
-      {info2 && (
-        <div className={styles.stat} title={info2.title} onClick={info2.onClick}>
-          <dt>{info2.label}</dt>
-          <dd>{info2.value}</dd>
-        </div>
-      )}
-    </dl>
   );
 }

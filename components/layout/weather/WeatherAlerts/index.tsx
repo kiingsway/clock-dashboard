@@ -2,11 +2,11 @@ import useBoolean from "@/hooks/useBoolean";
 import { useTranslation } from "react-i18next";
 import styles from './WeatherAlerts.module.css'
 import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
-import { sortWeatherAlerts2 } from "@/utils/weatherAlerts/sortWeatherAlerts";
+import sortWeatherAlerts from "@/utils/weatherAlerts/sortWeatherAlerts";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
 import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts";
-import WeatherAlertCard2 from "@/components/ui/weather/WeatherAlertCard2";
+import WeatherAlertCard from "@/components/ui/weather/WeatherAlertCard";
 
 interface Props {
   alerts: UseWeatherAlerts['data']
@@ -33,7 +33,7 @@ export default function WeatherAlerts({ alerts: alertsProps }: Props) {
 
   if (!alerts?.length) return <></>;
 
-  const worstAlerts = sortWeatherAlerts2(alerts);
+  const worstAlerts = sortWeatherAlerts(alerts);
 
   const riskColors = [... new Set(worstAlerts.map(wa => getSeverityColor(wa.color)))].reverse()
   const worstColor = riskColors.at(-1);
@@ -55,7 +55,7 @@ export default function WeatherAlerts({ alerts: alertsProps }: Props) {
         container={portalContainer}
       >
         <div className={styles.modalList} onDoubleClick={onDebugClick}>
-          {worstAlerts.map(alert => <WeatherAlertCard2 key={alert.id} alert={alert} autoExpand={alerts.length === 1} />)}
+          {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert} autoExpand={alerts.length === 1} />)}
         </div>
       </BottomSheet>
 

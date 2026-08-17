@@ -47,9 +47,6 @@ export default function getWeatherIconName(category: WeatherCategory, isDay: boo
   return category ? map[category.name] : unknownIcon;
 }
 
-
-
-
 interface GetWeatherIconUrlIconName {
   category?: never
   isDay?: never;

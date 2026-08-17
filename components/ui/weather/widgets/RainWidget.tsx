@@ -1,6 +1,6 @@
 import MiniCard from '@/components/ui/MiniCard'
 import WeatherIcon from '../WeatherIcon';
-import { getRainSummary } from '@/utils/weather/getRainSummary';
+import getRainSummary from '@/utils/weather/getRainSummary';
 import { useTranslation } from 'react-i18next';
 
 interface Props {

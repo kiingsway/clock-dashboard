@@ -1,0 +1,72 @@
+.dayItem+.dayItem {
+  border-top: 1px solid var(--wc-hairline);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 44px 30px 34px 1fr 38px 16px;
+  align-items: center;
+  gap: var(--wc-space-lg);
+  width: 100%;
+  padding: 11px 12px;
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.weekday {
+  font-family: var(--wc-font-body);
+  font-size: var(--wc-text-xs);
+  font-weight: 600;
+  color: var(--wc-text);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+}
+
+.minLabel {
+  font-family: var(--wc-font-body);
+  font-size: var(--wc-text-xs);
+  font-weight: 500;
+  color: var(--wc-text-faint);
+  text-align: right;
+}
+
+.maxLabel {
+  font-family: var(--wc-font-body);
+  font-size: var(--wc-text-xs);
+  font-weight: 700;
+  color: var(--wc-text);
+  text-align: right;
+}
+
+.range {
+  position: relative;
+  height: 4px;
+  border-radius: var(--wc-radius-xs);
+  background: var(--wc-hairline);
+}
+
+.rangeFill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--wc-radius-xs);
+  background: linear-gradient(90deg, #4fa0e0, #f4b860);
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  color: var(--wc-text-faint);
+  transition: transform 0.2s ease;
+}
+
+.chevron[data-expanded="true"] {
+  transform: rotate(180deg);
+}

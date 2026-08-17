@@ -55,7 +55,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
   });
 
   const isToday = indexDate.hasSame(now, "day");
-  const sunDate = isToday ? indexDateWithCurrentTime : indexDate
+  const sunDate = isToday ? indexDateWithCurrentTime : indexDate;
 
   const sunWindow = getSunWindow({
     sunriseTimes: daily.sunrise,

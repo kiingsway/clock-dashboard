@@ -1,36 +1,28 @@
 import { FiChevronDown } from 'react-icons/fi';
-import DailyDetailItem from '../DailyDetailItem';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import { getAccent } from '@/utils/weather/getAccentColor';
-import getWeatherCategory from '@/utils/weather/getWeatherCategory';
-import { IDaily, IDailyUnits } from '@/types/weather.types';
-import styles from '../DailyForecast.module.css';
+import { IWeather } from '@/types/weather.types';
+import styles from './ForecastDay.module.scss';
 import WeatherIcon from '@/components/ui/weather/WeatherIcon';
 import { roundValues } from '@/utils/formatters/mathDateFormatters';
 import getForecastDateLabel from '@/utils/weather/getForecastDateLabel';
-import { getForecastDetailItems } from '@/utils/weather/getForecastDetailItems';
 import { useNow } from '@/contexts/NowContext';
 
 interface Props {
-  daily: IDaily
-  dailyUnits: IDailyUnits
-
-  timezone: string
-
+  weather: IWeather;
   weekMin: number
   weekMax: number
   today: DateTime
-
   index: number
-  expandedIndex: number | undefined
   setExpandedIndex: (i?: number) => void;
-
 }
 
-export default function ForecastDay({ daily, dailyUnits, timezone, weekMin, weekMax, today, index, expandedIndex, setExpandedIndex }: Props) {
+export default function ForecastDay({ weather, weekMin, weekMax, today, index, setExpandedIndex }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
+
+  const { daily, daily_units: dailyUnits, timezone } = weather;
 
   const unit = {
     wind: dailyUnits.wind_speed_10m_mean ?? dailyUnits.wind_gusts_10m_mean ?? "km/h",
@@ -52,12 +44,10 @@ export default function ForecastDay({ daily, dailyUnits, timezone, weekMin, week
     daily.temperature_2m_max[index],
   );
 
-  const isExpanded = expandedIndex === index;
   const indexDate = DateTime.fromISO(iso, { zone: timezone });
   const isToday = indexDate.hasSame(today, "day");
 
-  const category = getWeatherCategory(weatherCode)
-  const accent = getAccent({ category });
+  const accent = getAccent({ weatherCode });
 
   const temperatureRange = weekMax - weekMin || 1;
   const rangeStart = ((dayMin - weekMin) / temperatureRange) * 100;
@@ -65,16 +55,13 @@ export default function ForecastDay({ daily, dailyUnits, timezone, weekMin, week
 
   const dateText = isToday ? t('today') : getForecastDateLabel(now, indexDate, locale);
 
-  const detailItems = getForecastDetailItems({ daily, units: dailyUnits, index, t })
-
   return (
     <li className={styles.dayItem} style={{ ["--wc-accent" as string]: accent }}>
 
       <button
         type="button"
         className={styles.row}
-        onClick={() => setExpandedIndex(isExpanded ? undefined : index)}
-        aria-expanded={isExpanded}
+        onClick={() => setExpandedIndex(index)}
       >
         <span className={styles.weekday}>
           {dateText}
@@ -96,16 +83,8 @@ export default function ForecastDay({ daily, dailyUnits, timezone, weekMin, week
           {dayMax}
           {unit.dayMax}
         </span>
-        <FiChevronDown className={styles.chevron} data-expanded={isExpanded} aria-hidden="true" />
+        <FiChevronDown className={styles.chevron} aria-hidden="true" />
       </button>
-
-      {isExpanded && (
-        <div className={styles.details}>
-          {detailItems.map(({ key, ...itemProps }) => (
-            <DailyDetailItem key={key} {...itemProps} />
-          ))}
-        </div>
-      )}
     </li>
   );
 }
