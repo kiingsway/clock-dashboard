@@ -12,6 +12,7 @@ import { useAutoToggle } from "@/hooks/useAutoToggle"
 import SunProgressBar from "@/components/ui/weather/SunProgressBar"
 import { useNow } from "@/contexts/NowContext"
 import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts"
+import { JSX } from "react/jsx-runtime"
 
 interface Props {
   weather: IWeather | undefined
@@ -80,7 +81,32 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
     date: now,
   });
 
-  const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow })
+  const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow });
+
+  const infoPillProps = ((): InfoPillProps => {
+    if (loading || error) return {
+      info1: {
+        label: t('status'),
+        value: loading ? 'Loading...' : error ? String(error) : 'Unknwon status'
+      }
+    }
+
+    return {
+      info1: {
+        label: t('maxMin'),
+        value: `${todayMax ? Math.round(todayMax) : '-'}° / ${todayMin ? Math.round(todayMin) : '-'}°`
+      },
+      info2: showPrecip ? {
+        label: t('weather'),
+        value: weatherCategory.title,
+        onClick: () => toggleWeatherInfoMode()
+      } : {
+        label: t('precipitation'),
+        value: hasPrecipitation ? `${current.precipitation}${precipUnit}` : t('noPrecipitation'),
+        onClick: () => toggleWeatherInfoMode()
+      }
+    }
+  })();
 
   return (
     <section className={styles.current} aria-label="Clima atual" onDoubleClick={onDebugClick}>
@@ -99,44 +125,45 @@ export function CurrentWeather({ weather, loading, error, alerts }: Props) {
 
       <WeatherAlerts alerts={alerts} />
 
-      <dl className={styles.statRow}>
-        {current ? (
-          <>
-            <div className={styles.stat}>
-              <dt>{t('maxMin')}</dt>
-              <dd>
-                {todayMax ? Math.round(todayMax) : '-'}° / {todayMin ? Math.round(todayMin) : '-'}°
-              </dd>
-            </div>
-            <div className={styles.statDivider} aria-hidden="true" />
-            <div className={styles.stat} id="prec-weather" onClick={() => toggleWeatherInfoMode()}>
-              {showPrecip ? (
-                <>
-                  <dt>{t('weather')}</dt>
-                  <dd title={`Weather Code (WMO): #${current.weather_code}`}>{weatherCategory.title}</dd>
-                </>
-              ) : (
-                <>
-                  <dt>{t('precipitation')}</dt>
-                  <dd>{hasPrecipitation ? `${current.precipitation}${precipUnit}` : t('noPrecipitation')}</dd>
-                </>
-              )}
-            </div>
-          </>
-        ) : (
-          <>
-            <div className={styles.stat}>
-              <dt>{t('status')}</dt>
-              <dd style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                {loading && <>Loading... {error && <><br /><br /></>}</>}{error ? String(error) : ''}
-              </dd>
-            </div>
-          </>
-        )}
-      </dl>
+      <InfoPill {...infoPillProps} />
 
       {sunWindow && <SunProgressBar sunWindow={sunWindow} includeNight />}
 
     </section>
+  );
+}
+
+type TInfoPill = {
+  label: string;
+  value: string;
+  title?: string;
+  onClick?: () => void;
+};
+
+interface InfoPillProps {
+  info1?: TInfoPill
+  info2?: TInfoPill
+}
+
+const InfoPill = ({ info1, info2 }: InfoPillProps): JSX.Element => {
+
+  if (!info1 && !info2) return <></>;
+
+  return (
+    <dl className={styles.statRow}>
+      {info1 && (
+        <div className={styles.stat} title={info1.title} onClick={info1.onClick}>
+          <dt>{info1.label}</dt>
+          <dd>{info1.value}</dd>
+        </div>
+      )}
+      {info1 && info2 && <div className={styles.statDivider} aria-hidden="true" />}
+      {info2 && (
+        <div className={styles.stat} title={info2.title} onClick={info2.onClick}>
+          <dt>{info2.label}</dt>
+          <dd>{info2.value}</dd>
+        </div>
+      )}
+    </dl>
   );
 }

@@ -37,14 +37,14 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
   const windInfo = windInfoProps || getWindInfo(weather, date, t);
   if (!windInfo) return null;
 
-  const onDebugClick = (): void => console.info('Wind Info:', { windInfo });
+  const onDebugClick = (): void => console.info('Wind Info:', windInfo);
 
   const { day, now } = windInfo;
 
   if (miniCard) {
     return (
       <MiniCard
-        title={`${t('windSpeed')}: ${now.speed} - ${t('windGusts')}: ${now.gusts}`}
+        title={`${t('windSpeed')}: ${now.speed.value} ${now.speed.unit} - ${t('windGusts')}: ${now.gusts.value} ${now.gusts.unit}`}
         desc={now.speed.desc}
         onDoubleClick={onDebugClick}
         size={size}

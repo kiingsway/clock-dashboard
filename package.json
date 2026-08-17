@@ -1,9 +1,9 @@
 {
   "name": "clock-dashboard",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

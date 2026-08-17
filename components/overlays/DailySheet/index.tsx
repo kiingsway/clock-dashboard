@@ -19,6 +19,7 @@ import { useNow } from '@/contexts/NowContext';
 import { TFunction } from 'i18next';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import VisibilityWidget from '@/components/ui/weather/widgets/VisibilityWidget';
+import { getAccent } from '@/utils/weather/getAccentColor';
 
 interface Props {
   weather: IWeather | undefined
@@ -78,6 +79,8 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
     dailyMoon: weather.daily_moon,
   });
 
+  const accent = getAccent({ weatherCode });
+
   return (
     <BottomSheet
       open={open && typeof index === 'number'}
@@ -89,7 +92,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
       dismissible
       container={portalContainer}
     >
-      <div className={styles.main} style={{ marginBottom: 40 }}>
+      <div className={styles.main} style={{ ["--wc-accent" as string]: accent }}>
         {sunWindow && <SunProgressBar sunWindow={sunWindow} />}
 
         <CurrentWeatherWidget weatherCode={weatherCode} tempMin={tempMin} tempMax={tempMax} size={60} />

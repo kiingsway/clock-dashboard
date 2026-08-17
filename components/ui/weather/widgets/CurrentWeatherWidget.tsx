@@ -19,8 +19,7 @@ export default function CurrentWeatherWidget({ weatherCode, tempMax, tempMin, si
     <MiniCard
       title={`${category.title}`}
       desc={`${t('maxMin')}: ${Math.round(tempMax)}ºC / ${Math.round(tempMin)}ºC`}
-      icon={<WeatherIcon category={category.name} size={size} />
-      }
+      icon={<WeatherIcon category={category.name} size={size} />}
     />
   )
 }
