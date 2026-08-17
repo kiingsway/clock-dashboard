@@ -16,14 +16,15 @@ interface Props {
   endKind?: 'sunrise' | 'sunset'
   progress?: number;
   onDoubleClick?: () => void;
+  hideDate?: boolean
 }
 
-export default function EventProgress({ start, end, startKind = 'sunrise', endKind = 'sunset', progress, onDoubleClick, endIconName, startIconName }: Props) {
+export default function EventProgress({ start, end, startKind = 'sunrise', endKind = 'sunset', progress, onDoubleClick, endIconName, startIconName, hideDate }: Props) {
   return (
     <div className={styles.arc} aria-label={`${startKind} ${start?.toFormat('HH:mm')}, ${endKind} ${end?.toFormat('HH:mm')}`} onDoubleClick={onDoubleClick}>
       <div className={styles.point}>
         <ProgressIcon icon={startIconName} categoryIcon={startKind} />
-        <ProgressLabel date={start} />
+        <ProgressLabel date={start} hideDate={hideDate} />
       </div>
 
       <div className={styles.track} aria-hidden={typeof progress !== 'number'}>
@@ -37,7 +38,7 @@ export default function EventProgress({ start, end, startKind = 'sunrise', endKi
 
       <div className={styles.point}>
         <ProgressIcon icon={endIconName} categoryIcon={endKind} />
-        <ProgressLabel date={end} />
+        <ProgressLabel date={end} hideDate={hideDate} />
       </div>
     </div>
   )
@@ -65,7 +66,7 @@ const ProgressIcon = ({ icon, categoryIcon }: IconProps): JSX.Element => {
   return <WeatherIcon {...weatherIconProps} />;
 }
 
-const ProgressLabel = ({ date }: { date?: DateTime }): JSX.Element => {
+const ProgressLabel = ({ date, hideDate }: { date?: DateTime, hideDate?: boolean }): JSX.Element => {
   const { i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
 
@@ -84,7 +85,7 @@ const ProgressLabel = ({ date }: { date?: DateTime }): JSX.Element => {
 
   return (
     <>
-      {dateLabel && <span>{dateLabel}</span>}
+      {dateLabel && !hideDate && <span>{dateLabel}</span>}
       <span>{timeLabel}</span>
     </>
   );

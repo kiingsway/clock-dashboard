@@ -47,6 +47,7 @@ export default function SunProgressBar({ sunWindow: sunWindowData, weather, incl
       endKind={sunWindow.endKind}
       progress={sunWindow.progress}
       onDoubleClick={onDebugClick}
+      hideDate={includeNight}
     />
   );
 }
