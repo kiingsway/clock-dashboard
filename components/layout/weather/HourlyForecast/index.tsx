@@ -18,7 +18,7 @@ export interface HourlyForecastProps {
  */
 export function HourlyForecast({ weather, hoursToShow = 24 * 3 }: HourlyForecastProps) {
   const { t } = useTranslation();
-    const { now } = useNow();
+  const { now } = useNow();
 
   const startIndex = Math.max(
     0,
@@ -35,21 +35,7 @@ export function HourlyForecast({ weather, hoursToShow = 24 * 3 }: HourlyForecast
 
   return (
     <section className={styles.section} aria-label={t('nextHours')}>
-      <HourlyList
-        startIndex={startIndex}
-        times={weather.hourly.time}
-        weatherCodes={weather.hourly.weather_code}
-        temps={weather.hourly.temperature_2m}
-        tempUnit={weather.hourly_units.temperature_2m}
-        feelsLikes={weather.hourly.apparent_temperature}
-        feelsLikeUnit={weather.hourly_units.apparent_temperature}
-        precipitations={weather.hourly.precipitation}
-        isDays={weather.hourly.is_day}
-        latitude={weather.latitude}
-        longitude={weather.longitude}
-        timezone={weather.timezone}
-        hoursToShow={72}
-      />
+      <HourlyList startIndex={startIndex} weather={weather} hoursToShow={72} />
     </section>
   );
 }

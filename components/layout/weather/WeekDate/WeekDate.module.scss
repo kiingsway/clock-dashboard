@@ -5,12 +5,16 @@
   gap: var(--wc-space-sm);
   font-family: var(--wc-font-display);
   font-size: var(--wc-text-lg);
-  color: var(--wc-text-muted);
 }
 
 .weekday {
   font-weight: 600;
-  color: var(--wc-text);
+  color: transparent;
+  background: linear-gradient(180deg, var(--wc-text) 30%, var(--wc-text-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px var(--wc-accent-muted));
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 40%, transparent);
 }
 
 .dot {
@@ -19,4 +23,10 @@
 
 .date {
   font-weight: 500;
+  color: transparent;
+  background: linear-gradient(180deg, var(--wc-text) 0%, var(--wc-text-faint) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px var(--wc-accent-muted));
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 20%, transparent);
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { JSX, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
 import { TLocation } from "@/types/location.types";
@@ -6,12 +6,14 @@ import { APP_INFO } from "@/constants/appInfo";
 import { Badge } from "@/components/ui/Badge";
 import styles from "./SettingsSheet.module.css";
 import { BottomSheet } from "@/components/ui/BottomSheet";
-import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon } from "./Icons";
+import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon, RainCardIcon } from "./Icons";
 import { ALERT_RADIUS_KM } from "@/constants/alerts";
 import { LOCATION_OPTIONS, LOCATION_TO_WEATHER } from "@/constants/locations";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import Alert from "@/components/ui/Alert";
+import Slider from "@/components/ui/Slider";
+import { MIN_RAIN_ALERT_HOURS, MAX_RAIN_ALERT_HOURS } from "@/constants/rainDescriptions";
 
 interface Props {
   open: boolean;
@@ -19,7 +21,7 @@ interface Props {
   updatedAt?: string;
   onUpdatedAtClick?: () => void;
 
-  alertsError: unknown;
+  alertsError?: unknown;
 }
 
 /**
@@ -36,19 +38,25 @@ export function SettingsSheet({
   alertsError
 }: Props) {
   const { t, i18n } = useTranslation();
-  const { set, get: { alertRadiusKm, location } } = useAppSettings();
+  const { set, get: { alertRadiusKm, location, precipHoursRange } } = useAppSettings();
 
   const [draftRadius, setDraftRadius] = useState(alertRadiusKm);
+  const [draftPrecipHrs, setDraftPrecipHrs] = useState(precipHoursRange);
   const portalContainer = usePortalContainer(".root");
 
   // se o valor mudar por fora (ex: carregado do storage depois), sincroniza
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setDraftRadius(alertRadiusKm);
-  }, [alertRadiusKm]);
+    setDraftPrecipHrs(precipHoursRange);
+  }, [alertRadiusKm, precipHoursRange]);
 
   const commitRadius = (raw: number) => {
     if (raw !== alertRadiusKm) set.alertRadiusKm(raw);
+  };
+
+  const commitPrecipHrs = (raw: number) => {
+    if (raw !== precipHoursRange) set.precipHoursRange(raw);
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -112,6 +120,7 @@ export function SettingsSheet({
                 value={location}
                 onChange={(e) => set.location(e.target.value as TLocation)}
               >
+                {/* <option value="auto">Auto</option> */}
                 {LOCATION_OPTIONS.map((loc) => (
                   <option key={loc} value={loc}>
                     {t(`cities.${loc.split("/")[1]}`)}
@@ -122,39 +131,44 @@ export function SettingsSheet({
           />
         </SettingsSection>
 
-        <SettingsSection title={t("settingsTexts.alerts.title")} hide={loc.country !== "CA"}>
+        <SettingsSection title={t("settingsTexts.alerts.title")}>
+          <SettingRow
+            icon={<RainCardIcon />}
+            title={t('precipitationRange')}
+            description={t('precipitationRangeDescription')}
+            value={`${draftPrecipHrs} hrs`}
+            htmlFor="alertPrecipHrs"
+            control={
+              <Slider
+                id="alertPrecipHrs"
+                min={MIN_RAIN_ALERT_HOURS}
+                max={MAX_RAIN_ALERT_HOURS}
+                step={1}
+                value={draftPrecipHrs}
+                onChange={setDraftPrecipHrs}
+                onCommit={commitPrecipHrs}
+                unit="hrs"
+              />
+            }
+          />
           <SettingRow
             icon={<RadiusIcon />}
             title={t("settingsTexts.alerts.radius.title")}
             description={t("settingsTexts.alerts.radius.description")}
             value={`${draftRadius} km`}
             htmlFor="alertRadius"
+            hide={!(['CA'].includes(loc.country || ""))}
             control={
-              <div className={styles.sliderRow}>
-                <input
-                  id="alertRadius"
-                  type="range"
-                  className={styles.slider}
-                  min={ALERT_RADIUS_KM.MIN}
-                  max={ALERT_RADIUS_KM.MAX}
-                  step={ALERT_RADIUS_KM.STEP}
-                  value={draftRadius}
-                  onChange={(e) => setDraftRadius(Number(e.target.value))}
-                  onPointerUp={(e) => commitRadius(Number((e.target as HTMLInputElement).value))}
-                  onKeyUp={(e) => commitRadius(Number((e.target as HTMLInputElement).value))}
-                  onBlur={(e) => commitRadius(Number((e.target as HTMLInputElement).value))}
-                  aria-valuetext={`${draftRadius} km`}
-                  style={
-                    {
-                      "--slider-fill": `${((draftRadius - ALERT_RADIUS_KM.MIN) / (ALERT_RADIUS_KM.MAX - ALERT_RADIUS_KM.MIN)) * 100}%`,
-                    } as React.CSSProperties
-                  }
-                />
-                <div className={styles.sliderScale}>
-                  <span>{ALERT_RADIUS_KM.MIN} km</span>
-                  <span>{ALERT_RADIUS_KM.MAX} km</span>
-                </div>
-              </div>
+              <Slider
+                id="alertRadius"
+                min={ALERT_RADIUS_KM.MIN}
+                max={ALERT_RADIUS_KM.MAX}
+                step={ALERT_RADIUS_KM.STEP}
+                value={draftRadius}
+                onChange={setDraftRadius}
+                onCommit={commitRadius}
+                unit="km"
+              />
             }
           />
         </SettingsSection>
@@ -181,8 +195,8 @@ export function SettingsSheet({
 
 // --- Presentational helpers ------------------------------------------------
 
-function SettingsSection({ title, hide, children }: { title: string; hide?: boolean; children: React.ReactNode }) {
-  if (hide) return <></>;
+function SettingsSection({ title, hide, children }: { title: string; hide?: boolean; children: React.ReactNode }): JSX.Element | null {
+  if (hide) return null;
   return (
     <section className={styles.section}>
       <h3 className={styles.sectionTitle}>{title}</h3>
@@ -200,10 +214,12 @@ interface SettingRowProps {
   /** Full-width interactive control rendered below the description (select, slider, etc). */
   control?: React.ReactNode;
   htmlFor?: string;
+  hide?: boolean;
   onDoubleClick?: () => void;
 }
 
-function SettingRow({ icon, title, description, value, control, htmlFor, onDoubleClick }: SettingRowProps) {
+function SettingRow({ icon, title, description, value, control, htmlFor, hide, onDoubleClick }: SettingRowProps) {
+  if (hide) return null;
   return (
     <div className={styles.row} onDoubleClick={onDoubleClick}>
       <div className={styles.rowMain}>

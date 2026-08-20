@@ -1,0 +1,117 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wc-space-3xs);
+  font-family: var(--wc-font-body);
+  color: var(--wc-text);
+}
+
+.icon {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 24px var(--wc-accent-muted));
+}
+
+.icon svg,
+.icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.tempRow {
+  display: flex;
+  align-items: flex-start;
+  line-height: 1;
+  position: relative;
+}
+
+.temp {
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-4xl);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: transparent;
+  background: linear-gradient(180deg, var(--wc-text) 0%, var(--wc-text-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px var(--wc-accent-muted));
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 30%, transparent);
+}
+
+.unit {
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-xl);
+  font-weight: 600;
+  margin-top: var(--wc-space-sm);
+
+  color: transparent;
+  background: linear-gradient(180deg, var(--wc-text) 0%, var(--wc-text-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px var(--wc-accent-muted));
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 80%, transparent);
+}
+
+.feelsLike {
+  font-size: var(--wc-text-md);
+  color: var(--wc-text-muted);
+}
+
+.feelsLikeValue {
+  color: var(--wc-text);
+  font-weight: 600;
+}
+
+/* Min/max indicator */
+
+.rangeCard {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--wc-space-sm);
+  margin-top: 10px;
+}
+
+.rangeMax,
+.rangeMin {
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-md);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.rangeMax {
+  color: var(--wc-danger);
+}
+
+.rangeMin {
+  color: var(--wc-info);
+}
+
+.rangeTrack {
+  position: relative;
+  width: 80px;
+  /* horizontal agora, então precisa de largura fixa em vez de flex: 1 */
+  height: 4px;
+  border-radius: var(--wc-radius-full);
+  background: linear-gradient(90deg, var(--wc-info) 0%, var(--wc-text-faint) 50%, var(--wc-danger) 100%);
+}
+
+.rangeDot {
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: var(--wc-radius-full);
+  background: var(--wc-text);
+  border: 2px solid var(--wc-ink);
+  box-shadow: var(--wc-shadow-md);
+  transform: translate(-50%, -50%);
+  transition: left 0.4s ease;
+  /* volta a animar em left, não top */
+}

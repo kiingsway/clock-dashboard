@@ -4,10 +4,9 @@ import { getCurrentIndex } from "../formatters/getValueByArray";
 import getBeaufortScale from "../geo/getBeaufortScale";
 import { getCompassDirection } from "../geo/getCompassDirection";
 import { DateTime } from "luxon";
-import { hexToRgb, lerp } from "../formatters/textFormatters";
 import { TFunction } from "i18next";
 import { IWindInfo } from "@/types/weatherInfo.types";
-import { WIND_SPEED_COLORS, WIND_GUSTS_COLORS } from "@/constants/wind";
+import { getWindColor } from "./getColors";
 
 export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunction): IWindInfo {
 
@@ -49,13 +48,13 @@ export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunct
       gusts: {
         value: windGustsNow,
         unit: weather.hourly_units.wind_gusts_10m,
-        color: windColor(windGustsNow, 'gusts'),
+        color: getWindColor(windGustsNow, 'gusts'),
         desc: windGustsNowSummary
       },
       speed: {
         value: windSpeedNow,
         unit: weather.hourly_units.wind_speed_10m,
-        color: windColor(windSpeedNow, 'speed'),
+        color: getWindColor(windSpeedNow, 'speed'),
         desc: windSpeedNowSummary,
       },
     },
@@ -68,13 +67,13 @@ export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunct
       gusts: {
         value: windGustsDay,
         unit: weather.daily_units.wind_gusts_10m_mean,
-        color: windColor(windGustsDay, 'gusts'),
+        color: getWindColor(windGustsDay, 'gusts'),
         desc: undefined
       },
       speed: {
         value: windSpeedDay,
         unit: weather.daily_units.wind_speed_10m_mean,
-        color: windColor(windSpeedDay, 'speed'),
+        color: getWindColor(windSpeedDay, 'speed'),
         desc: undefined,
       },
     },
@@ -103,53 +102,6 @@ function getWindGustAnimationDuration(windGust: number): number {
   const t = (gust - MIN_GUST) / (MAX_GUST - MIN_GUST);
 
   return MAX_DURATION - t * (MAX_DURATION - MIN_DURATION);
-}
-
-type WindType = "speed" | "gusts";
-
-/**
- * Retorna uma cor baseada no impacto/percepção do vento para o ser humano.
- *
- * "speed"  → velocidade sustentada do vento.
- * "gusts"  → rajadas de vento, com limites mais altos.
- *
- * As faixas de rajadas são mais tolerantes porque uma rajada é
- * momentânea, enquanto a velocidade sustentada afeta continuamente
- * o conforto e as atividades ao ar livre.
- */
-function windColor(windKmH?: number, type: WindType = "speed"): string | undefined {
-  if (windKmH == null || !Number.isFinite(windKmH)) return undefined;
-
-  const stops = type === "speed" ? WIND_SPEED_COLORS : WIND_GUSTS_COLORS;
-
-  const max = stops[stops.length - 1].value;
-  const value = Math.max(0, Math.min(max, windKmH));
-
-  let lower = stops[0];
-  let upper = stops[stops.length - 1];
-
-  for (let i = 0; i < stops.length - 1; i++) {
-    if (value >= stops[i].value && value <= stops[i + 1].value) {
-      lower = stops[i];
-      upper = stops[i + 1];
-      break;
-    }
-  }
-
-  const range = upper.value - lower.value;
-  const factor =
-    range === 0
-      ? 0
-      : (value - lower.value) / range;
-
-  const c1 = hexToRgb(lower.hex);
-  const c2 = hexToRgb(upper.hex);
-
-  const R = Math.round(lerp(c1.r, c2.r, factor));
-  const G = Math.round(lerp(c1.g, c2.g, factor));
-  const B = Math.round(lerp(c1.b, c2.b, factor));
-
-  return `rgb(${R}, ${G}, ${B})`;
 }
 
 interface WindSummaryData {

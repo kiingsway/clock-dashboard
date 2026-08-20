@@ -10,6 +10,8 @@
     "location": "Localização",
     "updatedAt": "Atualizado em",
     "weatherUpdatedAt": "Clima atualizado em",
+    "precipitationRange": "Faixa de precipitação",
+    "precipitationRangeDescription": "Define com quantas horas de antecedência a próxima precipitação deve aparecer",
     "alert": "Alerta",
     "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
@@ -21,10 +23,14 @@
     "feelsLike": "Sensação",
     "maxMin": "Máx/Mín",
     "precipitation": "Precipitação",
+    "humidity": "Umidade",
+    "dewPoint": "Ponto de orvalho",
     "visibility": "Visibilidade",
     "noPrecipitation": "Sem chuva",
     "sunrise": "Nascer do sol",
     "sunset": "Pôr do sol",
+    "sunshine": "Sol",
+    "daylight": "Luz do dia",
     "moonrise": "Nascer da lua",
     "moonset": "Pôr da lua",
     "moon": "Lua",
@@ -44,6 +50,7 @@
       "New_York": "Nova Iorque",
       "Bogota": "Bogotá",
       "Panama": "Panamá",
+      "Panama_City": "Panamá",
       "Chicago": "Chicago",
       "Toronto": "Toronto",
       "Sao_Paulo": "São Paulo",
@@ -74,6 +81,9 @@
     "weatherTexts": {
       "rain": {
         "dry": "Seco",
+        "rain": "Chuva",
+        "snowfall": "Neve",
+        "showers": "Pancadas",
         "trace": "Gotas",
         "drizzle": "Chuvisco",
         "light": "Leve",
@@ -167,6 +177,90 @@
       "low": "Baixa. Reduza a velocidade.",
       "veryLow": "Névoa intensa. Cuidado nas estradas.",
       "critical": "Crítica. Evite deslocamentos."
+    },
+    "humidityTextes": {
+      "extremelyDry": "Extremamente seco. A pele e as vias aéreas podem ficar irritadas.",
+      "veryDry": "Muito seco. Você pode sentir ressecamento e irritação.",
+      "dry": "Seco. Um umidificador pode melhorar o conforto.",
+      "comfortable": "Confortável. A umidade está dentro de uma faixa saudável.",
+      "slightlyHumid": "Levemente úmido. O ar pode parecer mais quente.",
+      "humid": "Úmido. Você pode sentir desconforto ou pegajosidade.",
+      "veryHumid": "Muito úmido. Condensação e mofo ficam mais prováveis.",
+      "extremelyHumid": "Extremamente úmido. Espere condições opressivas e excesso de umidade."
+    },
+    "dewPointTexts": {
+      "extremelyDry": "Ar extremamente seco. A umidade é praticamente imperceptível.",
+      "veryDry": "Ar muito seco. O ar parece fresco e seco.",
+      "dryAndComfortable": "Seco e confortável. A umidade está baixa, mas geralmente agradável.",
+      "comfortable": "Confortável. O ar parece seco e agradável.",
+      "veryComfortable": "Muito confortável. A umidade é quase imperceptível.",
+      "slightlyComfortable": "Confortável, com um leve toque de umidade.",
+      "slightlyHumid": "Levemente úmido. Você pode começar a perceber um pouco de umidade no ar.",
+      "humid": "Úmido. O ar pode começar a ficar pegajoso ou desconfortável.",
+      "veryHumid": "Muito úmido. Espere condições abafadas e desconfortáveis.",
+      "oppressive": "Umidade opressiva. O ar parece extremamente abafado e pesado."
+    },
+    "daylightTextes": {
+      "veryShort": "Um dia muito curto, com muitas horas de escuridão.",
+      "short": "Um dia curto, com pouca luz do dia.",
+      "belowAverage": "Menos luz do dia do que o usual.",
+      "balanced": "Dia e noite estão quase equilibrados.",
+      "long": "Um dia longo, com muita luz do dia.",
+      "veryLong": "Um dia muito longo, com uma noite estendida.",
+      "exceptionallyLong": "Um dia excepcionalmente longo, com luz do dia durando muitas horas."
+    },
+    "sunshineTextes": {
+      "none": "Pouco ou nenhum sol. As nuvens provavelmente dominarão o dia.",
+      "veryLittle": "Muito pouco sol. Espere condições majoritariamente nubladas.",
+      "limited": "Sol limitado. O sol pode aparecer apenas ocasionalmente.",
+      "moderate": "Algum sol. Espere uma mistura de sol e nuvens.",
+      "plenty": "Muita luz do sol. O sol deve ser perceptível por grande parte do dia.",
+      "verySunny": "Um dia muito ensolarado, com longos períodos de sol.",
+      "exceptionallySunny": "Um dia excepcionalmente ensolarado, com sol quase ininterrupto."
+    },
+    "weatherConditions": {
+      "rainWind": {
+        "clear": {
+          "status": "Condições claras",
+          "description": "Condições favoráveis. Não há chuva intensa nem vento forte previsto."
+        },
+        "severeWind": {
+          "status": "Ventos severos",
+          "description": "Ventos muito fortes sem chuva. Cuidado com objetos soltos e galhos caindo."
+        },
+        "strongWind": {
+          "status": "Ventos fortes",
+          "description": "Um dia muito ventoso sem chuva. Tenha mais cuidado ao caminhar ao ar livre."
+        },
+        "moderateBreeze": {
+          "status": "Brisa moderada",
+          "description": "Ventos moderados sem chuva. As condições geralmente são confortáveis ao ar livre."
+        },
+        "heavyRain": {
+          "status": "Chuva intensa",
+          "description": "Chuva intensa com pouco vento. Leve um guarda-chuva ou roupas à prova d'água."
+        },
+        "moderateRain": {
+          "status": "Chuva moderada",
+          "description": "Chuva constante sem ventos fortes. Um guarda-chuva deve ser suficiente."
+        },
+        "lightDrizzle": {
+          "status": "Chuvisco leve",
+          "description": "Apenas um chuvisco leve com pouco vento. As condições continuam administráveis ao ar livre."
+        },
+        "storm": {
+          "status": "Condições de tempestade",
+          "description": "Chuva forte combinada com ventos muito fortes. Evite sair se possível."
+        },
+        "windDrivenRain": {
+          "status": "Chuva com vento",
+          "description": "Ventos fortes estão soprando a chuva de lado. Guarda-chuvas podem ser difíceis de usar, então é recomendável usar roupa impermeável."
+        },
+        "rainWithWind": {
+          "status": "Chuva e vento",
+          "description": "Chuva acompanhada por rajadas de vento. É recomendável usar roupa impermeável."
+        }
+      }
     }
   },
   "en": {
@@ -180,6 +274,8 @@
     "location": "Location",
     "updatedAt": "Updated at",
     "weatherUpdatedAt": "Weather updated at",
+    "precipitationRange": "Precipitation Range",
+    "precipitationRangeDescription": "Defines how many hours in advance the next precipitation should appear",
     "alert": "Alert",
     "alerts": "Alerts",
     "alert_other": "Alerts ({{count}})",
@@ -191,10 +287,14 @@
     "feelsLike": "Feels Like",
     "maxMin": "Max/Min",
     "precipitation": "Precipitation",
+    "humidity": "Humidity",
+    "dewPoint": "Dew Point",
     "visibility": "Visibility",
     "noPrecipitation": "No rain",
     "sunrise": "Sunrise",
     "sunset": "Sunset",
+    "sunshine": "Sunshine",
+    "daylight": "Daylight",
     "moonrise": "Moonrise",
     "moonset": "Moonset",
     "moon": "Moon",
@@ -214,6 +314,7 @@
       "New_York": "New York",
       "Bogota": "Bogota",
       "Panama": "Panama City",
+      "Panama_City": "Panama City",
       "Chicago": "Chicago",
       "Toronto": "Toronto",
       "Sao_Paulo": "Sao Paulo",
@@ -244,6 +345,9 @@
     "weatherTexts": {
       "rain": {
         "dry": "Dry",
+        "rain": "Rain",
+        "snowfall": "Snowfall",
+        "showers": "Showers",
         "trace": "Trace",
         "drizzle": "Drizzle",
         "light": "Light",
@@ -337,6 +441,90 @@
       "low": "Low. Reduce speed.",
       "veryLow": "Heavy fog. Use caution on the roads.",
       "critical": "Critical. Avoid travel."
+    },
+    "humidityTextes": {
+      "extremelyDry": "Extremely dry. Skin and airways may feel irritated.",
+      "veryDry": "Very dry. You may notice dryness and irritation.",
+      "dry": "Dry. A humidifier may improve comfort.",
+      "comfortable": "Comfortable. Humidity is within a healthy range.",
+      "slightlyHumid": "Slightly humid. The air may feel warmer.",
+      "humid": "Humid. You may feel sticky or uncomfortable.",
+      "veryHumid": "Very humid. Condensation and mold become more likely.",
+      "extremelyHumid": "Extremely humid. Expect oppressive conditions and excessive moisture."
+    },
+    "dewPointTexts": {
+      "extremelyDry": "Extremely dry air. Moisture is barely noticeable.",
+      "veryDry": "Very dry air. The air feels crisp and dry.",
+      "dryAndComfortable": "Dry and comfortable. Humidity is low but generally pleasant.",
+      "comfortable": "Comfortable. The air feels dry and pleasant.",
+      "veryComfortable": "Very comfortable. Humidity is barely noticeable.",
+      "slightlyComfortable": "Comfortable, with a slight hint of humidity.",
+      "slightlyHumid": "Slightly humid. You may start noticing some moisture in the air.",
+      "humid": "Humid. The air may start feeling sticky or uncomfortable.",
+      "veryHumid": "Very humid. Expect muggy and uncomfortable conditions.",
+      "oppressive": "Oppressive humidity. The air feels extremely muggy and heavy."
+    },
+    "daylightTextes": {
+      "veryShort": "A very short day with many hours of darkness.",
+      "short": "A short day with limited daylight.",
+      "belowAverage": "Less daylight than usual.",
+      "balanced": "Day and night are nearly balanced.",
+      "long": "A long day with plenty of daylight.",
+      "veryLong": "A very long day with an extended evening.",
+      "exceptionallyLong": "An exceptionally long day with daylight lasting for many hours."
+    },
+    "sunshineTextes": {
+      "none": "Little to no sunshine. Clouds will likely dominate the day.",
+      "veryLittle": "Very little sunshine. Expect mostly cloudy conditions.",
+      "limited": "Limited sunshine. The sun may appear only occasionally.",
+      "moderate": "Some sunshine. Expect a mix of sun and clouds.",
+      "plenty": "Plenty of sunshine. The sun should be noticeable for much of the day.",
+      "verySunny": "A very sunny day with long periods of sunshine.",
+      "exceptionallySunny": "An exceptionally sunny day with nearly uninterrupted sunshine."
+    },
+    "weatherConditions": {
+      "rainWind": {
+        "clear": {
+          "status": "Clear conditions",
+          "description": "Favourable conditions. No major rain or strong wind expected."
+        },
+        "severeWind": {
+          "status": "Severe winds",
+          "description": "Very strong winds without rain. Watch for loose objects and falling branches."
+        },
+        "strongWind": {
+          "status": "Strong winds",
+          "description": "A very windy day without rain. Take extra care when walking outdoors."
+        },
+        "moderateBreeze": {
+          "status": "Moderate breeze",
+          "description": "Moderate winds without rain. Conditions are generally comfortable outdoors."
+        },
+        "heavyRain": {
+          "status": "Heavy rain",
+          "description": "Intense rain with little wind. Bring an umbrella or waterproof clothing."
+        },
+        "moderateRain": {
+          "status": "Moderate rain",
+          "description": "Steady rain without strong winds. An umbrella should be enough."
+        },
+        "lightDrizzle": {
+          "status": "Light drizzle",
+          "description": "Only light drizzle with little wind. Conditions remain manageable outdoors."
+        },
+        "storm": {
+          "status": "Stormy conditions",
+          "description": "Heavy rain combined with very strong winds. Avoid going outside if possible."
+        },
+        "windDrivenRain": {
+          "status": "Wind-driven rain",
+          "description": "Strong winds are blowing the rain sideways. Umbrellas may be difficult to use, so waterproof clothing is recommended."
+        },
+        "rainWithWind": {
+          "status": "Rain and wind",
+          "description": "Rain accompanied by wind gusts. Waterproof outerwear is recommended."
+        }
+      }
     }
   },
   "fr": {
@@ -349,6 +537,9 @@
     "weather": "Climat",
     "location": "Emplacement",
     "updatedAt": "Mis à jour",
+    "weatherUpdatedAt": "Météo mise à jour à",
+    "precipitationRange": "Plage de précipitations",
+    "precipitationRangeDescription": "Définissez combien d'heures à l'avance la prochaine précipitation doit apparaître",
     "alert": "Alerte",
     "alerts": "Alertes",
     "alert_other": "Alertes ({{count}})",
@@ -360,10 +551,14 @@
     "feelsLike": "Ressenti",
     "maxMin": "Max/Min",
     "precipitation": "Précipitation",
+    "humidity": "Humidité",
+    "dewPoint": "Point de rosée",
     "visibility": "Visibilité",
     "noPrecipitation": "Pas de pluie",
     "sunrise": "Lever du soleil",
     "sunset": "Coucher du soleil",
+    "sunshine": "Ensoleillement",
+    "daylight": "Lumière du jour",
     "moonrise": "Lever de la lune",
     "moonset": "Coucher de la lune",
     "moon": "Lune",
@@ -383,6 +578,7 @@
       "New_York": "New York",
       "Bogota": "Bogota",
       "Panama": "Panama City",
+      "Panama_City": "Panama City",
       "Chicago": "Chicago",
       "Toronto": "Toronto",
       "Sao_Paulo": "São Paulo",
@@ -413,6 +609,9 @@
     "weatherTexts": {
       "rain": {
         "dry": "Sec",
+        "rain": "Pluie",
+        "snowfall": "Neige",
+        "showers": "Averses",
         "trace": "Trace",
         "drizzle": "Bruine",
         "light": "Léger",
@@ -506,6 +705,90 @@
       "low": "Faible. Réduisez votre vitesse.",
       "veryLow": "Brouillard dense. Prudence sur les routes.",
       "critical": "Critique. Évitez les déplacements."
+    },
+    "humidityTextes": {
+      "extremelyDry": "Extrêmement sec. La peau et les voies respiratoires peuvent devenir irritées.",
+      "veryDry": "Très sec. Vous pouvez remarquer une sensation de sécheresse et d'irritation.",
+      "dry": "Sec. Un humidificateur peut améliorer le confort.",
+      "comfortable": "Confortable. L'humidité est dans une plage saine.",
+      "slightlyHumid": "Légèrement humide. L'air peut sembler plus chaud.",
+      "humid": "Humide. Vous pouvez vous sentir collant ou inconfortable.",
+      "veryHumid": "Très humide. La condensation et les moisissures deviennent plus probables.",
+      "extremelyHumid": "Extrêmement humide. Attendez des conditions oppressives et une humidité excessive."
+    },
+    "dewPointTexts": {
+      "extremelyDry": "Air extrêmement sèche. L'humidité est à peine perceptible.",
+      "veryDry": "Air très sec. L'air semble frais et sec.",
+      "dryAndComfortable": "Sec et confortable. L'humidité est faible mais généralement agréable.",
+      "comfortable": "Confortable. L'air semble sec et agréable.",
+      "veryComfortable": "Très confortable. L'humidité est à peine perceptible.",
+      "slightlyComfortable": "Confortable, avec une légère touche d'humidité.",
+      "slightlyHumid": "Légèrement humide. Vous pouvez commencer à remarquer une certaine humidité dans l'air.",
+      "humid": "Humide. L'air peut commencer à se sentir collant ou inconfortable.",
+      "veryHumid": "Très humide. Attendez des conditions étouffantes et inconfortables.",
+      "oppressive": "Humidité oppressive. L'air semble extrêmement étouffant et lourd."
+    },
+    "daylightTextes": {
+      "veryShort": "Une journée très courte avec de nombreuses heures de noirceur.",
+      "short": "Une journée courte avec peu de lumière du jour.",
+      "belowAverage": "Moins de lumière du jour que d'habitude.",
+      "balanced": "Le jour et la nuit sont presque équilibrés.",
+      "long": "Une journée longue avec beaucoup de lumière du jour.",
+      "veryLong": "Une journée très longue avec une soirée prolongée.",
+      "exceptionallyLong": "Une journée exceptionnellement longue avec une luminosité qui dure de nombreuses heures."
+    },
+    "sunshineTextes": {
+      "none": "Peu ou pas de soleil. Les nuages domineront probablement la journée.",
+      "veryLittle": "Très peu de soleil. Attendez plutôt un ciel majoritairement nuageux.",
+      "limited": "Ensoleillement limité. Le soleil peut n'apparaître que de façon occasionnelle.",
+      "moderate": "Un peu de soleil. Attendez un mélange de soleil et de nuages.",
+      "plenty": "Beaucoup de soleil. Le soleil devrait être visible pendant une grande partie de la journée.",
+      "verySunny": "Une journée très ensoleillée avec de longues périodes de soleil.",
+      "exceptionallySunny": "Une journée exceptionnellement ensoleillée avec un soleil presque ininterrompu."
+    },
+    "weatherConditions": {
+      "rainWind": {
+        "clear": {
+          "status": "Conditions claires",
+          "description": "Conditions favorables. Aucune pluie importante ni vent fort n'est prévu."
+        },
+        "severeWind": {
+          "status": "Vents violents",
+          "description": "Vents très forts sans pluie. Attention aux objets légers et aux branches qui peuvent tomber."
+        },
+        "strongWind": {
+          "status": "Vents forts",
+          "description": "Une journée très venteuse sans pluie. Faites davantage attention en marchant dehors."
+        },
+        "moderateBreeze": {
+          "status": "Brise modérée",
+          "description": "Vent modéré sans pluie. Les conditions sont généralement confortables en extérieur."
+        },
+        "heavyRain": {
+          "status": "Pluie forte",
+          "description": "Pluie intense avec peu de vent. Apportez un parapluie ou des vêtements imperméables."
+        },
+        "moderateRain": {
+          "status": "Pluie modérée",
+          "description": "Pluie soutenue sans vent fort. Un parapluie devrait suffire."
+        },
+        "lightDrizzle": {
+          "status": "Bruine légère",
+          "description": "Seulement une légère bruine avec peu de vent. Les conditions restent gérables en extérieur."
+        },
+        "storm": {
+          "status": "Conditions orageuses",
+          "description": "Pluie forte combinée à des vents très forts. Évitez de sortir si possible."
+        },
+        "windDrivenRain": {
+          "status": "Pluie poussée par le vent",
+          "description": "Des vents forts chassent la pluie de côté. Les parapluies peuvent être difficiles à utiliser, aussi il est recommandé de porter des vêtements imperméables."
+        },
+        "rainWithWind": {
+          "status": "Pluie et vent",
+          "description": "Pluie accompagnée de rafales de vent. Il est recommandé de porter des vêtements imperméables."
+        }
+      }
     }
   },
   "es": {
@@ -518,6 +801,9 @@
     "weather": "Clima",
     "location": "Ubicación",
     "updatedAt": "Actualizado",
+    "weatherUpdatedAt": "Clima actualizado a las",
+    "precipitationRange": "Rango de precipitación",
+    "precipitationRangeDescription": "Define con cuántas horas de antelación debe aparecer la próxima precipitación",
     "alert": "Alerta",
     "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
@@ -529,10 +815,14 @@
     "feelsLike": "Sensación",
     "maxMin": "Máx/Mín",
     "precipitation": "Precipitación",
+    "humidity": "Humedad",
+    "dewPoint": "Punto de rocío",
     "visibility": "Visibilidad",
     "noPrecipitation": "Sin lluvia",
     "sunrise": "Amanecer",
     "sunset": "Atardecer",
+    "sunshine": "Sol",
+    "daylight": "Luz del día",
     "moonrise": "Salida de la luna",
     "moonset": "Puesta de la luna",
     "moon": "Luna",
@@ -552,6 +842,7 @@
       "New_York": "Nueva York",
       "Bogota": "Bogotá",
       "Panama": "Panamá City",
+      "Panama_City": "Panamá City",
       "Chicago": "Chicago",
       "Toronto": "Toronto",
       "Sao_Paulo": "São Paulo",
@@ -582,6 +873,9 @@
     "weatherTexts": {
       "rain": {
         "dry": "Seco",
+        "rain": "Lluvia",
+        "snowfall": "Nieve",
+        "showers": "Chubascos",
         "trace": "Llovizna ligera",
         "drizzle": "Llovizna",
         "light": "Ligero",
@@ -675,6 +969,90 @@
       "low": "Baja. Reduzca la velocidad.",
       "veryLow": "Niebla intensa. Cuidado en la carretera.",
       "critical": "Crítica. Evite desplazarse."
+    },
+    "humidityTextes": {
+      "extremelyDry": "Extremadamente seco. La piel y las vías respiratorias pueden irritarse.",
+      "veryDry": "Muy seco. Puede notar sequedad e irritación.",
+      "dry": "Seco. Un humidificador puede mejorar la comodidad.",
+      "comfortable": "Cómodo. La humedad está dentro de un rango saludable.",
+      "slightlyHumid": "Ligeramente húmedo. El aire puede sentirse más cálido.",
+      "humid": "Húmedo. Puede sentirse pegajoso o incómodo.",
+      "veryHumid": "Muy húmedo. La condensación y el moho se vuelven más probables.",
+      "extremelyHumid": "Extremadamente húmedo. Espere condiciones opresivas y humedad excesiva."
+    },
+    "dewPointTexts": {
+      "extremelyDry": "Aire extremadamente seco. La humedad apenas es perceptible.",
+      "veryDry": "Aire muy seco. El aire se siente fresco y seco.",
+      "dryAndComfortable": "Seco y cómodo. La humedad es baja pero generalmente agradable.",
+      "comfortable": "Cómodo. El aire se siente seco y agradable.",
+      "veryComfortable": "Muy cómodo. La humedad apenas es perceptible.",
+      "slightlyComfortable": "Cómodo, con un ligero toque de humedad.",
+      "slightlyHumid": "Ligeramente húmedo. Puedes empezar a notar algo de humedad en el aire.",
+      "humid": "Húmedo. El aire puede comenzar a sentirse pegajoso o incómodo.",
+      "veryHumid": "Muy húmedo. Espera condiciones bochornosas e incómodas.",
+      "oppressive": "Humedad opresiva. El aire se siente extremadamente bochornoso y pesado."
+    },
+    "daylightTextes": {
+      "veryShort": "Un día muy corto con muchas horas de oscuridad.",
+      "short": "Un día corto con poca luz diurna.",
+      "belowAverage": "Hay menos luz diurna de lo habitual.",
+      "balanced": "El día y la noche están casi equilibrados.",
+      "long": "Un día largo con mucha luz diurna.",
+      "veryLong": "Un día muy largo con una tarde prolongada.",
+      "exceptionallyLong": "Un día excepcionalmente largo con luz diurna durante muchas horas."
+    },
+    "sunshineTextes": {
+      "none": "Poco o nada de sol. Las nubes probablemente dominarán el día.",
+      "veryLittle": "Muy poco sol. Espera condiciones mayoritariamente nubladas.",
+      "limited": "Sol limitado. El sol puede aparecer solo ocasionalmente.",
+      "moderate": "Algo de sol. Espera una mezcla de sol y nubes.",
+      "plenty": "Mucho sol. El sol debería ser visible durante gran parte del día.",
+      "verySunny": "Un día muy soleado con largos periodos de sol.",
+      "exceptionallySunny": "Un día excepcionalmente soleado con sol casi ininterrumpido."
+    },
+    "weatherConditions": {
+      "rainWind": {
+        "clear": {
+          "status": "Condiciones despejadas",
+          "description": "Condiciones favorables. No se esperan lluvias importantes ni vientos fuertes."
+        },
+        "severeWind": {
+          "status": "Vientos severos",
+          "description": "Vientos muy fuertes sin lluvia. Cuidado con objetos sueltos y ramas caídas."
+        },
+        "strongWind": {
+          "status": "Vientos fuertes",
+          "description": "Un día muy ventoso sin lluvia. Tenga más cuidado al caminar al aire libre."
+        },
+        "moderateBreeze": {
+          "status": "Brisa moderada",
+          "description": "Vientos moderados sin lluvia. Las condiciones son generalmente cómodas al aire libre."
+        },
+        "heavyRain": {
+          "status": "Lluvia fuerte",
+          "description": "Lluvia intensa con poco viento. Lleve un paraguas o ropa impermeable."
+        },
+        "moderateRain": {
+          "status": "Lluvia moderada",
+          "description": "Lluvia constante sin vientos fuertes. Un paraguas debería bastar."
+        },
+        "lightDrizzle": {
+          "status": "Llovizna ligera",
+          "description": "Solo hay llovizna ligera con poco viento. Las condiciones siguen siendo manejables al aire libre."
+        },
+        "storm": {
+          "status": "Condiciones de tormenta",
+          "description": "Lluvia intensa combinada con vientos muy fuertes. Evite salir si es posible."
+        },
+        "windDrivenRain": {
+          "status": "Lluvia empujada por el viento",
+          "description": "Vientos fuertes están empujando la lluvia de lado. Los paraguas pueden ser difíciles de usar, por lo que se recomienda ropa impermeable."
+        },
+        "rainWithWind": {
+          "status": "Lluvia y viento",
+          "description": "Lluvia acompañada de ráfagas de viento. Se recomienda ropa impermeable."
+        }
+      }
     }
   },
   "ko": {
@@ -687,6 +1065,9 @@
     "weather": "날씨",
     "location": "위치",
     "updatedAt": "업데이트됨",
+    "weatherUpdatedAt": "날씨 업데이트 시간",
+    "precipitationRange": "강수 범위",
+    "precipitationRangeDescription": "다음 강수가 몇 시간 전에 표시될지 정의합니다",
     "alert": "알림",
     "alerts": "알림",
     "alert_other": "알림 ({{count}})",
@@ -698,10 +1079,14 @@
     "feelsLike": "체감 온도",
     "maxMin": "최고/최저",
     "precipitation": "강수량",
+    "humidity": "습도",
+    "dewPoint": "이슬점",
     "visibility": "가시거리",
     "noPrecipitation": "강수 없음",
     "sunrise": "일출",
     "sunset": "일몰",
+    "sunshine": "일광",
+    "daylight": "주간 빛",
     "moonrise": "월출",
     "moonset": "월몰",
     "moon": "달",
@@ -721,6 +1106,7 @@
       "New_York": "뉴욕",
       "Bogota": "보고타",
       "Panama": "파나마시티",
+      "Panama_City": "파나마시티",
       "Chicago": "시카고",
       "Toronto": "토론토",
       "Sao_Paulo": "상파울루",
@@ -751,6 +1137,9 @@
     "weatherTexts": {
       "rain": {
         "dry": "건조",
+        "rain": "비",
+        "snowfall": "눈",
+        "showers": "소나기",
         "trace": "미세한",
         "drizzle": "이슬비",
         "light": "약함",
@@ -844,6 +1233,90 @@
       "low": "낮음. 속도를 줄이세요.",
       "veryLow": "짙은 안개. 도로에서 주의하세요.",
       "critical": "매우 위험. 이동을 피하세요."
+    },
+    "humidityTextes": {
+      "extremelyDry": "극도로 건조합니다. 피부와 호흡기에 자극을 느낄 수 있습니다.",
+      "veryDry": "매우 건조합니다. 건조함과 자극을 느낄 수 있습니다.",
+      "dry": "건조합니다. 가습기를 사용하면 불편함을 줄일 수 있습니다.",
+      "comfortable": "쾌적합니다. 습도가 건강한 범위에 있습니다.",
+      "slightlyHumid": "약간 습합니다. 공기가 더 더워 보일 수 있습니다.",
+      "humid": "습합니다. 끈적거리거나 불편함을 느낄 수 있습니다.",
+      "veryHumid": "매우 습합니다. 결로와 곰팡이가 더 많이 생길 수 있습니다.",
+      "extremelyHumid": "극도로 습합니다. 답답하고 과도하게 젖은 상태가 예상됩니다."
+    },
+    "dewPointTexts": {
+      "extremelyDry": "매우 건조한 공기입니다. 습기는 거의 느껴지지 않습니다.",
+      "veryDry": "매우 건조한 공기입니다. 공기가 시원하고 건조하게 느껴집니다.",
+      "dryAndComfortable": "건조하고 편안합니다. 습도는 낮지만 일반적으로 쾌적합니다.",
+      "comfortable": "편안합니다. 공기가 건조하고 상쾌하게 느껴집니다.",
+      "veryComfortable": "매우 편안합니다. 습기는 거의 느껴지지 않습니다.",
+      "slightlyComfortable": "약간의 습기가 느껴지는 편안한 상태입니다.",
+      "slightlyHumid": "약간 습합니다. 공기에 약간의 수분이 느껴지기 시작할 수 있습니다.",
+      "humid": "습합니다. 공기가 끈적거리거나 불편하게 느껴질 수 있습니다.",
+      "veryHumid": "매우 습합니다. 답답하고 불쾌한 상태가 예상됩니다.",
+      "oppressive": "억압적인 습도입니다. 공기가 매우 답답하고 무겁게 느껴집니다."
+    },
+    "daylightTextes": {
+      "veryShort": "어두운 시간이 많은 매우 짧은 하루입니다.",
+      "short": "낮의 시간이 제한적인 짧은 하루입니다.",
+      "belowAverage": "평소보다 낮시간이 적습니다.",
+      "balanced": "낮과 밤이 거의 균형을 이룹니다.",
+      "long": "낮이 길고 햇빛이 많은 하루입니다.",
+      "veryLong": "매우 긴 하루로 저녁이 길게 이어집니다.",
+      "exceptionallyLong": "낮이 매우 길어 여러 시간 동안 햇빛이 지속되는 하루입니다."
+    },
+    "sunshineTextes": {
+      "none": "해가 거의 없거나 전혀 없습니다. 구름이 하루를 지배할 가능성이 큽니다.",
+      "veryLittle": "해가 아주 적습니다. 대부분 흐린 날씨가 예상됩니다.",
+      "limited": "햇볕이 제한적입니다. 태양이 가끔 나타날 뿐입니다.",
+      "moderate": "약간의 햇볕이 있습니다. 맑음과 흐림이 섞인 날씨가 예상됩니다.",
+      "plenty": "햇볕이 충분합니다. 하루의 많은 시간 동안 태양이 뚜렷하게 보일 것입니다.",
+      "verySunny": "햇볕이 매우 좋은 날이며 햇빛이 길게 지속됩니다.",
+      "exceptionallySunny": "매우 맑고 거의 쉬지 않고 햇빛이 지속되는 날입니다."
+    },
+    "weatherConditions": {
+      "rainWind": {
+        "clear": {
+          "status": "맑은 날씨",
+          "description": "좋은 조건입니다. 큰 비나 강한 바람이 예상되지 않습니다."
+        },
+        "severeWind": {
+          "status": "강풍",
+          "description": "비 없이 매우 강한 바람이 불고 있습니다. 느슨한 물건과 떨어지는 가지에 주의하세요."
+        },
+        "strongWind": {
+          "status": "강한 바람",
+          "description": "비 없이 매우 바람이 많이 부는 날입니다. 야외에서 걷는 동안 더 주의하세요."
+        },
+        "moderateBreeze": {
+          "status": "보통 바람",
+          "description": "비 없이 적당한 바람이 불고 있습니다. 야외 활동은 대체로 편안합니다."
+        },
+        "heavyRain": {
+          "status": "강한 비",
+          "description": "바람은 약하지만 폭우가 내립니다. 우산이나 방수 의류를 준비하세요."
+        },
+        "moderateRain": {
+          "status": "보통 비",
+          "description": "강한 바람 없이 꾸준히 비가 옵니다. 우산이면 충분합니다."
+        },
+        "lightDrizzle": {
+          "status": "약한 이슬비",
+          "description": "바람이 약하고 가벼운 이슬비만 내립니다. 야외 상황은 관리가 가능합니다."
+        },
+        "storm": {
+          "status": "폭풍 조건",
+          "description": "강한 비와 매우 강한 바람이 함께 옵니다. 가능하면 밖에 나가지 마세요."
+        },
+        "windDrivenRain": {
+          "status": "바람에 밀려오는 비",
+          "description": "강한 바람이 비를 옆으로 밀고 있습니다. 우산을 쓰기 어려울 수 있어 방수 의류를 권장합니다."
+        },
+        "rainWithWind": {
+          "status": "비와 바람",
+          "description": "바람이 불며 비가 내립니다. 방수 외투를 착용하는 것이 좋습니다."
+        }
+      }
     }
   }
 }

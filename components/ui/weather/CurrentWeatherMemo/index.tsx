@@ -1,19 +1,19 @@
 import type { JSX } from 'react';
 import styles from './InfoPill.module.scss';
 
-type TInfoPill = {
+type TInfoMemo = {
   label: string;
   value: string;
   title?: string;
   onClick?: () => void;
 };
 
-export interface InfoPillProps {
-  info1?: TInfoPill
-  info2?: TInfoPill
+export interface CurrentWeatherMemoProps {
+  info1?: TInfoMemo
+  info2?: TInfoMemo
 }
 
-export default function InfoPill({ info1, info2 }: InfoPillProps): JSX.Element {
+export default function CurrentWeatherMemo({ info1, info2 }: CurrentWeatherMemoProps): JSX.Element {
 
   if (!info1 && !info2) return <></>;
 

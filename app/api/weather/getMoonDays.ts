@@ -1,8 +1,7 @@
 import { getMoonIllumination, getMoonTimes } from "suncalc";
 import { DateTime } from "luxon";
 import { IMoonDaily } from "@/types/weather.types";
-import MOON_PHASES from "@/constants/moonPhases";
-import { NameIcon } from "@/types/weatherInfo.types";
+import { getMoonPhaseInfo } from "@/utils/weather/getMoonInfo";
 
 export interface MoonDay {
   date: string;
@@ -122,30 +121,11 @@ export function getMoonDays({
       : undefined;
 
     const { phase } = getMoonIllumination(date.toJSDate());
-
-    let moon: NameIcon;
-
-    if (phase < 1 / 16 || phase >= 15 / 16) {
-      moon = MOON_PHASES.new;
-    } else if (phase < 3 / 16) {
-      moon = MOON_PHASES.waxingCrescent;
-    } else if (phase < 5 / 16) {
-      moon = MOON_PHASES.firstQuarter;
-    } else if (phase < 7 / 16) {
-      moon = MOON_PHASES.waxingGibbous;
-    } else if (phase < 9 / 16) {
-      moon = MOON_PHASES.full;
-    } else if (phase < 11 / 16) {
-      moon = MOON_PHASES.waningGibbous;
-    } else if (phase < 13 / 16) {
-      moon = MOON_PHASES.lastQuarter;
-    } else {
-      moon = MOON_PHASES.waningCrescent;
-    }
+    const { name, icon: iconName } = getMoonPhaseInfo(phase);
 
     return {
-      name: moon.name,
-      iconName: moon.icon,
+      name,
+      iconName,
       date: dateKey,
       moonrise: moonrise?.time.toISO() ?? undefined,
       moonset: moonset?.time.toISO() ?? undefined,

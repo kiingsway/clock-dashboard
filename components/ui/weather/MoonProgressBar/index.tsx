@@ -4,19 +4,18 @@ import EventProgress from "../EventProgress";
 
 interface Props {
   moonInfo: IMoonInfoWithTimes
-  moonIconName: string;
 }
 
-export default function MoonProgressBar({ moonInfo, moonIconName }: Props): JSX.Element {
+export default function MoonProgressBar({ moonInfo }: Props): JSX.Element {
 
   const onDebugClick = (): void => console.info('Moon Progress Bar:', moonInfo);
 
   return (
     <EventProgress
-      start={moonInfo.moonrise}
-      end={moonInfo.moonset}
-      startIconName={moonIconName}
-      endIconName={moonIconName}
+      start={moonInfo.moonrise.date}
+      end={moonInfo.moonset.date}
+      startIconName={moonInfo.moonrise.phase.iconName}
+      endIconName={moonInfo.moonset.phase.iconName}
       progress={moonInfo.progress}
       onDoubleClick={onDebugClick}
     />

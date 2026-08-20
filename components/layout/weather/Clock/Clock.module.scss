@@ -5,8 +5,13 @@
   font-size: var(--wc-text-5xl);
   line-height: 1;
   letter-spacing: 0.01em;
-  color: var(--wc-text);
   font-variant-numeric: tabular-nums;
   /* Faint glow keeps the digits legible without turning the room bright. */
-  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 35%, transparent);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--wc-accent) 25%, transparent);
+
+  color: transparent;
+  background: linear-gradient(180deg, var(--wc-text) 50%, var(--wc-text-muted) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px var(--wc-accent-muted));
 }

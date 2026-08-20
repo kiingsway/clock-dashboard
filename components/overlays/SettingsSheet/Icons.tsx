@@ -60,3 +60,16 @@ export function InfoIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function RainCardIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      {/* Nuvem */}
+      <path d="M4 14.8A5 5 0 0 1 7.8 7 6 6 0 0 1 18 9.2 4 4 0 0 1 18 17H7.5" />
+      {/* Gotas de Chuva */}
+      <path d="M8 19v2" />
+      <path d="M12 19v2" />
+      <path d="M16 19v2" />
+    </svg>
+  );
+}

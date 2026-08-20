@@ -2,6 +2,8 @@
 
 A responsive clock + weather dashboard built with React, TypeScript, and CSS Modules. No weather API is wired up — `helpers/fetchWeather.ts` is a typed placeholder ready to be filled in.
 
+next dev --webpack --hostname 0.0.0.0
+
 ## Structure
 
 ```

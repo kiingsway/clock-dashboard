@@ -23,6 +23,10 @@ const api = {
     "precipitation_sum",
     "precipitation_hours",
     "precipitation_probability_max",
+    "relative_humidity_2m_mean",
+    "dew_point_2m_mean",
+    "daylight_duration",
+    "sunshine_duration",
   ],
   hourly: [
     "temperature_2m",
@@ -35,6 +39,11 @@ const api = {
     "wind_gusts_10m",
     "visibility",
     "uv_index",
+    "rain",
+    "showers",
+    "snowfall",
+    "relative_humidity_2m",
+    "dew_point_2m",
   ],
   current: [
     "temperature_2m",
@@ -42,6 +51,9 @@ const api = {
     "precipitation",
     "weather_code",
     "is_day",
+    "rain",
+    "showers",
+    "snowfall",
   ],
 };
 

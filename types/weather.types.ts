@@ -13,6 +13,9 @@ export interface IWeatherUnits {
   apparent_temperature: "°C" | "°F";
   precipitation: "mm" | "inch";
   weather_code: "wmo code";
+  rain: "mm";
+  showers: "mm";
+  snowfall: "cm";
 }
 
 export interface IWeatherCurrent {
@@ -23,6 +26,9 @@ export interface IWeatherCurrent {
   precipitation: number;
   weather_code: number;
   is_day: 0 | 1 | "";
+  rain: number;
+  showers: number;
+  snowfall: number;
 }
 
 export interface IHourlyUnits {
@@ -31,10 +37,16 @@ export interface IHourlyUnits {
   precipitation: "mm" | "inch";
   apparent_temperature: "°C" | "°F";
   weather_code: "wmo code";
-  wind_speed_10m: "km/h",
-  wind_direction_10m: "°",
-  wind_gusts_10m: "km/h",
+  wind_speed_10m: "km/h";
+  wind_direction_10m: "°";
+  wind_gusts_10m: "km/h";
   visibility: "m"
+  rain: "mm";
+  showers: "mm";
+  snowfall: "cm"
+  relative_humidity_2m: "%";
+  dew_point_2m: "°C";
+  sunshine_duration: "s";
 }
 
 export interface IHourly {
@@ -49,6 +61,12 @@ export interface IHourly {
   wind_speed_10m: number[];
   visibility: number[];
   uv_index: number[];
+  rain: number[];
+  showers: number[];
+  snowfall: number[];
+  relative_humidity_2m: number[];
+  dew_point_2m: number[];
+  sunshine_duration: number[];
 }
 
 export interface IDailyUnits {
@@ -63,6 +81,10 @@ export interface IDailyUnits {
   precipitation_hours: "h";
   precipitation_probability_max: "%";
   wind_direction_10m_dominant: "°"
+  relative_humidity_2m_mean: "%"
+  dew_point_2m_mean: "°C" | "°F";
+  daylight_duration: "s";
+  sunshine_duration: "s";
 }
 
 export interface IDaily {
@@ -80,7 +102,11 @@ export interface IDaily {
   precipitation_sum: number[];
   precipitation_hours: number[];
   precipitation_probability_max: number[];
-  wind_direction_10m_dominant: Array<number>
+  wind_direction_10m_dominant: number[];
+  relative_humidity_2m_mean: number[];
+  dew_point_2m_mean: number[];
+  daylight_duration: number[];
+  sunshine_duration: number[];
 }
 
 export interface IMoonDaily {
@@ -161,3 +187,5 @@ export interface WeatherIconInfo {
   weather: ImageInfo;
   current: ImageInfo;
 }
+
+export type WindType = "speed" | "gusts";

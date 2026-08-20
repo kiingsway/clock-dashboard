@@ -1,18 +1,16 @@
 import { SunWindow, SunEvent } from "@/types/sun.types";
 import { DateTime } from "luxon";
 
-function buildSunWindow(now: DateTime, start: DateTime, end: DateTime, startKind: "sunrise" | "sunset", endKind: "sunrise" | "sunset"): SunWindow {
+const calculateProgressBetweenTwoDates = (startDate: DateTime, endDate: DateTime, progressDate: DateTime) => {
+  if (!startDate?.isValid || !endDate?.isValid) return 0;
 
-  const total = end.toMillis() - start.toMillis();
-  const progress = total <= 0 ? 0 : Math.min(1, Math.max(0, (now.toMillis() - start.toMillis()) / total));
+  if (progressDate >= endDate) return 1;
+  if (progressDate <= startDate) return 0;
 
-  return {
-    start,
-    end,
-    startKind,
-    endKind,
-    progress,
-  };
+  const elapsed = progressDate.diff(startDate, "milliseconds").milliseconds;
+  const duration = endDate.diff(startDate, "milliseconds").milliseconds;
+
+  return elapsed / duration;
 }
 
 interface GetSunWindowAttr {
@@ -42,7 +40,7 @@ interface GetSunWindowAttr {
  * @param sunriseTimes ISO 8601 sunrise times without timezone information.
  * @param sunsetTimes ISO 8601 sunset times without timezone information.
  * @param timezone IANA timezone used to interpret the provided times.
- * @param now Optional ISO 8601 date/time used as the target moment.
+ * @param date Optional ISO 8601 date/time used as the target moment.
  * @param includeNight Whether to allow the window to span sunset → sunrise.
  */
 export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
@@ -80,24 +78,26 @@ export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
    * sunset  → sunrise
    */
   if (includeNight) {
-    let previous = events[0];
-    let next = events[events.length - 1];
+    let start = events[0];
+    let end = events[events.length - 1];
 
     for (const event of events) {
-      if (event.time.toMillis() <= date.toMillis()) previous = event;
+      if (event.time.toMillis() <= date.toMillis()) start = event;
       if (event.time.toMillis() > date.toMillis()) {
-        next = event;
+        end = event;
         break;
       }
     }
 
-    return buildSunWindow(
-      date,
-      previous.time,
-      next.time,
-      previous.kind,
-      next.kind
-    );
+    const progress = calculateProgressBetweenTwoDates(start.time, end.time, date);
+
+    return {
+      start: start.time,
+      end: end.time,
+      startKind: start.kind,
+      endKind: end.kind,
+      progress: progress,
+    };
   }
 
   /*
@@ -128,17 +128,7 @@ export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
     };
   }
 
-  const progress = ((): number => {
-    if (!sunrise.time?.isValid || !sunset.time?.isValid) return 0;
-
-    if (date >= sunset.time) return 1;
-    if (date <= sunrise.time) return 0;
-
-    const elapsed = date.diff(sunrise.time, "milliseconds").milliseconds;
-    const duration = sunset.time.diff(sunrise.time, "milliseconds").milliseconds;
-
-    return elapsed / duration;
-  })();
+  const progress = calculateProgressBetweenTwoDates(sunrise.time, sunset.time, date);
 
   return {
     start: sunrise.time,

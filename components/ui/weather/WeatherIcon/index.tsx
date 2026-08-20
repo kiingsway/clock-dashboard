@@ -8,6 +8,7 @@ import AnimatedWeatherIcon from "./WeatherIconAnimated";
 import { capitalizeWords, splitCamelCase } from "@/utils/formatters/textFormatters";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
+import classNames from "classnames";
 
 interface WeatherSrcAltProps {
   src: string;
@@ -67,6 +68,8 @@ interface WeatherCodeProps {
 
 interface Props {
   size?: number;
+  className?: string;
+  hideGlow?: boolean;
 }
 
 export type WeatherIconProps = Props & (WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps)
@@ -81,8 +84,10 @@ export default function WeatherIcon({
   src,
   title,
   duration,
+  className,
   isDay = true,
-  size = 34
+  size = 34,
+  hideGlow = false,
 }: WeatherIconProps): JSX.Element {
   const { now } = useNow()
   const { get: { location: timezone } } = useAppSettings();
@@ -124,9 +129,10 @@ export default function WeatherIcon({
 
   return (
     <div
-      className={styles.icon}
+      className={classNames(styles.icon, { [styles.noBefore]: hideGlow }, className)}
       title={weatherIcon?.title}
-      style={{ '--size': `${size / 2}px` } as React.CSSProperties}>
+      style={{ '--size': `${size / 2}px` } as React.CSSProperties}
+    >
       <Image
         src={weatherIcon.src}
         alt={weatherIcon.alt}

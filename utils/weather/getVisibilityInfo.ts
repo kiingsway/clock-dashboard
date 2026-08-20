@@ -1,9 +1,10 @@
 import { IWeather } from "@/types/weather.types";
-import { formatLocaleNumber, hexToRgb, lerp } from "../formatters/textFormatters";
+import { formatLocaleNumber } from "../formatters/textFormatters";
 import { getCurrentValue } from "../formatters/getValueByArray";
 import { DateTime } from "luxon";
 import { TFunction } from "i18next";
-import { MAX_VISIBILITY_METERS, MIN_VISIBILITY_METERS, VISIBILITY_COLORS } from "@/constants/visibility";
+import { MAX_VISIBILITY_METERS, MIN_VISIBILITY_METERS } from "@/constants/visibility";
+import { getVisibilityColor } from "./getColors";
 
 export interface IVisibilityInfo {
   value: number;
@@ -38,46 +39,6 @@ export default function getVisibilityInfo(weather: IWeather, date: DateTime<bool
 
   return { value: visibility, title, color, desc, unit: hourly_units.visibility }
 
-}
-
-/**
- * Calcula a cor exata da visibilidade de forma linear e contínua.
- * @param visibility Valor da visibilidade em metros (0 a 10000+)
- */
-export function getVisibilityColor(visibility: number): string {
-  // Garantir limites entre 0 e 10000 metros para o cálculo
-  const v = Math.max(0, Math.min(10000, visibility));
-
-  // Definimos os pontos de parada e suas respectivas cores (as que você gostou)
-  const stops = VISIBILITY_COLORS
-
-  // Encontra entre quais duas paradas o valor atual se encontra
-  let lower = stops[0];
-  let upper = stops[stops.length - 1];
-
-  for (let i = 0; i < stops.length - 1; i++) {
-    if (v >= stops[i].value && v <= stops[i + 1].value) {
-      lower = stops[i];
-      upper = stops[i + 1];
-      break;
-    }
-  }
-
-  // Calcula a porcentagem de onde o valor está dentro desse intervalo específico
-  const range = upper.value - lower.value;
-  const factor = range === 0 ? 0 : (v - lower.value) / range;
-
-  // Converte ambas as cores para RGB para fazer a mistura matemática
-  const c1 = hexToRgb(lower.hex);
-  const c2 = hexToRgb(upper.hex);
-
-  // Mistura os canais R, G e B
-  const r = lerp(c1.r, c2.r, factor);
-  const g = lerp(c1.g, c2.g, factor);
-  const b = lerp(c1.b, c2.b, factor);
-
-  // Retorna no formato RGB legível pelo CSS
-  return `rgb(${r}, ${g}, ${b})`;
 }
 
 /**

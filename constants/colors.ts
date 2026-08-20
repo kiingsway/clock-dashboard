@@ -1,0 +1,91 @@
+import { WeatherCategoryName } from "@/types/weather.types";
+
+export const DEFAULT_COLOR = {
+  weather: "#6b7280",
+  normalWhite: "#e8ecf4"
+}
+
+export const WEATHER_ACCENT_COLORS: Record<WeatherCategoryName, string | { day: string; night: string }> = {
+  clear: { day: "#f4b860", night: "#8695f0" },
+  partlyCloudy: { day: "#e5be85", night: "#7f8cb8" },
+  cloudy: "#8b93a6",
+  smoke: "#8b93a6",
+  haze: "#8b93a6",
+  lightFog: { day: "#a7b8bd", night: "#7c8b95" },
+  fog: { day: "#a7b8bd", night: "#7c8b95" },
+  drizzle: "#6fc1e0",
+  showers: "#6fc1e0",
+  rain: "#4fa0e0",
+  heavyRain: "#4fa0e0",
+  freezingDrizzle: "#4dd0e1",
+  freezingRain: "#4dd0e1",
+  snow: "#cfe3f0",
+  snowShowers: "#cfe3f0",
+  sleet: "#cfe3f0",
+  heavySnow: "#9fa8da",
+  heavySleet: "#9fa8da",
+  hail: "#9fa8da",
+  thunderstorm: "#a98cf0",
+  moderateHail: "#a98cf0",
+  heavyHail: "#a98cf0",
+  loading: "#4b5563",
+  error: "#ef4444",
+  unknown: DEFAULT_COLOR.weather,
+  sunrise: "#e5be85",
+  sunset: "#f4b860"
+} as const;
+
+export const WIND_SPEED_COLORS = [
+  { value: 0, hex: "#E0F2F1" },   // Calmo
+  { value: 10, hex: "#D9F99D" },  // Brisa leve
+  { value: 20, hex: "#FFF59D" },  // Perceptível
+  { value: 30, hex: "#FFD180" },  // Incômodo
+  { value: 40, hex: "#FFAB91" },  // Forte
+  { value: 55, hex: "#FF7043" },  // Muito forte
+  { value: 70, hex: "#D32F2F" },  // Severo
+  { value: 90, hex: "#6A1B9A" },  // Extremo
+] as const;
+
+export const WIND_GUSTS_COLORS = [
+  { value: 0, hex: "#E0F2F1" },   // Sem rajadas relevantes
+  { value: 20, hex: "#D9F99D" },  // Leve
+  { value: 40, hex: "#FFF59D" },  // Perceptível
+  { value: 60, hex: "#FFD180" },  // Moderada
+  { value: 80, hex: "#FFAB91" },  // Forte
+  { value: 100, hex: "#FF7043" }, // Muito forte
+  { value: 120, hex: "#D32F2F" }, // Severa
+  { value: 140, hex: "#6A1B9A" }, // Extrema
+] as const;
+
+export const VISIBILITY_COLORS = [
+  { value: 0, hex: "#6E5033" }, // Crítico
+  { value: 500, hex: "#9E7B56" }, // Névoa intensa
+  { value: 1000, hex: "#C4A482" }, // Baixa
+  { value: 2000, hex: "#D9C3A5" }, // Moderada
+  { value: 5000, hex: "#EADCC9" }, // Boa
+  { value: 10000, hex: "#F5F0E6" }  // Excelente
+] as const;
+
+export const HUMIDITY_COLORS = {
+  DRY: "#f59e0b",
+  NORMAL: DEFAULT_COLOR.normalWhite,
+  WET: "#3b82f6",
+} as const;
+
+export const DEW_COLORS = {
+  COLD: '#a5f3fc',
+  NORMAL: DEFAULT_COLOR.normalWhite,
+  HOT: '#fca5a5',
+} as const;
+
+export const DAYLIGHT_COLORS = {
+  DARK: "#a98cf0",
+  NORMAL: DEFAULT_COLOR.normalWhite,
+  LIGHT: "#fef08a",
+} as const;
+
+export const SUNSHINE_COLORS = {
+  NOTHING: DEFAULT_COLOR.normalWhite,
+  HALF: "#fde047",
+  FULL: "#fdba74",
+} as const;

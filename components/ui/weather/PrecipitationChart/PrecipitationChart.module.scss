@@ -1,0 +1,14 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--wc-space-xs);
+  padding: 5px var(--wc-space-lg) 0;
+  border-radius: var(--wc-radius-sm);
+  cursor: default;
+  user-select: none;
+  width: 100%;
+
+  font-family: var(--wc-font-display);
+  font-size: 12px;
+}

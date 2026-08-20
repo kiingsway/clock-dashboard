@@ -5,12 +5,12 @@ import { DateTime } from "luxon";
 import { getCurrentValue } from "../formatters/getValueByArray";
 import { TFunction } from "i18next";
 
-const getUvSrc = (uv?: number): string => {
+const getUvSrc = (uv: number | undefined): string => {
   let name: string = 'uv-index';
-  if (uv) {
-    const uvInRange = Math.min(Math.max(Math.round(uv), 1), 12);
-    if (uvInRange > 11) name = `uv-index-11-plus`;
-    else if (uvInRange > 0 && uvInRange < 0) name = `uv-index-1`;
+  if (typeof uv === 'number') {
+    const uvInRange = Math.min(Math.max(Math.round(uv), 0), 12);
+    if (uvInRange === 0) name = 'partly-cloudy-day';
+    else if (uvInRange > 11) name = `uv-index-11-plus`;
     else name = `uv-index-${uvInRange}`;
   }
   return `${ICON_BASE_URI}${name}.svg`
@@ -45,7 +45,7 @@ export default function getUVIcon({ weather, date, kind, t }: GetUVIconProps): I
 
   const uvNumber = getCurrentValue({ date, time, values });
 
-  if (typeof uvNumber !== 'number') return undefined
+  if (typeof uvNumber !== 'number') return undefined;
 
   const uvIcon = getUvSrc(uvNumber)
   const uvIndex = Math.round(uvNumber)

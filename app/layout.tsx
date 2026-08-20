@@ -3,19 +3,19 @@ import { Inter, Sora, Space_Mono } from "next/font/google";
 import "./globals.css";
 import '@/styles/tokens.css';
 
-export const inter = Inter({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
 });
 
-export const sora = Sora({
+const sora = Sora({
   subsets: ["latin"],
   weight: ["500", "600", "700"],
   variable: "--font-sora",
 });
 
-export const spaceMono = Space_Mono({
+const spaceMono = Space_Mono({
   subsets: ["latin"],
   weight: ["700"],
   variable: "--font-space-mono",

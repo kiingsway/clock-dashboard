@@ -2,7 +2,7 @@ import styles from "./DateHeader.module.scss";
 import Clock from "../Clock";
 import WeekDate from "../WeekDate";
 
-export interface ClockProps {
+interface Props {
   onClick?: () => void
 }
 
@@ -11,7 +11,7 @@ export interface ClockProps {
  * ("10 de julho" / "July 10"). Ticks every second internally so the minute
  * rolls over on its own — the host app never needs to re-render this.
  */
-export function DateHeader({ onClick }: ClockProps) {
+export function DateHeader({ onClick }: Props) {
   return (
     <header className={styles.header} aria-label="Relógio" onClick={onClick}>
       <Clock />

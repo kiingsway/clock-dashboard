@@ -6,7 +6,7 @@ import Image from "next/image";
 import { ICON_BASE_URI } from "@/constants/iconFiles";
 import { IMoonDaily } from "@/types/weather.types";
 
-function getMoonPhaseInfo(phase: number) {
+export function getMoonPhaseInfo(phase: number) {
   let moon: NameIcon;
 
   if (phase < 1 / 16 || phase >= 15 / 16) {
@@ -46,9 +46,17 @@ interface GetMoonInfoWithoutDailyMoonProps extends GetMoonInfoBaseProps {
   dailyMoon?: undefined;
 }
 
+type PhaseIcon = { iconName: string | undefined; phase: number | undefined };
+
 interface MoonTimes {
-  moonrise: DateTime<true> | undefined;
-  moonset: DateTime<true> | undefined;
+  moonrise: {
+    date: DateTime<true> | undefined;
+    phase: PhaseIcon;
+  };
+  moonset: {
+    date: DateTime<true> | undefined;
+    phase: PhaseIcon;
+  };
   progress: number | undefined;
 }
 
@@ -125,9 +133,7 @@ function getMoonInfo({
     };
   }
 
-  const moonDay = dailyMoon.find(
-    (day) => day.date === targetDateISO
-  );
+  const moonDay = dailyMoon.find((day) => day.date === targetDateISO);
 
   if (!moonDay) {
     return {
@@ -145,6 +151,27 @@ function getMoonInfo({
     ? DateTime.fromISO(moonDay.moonset)
     : undefined;
 
+  const { moonrisePhase, moonsetPhase } = (() => {
+    const phaseIconDefault: PhaseIcon = { iconName: undefined, phase: undefined };
+
+    let moonrisePhase: PhaseIcon = phaseIconDefault;
+    let moonsetPhase: PhaseIcon = phaseIconDefault;
+
+    if (moonrise?.isValid) {
+      const { phase } = getMoonIllumination(moonrise.toJSDate());
+      const { icon: iconName } = getMoonPhaseInfo(phase);
+      moonrisePhase = { iconName, phase };
+    }
+
+    if (moonset?.isValid) {
+      const { phase } = getMoonIllumination(moonset.toJSDate());
+      const { icon: iconName } = getMoonPhaseInfo(phase);
+      moonsetPhase = { iconName, phase };
+    }
+
+    return { moonrisePhase, moonsetPhase };
+  })();
+
   const progress = ((): number => {
     if (!moonrise?.isValid || !moonset?.isValid) return 0;
 
@@ -159,9 +186,15 @@ function getMoonInfo({
 
   return {
     ...baseInfo,
-    moonrise: moonrise?.isValid ? moonrise : undefined,
-    moonset: moonset?.isValid ? moonset : undefined,
-    progress
+    progress,
+    moonrise: {
+      date: moonrise?.isValid ? moonrise : undefined,
+      phase: moonrisePhase
+    },
+    moonset: {
+      date: moonset?.isValid ? moonset : undefined,
+      phase: moonsetPhase
+    },
   };
 }
 

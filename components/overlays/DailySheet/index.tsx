@@ -9,7 +9,7 @@ import SunProgressBar from '@/components/ui/weather/SunProgressBar';
 import MoonWidget from '@/components/ui/weather/widgets/MoonWidget';
 import TempFeelsLikeWidget from '@/components/ui/weather/widgets/TempFeelsLikeWidget';
 import RainWidget from '@/components/ui/weather/widgets/RainWidget';
-import UVIndexWidget from '@/components/ui/weather/widgets/UVIndex';
+import UVIndexWidget from '@/components/ui/weather/widgets/UVIndexWidget';
 import WindWidget from '@/components/ui/weather/widgets/WindWidget';
 import CurrentWeatherWidget from '@/components/ui/weather/widgets/CurrentWeatherWidget';
 import HourlyList from '@/components/ui/weather/HourlyList';
@@ -20,6 +20,9 @@ import { TFunction } from 'i18next';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import VisibilityWidget from '@/components/ui/weather/widgets/VisibilityWidget';
 import { getAccent } from '@/utils/weather/getAccentColor';
+import DaylightSunshineWidget from '@/components/ui/weather/widgets/DaylightSunshineWidget';
+import DewPointWidget from '@/components/ui/weather/widgets/DewPointWidget';
+import HumidityWidget from '@/components/ui/weather/widgets/HumidityWidget';
 
 interface Props {
   weather: IWeather | undefined
@@ -94,33 +97,18 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
     >
       <div className={styles.main} style={{ ["--wc-accent" as string]: accent }}>
         {sunWindow && <SunProgressBar sunWindow={sunWindow} />}
-
         <CurrentWeatherWidget weatherCode={weatherCode} tempMin={tempMin} tempMax={tempMax} size={60} />
         <TempFeelsLikeWidget feelsLike={feelsLike} tempMean={tempMean} size={60} />
         <RainWidget precipMM={precipSum} chance={precipChance} hoursOfRain={precipHours} size={60} />
-
-        <HourlyList
-          startIndex={startIndex}
-          times={weather.hourly.time}
-          weatherCodes={weather.hourly.weather_code}
-          temps={weather.hourly.temperature_2m}
-          tempUnit={weather.hourly_units.temperature_2m}
-          feelsLikes={weather.hourly.apparent_temperature}
-          feelsLikeUnit={weather.hourly_units.apparent_temperature}
-          precipitations={weather.hourly.precipitation}
-          isDays={weather.hourly.is_day}
-          latitude={weather.latitude}
-          longitude={weather.longitude}
-          timezone={weather.timezone}
-        />
-
-        <MoonWidget moonInfo={moonInfo} size={60} miniCard />
-        <MoonProgressBar moonInfo={moonInfo} moonIconName={moonInfo.iconName} />
-
+        <HourlyList startIndex={startIndex} weather={weather} />
+        <MoonWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
+        <MoonProgressBar moonInfo={moonInfo} />
         <UVIndexWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
         <WindWidget date={indexDate} weather={weather} size={60} miniCard />
-
         <VisibilityWidget date={indexDate} weather={weather} size={60} miniCard />
+        <HumidityWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
+        <DewPointWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
+        <DaylightSunshineWidget date={indexDate} weather={weather} size={60} miniCard />
       </div>
     </BottomSheet>
   )

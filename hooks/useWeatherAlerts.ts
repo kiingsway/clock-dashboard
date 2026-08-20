@@ -3,21 +3,12 @@ import { DEFAULT_SETTINGS } from "@/constants/settings";
 import { isSupportedWeatherAlertCountry, IWeatherAlert, WeatherAlertCountryCode } from "@/types/weatherAlerts.types";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import useSWR from "swr";
-import { IWeatherAlertCanada } from "@/types/WeatherAlerts/canada.types";
-import { IWeatherAlertUSA } from "@/types/WeatherAlerts/usa.types";
 import { WEATHER_ALERT_PROVIDERS } from "@/constants/alerts";
 
 export interface UseWeatherAlerts {
   error: unknown;
   isLoading: boolean;
-
-  data: undefined | {
-    original: {
-      canada: IWeatherAlertCanada[] | undefined;
-      usa: IWeatherAlertUSA | undefined;
-    };
-    mapped: IWeatherAlert[];
-  };
+  data: IWeatherAlert[] | undefined;
 }
 
 async function fetchAlertJson(url: string, countryCode: string | undefined) {
@@ -57,10 +48,7 @@ export default function useWeatherAlerts(): UseWeatherAlerts {
 
       const raw = await fetchAlertJson(url, countryCode);
 
-      return {
-        original: raw,
-        mapped: provider.mapper(raw),
-      };
+      return provider.mapper(raw);
     },
     {
       refreshInterval: 5 * 60 * 1000,

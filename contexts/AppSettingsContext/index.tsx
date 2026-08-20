@@ -16,10 +16,11 @@ import { AppSettings, UseAppSettings } from '@/types/app.types';
 import { STORAGE_KEY } from '@/constants/keys';
 import { DEFAULT_SETTINGS } from '@/constants/settings';
 import { TLocation } from '@/types/location.types';
-import { getLocationToWeather } from '@/utils/location/getLocationToWeather';
 
 import loadSettings from './loadSettings';
 import persistSettings from './persistSettings';
+import { getLocationToWeather } from '@/utils/location/getLocationToWeather';
+import { MAX_RAIN_ALERT_HOURS, MIN_RAIN_ALERT_HOURS } from '@/constants/rainDescriptions';
 
 const AppSettingsContext = createContext<UseAppSettings | undefined>(undefined);
 
@@ -33,8 +34,14 @@ export function AppSettingsProvider({ children }: Props) {
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
 
   useEffect(() => {
+    const loadedSettings = loadSettings();
+
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSettings(loadSettings());
+    setSettings({
+      ...DEFAULT_SETTINGS,
+      ...loadedSettings,
+    });
+
     setIsLoaded(true);
   }, []);
 
@@ -57,9 +64,9 @@ export function AppSettingsProvider({ children }: Props) {
       }
 
       try {
-        const parsed = JSON.parse(event.newValue) as AppSettings;
+        const parsed = JSON.parse(event.newValue) as Partial<AppSettings>;
 
-        setSettings(parsed);
+        setSettings({ ...DEFAULT_SETTINGS, ...parsed });
       } catch (error) {
         console.error(
           'Falha ao sincronizar configurações entre abas:',
@@ -92,32 +99,30 @@ export function AppSettingsProvider({ children }: Props) {
     }));
   }, []);
 
-  const resetSettings = useCallback(() => {
-    setSettings(DEFAULT_SETTINGS);
+  const setPrecipHoursRange = useCallback((precipHoursRangeData: number) => {
+    const precipHoursRange = Math.max(MIN_RAIN_ALERT_HOURS, Math.min((precipHoursRangeData ?? MIN_RAIN_ALERT_HOURS), MAX_RAIN_ALERT_HOURS))
+    setSettings((prev) => ({
+      ...prev,
+      precipHoursRange,
+    }));
   }, []);
 
-  const locations = useMemo(
-    () => getLocationToWeather(t),
-    [t]
-  );
+  const resetSettings = useCallback(() => setSettings(DEFAULT_SETTINGS), []);
+
+  const locations = useMemo(() => getLocationToWeather(t), [t]);
 
   const value = useMemo<UseAppSettings>(
     () => ({
       set: {
         location: setLocation,
         alertRadiusKm: setAlertRadiusKm,
+        precipHoursRange: setPrecipHoursRange,
       },
       get: settings,
       weatherLocation: locations[settings.location],
       resetSettings,
     }),
-    [
-      settings,
-      locations,
-      setLocation,
-      setAlertRadiusKm,
-      resetSettings,
-    ]
+    [setLocation, setAlertRadiusKm, setPrecipHoursRange, settings, locations, resetSettings]
   );
 
   return (
