@@ -1,7 +1,14 @@
 import { useEffect } from "react";
 import useBoolean from "./useBoolean";
 
-const events = ["mousemove", "mousedown", "keydown", "touchstart", "scroll", "wheel"] as const;
+const events = [
+  "mousemove",
+  "mousedown",
+  "keydown",
+  "touchstart",
+  "scroll",
+  "wheel",
+] as const;
 
 interface IUseFocusMode {
   focus: boolean;
@@ -9,16 +16,21 @@ interface IUseFocusMode {
 }
 
 interface Props {
-  onFocus: number
+  onFocus: number;
   offFocus: number;
 }
 
-export function useFocusMode({ onFocus, offFocus }: Props): IUseFocusMode {
-  const [focus, { toggle: toggleFocus }] = useBoolean()
+export function useFocusMode({
+  onFocus,
+  offFocus,
+}: Props): IUseFocusMode {
+  const [focus, { toggle: toggleFocus }] = useBoolean();
 
   const delay = focus ? onFocus : offFocus;
 
   useEffect(() => {
+    if (delay <= 0) return;
+
     let timeout: ReturnType<typeof setTimeout>;
 
     const resetTimer = () => {
@@ -27,12 +39,17 @@ export function useFocusMode({ onFocus, offFocus }: Props): IUseFocusMode {
       if (window.scrollY === 0) return;
 
       timeout = setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
       }, delay);
     };
 
     events.forEach((event) => {
-      window.addEventListener(event, resetTimer, { passive: true });
+      window.addEventListener(event, resetTimer, {
+        passive: true,
+      });
     });
 
     resetTimer();

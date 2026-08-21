@@ -27,6 +27,7 @@ const api = {
     "dew_point_2m_mean",
     "daylight_duration",
     "sunshine_duration",
+    "visibility_mean",
   ],
   hourly: [
     "temperature_2m",

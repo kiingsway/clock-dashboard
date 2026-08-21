@@ -32,6 +32,7 @@
 
 .row {
   padding: var(--wc-space-md, 12px) var(--wc-space-lg, 16px);
+  user-select: none;
 }
 
 .row+.row {

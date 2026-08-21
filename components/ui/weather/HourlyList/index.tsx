@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import HourlyCard from '../HourlyCard';
 import styles from './HourlyList.module.scss';
-import { getLocaleHour } from '@/utils/formatters/dateFormatters';
+import { formatDateTime, getLocaleHour } from '@/utils/formatters/dateFormatters';
 import { RainGauge } from '../RainGauge';
 import WeatherIcon from '../WeatherIcon';
 import { DateTime } from 'luxon';
@@ -74,6 +74,8 @@ export default function HourlyList({ startIndex, weather, hoursToShow = 24 }: Pr
         const minDiff = indexDate.diff(now, 'minutes').minutes;
         const within20Minutes = Math.abs(minDiff) <= 25;
 
+        const hourTooltip = formatDateTime({ date: indexDate.toJSDate(), locale, timezone });
+
         return (
           <HourlyCard
             key={indexDateString}
@@ -83,7 +85,7 @@ export default function HourlyList({ startIndex, weather, hoursToShow = 24 }: Pr
               : getLocaleHour(indexDate, locale)}
             subhour={subhour}
             hideSubhour={difference < 1}
-            hourTooltip={indexDate.toFormat('dd/LL/yyyy HH:mm')}
+            hourTooltip={hourTooltip}
             temp={temp}
             tempUnit={tempUnit}
             feelsLike={feelsLike}
@@ -98,6 +100,7 @@ export default function HourlyList({ startIndex, weather, hoursToShow = 24 }: Pr
                 lat={latitude}
                 lon={longitude}
                 size={40}
+                title={category.title}
               />
             }
           />

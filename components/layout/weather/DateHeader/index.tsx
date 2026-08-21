@@ -1,6 +1,7 @@
 import styles from "./DateHeader.module.scss";
 import Clock from "../Clock";
 import WeekDate from "../WeekDate";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 
 interface Props {
   onClick?: () => void
@@ -12,10 +13,13 @@ interface Props {
  * rolls over on its own — the host app never needs to re-render this.
  */
 export function DateHeader({ onClick }: Props) {
+  
   return (
-    <header className={styles.header} aria-label="Relógio" onClick={onClick}>
-      <Clock />
-      <WeekDate />
-    </header>
+    <ErrorBoundary>
+      <header className={styles.header} aria-label="Relógio" onClick={onClick}>
+        <Clock />
+        <WeekDate />
+      </header>
+    </ErrorBoundary>
   );
 }

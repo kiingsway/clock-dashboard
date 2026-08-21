@@ -34,6 +34,8 @@ export default function DaylightSunshineWidget({ date, weather, miniCard, size }
   const daylightDesc = getDaylightDurationDescription(daylight, t);
   const sunshineDesc = getSunshineDurationDescription(sunshine, t);
 
+  const sunshineIcon = (sunshine / 60 / 60) > 4 ? "dust-day" : "cloudy";
+
   const onDebugClick = (): void => console.info('Daylight Sunshine', {
     weather,
     sunshine: { duration: sunshineDuration, value: sunshine },
@@ -61,7 +63,7 @@ export default function DaylightSunshineWidget({ date, weather, miniCard, size }
         size={120}
         icon={(
           <WeatherIcon
-            iconName="dust-day"
+            iconName={sunshineIcon}
             size={size}
           />
         )}

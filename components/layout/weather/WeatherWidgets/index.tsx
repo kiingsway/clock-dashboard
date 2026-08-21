@@ -24,7 +24,7 @@ export default function WeatherWidgets({ weather }: Props): JSX.Element {
       <MoonWidget date={now} weather={weather} kind='now' />
       <UVIndexWidget date={now} weather={weather} kind='now' />
       <WindWidget date={now} weather={weather} />
-      <VisibilityWidget date={now} weather={weather} />
+      <VisibilityWidget date={now} weather={weather} kind='now' />
       <HumidityWidget date={now} weather={weather} kind='now' />
       <DewPointWidget date={now} weather={weather} kind='now' />
       <DaylightSunshineWidget date={now} weather={weather} />

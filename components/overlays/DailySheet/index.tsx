@@ -14,7 +14,6 @@ import WindWidget from '@/components/ui/weather/widgets/WindWidget';
 import CurrentWeatherWidget from '@/components/ui/weather/widgets/CurrentWeatherWidget';
 import HourlyList from '@/components/ui/weather/HourlyList';
 import MoonProgressBar from '@/components/ui/weather/MoonProgressBar';
-import getMoonInfo from '@/utils/weather/getMoonInfo';
 import { useNow } from '@/contexts/NowContext';
 import { TFunction } from 'i18next';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
@@ -74,14 +73,6 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
     return dateTime.hasSame(indexDate, 'day');
   });
 
-  const moonInfo = getMoonInfo({
-    now,
-    date: indexDate,
-    lat: weather.latitude,
-    lon: weather.longitude,
-    dailyMoon: weather.daily_moon,
-  });
-
   const accent = getAccent({ weatherCode });
 
   return (
@@ -102,10 +93,10 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
         <RainWidget precipMM={precipSum} chance={precipChance} hoursOfRain={precipHours} size={60} />
         <HourlyList startIndex={startIndex} weather={weather} />
         <MoonWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
-        <MoonProgressBar moonInfo={moonInfo} />
+        <MoonProgressBar date={indexDate} weather={weather} />
         <UVIndexWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
         <WindWidget date={indexDate} weather={weather} size={60} miniCard />
-        <VisibilityWidget date={indexDate} weather={weather} size={60} miniCard />
+        <VisibilityWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
         <HumidityWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
         <DewPointWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
         <DaylightSunshineWidget date={indexDate} weather={weather} size={60} miniCard />

@@ -17,26 +17,37 @@ interface Props {
   weather: IWeather;
   date: DateTime<boolean>;
   size?: number;
+  kind: 'now' | 'day';
   miniCard?: boolean;
 }
 
-export default function VisibilityWidget({ date, weather, size = 60, miniCard }: Props) {
+export default function VisibilityWidget({ date, weather, size = 60, kind, miniCard }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
   const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
 
-  const { hourly, hourly_units: { visibility: unit } } = weather
+  const { daily, daily_units, hourly, hourly_units } = weather
 
-  const nowIndex = getCurrentIndex({ date, time: hourly.time });
+  const time = kind === 'now' ? hourly.time : daily.time;
+  const nowIndex = getCurrentIndex({ date, time });
+  const visibArr = kind === 'now' ? hourly.visibility : daily.visibility_mean;
+  const visibility = visibArr[nowIndex];
 
-  const visibility = hourly.visibility[nowIndex];
+  const isDay = kind === 'day' || hourly.is_day;
+  const unit = kind === 'now' ? hourly_units.visibility : daily_units.visibility_mean;
 
   if (typeof visibility !== 'number') return null;
 
   const v = {
-    text: formatVisibility(visibility, locale, unit),
+    text: formatVisibility(visibility, unit, locale),
     desc: getVisibilityDescription(visibility, t),
     color: getVisibilityColor(visibility),
   }
+
+  const icon = (() => {
+    if (visibility <= 2000) return `cloud-down`;
+    if (visibility <= 5000) return `fog-${isDay ? 'day' : 'night'}`;
+    return 'rainbow-clear';
+  })();
 
   const onDebugClick = () => console.info('Visibility:', visibility);
 
@@ -45,7 +56,8 @@ export default function VisibilityWidget({ date, weather, size = 60, miniCard }:
       title={`${t('visibility')}: ${v.text}`}
       desc={v.desc}
       onDoubleClick={onDebugClick}
-      icon={<WeatherIcon iconName="rainbow-clear" size={size} />}
+      iconSize={size}
+      icon={<WeatherIcon iconName={icon} size={size} />}
     />
   );
 
@@ -72,7 +84,7 @@ export default function VisibilityWidget({ date, weather, size = 60, miniCard }:
   )
 }
 
-const formatVisibility = (visibility: number, locale: string, unit: string): string => {
+const formatVisibility = (visibility: number, unit: string, locale: string,): string => {
   if (visibility < 1000) return `${formatLocaleNumber(visibility, locale)} ${unit}`;
   return `${formatLocaleNumber(visibility / 1000, locale)} k${unit}`
 }

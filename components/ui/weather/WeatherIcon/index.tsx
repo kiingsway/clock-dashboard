@@ -9,6 +9,7 @@ import { capitalizeWords, splitCamelCase } from "@/utils/formatters/textFormatte
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
 import classNames from "classnames";
+import { Tooltip } from "../../Tooltip";
 
 interface WeatherSrcAltProps {
   src: string;
@@ -34,7 +35,6 @@ interface WeatherIconNameProps {
   category?: never
   src?: never;
   alt?: never;
-  title?: never;
   duration?: never;
 }
 
@@ -48,7 +48,6 @@ interface WeatherCategoryProps {
   iconName?: never
   src?: never;
   alt?: never;
-  title?: never;
   duration?: never;
 }
 
@@ -62,7 +61,6 @@ interface WeatherCodeProps {
   iconName?: never
   src?: never;
   alt?: never;
-  title?: never;
   duration?: never;
 }
 
@@ -70,6 +68,7 @@ interface Props {
   size?: number;
   className?: string;
   hideGlow?: boolean;
+  title?: string;
 }
 
 export type WeatherIconProps = Props & (WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps)
@@ -100,12 +99,12 @@ export default function WeatherIcon({
     if (iconName) {
       const src = getWeatherIconUrl({ iconName });
       const alt = capitalizeWords(iconName.split('-').join(' '))
-      return { src, alt }
+      return { src, alt, title }
     }
 
     if (typeof weatherCode === 'number') {
       const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now })
-      return { src, alt, title: alt }
+      return { src, alt, title }
     }
 
     if (category) {
@@ -125,13 +124,13 @@ export default function WeatherIcon({
     }
   })()
 
-  if (!weatherIcon) return <></>
+  if (!weatherIcon) return <></>;
 
-  return (
+  const content = (
     <div
       className={classNames(styles.icon, { [styles.noBefore]: hideGlow }, className)}
       title={weatherIcon?.title}
-      style={{ '--size': `${size / 2}px` } as React.CSSProperties}
+      style={{ '--half-size': `${size / 2}px` } as React.CSSProperties}
     >
       <Image
         src={weatherIcon.src}
@@ -140,5 +139,13 @@ export default function WeatherIcon({
         height={size}
       />
     </div>
+  );
+
+  if (!title && !weatherIcon.title) return content;
+
+  return (
+    <Tooltip content={title || weatherIcon.title}>
+      {content}
+    </Tooltip>
   )
 }

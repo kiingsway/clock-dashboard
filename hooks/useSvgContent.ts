@@ -32,9 +32,7 @@ export function useSvgContent(src?: string) {
 
       const response = await fetch(src);
 
-      if (!response.ok) {
-        throw new Error(`Failed to fetch SVG: ${src}`);
-      }
+      if (!response.ok) throw new Error(`Failed to fetch SVG: ${src}`);
 
       const content = await response.text();
 

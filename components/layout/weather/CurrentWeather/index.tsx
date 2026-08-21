@@ -9,6 +9,7 @@ import { JSX } from "react"
 import { WeatherNow } from "@/components/ui/weather/WeatherNow"
 import { ensureWeather } from "@/utils/weather/ensureWeather"
 import PrecipitationChart from "@/components/ui/weather/PrecipitationChart"
+import ErrorBoundary from "@/components/ui/ErrorBoundary"
 
 interface Props {
   weather: IWeather | undefined
@@ -35,6 +36,7 @@ export function CurrentWeather({ weather, loading, alerts }: Props): JSX.Element
   const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow });
 
   return (
+    <ErrorBoundary>
     <section className={styles.current} aria-label="Clima atual" onDoubleClick={onDebugClick}>
       <CurrentWeatherIcon
         weatherCode={current.weather_code}
@@ -42,7 +44,6 @@ export function CurrentWeather({ weather, loading, alerts }: Props): JSX.Element
         sunWindow={sunWindow}
         weather={weather}
       />
-
       <WeatherNow
         temperature={current.temperature_2m}
         feelsLike={current.apparent_temperature}
@@ -58,5 +59,6 @@ export function CurrentWeather({ weather, loading, alerts }: Props): JSX.Element
       {sunWindow && <SunProgressBar sunWindow={sunWindow} includeNight />}
 
     </section>
+    </ErrorBoundary>
   );
 }

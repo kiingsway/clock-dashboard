@@ -10,9 +10,7 @@ export default async function fetchCanadaWeatherAlerts(
     `/api/z/weather-alerts?lat=${lat}&lon=${lon}&radiusKm=${radiusKm}`,
   );
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch weather alerts.");
-  }
+  if (!res.ok) throw new Error("Failed to fetch weather alerts.");
 
   return res.json();
 }

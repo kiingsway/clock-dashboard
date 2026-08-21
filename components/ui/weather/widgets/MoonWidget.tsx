@@ -23,7 +23,7 @@ export default function MoonWidget({ date, weather, kind = 'now', miniCard = fal
   const moonNow = weather?.daily_moon?.find(m => m.date === (kind === 'now' ? now : date).toISODate());
 
   const [moonrise, moonset] = [moonNow?.moonrise, moonNow?.moonset].map(moonTime => {
-    const datetime = moonTime ? DateTime.fromISO(moonTime) : undefined;
+    const datetime = moonTime ? DateTime.fromISO(moonTime).setZone(weather.timezone) : undefined;
     if (!datetime?.isValid) return { date: undefined, text: '--/-- --:--' };
     const isToday = datetime.hasSame(now, 'day');
     return { date: datetime, text: datetime.toFormat(`${isToday ? '' : 'dd/LL '}HH:mm`) }

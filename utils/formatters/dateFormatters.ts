@@ -56,3 +56,19 @@ export function formatDuration(totalSeconds: number): string {
 
   return minutes > 0 ? `${hours}h ${minutes}m` : `${hours}h`;
 }
+
+interface FormatDateTimeOptions {
+  date: Date | string | number;
+  locale: string; // Ex: 'pt', 'en', 'fr', 'es', 'ko' ou vindo do i18n.language
+  timezone?: string; // Ex: 'America/Toronto', 'Asia/Seoul'
+}
+
+export function formatDateTime({ date, locale, timezone }: FormatDateTimeOptions): string {
+  const d = new Date(date);
+
+  return new Intl.DateTimeFormat(locale, {
+    dateStyle: "medium", // 'full' | 'long' | 'medium' | 'short'
+    timeStyle: "short",  // 'full' | 'long' | 'medium' | 'short'
+    timeZone: timezone,
+  }).format(d);
+}

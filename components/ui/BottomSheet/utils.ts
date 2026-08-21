@@ -51,8 +51,9 @@ export function useFocusTrap(
     previouslyFocused.current = document.activeElement as HTMLElement | null;
 
     // Focus something inside the sheet so screen readers announce the dialog.
-    const focusables = getFocusableElements(container);
-    (focusables[0] ?? container).focus({ preventScroll: true });
+    // const focusables = getFocusableElements(container);
+    // (focusables[0] ?? container).focus({ preventScroll: true });
+    container.focus({ preventScroll: true });
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== "Tab") return;

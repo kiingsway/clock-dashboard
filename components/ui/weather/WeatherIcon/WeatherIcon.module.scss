@@ -7,8 +7,8 @@
   &::before {
     content: "";
     position: absolute;
-    width: calc(20px + (50px - var(--size, 34px)) * 0.4);
-    height: calc(20px + (50px - var(--size, 34px)) * 0.4);
+    width: calc(20px + (50px - var(--half-size, 34px)) * 0.4);
+    height: calc(20px + (50px - var(--half-size, 34px)) * 0.4);
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);

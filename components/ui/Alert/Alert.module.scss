@@ -6,7 +6,7 @@
   padding: var(--wc-space-lg);
   border-radius: var(--wc-radius-md);
   border: 1px solid var(--wc-hairline);
-  
+
   background: linear-gradient(to right,
       var(--wc-surface) 0%,
       color-mix(in srgb, var(--wc-surface) 60%, var(--alert-accent)) 80%,
@@ -58,25 +58,26 @@
   color: var(--wc-text-muted);
 }
 
-.close {
+.btn {
   flex-shrink: 0;
   appearance: none;
   border: none;
-  background: transparent;
+  background-color: transparent;
   cursor: pointer;
 
-  width: 24px;
-  height: 24px;
+  padding: var(--wc-space-sm);
   border-radius: var(--wc-radius-sm);
 
-  color: var(--wc-text-faint);
+  color: var(--wc-text);
   font-size: var(--wc-text-lg);
   line-height: 1;
-}
 
-.close:hover {
-  color: var(--wc-text);
-  background: var(--wc-highlight);
+  transition: background-color 50ms ease-in-out;
+
+  &:hover {
+    color: white;
+    background-color: var(--wc-highlight);
+  }
 }
 
 /* Variantes */

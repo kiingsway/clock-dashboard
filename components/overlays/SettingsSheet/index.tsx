@@ -80,7 +80,7 @@ export function SettingsSheet({
       dismissible
       container={portalContainer}
     >
-      <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+      <form className={styles.form} onSubmit={(e) => e.preventDefault()} tabIndex={-1}>
         {Boolean(alertsError) && (
           <Alert
             title="Failed to fetch weather alerts"
@@ -95,6 +95,7 @@ export function SettingsSheet({
             htmlFor="language"
             control={
               <select
+                onFocus={() => console.log("SELECT FOCUSED")}
                 id="language"
                 className={styles.select}
                 value={i18n.language}

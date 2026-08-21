@@ -11,7 +11,11 @@ interface Props {
   variant?: AlertVariant;
   title: string;
   message?: ReactNode;
-  onClose?: () => void;
+  button?: {
+    onClick: () => void;
+    ariaLabel: string;
+    text?: ReactNode;
+  }
 }
 
 const ICONS: Record<AlertVariant, ReactNode> = {
@@ -21,7 +25,7 @@ const ICONS: Record<AlertVariant, ReactNode> = {
   info: <IoMdInformationCircle />,
 };
 
-export default function Alert({ variant = 'info', title, message, onClose }: Props) {
+export default function Alert({ variant = 'info', title, message, button }: Props) {
   return (
     <div className={`${styles.alert} ${styles[variant]}`} role="alert">
       <div className={styles.icon}>{ICONS[variant]}</div>
@@ -31,14 +35,14 @@ export default function Alert({ variant = 'info', title, message, onClose }: Pro
         {message && <p className={styles.message}>{message}</p>}
       </div>
 
-      {onClose && (
+      {button && (
         <button
           type="button"
-          className={styles.close}
-          onClick={onClose}
-          aria-label="Fechar alerta"
+          className={styles.btn}
+          onClick={button.onClick}
+          aria-label={button.ariaLabel}
         >
-          &times;
+          {button.text || <>&times;</>}
         </button>
       )}
     </div>

@@ -1,16 +1,17 @@
-import { ReactNode, isValidElement, cloneElement, ReactElement } from "react";
+import { ReactNode, isValidElement, cloneElement, ReactElement, CSSProperties } from "react";
 import styles from './MiniCard.module.scss';
 
 interface Props {
   icon?: ReactNode;
   icons?: ReactNode[];
   size?: number;
+  iconSize?: number;
   title?: string;
   desc?: string;
   onDoubleClick?: () => void;
 }
 
-export default function MiniCard({ icon, icons, size = 48, title, desc, onDoubleClick }: Props) {
+export default function MiniCard({ icon, icons, size = 48, iconSize, title, desc, onDoubleClick }: Props) {
   const hasIcons = icons && icons.length > 0;
 
   const renderIconStack = () => {
@@ -46,8 +47,15 @@ export default function MiniCard({ icon, icons, size = 48, title, desc, onDouble
     );
   };
 
+  const style = {
+    ...(iconSize ? { '--icon-size': `${iconSize}px` } : {})
+  } as CSSProperties;
+
   return (
-    <div className={styles.card} onDoubleClick={onDoubleClick}>
+    <div
+      style={style}
+      className={styles.card}
+      onDoubleClick={onDoubleClick}>
       <div className={styles.icon}>
         {hasIcons ? renderIconStack() : icon}
       </div>

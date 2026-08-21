@@ -85,6 +85,7 @@ export interface IDailyUnits {
   dew_point_2m_mean: "°C" | "°F";
   daylight_duration: "s";
   sunshine_duration: "s";
+  visibility_mean: "m";
 }
 
 export interface IDaily {
@@ -107,6 +108,7 @@ export interface IDaily {
   dew_point_2m_mean: number[];
   daylight_duration: number[];
   sunshine_duration: number[];
+  visibility_mean: number[];
 }
 
 export interface IMoonDaily {
@@ -189,3 +191,5 @@ export interface WeatherIconInfo {
 }
 
 export type WindType = "speed" | "gusts";
+
+export type MoonPhaseIcon = { iconName: string | undefined; phase: number | undefined };

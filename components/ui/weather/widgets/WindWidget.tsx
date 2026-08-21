@@ -41,6 +41,8 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
 
   const { day, now } = windInfo;
 
+  const nowBeaufortTitle = `Beaufort Scale: ${now.beaufort?.value} (${now.speed.value}${now.speed.unit})`;
+
   if (miniCard) {
     return (
       <MiniCard
@@ -52,8 +54,8 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
           <WeatherIcon
             key="beaufort"
             src={now.beaufort?.src || ''}
-            title={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
-            alt={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
+            title={nowBeaufortTitle}
+            alt={nowBeaufortTitle}
             duration={now.beaufort?.duration}
           />,
           <WeatherIcon
@@ -80,8 +82,8 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
           <>
             <WeatherIcon
               src={now.beaufort.src}
-              title={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
-              alt={`Beaufort Scale: ${now.beaufort?.value} (${now.speed})`}
+              title={nowBeaufortTitle}
+              alt={nowBeaufortTitle}
               duration={now.beaufort?.duration}
               size={80}
             />
