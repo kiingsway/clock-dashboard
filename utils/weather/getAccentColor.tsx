@@ -34,7 +34,7 @@ type GetAccentProps = (WeatherCodeProps | CategoryProps | CategoryNameProps) & I
 
 export function getAccent({ isDay = true, categoryName: cName, category, weatherCode, t }: GetAccentProps): string {
   const categoryName = (() => {
-    if (weatherCode && t) return getWeatherCategory(weatherCode, t).name
+    if (typeof weatherCode === 'number' && t) return getWeatherCategory(weatherCode, t).name
     return category?.name || cName
   })();
 
