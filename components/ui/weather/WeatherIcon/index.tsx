@@ -10,6 +10,7 @@ import { useAppSettings } from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
 import classNames from "classnames";
 import { Tooltip } from "../../Tooltip";
+import { useTranslation } from "react-i18next";
 
 interface WeatherSrcAltProps {
   src: string;
@@ -90,6 +91,7 @@ export default function WeatherIcon({
 }: WeatherIconProps): JSX.Element {
   const { now } = useNow()
   const { get: { location: timezone } } = useAppSettings();
+  const { t } = useTranslation();
 
   if (duration) return <AnimatedWeatherIcon src={src} alt={alt} title={title} size={size} duration={duration} />
 
@@ -103,7 +105,7 @@ export default function WeatherIcon({
     }
 
     if (typeof weatherCode === 'number') {
-      const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now })
+      const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now, t })
       return { src, alt, title }
     }
 

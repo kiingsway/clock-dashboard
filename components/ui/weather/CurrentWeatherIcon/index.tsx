@@ -6,6 +6,7 @@ import { isXMinBefore } from '@/utils/formatters/mathDateFormatters';
 import WeatherIcon, { WeatherIconProps } from '../WeatherIcon';
 import { Tooltip } from '../../Tooltip';
 import { useNow } from '@/contexts/NowContext';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   weatherCode: number;
@@ -17,8 +18,9 @@ interface Props {
 
 export default function CurrentWeatherIcon({ weatherCode, sunWindow, isDay, weather, size = 160 }: Props) {
   const { now } = useNow();
+  const { t } = useTranslation();
 
-  const weatherCategory = getWeatherCategory(weatherCode);
+  const weatherCategory = getWeatherCategory(weatherCode, t);
   const isBeforeSunRiseSet = !sunWindow ? false : isXMinBefore(now, sunWindow.end, 30);
 
   const weatherIconProps: WeatherIconProps = {

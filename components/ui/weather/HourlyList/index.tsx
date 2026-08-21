@@ -15,9 +15,10 @@ interface Props {
   startIndex: number;
   weather: IWeather;
   hoursToShow?: number;
+  kind: 'day' | 'now';
 }
 
-export default function HourlyList({ startIndex, weather, hoursToShow = 24 }: Props) {
+export default function HourlyList({ startIndex, weather, hoursToShow = 24, kind = 'now' }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
 
@@ -61,30 +62,24 @@ export default function HourlyList({ startIndex, weather, hoursToShow = 24 }: Pr
         const precip = precipitations[index];
         const isDay = isDays[index] === 1;
 
-        const category = getWeatherCategory(weatherCode);
+        const category = getWeatherCategory(weatherCode, t);
         const accent = getAccent({ category, isDay });
         const accentPeak = getRainColor(precip);
 
-        const difference = indexDate
-          .startOf('day')
-          .diff(now.startOf('day'), 'days')
-          .days;
-        const subhour = `+${difference}`;
-
         const minDiff = indexDate.diff(now, 'minutes').minutes;
-        const within20Minutes = Math.abs(minDiff) <= 25;
+        const daysDiff = kind === 'now' ? minDiff / 1440 : indexDate.startOf('day').diff(now.startOf('day'), 'days').days;
 
+        const hour = Math.abs(minDiff) <= 25 ? t('now') : getLocaleHour(indexDate, locale);
+        const subhour = `+${Math.floor(daysDiff)}`;
         const hourTooltip = formatDateTime({ date: indexDate.toJSDate(), locale, timezone });
 
         return (
           <HourlyCard
             key={indexDateString}
             as="li"
-            hour={within20Minutes
-              ? t('now')
-              : getLocaleHour(indexDate, locale)}
+            hour={hour}
             subhour={subhour}
-            hideSubhour={difference < 1}
+            hideSubhour={daysDiff < 1}
             hourTooltip={hourTooltip}
             temp={temp}
             tempUnit={tempUnit}

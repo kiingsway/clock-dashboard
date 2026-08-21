@@ -35,7 +35,7 @@ export function HourlyForecast({ weather, hoursToShow = 24 * 3 }: HourlyForecast
 
   return (
     <section className={styles.section} aria-label={t('nextHours')}>
-      <HourlyList startIndex={startIndex} weather={weather} hoursToShow={72} />
+      <HourlyList startIndex={startIndex} weather={weather} hoursToShow={72} kind="now" />
     </section>
   );
 }

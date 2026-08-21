@@ -1,15 +1,15 @@
 ﻿import { WeatherCategory, WeatherCategoryName } from "@/types/weather.types";
-import { splitCamelCase } from "../formatters/textFormatters";
+import { TFunction } from "i18next";
 
 /**
  * Buckets a WMO weather code into a coarse category.
  * Shared by the icon picker and by `getAccentColor`, so the two always agree
  * on what a given code "means".
  */
-export default function getWeatherCategory(weatherCode?: number): WeatherCategory {
+export default function getWeatherCategory(weatherCode: number | undefined, t: TFunction): WeatherCategory {
   let name: WeatherCategoryName = "unknown";
 
-  if (typeof weatherCode !== 'number') return { name, title: splitCamelCase(name) }
+  if (typeof weatherCode !== 'number') return { name, title: t(name) }
 
   if (weatherCode === 0 || weatherCode === 1) {
     name = "clear";
@@ -63,6 +63,6 @@ export default function getWeatherCategory(weatherCode?: number): WeatherCategor
     name = "unknown";
   }
 
-  return { name, title: splitCamelCase(name) };
+  return { name, title: t(`weatherCategoryNames.${name}`) };
 }
 

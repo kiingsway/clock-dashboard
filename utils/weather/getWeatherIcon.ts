@@ -3,6 +3,7 @@ import getWeatherCategory from "./getWeatherCategory";
 import { getWeatherIconUrl } from "./getWeatherIconName";
 import getMoonInfo from "./getMoonInfo";
 import { WeatherIconInfo } from "@/types/weather.types";
+import { TFunction } from "i18next";
 
 interface Props {
   weatherCode: number;
@@ -12,6 +13,7 @@ interface Props {
   date?: DateTime
   lat?: number;
   lon?: number;
+  t: TFunction
 }
 
 export default function getWeatherIcon({
@@ -20,9 +22,10 @@ export default function getWeatherIcon({
   lon,
   isDay = true,
   now,
+  t,
 }: Props): WeatherIconInfo {
 
-  const category = getWeatherCategory(weatherCode)
+  const category = getWeatherCategory(weatherCode, t)
   const weatherIconSrc = getWeatherIconUrl({ category, isDay });
 
   const moonInfo = lat && lon ? getMoonInfo({ now, lat, lon }) : undefined;

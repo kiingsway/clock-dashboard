@@ -90,8 +90,8 @@ export default function PrecipitationTooltip({
 
   const items = [...areaItems, ...infoItems];
 
-  const accent = getAccent({ isDay, weatherCode });
-  const weatherCategory = getWeatherCategory(weatherCode);
+  const accent = getAccent({ isDay, weatherCode, t });
+  const weatherCategory = getWeatherCategory(weatherCode, t);
 
   return (
     <div className={styles.tooltip} style={{ '--wc-accent': accent } as CSSProperties}>

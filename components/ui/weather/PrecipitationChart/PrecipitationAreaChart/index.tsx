@@ -94,7 +94,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
 
   const tickFormatter = (label: string) => label === firstData.hour ? t('now') : label;
 
-  const firstAccent = getAccent(firstData);
+  const firstAccent = getAccent({ ...firstData, t });
 
   const maxPrecipitation = Math.max(
     10,
@@ -138,7 +138,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
           tickFormatter={tickFormatter}
           ticks={customTicks}
           tick={({ x, y, payload }) => {
-            const accent = getAccent(data[payload.index]);
+            const accent = getAccent({...data[payload.index], t});
             return (
               <CustomTick
                 x={x}

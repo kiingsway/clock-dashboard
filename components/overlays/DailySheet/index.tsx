@@ -73,7 +73,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
     return dateTime.hasSame(indexDate, 'day');
   });
 
-  const accent = getAccent({ weatherCode });
+  const accent = getAccent({ weatherCode, t });
 
   return (
     <BottomSheet
@@ -91,7 +91,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
         <CurrentWeatherWidget weatherCode={weatherCode} tempMin={tempMin} tempMax={tempMax} size={60} />
         <TempFeelsLikeWidget feelsLike={feelsLike} tempMean={tempMean} size={60} />
         <RainWidget precipMM={precipSum} chance={precipChance} hoursOfRain={precipHours} size={60} />
-        <HourlyList startIndex={startIndex} weather={weather} />
+        <HourlyList startIndex={startIndex} weather={weather} kind='day' />
         <MoonWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
         <MoonProgressBar date={indexDate} weather={weather} />
         <UVIndexWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />

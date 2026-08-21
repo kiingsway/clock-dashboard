@@ -13,7 +13,7 @@ interface Props {
 export default function CurrentWeatherWidget({ weatherCode, tempMax, tempMin, size }: Props) {
   const { t } = useTranslation();
 
-  const category = getWeatherCategory(weatherCode);
+  const category = getWeatherCategory(weatherCode, t);
 
   return (
     <MiniCard

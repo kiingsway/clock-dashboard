@@ -13,14 +13,16 @@ import { SettingsSheet } from "@/components/overlays/SettingsSheet";
 import useBoolean from "@/hooks/useBoolean";
 import { getAccent } from "@/utils/weather/getAccentColor";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
+import { useTranslation } from "react-i18next";
 
 export default function WeatherTab() {
+  const { t } = useTranslation();
   const { weather, isLoading, error: weatherError } = useWeather();
   const { data: alerts, error: alertsError } = useWeatherAlerts();
   const { focus, toggleFocus } = useFocusMode({ onFocus: 12000, offFocus: 0 });
   const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
 
-  const accent = getAccent({ weatherCode: weather?.current.weather_code ?? -1, isDay: weather?.current.is_day === 1 });
+  const accent = getAccent({ weatherCode: weather?.current.weather_code ?? -1, isDay: weather?.current.is_day === 1, t });
 
   return (
     <>

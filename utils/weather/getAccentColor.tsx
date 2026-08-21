@@ -1,12 +1,10 @@
 import { IWeatherCurrent, WeatherCategory, WeatherCategoryName } from "@/types/weather.types";
 import getWeatherCategory from "./getWeatherCategory";
-
-interface InitialProps {
-  isDay?: IWeatherCurrent["is_day"] | boolean;
-}
+import { TFunction } from "i18next";
 
 interface WeatherCodeProps {
   weatherCode: number;
+  t: TFunction;
 
   category?: never;
   categoryName?: never;
@@ -15,6 +13,7 @@ interface WeatherCodeProps {
 interface CategoryProps {
   category: WeatherCategory;
 
+  t?: never;
   weatherCode?: never;
   categoryName?: never;
 }
@@ -22,14 +21,23 @@ interface CategoryProps {
 interface CategoryNameProps {
   categoryName: WeatherCategoryName;
 
+  t?: never;
   weatherCode?: never;
   category?: never;
 }
 
+interface InitialProps {
+  isDay?: IWeatherCurrent["is_day"] | boolean;
+}
+
 type GetAccentProps = (WeatherCodeProps | CategoryProps | CategoryNameProps) & InitialProps;
 
-export function getAccent({ isDay = true, categoryName: cName, category, weatherCode }: GetAccentProps): string {
-  const categoryName = cName || category?.name || getWeatherCategory(weatherCode).name;
+export function getAccent({ isDay = true, categoryName: cName, category, weatherCode, t }: GetAccentProps): string {
+  const categoryName = (() => {
+    if (weatherCode && t) return getWeatherCategory(weatherCode, t).name
+    return category?.name || cName
+  })();
+
   if (!categoryName) return "#6b7280";
   return getAccentColor(categoryName, typeof isDay === 'boolean' ? isDay : isDay !== 0);
 }

@@ -47,7 +47,7 @@ export default function ForecastDay({ weather, weekMin, weekMax, today, index, s
   const indexDate = DateTime.fromISO(iso, { zone: timezone });
   const isToday = indexDate.hasSame(today, "day");
 
-  const accent = getAccent({ weatherCode });
+  const accent = getAccent({ weatherCode, t });
 
   const temperatureRange = weekMax - weekMin || 1;
   const rangeStart = ((dayMin - weekMin) / temperatureRange) * 100;
