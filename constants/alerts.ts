@@ -18,7 +18,7 @@ export const RISK_COLOR_ORDER = [
 ];
 
 export const ALERT_RADIUS_KM = {
-  MIN: 50,
+  MIN: 10,
   MAX: 4000,
   STEP: 50,
 }

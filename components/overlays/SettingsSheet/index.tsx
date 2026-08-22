@@ -169,6 +169,7 @@ export function SettingsSheet({
                 onChange={setDraftRadius}
                 onCommit={commitRadius}
                 unit="km"
+                snapToMultiples
               />
             }
           />
