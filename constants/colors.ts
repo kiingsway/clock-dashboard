@@ -1,8 +1,8 @@
 import { WeatherCategoryName } from "@/types/weather.types";
 
 export const DEFAULT_COLOR = {
-  weather: "#6b7280",
-  normalWhite: "#e8ecf4"
+  WEATHER: "#6b7280",
+  WHITE: "#e8ecf4"
 }
 
 export const WEATHER_ACCENT_COLORS: Record<WeatherCategoryName, string | { day: string; night: string }> = {
@@ -30,7 +30,7 @@ export const WEATHER_ACCENT_COLORS: Record<WeatherCategoryName, string | { day: 
   heavyHail: "#a98cf0",
   loading: "#4b5563",
   error: "#ef4444",
-  unknown: DEFAULT_COLOR.weather,
+  unknown: DEFAULT_COLOR.WEATHER,
   sunrise: "#e5be85",
   sunset: "#f4b860"
 } as const;
@@ -68,24 +68,24 @@ export const VISIBILITY_COLORS = [
 
 export const HUMIDITY_COLORS = {
   DRY: "#f59e0b",
-  NORMAL: DEFAULT_COLOR.normalWhite,
+  NORMAL: DEFAULT_COLOR.WHITE,
   WET: "#3b82f6",
 } as const;
 
 export const DEW_COLORS = {
   COLD: '#a5f3fc',
-  NORMAL: DEFAULT_COLOR.normalWhite,
+  NORMAL: DEFAULT_COLOR.WHITE,
   HOT: '#fca5a5',
 } as const;
 
 export const DAYLIGHT_COLORS = {
   DARK: "#a98cf0",
-  NORMAL: DEFAULT_COLOR.normalWhite,
+  NORMAL: DEFAULT_COLOR.WHITE,
   LIGHT: "#fef08a",
 } as const;
 
 export const SUNSHINE_COLORS = {
-  NOTHING: DEFAULT_COLOR.normalWhite,
+  NOTHING: DEFAULT_COLOR.WHITE,
   HALF: "#fde047",
   FULL: "#fdba74",
 } as const;

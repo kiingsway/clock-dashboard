@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { Key, ReactNode } from "react";
 
 export interface NameIcon {
   name: string;
@@ -63,4 +63,16 @@ export interface IVisibilityInfo {
   title: string;
   color: string;
   desc: string;
+}
+
+export interface IDailyData {
+  key: Key;
+  dayName: string;
+  weatherCode: number;
+  tempMin: number;
+  tempMax: number;
+  tempUnit: string;
+  index: number;
+  accent: string;
+  range: { left: string, width: string };
 }

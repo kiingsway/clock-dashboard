@@ -56,10 +56,5 @@ export function RainGauge({ mm, max = 10, precision = 1, className }: RainGaugeP
   );
 
   if (mm === 0) return content;
-
-  return (
-    <Tooltip content={title}>
-      {content}
-    </Tooltip>
-  );
+  return <Tooltip content={title}>{content}</Tooltip>;
 }

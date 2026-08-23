@@ -20,10 +20,7 @@ interface Props {
   offFocus: number;
 }
 
-export function useFocusMode({
-  onFocus,
-  offFocus,
-}: Props): IUseFocusMode {
+export function useFocusMode({ onFocus, offFocus }: Props): IUseFocusMode {
   const [focus, { toggle: toggleFocus }] = useBoolean();
 
   const delay = focus ? onFocus : offFocus;

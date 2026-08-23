@@ -10,6 +10,7 @@ import WeatherIcon from '../../WeatherIcon';
 import { rainIntensityColor, showersIntensityColor, snowIntensityColor } from '@/utils/weather/getColors';
 import PrecipitationTooltip from '../PrecipitationTooltip';
 import { IPrecipChartData } from '@/types/chart.types';
+import { DEFAULT_COLOR } from '@/constants/colors';
 
 interface Props {
   data: IPrecipChartData[];
@@ -89,12 +90,12 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
     return Math.round((len * 20 + 10) / 7);
   })();
 
-  const firstData = data[0];
+  const firstData = data?.[0] as IPrecipChartData | undefined;
   const firstTop = precipitationAreas.reduce((sum, area) => sum + (firstData?.[area] || 0), 0);
 
-  const tickFormatter = (label: string) => label === firstData.hour ? t('now') : label;
+  const tickFormatter = (label: string) => label === firstData?.hour ? t('now') : label;
 
-  const firstAccent = getAccent({ ...firstData, t });
+  const firstAccent = firstData ? getAccent({ ...firstData, t }) : DEFAULT_COLOR.WEATHER;
 
   const maxPrecipitation = Math.max(
     10,
@@ -118,11 +119,13 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
           ))}
         </defs>
 
-        <ReferenceDot
-          x={firstData.hour}
-          y={firstTop}
-          shape={firstData.rain > 0 ? <Arrow accent={firstAccent} /> : <></>}
-        />
+        {firstData && firstData.rain > 0 && (
+          <ReferenceDot
+            x={firstData.hour}
+            y={firstTop}
+            shape={<Arrow accent={firstAccent} />}
+          />
+        )}
 
         <YAxis
           hide
@@ -138,7 +141,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
           tickFormatter={tickFormatter}
           ticks={customTicks}
           tick={({ x, y, payload }) => {
-            const accent = getAccent({...data[payload.index], t});
+            const accent = getAccent({ ...data[payload.index], t });
             return (
               <CustomTick
                 x={x}
@@ -146,7 +149,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
                 value={payload.value}
                 firstHour={customTicks[0]}
                 accent={accent}
-                hasPrecip={firstData.rain > 0}
+                hasPrecip={Boolean(firstData && firstData.rain > 0)}
               />
             )
           }}

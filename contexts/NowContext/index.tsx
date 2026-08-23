@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 interface NowContextValue {
   now: DateTime;
+  today: DateTime;
   simulatedDate: DateTime | undefined;
   setSimulatedDate: (date: DateTime | string | undefined) => void;
 }
@@ -56,6 +57,7 @@ export function NowProvider({ children }: NowProviderProps) {
   };
 
   const [now, setNow] = useState<DateTime>(getNow);
+  const [today, setToday] = useState<DateTime>(getNow);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -66,7 +68,17 @@ export function NowProvider({ children }: NowProviderProps) {
     let timeout: ReturnType<typeof setTimeout>;
 
     const update = () => {
-      setNow(getRealNow());
+      const realNow = getRealNow();
+
+      setNow(realNow);
+
+      setToday((previous) => {
+        const next = realNow.startOf("day");
+
+        return previous.hasSame(next, "day")
+          ? previous
+          : next;
+      });
 
       const current = DateTime.now();
 
@@ -113,10 +125,11 @@ export function NowProvider({ children }: NowProviderProps) {
   const value = useMemo(
     () => ({
       now,
+      today,
       simulatedDate,
       setSimulatedDate,
     }),
-    [now, simulatedDate]
+    [now, today, simulatedDate]
   );
 
   return (

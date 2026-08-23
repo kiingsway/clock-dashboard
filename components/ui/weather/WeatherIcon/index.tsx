@@ -11,8 +11,15 @@ import { useNow } from "@/contexts/NowContext";
 import classNames from "classnames";
 import { Tooltip } from "../../Tooltip";
 import { useTranslation } from "react-i18next";
+import { DateTime } from "luxon";
 
-interface WeatherSrcAltProps {
+interface Props {
+  size?: number;
+  className?: string;
+  hideGlow?: boolean;
+}
+
+interface WeatherSrcAltProps extends Props {
   src: string;
   alt: string;
   title?: string;
@@ -20,43 +27,50 @@ interface WeatherSrcAltProps {
 
   weatherCode?: never
   isDay?: never
+  date?: never
   lat?: never
   lon?: never
   category?: never
   iconName?: never
 }
 
-interface WeatherIconNameProps {
+interface WeatherIconNameProps extends Props {
   iconName: string
 
   weatherCode?: never
   isDay?: never
+  date?: never
   lat?: never
   lon?: never
   category?: never
   src?: never;
   alt?: never;
+  title?: never;
   duration?: never;
 }
 
-interface WeatherCategoryProps {
+interface WeatherCategoryProps extends Props {
   category: WeatherCategoryName | { name: WeatherCategoryName, title?: string }
 
   weatherCode?: never
   isDay?: never
+  date?: never
   lat?: never
   lon?: never
   iconName?: never
   src?: never;
   alt?: never;
+  title?: never;
   duration?: never;
 }
 
-interface WeatherCodeProps {
+interface WeatherCodeProps extends Props {
   weatherCode: number
   isDay?: boolean
+  date?: DateTime
   lat?: number
   lon?: number
+  title?: string;
 
   category?: never
   iconName?: never
@@ -65,14 +79,7 @@ interface WeatherCodeProps {
   duration?: never;
 }
 
-interface Props {
-  size?: number;
-  className?: string;
-  hideGlow?: boolean;
-  title?: string;
-}
-
-export type WeatherIconProps = Props & (WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps)
+export type WeatherIconProps = WeatherCodeProps | WeatherCategoryProps | WeatherIconNameProps | WeatherSrcAltProps
 
 export default function WeatherIcon({
   category,

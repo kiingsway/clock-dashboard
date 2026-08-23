@@ -1,31 +1,33 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties } from 'react';
 import styles from './HourlyCard.module.scss';
 import { Tooltip } from '../../Tooltip';
+import WeatherIcon, { WeatherIconProps } from '../WeatherIcon';
+import { RainGauge } from '../RainGauge';
 
-interface Props {
+export interface HourlyCardProps {
   as?: 'li' | 'div';
   hour: string;
   subhour?: string | number;
   hideSubhour?: boolean;
   hourTooltip: string;
-  icon: ReactNode;
+  icon: WeatherIconProps;
   temp: number;
   tempUnit?: string;
   feelsLike: number;
   feelsLikeUnit?: string;
-  desc: ReactNode;
+  precipitation: number;
   accent: string;
   accentPeak: string;
 }
 
 export default function HourlyCard({
   as: Component = 'div',
-  desc, icon, feelsLike, hour, temp, subhour, hideSubhour,
+  precipitation, icon, feelsLike, hour, temp, subhour, hideSubhour,
   tempUnit = 'ºC',
   feelsLikeUnit = 'ºC',
   hourTooltip,
   accent, accentPeak
-}: Props) {
+}: HourlyCardProps) {
   return (
     <Component className={styles.card} style={{
       "--wc-accent": accent,
@@ -40,7 +42,7 @@ export default function HourlyCard({
       </Tooltip>
 
       <div className={styles.icon}>
-        {icon}
+        <WeatherIcon {...icon} size={40} />
       </div>
 
       <span className={styles.temp}>
@@ -51,7 +53,7 @@ export default function HourlyCard({
         {feelsLike + feelsLikeUnit}
       </span>
 
-      {desc}
+      <RainGauge mm={precipitation} />
     </Component>
   )
 }

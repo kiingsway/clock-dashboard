@@ -1,9 +1,13 @@
+import { TFunction } from "i18next";
 import { DateTime } from "luxon";
 
-export default function getForecastDateLabel(now: DateTime, date: DateTime, locale: string) {
+export default function getForecastDateLabel(now: DateTime, date: DateTime, locale: string, t: TFunction) {
   const initialNow = now.startOf("day");
   const targetDate = date.startOf("day");
   const diffInDays = Math.abs(targetDate.diff(initialNow, "days").days);
+
+  if (diffInDays === -1) return t('yesterday');
+  if (diffInDays === 0) return t('today');
 
   const localDate = date.setLocale(locale);
 
