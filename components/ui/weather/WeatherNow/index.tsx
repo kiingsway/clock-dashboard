@@ -26,12 +26,12 @@ export function WeatherNow({
   icon,
 }: WeatherNowProps) {
   const { t } = useTranslation();
-  const round = (n: number) => Math.round(n);
+  const r = (n: number) => Math.round(n);
 
   // Where the current temp sits between today's min/max, clamped 0–100.
   const rangePosition = useMemo(() => {
     if ((maxTemp === minTemp) || (maxTemp === -999 || minTemp === -999)) return 50;
-    const pct = ((round(temperature) - minTemp) / (maxTemp - minTemp)) * 100;
+    const pct = ((r(temperature) - minTemp) / (maxTemp - minTemp)) * 100;
     return Math.min(100, Math.max(0, pct));
   }, [temperature, minTemp, maxTemp]);
 
@@ -40,10 +40,14 @@ export function WeatherNow({
   const noMaxTemp = maxTemp === -999;
   const noMinTemp = minTemp === -999;
 
-  const temp = hasNoTemp ? '-' : round(temperature);
-  const feelsLikeTemp = hasNoFLike ? '-' : `${round(feelsLike)}°`;
-  const max = noMaxTemp ? '-' : `${round(maxTemp)}°`;
-  const min = noMinTemp ? '-' : `${round(minTemp)}°`;
+  const temp = hasNoTemp ? '-' : r(temperature);
+  const feelsLikeTemp = hasNoFLike ? '-' : `${r(feelsLike)}°`;
+  const max = noMaxTemp ? '-' : `${r(maxTemp)}°`;
+  const min = noMinTemp ? '-' : `${r(minTemp)}°`;
+
+  console.log({ feelsLike: r(feelsLike), temp });
+
+  const hideFeelsLike = r(feelsLike) === temp;
 
   return (
     <div className={styles.root}>
@@ -54,16 +58,16 @@ export function WeatherNow({
         {!hasNoTemp && <span className={styles.unit}>{unit}</span>}
       </div>
 
-      <div className={styles.feelsLike}>
+      {!hideFeelsLike && <div className={styles.feelsLike}>
         {t('feelsLike')} <span className={styles.feelsLikeValue}>{feelsLikeTemp}</span>
-      </div>
+      </div>}
 
       <div className={styles.rangeCard}>
-        <span className={styles.rangeMin}>{min}</span>
+        <span className={styles.rangeMin}>{r(temperature) === minTemp ? t('min').toUpperCase() : min}</span>
         <div className={styles.rangeTrack}>
           <div className={styles.rangeDot} style={{ left: `${rangePosition}%` }} />
         </div>
-        <span className={styles.rangeMax}>{max}</span>
+        <span className={styles.rangeMax}>{r(temperature) === maxTemp ? t('max').toUpperCase() : max}</span>
       </div>
     </div>
   );
