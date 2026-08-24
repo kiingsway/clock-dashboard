@@ -76,7 +76,6 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
   const subArcs = WIND_GUSTS_COLORS.map(({ hex: color, value: limit }) => ({ limit, color }));
 
   const zones = WIND_GUSTS_COLORS.map(({ hex: color, value }) => ({ value, color }));
-  console.log('zones, ', zones);
 
   return (
     <>

@@ -4,14 +4,13 @@ import styles from './WeatherIcon.module.scss';
 import getWeatherIcon from "@/utils/weather/getWeatherIcon";
 import { WeatherCategoryName } from "@/types/weather.types";
 import getWeatherIconName from "@/utils/weather/getWeatherIconName";
-import AnimatedWeatherIcon from "./WeatherIconAnimated";
 import { capitalizeWords, splitCamelCase } from "@/utils/formatters/textFormatters";
+import AnimatedWeatherIcon from "./WeatherIconAnimated";
+import classNames from "classnames";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
-import classNames from "classnames";
-import { Tooltip } from "../../Tooltip";
 import { useTranslation } from "react-i18next";
-import { DateTime } from "luxon";
+import { Tooltip } from "../../Tooltip";
 import { createIconUrl } from "@/constants/iconFiles";
 
 interface Props {
@@ -28,7 +27,6 @@ interface WeatherSrcAltProps extends Props {
 
   weatherCode?: never
   isDay?: never
-  date?: never
   lat?: never
   lon?: never
   category?: never
@@ -40,7 +38,6 @@ interface WeatherIconNameProps extends Props {
 
   weatherCode?: never
   isDay?: never
-  date?: never
   lat?: never
   lon?: never
   category?: never
@@ -55,7 +52,6 @@ interface WeatherCategoryProps extends Props {
 
   weatherCode?: never
   isDay?: never
-  date?: never
   lat?: never
   lon?: never
   iconName?: never
@@ -68,7 +64,6 @@ interface WeatherCategoryProps extends Props {
 interface WeatherCodeProps extends Props {
   weatherCode: number
   isDay?: boolean
-  date?: DateTime
   lat?: number
   lon?: number
   title?: string;
@@ -104,17 +99,17 @@ export default function WeatherIcon({
   if (duration) return <AnimatedWeatherIcon src={src} alt={alt} title={title} size={size} duration={duration} />
 
   const weatherIcon = (() => {
-    if (src) return { src, alt, title }
+    if (src) return { src, alt, title };
 
     if (iconName) {
       const src = createIconUrl(iconName);
       const alt = capitalizeWords(iconName.split('-').join(' '))
-      return { src, alt, title }
+      return { src, alt, title };
     }
 
     if (typeof weatherCode === 'number') {
       const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now, t })
-      return { src, alt, title }
+      return { src, alt, title };
     }
 
     if (category) {

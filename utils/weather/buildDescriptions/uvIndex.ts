@@ -3,7 +3,7 @@ import ICON_FILES, { createIconUrl } from '@/constants/iconFiles';
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 
-function getUvSrc(uv: number | undefined, isDay: boolean = true): string {
+export function getUvSrc(uv: number | undefined, isDay: boolean = true): string {
   if ((!uv || uv < 1) && !isDay) return createIconUrl(ICON_FILES.clearNight);
   let name: string = 'uv-index';
   if (typeof uv === 'number') {

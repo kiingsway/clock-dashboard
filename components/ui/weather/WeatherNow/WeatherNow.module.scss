@@ -86,11 +86,11 @@
 }
 
 .rangeMax {
-  color: var(--wc-danger);
+  color: var(--wc-max-color);
 }
 
 .rangeMin {
-  color: var(--wc-info);
+  color: var(--wc-min-color);
 }
 
 .rangeTrack {
@@ -99,7 +99,7 @@
   /* horizontal agora, então precisa de largura fixa em vez de flex: 1 */
   height: 4px;
   border-radius: var(--wc-radius-full);
-  background: linear-gradient(90deg, var(--wc-info) 0%, var(--wc-text-faint) 50%, var(--wc-danger) 100%);
+  background: linear-gradient(90deg, var(--wc-min-color) 0%, var(--wc-mean-color) 50%, var(--wc-max-color) 100%);
 }
 
 .rangeDot {
@@ -113,5 +113,5 @@
   box-shadow: var(--wc-shadow-md);
   transform: translate(-50%, -50%);
   transition: left 0.4s ease;
-  /* volta a animar em left, não top */
+  box-shadow: 0 0 15px 1px color-mix(in srgb, var(--wc-accent) 40%, transparent);
 }

@@ -139,6 +139,8 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
   const daylightHours = [0, 4, 8, 12, 16, 20, 24];
   const daylightZones = daylightHours.map(value => ({ value, color: getDaylightColor(value * 60 * 60) }));
 
+  // console.log('uvIndexDesc.icons[0]', uvIndexDesc.icons[0]);
+
   return [
     {
       title: t('moon'),

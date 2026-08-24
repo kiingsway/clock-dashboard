@@ -32,9 +32,10 @@
 .track {
   position: relative;
   flex: 1 1 auto;
-  height: 3px;
+  height: 4px;
   border-radius: var(--wc-radius-xs);
   background: var(--wc-hairline);
+  z-index: 0;
 }
 
 .trackFill {
@@ -50,8 +51,9 @@
   top: 50%;
   width: 9px;
   height: 9px;
+  border: 1px solid color-mix(in srgb, var(--wc-accent), white 30%);
   border-radius: var(--wc-radius-full);
   background: var(--wc-accent);
-  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--wc-accent) 70%, transparent);
+  box-shadow: 0 0 15px 1px color-mix(in srgb, var(--wc-accent) 80%, transparent);
   transform: translate(-50%, -50%);
 }
