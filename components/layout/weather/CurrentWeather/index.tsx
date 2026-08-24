@@ -12,10 +12,10 @@ import PrecipitationChart from "@/components/ui/weather/PrecipitationChart"
 import ErrorBoundary from "@/components/ui/ErrorBoundary"
 
 interface Props {
-  weather: IWeather | undefined
-  loading: boolean
-  error: unknown
-  alerts: UseWeatherAlerts['data']
+  weather: IWeather | undefined;
+  loading: boolean;
+  error: unknown;
+  alerts: UseWeatherAlerts['data'];
 }
 
 /**
@@ -44,6 +44,7 @@ export function CurrentWeather({ weather, loading, alerts }: Props): JSX.Element
         sunWindow={sunWindow}
         weather={weather}
       />
+
       <WeatherNow
         temperature={current.temperature_2m}
         feelsLike={current.apparent_temperature}

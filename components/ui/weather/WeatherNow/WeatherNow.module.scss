@@ -86,11 +86,11 @@
 }
 
 .rangeMax {
-  color: var(--wc-max-color);
+  color: var(--wc-danger);
 }
 
 .rangeMin {
-  color: var(--wc-min-color);
+  color: var(--wc-info);
 }
 
 .rangeTrack {
@@ -99,7 +99,7 @@
   /* horizontal agora, então precisa de largura fixa em vez de flex: 1 */
   height: 4px;
   border-radius: var(--wc-radius-full);
-  background: linear-gradient(90deg, var(--wc-min-color) 0%, var(--wc-mean-color) 50%, var(--wc-max-color) 100%);
+  background: linear-gradient(90deg, var(--wc-info) 0%, var(--wc-text-faint) 50%, var(--wc-danger) 100%);
 }
 
 .rangeDot {
