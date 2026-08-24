@@ -3,7 +3,7 @@ import { IMoonInfo, NameIcon } from "@/types/weatherInfo.types";
 import { DateTime } from "luxon";
 import { getMoonIllumination, getMoonPosition } from "suncalc";
 import Image from "next/image";
-import { ICON_BASE_URI } from "@/constants/iconFiles";
+import { createIconUrl } from "@/constants/iconFiles";
 import { IMoonDaily } from "@/types/weather.types";
 
 export function getMoonPhaseInfo(phase: number) {
@@ -87,7 +87,7 @@ function getMoonInfo({
 
   const isVisible = altitude > 2;
 
-  const iconSrc = `${ICON_BASE_URI}${iconName}.svg`;
+  const iconSrc = createIconUrl(iconName);
 
   const icon = (
     <Image

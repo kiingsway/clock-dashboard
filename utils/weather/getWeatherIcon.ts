@@ -1,9 +1,10 @@
 import { DateTime } from "luxon"
 import getWeatherCategory from "./getWeatherCategory";
-import { getWeatherIconUrl } from "./getWeatherIconName";
+import getWeatherIconName from "./getWeatherIconName";
 import getMoonInfo from "./getMoonInfo";
 import { WeatherIconInfo } from "@/types/weather.types";
 import { TFunction } from "i18next";
+import { createIconUrl } from "@/constants/iconFiles";
 
 interface Props {
   weatherCode: number;
@@ -26,7 +27,7 @@ export default function getWeatherIcon({
 }: Props): WeatherIconInfo {
 
   const category = getWeatherCategory(weatherCode, t)
-  const weatherIconSrc = getWeatherIconUrl({ category, isDay });
+  const weatherIconSrc = createIconUrl(getWeatherIconName(category, isDay));
 
   const moonInfo = lat && lon ? getMoonInfo({ now, lat, lon }) : undefined;
 

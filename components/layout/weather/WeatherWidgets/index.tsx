@@ -1,33 +1,39 @@
-import type { JSX } from 'react'
+import { useMemo, type JSX } from 'react'
 import styles from './WeatherWidgets.module.scss'
-import MoonWidget from '@/components/ui/weather/widgets/MoonWidget'
-import UVIndexWidget from '@/components/ui/weather/widgets/UVIndexWidget'
-import WindWidget from '@/components/ui/weather/widgets/WindWidget'
 import { useNow } from '@/contexts/NowContext'
-import VisibilityWidget from '@/components/ui/weather/widgets/VisibilityWidget'
 import { IWeather } from '@/types/weather.types'
-import DaylightSunshineWidget from '@/components/ui/weather/widgets/DaylightSunshineWidget'
-import DewPointWidget from '@/components/ui/weather/widgets/DewPointWidget'
-import HumidityWidget from '@/components/ui/weather/widgets/HumidityWidget'
+import { DetailCard } from '@/components/ui/DetailCard/DetailCard';
+import ZoneGaugeBar from '@/components/ui/ZoneGaugeBar';
+import useBoolean from '@/hooks/useBoolean';
+import { useTranslation } from 'react-i18next';
+import buildWeatherWidgetsData, { TWeatherWidgetsDataItem } from './buildWeatherWidgetsData';
 
 interface Props {
-  weather: IWeather | undefined
+  weather: IWeather;
 }
 
-export default function WeatherWidgets({ weather }: Props): JSX.Element {
+export default function WeatherWidgets({ weather }: Props): JSX.Element | null {
+  const { i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
+  const { t } = useTranslation();
 
-  if (!weather) return <></>;
+  const data = useMemo(() => buildWeatherWidgetsData(weather, now, locale, t), [locale, now, t, weather])
 
   return (
     <div className={styles.main}>
-      <MoonWidget date={now} weather={weather} kind='now' />
-      <UVIndexWidget date={now} weather={weather} kind='now' />
-      <WindWidget date={now} weather={weather} />
-      <VisibilityWidget date={now} weather={weather} kind='now' />
-      <HumidityWidget date={now} weather={weather} kind='now' />
-      <DewPointWidget date={now} weather={weather} kind='now' />
-      <DaylightSunshineWidget date={now} weather={weather} />
+      {data.map((detailProps, i) => <DetailCardRender key={i} data={detailProps} />)}
     </div>
   );
+}
+
+const DetailCardRender = ({ data }: { data: TWeatherWidgetsDataItem }) => {
+  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
+
+  const onClick = () => data.zoneGauge ? toggleGauge() : undefined;
+
+  return (
+    <DetailCard {...data} onClick={onClick}>
+      {gaugeShowing && data.zoneGauge && <ZoneGaugeBar {...data.zoneGauge} />}
+    </DetailCard>
+  )
 }

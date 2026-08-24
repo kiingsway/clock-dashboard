@@ -3,7 +3,7 @@ import Image from 'next/image';
 import styles from './WeatherIcon.module.scss';
 import getWeatherIcon from "@/utils/weather/getWeatherIcon";
 import { WeatherCategoryName } from "@/types/weather.types";
-import { getWeatherIconUrl } from "@/utils/weather/getWeatherIconName";
+import getWeatherIconName from "@/utils/weather/getWeatherIconName";
 import AnimatedWeatherIcon from "./WeatherIconAnimated";
 import { capitalizeWords, splitCamelCase } from "@/utils/formatters/textFormatters";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
@@ -12,6 +12,7 @@ import classNames from "classnames";
 import { Tooltip } from "../../Tooltip";
 import { useTranslation } from "react-i18next";
 import { DateTime } from "luxon";
+import { createIconUrl } from "@/constants/iconFiles";
 
 interface Props {
   size?: number;
@@ -106,7 +107,7 @@ export default function WeatherIcon({
     if (src) return { src, alt, title }
 
     if (iconName) {
-      const src = getWeatherIconUrl({ iconName });
+      const src = createIconUrl(iconName);
       const alt = capitalizeWords(iconName.split('-').join(' '))
       return { src, alt, title }
     }
@@ -128,7 +129,7 @@ export default function WeatherIcon({
         }
       })();
 
-      const src = getWeatherIconUrl({ category: { name, title }, isDay })
+      const src = createIconUrl(getWeatherIconName({ name, title }, isDay));
       return { src, alt: title, title }
     }
   })()

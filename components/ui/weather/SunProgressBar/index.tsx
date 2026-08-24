@@ -24,7 +24,6 @@ type Props = (SunWindowProps | NoSunWindowProps) & {
 }
 
 export default function SunProgressBar({ sunWindow: sunWindowData, weather, includeNight, date }: Props): JSX.Element {
-
   if (!weather && !sunWindowData) return <></>;
 
   const sunWindow = sunWindowData || getSunWindow({
@@ -35,18 +34,14 @@ export default function SunProgressBar({ sunWindow: sunWindowData, weather, incl
     date
   });
 
-  const onDebugClick = (): void => console.info('Sun Progress:', sunWindow);
-
   if (!sunWindow) return <></>;
 
   return (
     <EventProgress
       start={sunWindow.start}
       end={sunWindow.end}
-      startKind={sunWindow.startKind}
-      endKind={sunWindow.endKind}
-      progress={sunWindow.progress}
-      onDoubleClick={onDebugClick}
+      startIcon={{ category: sunWindow.startKind }}
+      endIcon={{ category: sunWindow.endKind }}
       hideDate={includeNight}
     />
   );

@@ -95,7 +95,6 @@ export function SettingsSheet({
             htmlFor="language"
             control={
               <select
-                onFocus={() => console.log("SELECT FOCUSED")}
                 id="language"
                 className={styles.select}
                 value={i18n.language}

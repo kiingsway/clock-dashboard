@@ -1,6 +1,5 @@
 export const STORAGE_KEY = {
-  SETTINGS: 'app-settings',
-  FOCUSED: 'focused'
+  SETTINGS: 'app-settings'
 }
 
 export const CACHE_KEY = {

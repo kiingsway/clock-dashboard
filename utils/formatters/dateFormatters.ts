@@ -72,3 +72,17 @@ export function formatDateTime({ date, locale, timezone }: FormatDateTimeOptions
     timeZone: timezone,
   }).format(d);
 }
+
+type D = DateTime<boolean> | undefined
+
+export function getProgressBetweenDates(dateBefore: D, dateAfter: D, now: DateTime) {
+  if (!dateBefore?.isValid || !dateAfter?.isValid) return 0;
+
+  if (now.toMillis() >= dateAfter.toMillis()) return 1;
+  if (now.toMillis() <= dateBefore.toMillis()) return 0;
+
+  const elapsed = now.diff(dateBefore, "milliseconds").milliseconds;
+  const duration = dateAfter.diff(dateBefore, "milliseconds").milliseconds;
+
+  return elapsed / duration;
+}

@@ -1,4 +1,4 @@
-import ICON_FILES, { ICON_BASE_URI } from "@/constants/iconFiles";
+import ICON_FILES from "@/constants/iconFiles";
 import { WeatherCategory } from "@/types/weather.types";
 
 export default function getWeatherIconName(category: WeatherCategory, isDay: boolean): string {
@@ -45,23 +45,4 @@ export default function getWeatherIconName(category: WeatherCategory, isDay: boo
   };
 
   return category ? map[category.name] : unknownIcon;
-}
-
-interface GetWeatherIconUrlIconName {
-  category?: never
-  isDay?: never;
-
-  iconName: string;
-}
-
-interface GetWeatherIconUrlCategory {
-  category: WeatherCategory
-  isDay: boolean;
-
-  iconName?: never;
-}
-
-export function getWeatherIconUrl({ category, iconName, isDay = true }: GetWeatherIconUrlIconName | GetWeatherIconUrlCategory) {
-  if (category) return `${ICON_BASE_URI}${getWeatherIconName(category, isDay)}.svg`
-  return `${ICON_BASE_URI}${iconName}.svg`
 }

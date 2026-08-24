@@ -7,6 +7,9 @@ import { getDewPointDescription } from "@/utils/weather/getDewPointDescription";
 import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
 import WeatherIcon from "../WeatherIcon";
+import { JSX } from "react";
+import useBoolean from "@/hooks/useBoolean";
+import ZoneGaugeBar from "../../ZoneGaugeBar";
 
 interface Props {
   weather: IWeather;
@@ -16,8 +19,9 @@ interface Props {
   kind: 'now' | 'day';
 }
 
-export default function DewPointWidget({ date, weather, miniCard, kind, size = 60 }: Props) {
+export default function DewPointWidget({ date, weather, miniCard, kind, size = 60 }: Props): JSX.Element {
   const { t } = useTranslation();
+  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
 
   const { daily, daily_units, hourly, hourly_units } = weather;
 
@@ -48,6 +52,13 @@ export default function DewPointWidget({ date, weather, miniCard, kind, size = 6
     />
   );
 
+  const dewPointStops = [-10, 0, 7, 13, 18, 27];
+  const dewPointZones: { value: number; color: string }[] =
+    dewPointStops.map(value => ({
+      value,
+      color: getDewPointColor(value)
+    }))
+
   return (
     <DetailCard
       onDoubleClick={onDebugClick}
@@ -55,6 +66,18 @@ export default function DewPointWidget({ date, weather, miniCard, kind, size = 6
       description={desc}
       bigText={dewPoint}
       textColor={getDewPointColor(dew)}
-    />
+      onClick={toggleGauge}
+    >
+      {gaugeShowing && (
+        <ZoneGaugeBar
+          value={dew}
+          unit={unit}
+          zones={dewPointZones}
+          min={-18}
+          max={35}
+          hideZoneLabel
+        />
+      )}
+    </DetailCard>
   );
 }

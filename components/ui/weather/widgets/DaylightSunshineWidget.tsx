@@ -8,6 +8,8 @@ import WeatherIcon from "../WeatherIcon";
 import { getDaylightColor } from "@/utils/weather/getColors";
 import { formatDuration } from "@/utils/formatters/dateFormatters";
 import getDaylightDurationDescription, { getSunshineDurationDescription } from "@/utils/weather/getDaylightDurationDescription";
+import useBoolean from "@/hooks/useBoolean";
+import ZoneGaugeBar from "../../ZoneGaugeBar";
 
 interface Props {
   weather: IWeather;
@@ -19,6 +21,7 @@ interface Props {
 export default function DaylightSunshineWidget({ date, weather, miniCard, size }: Props) {
   const { t } = useTranslation();
   const { daily: { sunshine_duration, daylight_duration, time } } = weather;
+  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
 
   const nowIndex = getCurrentIndex({ date, time });
 
@@ -71,6 +74,9 @@ export default function DaylightSunshineWidget({ date, weather, miniCard, size }
     </>
   );
 
+  const hours = [0, 4, 8, 12, 16, 20, 24];
+  const daylightZones = hours.map(value => ({ value, color: getDaylightColor(value * 60 * 60) }));
+
   return (
     <>
       <DetailCard
@@ -79,14 +85,38 @@ export default function DaylightSunshineWidget({ date, weather, miniCard, size }
         description={daylightDesc}
         bigText={daylightDuration}
         textColor={daylightColor}
-      />
+        onClick={toggleGauge}
+      >
+        {gaugeShowing && (
+          <ZoneGaugeBar
+            value={daylight / 60 / 60}
+            valueLabel={() => formatDuration(daylight)}
+            zones={daylightZones}
+            min={daylightZones[0].value}
+            max={daylightZones[daylightZones.length - 1].value}
+            hideZoneLabel
+          />
+        )}
+      </DetailCard>
       <DetailCard
         onDoubleClick={onDebugClick}
         title={t('sunshine')}
         description={sunshineDesc}
         bigText={sunshineDuration}
         textColor={sunshineColor}
-      />
+        onClick={toggleGauge}
+      >
+        {gaugeShowing && (
+          <ZoneGaugeBar
+            value={sunshine / 60 / 60}
+            valueLabel={() => formatDuration(sunshine)}
+            zones={daylightZones}
+            min={daylightZones[0].value}
+            max={daylightZones[daylightZones.length - 1].value}
+            hideZoneLabel
+          />
+        )}
+      </DetailCard>
     </>
   );
 }

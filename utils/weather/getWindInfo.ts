@@ -1,4 +1,3 @@
-import { ICON_BASE_URI } from "@/constants/iconFiles";
 import { IWeather } from "@/types/weather.types";
 import { getCurrentIndex } from "../formatters/getValueByArray";
 import getBeaufortScale from "../geo/getBeaufortScale";
@@ -7,6 +6,7 @@ import { DateTime } from "luxon";
 import { TFunction } from "i18next";
 import { IWindInfo } from "@/types/weatherInfo.types";
 import { getWindColor } from "./getColors";
+import { createIconUrl } from "@/constants/iconFiles";
 
 export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunction): IWindInfo {
 
@@ -24,15 +24,15 @@ export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunct
   const windDirectionNow = hourly.wind_direction_10m[indexNow];
   const windDirectionDay = daily.wind_direction_10m_dominant[indexDay];
 
-  const windCompassNow = windDirectionNow ? getCompassDirection(windDirectionNow) : undefined;
-  const windCompassDay = windDirectionDay ? getCompassDirection(windDirectionDay) : undefined;
+  const windCompassNow = windDirectionNow ? getCompassDirection(windDirectionNow, t) : undefined;
+  const windCompassDay = windDirectionDay ? getCompassDirection(windDirectionDay, t) : undefined;
 
   const windSpeedNowSummary = windSpeedNow && windSpeedDay && windCompassNow ?
-    getWindSummary({ currentSpeed: windSpeedNow, averageSpeed: windSpeedDay, direction: t(`compass.${windCompassNow.name}`) }, t)
+    getWindSummary({ currentSpeed: windSpeedNow, averageSpeed: windSpeedDay, direction: windCompassNow.title }, t)
     : undefined
 
   const windGustsNowSummary = windGustsNow && windGustsDay && windCompassNow ?
-    getWindSummary({ currentSpeed: windGustsNow, averageSpeed: windGustsDay, direction: t(`compass.${windCompassNow.name}`) }, t)
+    getWindSummary({ currentSpeed: windGustsNow, averageSpeed: windGustsDay, direction: windCompassNow.title }, t)
     : undefined
 
   const beaufortNow = getBeaufortInfo(windSpeedNow)
@@ -42,8 +42,8 @@ export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunct
     now: {
       beaufort: beaufortNow,
       direction: !windCompassNow ? undefined : {
-        name: t(`compass.${windCompassNow.name}`),
-        src: `${ICON_BASE_URI}wind-direction-${windCompassNow.abbreviation.toLowerCase()}.svg`
+        name: windCompassNow.title,
+        src: windCompassNow.iconSrc
       },
       gusts: {
         value: windGustsNow,
@@ -61,8 +61,8 @@ export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunct
     day: {
       beaufort: beaufortDay,
       direction: !windCompassDay ? undefined : {
-        name: t(`compass.${windCompassDay.name}`),
-        src: `${ICON_BASE_URI}wind-direction-${windCompassDay.abbreviation.toLowerCase()}.svg`
+        name: windCompassDay.title,
+        src: windCompassDay.iconSrc
       },
       gusts: {
         value: windGustsDay,
@@ -80,17 +80,17 @@ export default function getWindInfo(weather: IWeather, date: DateTime, t: TFunct
   };
 }
 
-const getBeaufortInfo = (windSpeed: number | undefined) => {
+export const getBeaufortInfo = (windSpeed: number | undefined) => {
   if (typeof windSpeed !== 'number') return undefined
 
   const value = getBeaufortScale(windSpeed).level;
-  const src = `${ICON_BASE_URI}wind-beaufort-${value}.svg`
+  const src = createIconUrl(`wind-beaufort-${value}`);
   const duration = getWindGustAnimationDuration(windSpeed)
 
   return { src, value, duration }
 }
 
-function getWindGustAnimationDuration(windGust: number): number {
+export function getWindGustAnimationDuration(windGust: number): number {
   const MIN_GUST = 0;
   const MAX_GUST = 100;
 
@@ -110,7 +110,7 @@ interface WindSummaryData {
   direction: string;
 }
 
-function getWindSummary({ currentSpeed, averageSpeed, direction }: WindSummaryData, t: TFunction): string {
+export function getWindSummary({ currentSpeed, averageSpeed, direction }: WindSummaryData, t: TFunction): string {
   let impact: string;
 
   if (currentSpeed < 10) {
@@ -131,4 +131,22 @@ function getWindSummary({ currentSpeed, averageSpeed, direction }: WindSummaryDa
     direction,
     impact,
   });
+}
+
+export function getWindSummary2(speed: number, gusts: number, windGustsUnit: string, compass: string, t: TFunction): string {
+  let impact: string;
+
+  if (speed < 10) {
+    impact = t("windTextes.impact.calm");
+  } else if (speed < 20) {
+    impact = t("windTextes.impact.light");
+  } else if (speed < 30) {
+    impact = t("windTextes.impact.moderate");
+  } else if (speed < 50) {
+    impact = t("windTextes.impact.strong");
+  } else {
+    impact = t("windTextes.impact.veryStrong");
+  }
+
+  return `${t('windGusts')}: ${gusts} ${windGustsUnit}. ${t('wind')} ${t(compass)}. ${impact}`;
 }

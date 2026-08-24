@@ -1,7 +1,7 @@
 export const DAYLIGHT_HOURS = {
-  MIN: 8,
+  MIN: 0,
   MID: 12,
-  MAX: 16,
+  MAX: 18,
 } as const;
 
 export const SUNSHINE_PERCENTAGE = {

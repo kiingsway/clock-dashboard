@@ -9,7 +9,8 @@ import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import { IWindInfo } from '@/types/weatherInfo.types';
 import WindGustsGauge from '../Gauges/WindGustsGauge';
 import { WIND_GUSTS_COLORS } from '@/constants/wind';
-import useBoolean from '@/hooks/useBoolean';
+import { useState } from 'react';
+import ZoneGaugeBar from '../../ZoneGaugeBar';
 
 type WindProps = {
   windInfo: IWindInfo;
@@ -32,7 +33,9 @@ export type Props = (WindProps | WeatherProps) & {
 
 export default function WindWidget({ windInfo: windInfoProps, date, weather, miniCard, size = 120 }: Props) {
   const { t } = useTranslation();
-  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
+
+  const [active, setActive] = useState<number>(3);
+  const toggle = () => setActive(prev => prev === 3 ? 1 : prev + 1);
 
   const windInfo = windInfoProps || getWindInfo(weather, date, t);
   if (!windInfo) return null;
@@ -72,6 +75,9 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
 
   const subArcs = WIND_GUSTS_COLORS.map(({ hex: color, value: limit }) => ({ limit, color }));
 
+  const zones = WIND_GUSTS_COLORS.map(({ hex: color, value }) => ({ value, color }));
+  console.log('zones, ', zones);
+
   return (
     <>
       <DetailCard
@@ -96,7 +102,23 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
             />
           </>
         )}
-      />
+      >
+        {active === 1 ? (
+          null
+        ) : active === 2 ? (
+          <ZoneGaugeBar
+            value={now.speed.value}
+            unit={` ${day.speed.unit}`}
+            zones={zones}
+            min={zones[0].value}
+            max={zones[zones.length - 1].value}
+            hideZoneLabel
+            referenceZones={[
+              { label: `${t('mean')}: ${day.speed.value} ${day.speed.unit}`, value: day.speed.value }
+            ]}
+          />
+        ) : null}
+      </DetailCard>
 
       {now.gusts && (
         <DetailCard
@@ -104,9 +126,9 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
           textColor={now.gusts.color}
           bigText={`${now.gusts.value} ${now.gusts.unit}`}
           description={t('averageSpeedForDay', { speed: day.gusts.value + day.gusts.unit })}
-          onClick={toggleGauge}
+          onClick={toggle}
         >
-          {gaugeShowing && (
+          {active === 1 ? (
             <WindGustsGauge
               value={now.gusts.value}
               valueColor={now.gusts.color}
@@ -115,7 +137,19 @@ export default function WindWidget({ windInfo: windInfoProps, date, weather, min
               subArcs={subArcs}
               max={WIND_GUSTS_COLORS.at(-1)!.value}
             />
-          )}
+          ) : active === 2 ? (
+            <ZoneGaugeBar
+              value={now.gusts.value}
+              unit={` ${now.gusts.unit}`}
+              zones={zones}
+              min={zones[0].value}
+              max={zones[zones.length - 1].value}
+              hideZoneLabel
+              referenceZones={[
+                { label: `${t('mean')}: ${day.gusts.value} ${day.gusts.unit}`, value: day.gusts.value }
+              ]}
+            />
+          ) : null}
         </DetailCard>
       )}
     </>

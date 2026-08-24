@@ -1,18 +1,6 @@
 import { SunWindow, SunEvent } from "@/types/sun.types";
 import { DateTime } from "luxon";
 
-const calculateProgressBetweenTwoDates = (startDate: DateTime, endDate: DateTime, progressDate: DateTime) => {
-  if (!startDate?.isValid || !endDate?.isValid) return 0;
-
-  if (progressDate >= endDate) return 1;
-  if (progressDate <= startDate) return 0;
-
-  const elapsed = progressDate.diff(startDate, "milliseconds").milliseconds;
-  const duration = endDate.diff(startDate, "milliseconds").milliseconds;
-
-  return elapsed / duration;
-}
-
 interface GetSunWindowAttr {
   sunriseTimes: string[]
   sunsetTimes: string[]
@@ -89,14 +77,11 @@ export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
       }
     }
 
-    const progress = calculateProgressBetweenTwoDates(start.time, end.time, date);
-
     return {
       start: start.time,
       end: end.time,
       startKind: start.kind,
       endKind: end.kind,
-      progress: progress,
     };
   }
 
@@ -107,15 +92,11 @@ export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
    */
 
   const sunrise = events.find(
-    (event) =>
-      event.kind === "sunrise" &&
-      event.time.hasSame(date, "day")
+    (event) => event.kind === "sunrise" && event.time.hasSame(date, "day")
   );
 
   const sunset = events.find(
-    (event) =>
-      event.kind === "sunset" &&
-      event.time.hasSame(date, "day")
+    (event) => event.kind === "sunset" && event.time.hasSame(date, "day")
   );
 
   if (!sunrise || !sunset) {
@@ -124,17 +105,13 @@ export function getSunWindow(p: GetSunWindowAttr): SunWindow | undefined {
       end: sunset?.time ?? events[events.length - 1].time,
       startKind: "sunrise",
       endKind: "sunset",
-      progress: 0,
     };
   }
-
-  const progress = calculateProgressBetweenTwoDates(sunrise.time, sunset.time, date);
 
   return {
     start: sunrise.time,
     end: sunset.time,
     startKind: "sunrise",
     endKind: "sunset",
-    progress,
   };
 }

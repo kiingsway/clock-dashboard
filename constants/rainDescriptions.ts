@@ -1,5 +1,3 @@
-
-
 export const RAIN_DESCRIPTIONS = {
   prefix: 'rainTextes.hoursPrefix',
 

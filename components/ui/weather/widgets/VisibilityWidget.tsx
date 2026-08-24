@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { DetailCard } from '../../DetailCard/DetailCard';
 import MiniCard from '../../MiniCard';
 import WeatherIcon from '../WeatherIcon';
-import { formatLocaleNumber } from '@/utils/formatters/textFormatters';
-import useBoolean from '@/hooks/useBoolean';
+import { formatLocaleNumber, formatMetricValue } from '@/utils/formatters/textFormatters';
 import WindGustsGauge from '../Gauges/WindGustsGauge';
 import { MAX_VISIBILITY_METERS } from '@/constants/visibility';
 import { getCurrentIndex } from '@/utils/formatters/getValueByArray';
 import getVisibilityDescription from '@/utils/weather/getVisibilityDescription';
 import { VISIBILITY_COLORS } from '@/constants/colors';
 import { getVisibilityColor } from '@/utils/weather/getColors';
+import { useState } from 'react';
+import ZoneGaugeBar from '../../ZoneGaugeBar';
 
 interface Props {
   weather: IWeather;
@@ -23,7 +24,9 @@ interface Props {
 
 export default function VisibilityWidget({ date, weather, size = 60, kind, miniCard }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
-  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
+
+  const [active, setActive] = useState<number>(3);
+  const toggle = () => setActive(prev => prev === 3 ? 1 : prev + 1);
 
   const { daily, daily_units, hourly, hourly_units } = weather
 
@@ -62,16 +65,18 @@ export default function VisibilityWidget({ date, weather, size = 60, kind, miniC
   );
 
   const subArcs = VISIBILITY_COLORS.map(({ hex: color, value: limit }) => ({ limit, color }));
+  const zones = VISIBILITY_COLORS.map(({ hex: color, value }) => ({ color, value }));
+
   return (
     <DetailCard
       title={t('visibility')}
       bigText={v.text}
       textColor={v.color}
       description={v.desc}
-      onClick={toggleGauge}
+      onClick={toggle}
       onDoubleClick={onDebugClick}
     >
-      {gaugeShowing && (
+      {active === 1 ? (
         <WindGustsGauge
           value={visibility}
           valueColor={v.color}
@@ -79,7 +84,17 @@ export default function VisibilityWidget({ date, weather, size = 60, kind, miniC
           subArcs={subArcs}
           max={MAX_VISIBILITY_METERS}
         />
-      )}
+      ) : active === 2 ? (
+        <ZoneGaugeBar
+          value={visibility}
+          valueLabel={v => formatMetricValue(v, locale, unit)}
+          unit={unit}
+          zones={zones}
+          min={zones[0].value}
+          max={zones[zones.length - 1].value}
+          hideZoneLabel
+        />
+      ) : null}
     </DetailCard>
   )
 }

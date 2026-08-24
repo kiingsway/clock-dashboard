@@ -30,3 +30,11 @@ export function capitalizeWords(text: string): string {
 export function formatLocaleNumber(n: number, locale: string) {
   return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(n);
 }
+
+export const formatMetricValue = (value: number, locale: string, unit: string): string => {
+  const isKilo = value >= 1000;
+  const scaledValue = value / (isKilo ? 1000 : 1);
+  const unitPrefix = isKilo ? 'k' : '';
+
+  return `${formatLocaleNumber(scaledValue, locale)} ${unitPrefix}${unit}`;
+};

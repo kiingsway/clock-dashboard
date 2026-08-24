@@ -7,6 +7,8 @@ import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
 import WeatherIcon from "../WeatherIcon";
 import { getHumidityColor } from "@/utils/weather/getColors";
+import useBoolean from "@/hooks/useBoolean";
+import ZoneGaugeBar from "../../ZoneGaugeBar";
 
 interface Props {
   weather: IWeather;
@@ -18,6 +20,7 @@ interface Props {
 
 export default function HumidityWidget({ date, weather, miniCard, kind, size = 60 }: Props) {
   const { t } = useTranslation();
+  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
 
   const { daily, daily_units, hourly, hourly_units } = weather;
 
@@ -48,6 +51,17 @@ export default function HumidityWidget({ date, weather, miniCard, kind, size = 6
     />
   );
 
+  const humidityZones = [
+    { value: 0, color: "#C9A227", },// Extremely dry
+    { value: 20, color: "#D9A441", },// Very dry
+    { value: 30, color: "#d8c38e", },// Dry
+    { value: 40, color: "#cfddf4", },// Comfortable
+    { value: 60, color: "#7db2c4", },// Slightly humid
+    { value: 70, color: "#3D8FB8", },// Humid
+    { value: 80, color: "#3976A8", },// Very humid
+    { value: 90, color: "#2E5E96", },// Extremely humid
+  ];
+
   return (
     <DetailCard
       onDoubleClick={onDebugClick}
@@ -55,6 +69,16 @@ export default function HumidityWidget({ date, weather, miniCard, kind, size = 6
       description={desc}
       bigText={humidityText}
       textColor={getHumidityColor(humidity)}
-    />
+      onClick={toggleGauge}
+    >
+      {gaugeShowing && (
+        <ZoneGaugeBar
+          value={humidity}
+          unit={unit}
+          zones={humidityZones}
+          hideZoneLabel
+        />
+      )}
+    </DetailCard>
   );
 }

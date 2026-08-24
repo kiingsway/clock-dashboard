@@ -1,29 +1,39 @@
-import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import WeatherIcon, { WeatherIconProps } from '../WeatherIcon';
 import styles from './EventProgress.module.scss';
 import { DateTime } from 'luxon';
 import { JSX } from 'react/jsx-runtime';
-import { WeatherCategoryName } from '@/types/weather.types';
 import { useNow } from '@/contexts/NowContext';
 import { useTranslation } from 'react-i18next';
+import { getProgressBetweenDates } from '@/utils/formatters/dateFormatters';
 
 interface Props {
   start?: DateTime;
+  startIcon?: WeatherIconProps
   end?: DateTime;
-  startKind?: 'sunrise' | 'sunset';
-  startIconName?: string;
-  endIconName?: string;
-  endKind?: 'sunrise' | 'sunset'
-  progress?: number;
+  endIcon?: WeatherIconProps
   onDoubleClick?: () => void;
   hideDate?: boolean
 }
 
-export default function EventProgress({ start, end, startKind = 'sunrise', endKind = 'sunset', progress, onDoubleClick, endIconName, startIconName, hideDate }: Props) {
+export default function EventProgress({ start, end, startIcon, endIcon, hideDate }: Props) {
+
+  const { now } = useNow();
+  const progress = (() => {
+    if (start?.isValid && end?.isValid)
+      return getProgressBetweenDates(start, end, now);
+    return 0;
+  })();
+
+  const onDebugClick = (): void => {
+    const f = (d: DateTime | undefined) => !d ? '--:--' : d.toFormat('LLL dd HH:mm');
+    const t = `${f(start)} -> ${f(now)} (${(progress * 100).toFixed(1)}%) -> ${f(end)}.${hideDate ? ' Hiding Date.' : ''}`
+    console.info(`Event Progress: ${t}`, { startIcon, endIcon });
+  }
+
   return (
-    <div className={styles.arc} aria-label={`${startKind} ${start?.toFormat('HH:mm')}, ${endKind} ${end?.toFormat('HH:mm')}`} onDoubleClick={onDoubleClick}>
+    <div className={styles.arc} aria-label={`start ${start?.toFormat('HH:mm')}, end ${end?.toFormat('HH:mm')}`} onDoubleClick={onDebugClick}>
       <div className={styles.point}>
-        <ProgressIcon icon={startIconName} categoryIcon={startKind} />
+        {startIcon && <WeatherIcon size={18} {...startIcon} />}
         <ProgressLabel date={start} hideDate={hideDate} />
       </div>
 
@@ -33,37 +43,15 @@ export default function EventProgress({ start, end, startKind = 'sunrise', endKi
             <div className={styles.trackFill} style={{ width: `${progress * 100}%` }} />
             <div className={styles.marker} style={{ left: `${progress * 100}%` }} />
           </>
-        ) : <></>}
+        ) : null}
       </div>
 
       <div className={styles.point}>
-        <ProgressIcon icon={endIconName} categoryIcon={endKind} />
+        {endIcon && <WeatherIcon size={18} {...endIcon} />}
         <ProgressLabel date={end} hideDate={hideDate} />
       </div>
     </div>
   )
-}
-
-interface IconProps {
-  icon?: string;
-  categoryIcon: WeatherCategoryName;
-}
-
-const ProgressIcon = ({ icon, categoryIcon }: IconProps): JSX.Element => {
-
-  const weatherIconProps: WeatherIconProps = {
-    size: 18,
-    ...(icon ? {
-      iconName: icon
-    } : {
-      category: {
-        name: categoryIcon,
-        title: capitalizeWords(categoryIcon)
-      }
-    })
-  }
-
-  return <WeatherIcon {...weatherIconProps} />;
 }
 
 const ProgressLabel = ({ date, hideDate }: { date?: DateTime, hideDate?: boolean }): JSX.Element => {

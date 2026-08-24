@@ -18,4 +18,5 @@ export const WIND_GUSTS_COLORS = [
   { value: 100, hex: "#FF7043" }, // Muito forte
   { value: 120, hex: "#D32F2F" }, // Severa
   { value: 140, hex: "#6A1B9A" }, // Extrema
+  { value: 160, hex: "#6A1B9A" }, // Última
 ] as const;

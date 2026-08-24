@@ -5,6 +5,8 @@ import getUVIcon from '@/utils/weather/getUVIcon';
 import { DateTime } from 'luxon';
 import WeatherIcon from '../WeatherIcon';
 import { useTranslation } from 'react-i18next';
+import useBoolean from '@/hooks/useBoolean';
+import ZoneGaugeBar from '../../ZoneGaugeBar';
 
 interface Props {
   weather: IWeather;
@@ -16,6 +18,7 @@ interface Props {
 
 export default function UVIndexWidget({ weather, date, miniCard, kind = 'day', size = 120 }: Props) {
   const { t } = useTranslation();
+  const [gaugeShowing, { toggle: toggleGauge }] = useBoolean();
 
   const uvIcon = getUVIcon({ date, weather, kind, t });
   if (!uvIcon) return null;
@@ -41,11 +44,20 @@ export default function UVIndexWidget({ weather, date, miniCard, kind = 'day', s
     )
   }
 
+  const zones: { value: number; color: string }[] = [
+    { value: 0, color: "#86CFA3" },  // Verde — baixo
+    { value: 3, color: "#F2D37A" },  // Amarelo — moderado
+    { value: 6, color: "#F2A56F" },  // Laranja — alto
+    { value: 8, color: "#E97C7C" },  // Vermelho — muito alto
+    { value: 11, color: "#A982C7" }, // Roxo — extremo
+  ];
+
   return (
     <DetailCard
       onDoubleClick={onDebugClick}
       title={t('uvIndex')}
       description={t(desc)}
+      onClick={toggleGauge}
       icon={(
         <WeatherIcon
           src={src}
@@ -54,6 +66,16 @@ export default function UVIndexWidget({ weather, date, miniCard, kind = 'day', s
           size={size}
           duration={iconDuration}
         />
-      )} />
+      )} >
+      {gaugeShowing && (
+        <ZoneGaugeBar
+          value={uv ?? 0}
+          zones={zones}
+          min={0}
+          max={12}
+          hideZoneLabel
+        />
+      )}
+    </DetailCard>
   )
 }

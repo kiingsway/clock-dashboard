@@ -6,22 +6,16 @@ import { useTranslation } from 'react-i18next';
 import styles from './DailySheet.module.scss';
 import { getSunWindow } from '@/utils/weather/getSunWindow';
 import SunProgressBar from '@/components/ui/weather/SunProgressBar';
-import MoonWidget from '@/components/ui/weather/widgets/MoonWidget';
-import TempFeelsLikeWidget from '@/components/ui/weather/widgets/TempFeelsLikeWidget';
-import RainWidget from '@/components/ui/weather/widgets/RainWidget';
-import UVIndexWidget from '@/components/ui/weather/widgets/UVIndexWidget';
-import WindWidget from '@/components/ui/weather/widgets/WindWidget';
-import CurrentWeatherWidget from '@/components/ui/weather/widgets/CurrentWeatherWidget';
 import HourlyList from '@/components/ui/weather/HourlyList';
 import MoonProgressBar from '@/components/ui/weather/MoonProgressBar';
 import { useNow } from '@/contexts/NowContext';
 import { TFunction } from 'i18next';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
-import VisibilityWidget from '@/components/ui/weather/widgets/VisibilityWidget';
 import { getAccent } from '@/utils/weather/getAccentColor';
-import DaylightSunshineWidget from '@/components/ui/weather/widgets/DaylightSunshineWidget';
-import DewPointWidget from '@/components/ui/weather/widgets/DewPointWidget';
-import HumidityWidget from '@/components/ui/weather/widgets/HumidityWidget';
+import { Fragment, JSX } from 'react';
+import WeatherIcon from '@/components/ui/weather/WeatherIcon';
+import MiniCard from '@/components/ui/MiniCard';
+import buildDailySheetInfo from './buildDailySheetInfo';
 
 interface Props {
   weather: IWeather | undefined
@@ -30,7 +24,7 @@ interface Props {
   onClose: () => void;
 }
 
-export default function DailySheet({ weather, open, index, onClose }: Props) {
+export default function DailySheet({ weather, open, index, onClose }: Props): JSX.Element | null {
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
   const portalContainer = usePortalContainer();
@@ -41,13 +35,6 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
 
   const iso = daily.time[index];
   const weatherCode = daily.weather_code[index];
-  const feelsLike = daily.apparent_temperature_mean[index];
-  const tempMean = daily.temperature_2m_mean[index];
-  const tempMax = daily.temperature_2m_max[index];
-  const tempMin = daily.temperature_2m_min[index];
-  const precipHours = daily.precipitation_hours[index];
-  const precipSum = daily.precipitation_sum[index];
-  const precipChance = daily.precipitation_probability_max[index];
 
   const indexDate = DateTime.fromISO(iso, { zone: timezone });
   const indexDateWithCurrentTime = now.set({
@@ -70,6 +57,8 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
 
   const accent = getAccent({ weatherCode, t });
 
+  const dailySheetInfo = buildDailySheetInfo(weather, indexDate, locale, t);
+
   return (
     <BottomSheet
       open={open && typeof index === 'number'}
@@ -83,31 +72,58 @@ export default function DailySheet({ weather, open, index, onClose }: Props) {
     >
       <div className={styles.main} style={{ ["--wc-accent" as string]: accent }}>
         {sunWindow && <SunProgressBar sunWindow={sunWindow} />}
-        <CurrentWeatherWidget weatherCode={weatherCode} tempMin={tempMin} tempMax={tempMax} size={60} />
-        <TempFeelsLikeWidget feelsLike={feelsLike} tempMean={tempMean} size={60} />
-        <RainWidget precipMM={precipSum} chance={precipChance} hoursOfRain={precipHours} size={60} />
-        <HourlyList date={indexDate} weather={weather} kind='day' />
-        <MoonWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
-        <MoonProgressBar date={indexDate} weather={weather} />
-        <UVIndexWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
-        <WindWidget date={indexDate} weather={weather} size={60} miniCard />
-        <VisibilityWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
-        <HumidityWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
-        <DewPointWidget date={indexDate} weather={weather} size={60} miniCard kind='day' />
-        <DaylightSunshineWidget date={indexDate} weather={weather} size={60} miniCard />
+        {dailySheetInfo.map(({ key, title, desc, icons }, index) => {
+
+          const iconsProps = icons.length > 1
+            ? icons.map((icon, i) => <WeatherIcon key={i} {...icon} size={60} />)
+            : undefined;
+
+          const iconProps = icons.length === 1
+            ? <WeatherIcon {...icons[0]} size={60} />
+            : undefined
+
+          return (
+            <Fragment key={key}>
+              <MiniCard
+                title={title}
+                desc={desc}
+                icons={iconsProps}
+                icon={iconProps}
+              />
+
+              {index === 2 && (
+                <HourlyList
+                  date={indexDate}
+                  weather={weather}
+                  kind="day"
+                />
+              )}
+
+              {index === 4 && (
+                <MoonProgressBar
+                  date={indexDate}
+                  dailyMoon={weather.daily_moon}
+                  timezone={weather.timezone}
+                />
+              )}
+            </Fragment>
+          )
+        })}
       </div>
     </BottomSheet>
   )
 }
 
 function getForecastTitle(now: DateTime, date: DateTime, locale = "en-US", t: TFunction): string {
-  const isToday = date.hasSame(now, "day");
-  const isTomorrow = date.hasSame(now.plus({ days: 1 }), "day");
+  const diffDays = Math.floor(date.startOf('day').diff(now.startOf('day'), "days").days);
 
-  const formattedDate = date
-    .setLocale(locale)
-    .toFormat("cccc, LLLL d");
+  const isYesterday = diffDays === -1;
+  const isToday = diffDays === 0;
+  const isTomorrow = diffDays === 1;
 
+  const formattedDate = date.setLocale(locale).toFormat("cccc, LLLL d");
+
+  if (isYesterday) return `${capitalizeWords(t('yesterday'))} — ${formattedDate}`;
   if (isToday) return `${capitalizeWords(t('today'))} — ${formattedDate}`;
   if (isTomorrow) return `${capitalizeWords(t('tomorrow'))} — ${formattedDate}`;
 

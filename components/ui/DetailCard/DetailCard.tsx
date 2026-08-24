@@ -1,5 +1,6 @@
 import type { PropsWithChildren, ReactNode } from "react";
 import styles from "./DetailCard.module.css";
+import WeatherIcon, { WeatherIconProps } from "../weather/WeatherIcon";
 
 export interface DetailCardProps {
   /** Small caption, top-left (e.g. "UV INDEX", "HUMIDITY"). */
@@ -14,6 +15,8 @@ export interface DetailCardProps {
   textColor?: string;
   onClick?: () => void;
   onDoubleClick?: () => void;
+  iconProps?: WeatherIconProps;
+  iconsProps?: WeatherIconProps[];
 }
 
 /**
@@ -27,8 +30,19 @@ export interface DetailCardProps {
  * un-broken square (just visually blank), so a card with missing data
  * never collapses the grid or throws.
  */
-export function DetailCard({ title, icon, bigText, textColor, description, className, children, onClick, onDoubleClick }: PropsWithChildren<DetailCardProps>) {
-  const center = icon ?? bigText;
+export function DetailCard({ title, icon, iconProps, iconsProps, bigText, textColor, description, className, children, onClick, onDoubleClick }: PropsWithChildren<DetailCardProps>) {
+
+  const iconElement = (() => {
+    if (iconsProps?.length) {
+      const size = 120 / Math.sqrt(iconsProps.length);
+      return <>{iconsProps.map((p, i) => <WeatherIcon key={i} size={size} {...p} />)}</>;
+    }
+    
+    if (iconProps) return <WeatherIcon size={120} {...iconProps} />
+    return null;
+  })();
+
+  const center = iconElement ?? icon ?? bigText;
 
   return (
     <div className={[styles.card, className].filter(Boolean).join(" ")} onClick={onClick} onDoubleClick={onDoubleClick}>

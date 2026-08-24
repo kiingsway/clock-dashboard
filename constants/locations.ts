@@ -1,6 +1,9 @@
 import { IWeatherLocationItem, TLocation } from "@/types/location.types";
 
-export const LOCATION_TO_WEATHER: Record<TLocation, Omit<IWeatherLocationItem, "name">> = {
+type TLocationValues = Omit<IWeatherLocationItem, "name">;
+type TLocationToWeather = Record<TLocation, TLocationValues>;
+
+export const LOCATION_TO_WEATHER: TLocationToWeather = {
   "America/Toronto": {
     id: "Toronto",
     lat: 43.6532,

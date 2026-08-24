@@ -1,4 +1,4 @@
-import ICON_FILES, { ICON_BASE_URI } from "@/constants/iconFiles";
+import ICON_FILES, { createIconUrl } from "@/constants/iconFiles";
 import { IWeather } from "@/types/weather.types"
 import { IUVIcon } from "@/types/weatherInfo.types";
 import { DateTime } from "luxon";
@@ -13,7 +13,7 @@ const getUvSrc = (uv: number | undefined): string => {
     else if (uvInRange > 11) name = `uv-index-11-plus`;
     else name = `uv-index-${uvInRange}`;
   }
-  return `${ICON_BASE_URI}${name}.svg`
+  return createIconUrl(name);
 }
 
 interface GetUVIconProps {
@@ -38,7 +38,7 @@ export default function getUVIcon({ weather, date, kind, t }: GetUVIconProps): I
 
     if (!isHourlyDay) return {
       alt: `${t('uvIndex')}: 0 (${t('night')})`,
-      src: `${ICON_BASE_URI}${ICON_FILES.clearNight}.svg`,
+      src: createIconUrl(ICON_FILES.clearNight),
       desc: t('uvIndexes.noUvIndex')
     }
   }
