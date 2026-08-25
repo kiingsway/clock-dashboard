@@ -18,5 +18,5 @@ export default function ErrorAlert({ error, retry }: ErrorAlertProps) {
         text: <AiOutlineReload />
       }}
     />
-  )
+  );
 }

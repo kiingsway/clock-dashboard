@@ -1,4 +1,4 @@
-import { DailySheetItemDesc } from '@/types/weatherInfo.types'
+import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 import getHumidityDescription from '../getHumidityDescription';
 
@@ -10,5 +10,5 @@ export default function buildHumidityDescription(humidity: number, unit: string,
     title: `${t('humidity')}: ${humidity}${unit}`,
     desc,
     icons: [{ iconName: "humidity" }],
-  }
+  };
 }

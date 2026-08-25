@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { CSSProperties, useMemo } from 'react';
-import { XAxis, Tooltip, Area, AreaChart, ResponsiveContainer, ReferenceDot, YAxis } from 'recharts'
+import { XAxis, Tooltip, Area, AreaChart, ResponsiveContainer, ReferenceDot, YAxis } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import { precipitationAreas, TPrecipAreas } from '..';
-import { getAccent } from '@/utils/weather/getAccentColor';
+import getAccentColor, { getAccent } from '@/utils/weather/getAccentColor';
 import { RiArrowDropRightFill } from 'react-icons/ri';
 import { MAX_RAIN_MM_LIMIT, MAX_SHOWERS_MM_LIMIT, MAX_SNOWFALL_CM_LIMIT } from '@/constants/rainDescriptions';
 import WeatherIcon from '../../WeatherIcon';
@@ -20,9 +20,9 @@ interface Props {
 export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
   const { t } = useTranslation();
 
-  const rainColor = getAccent({ categoryName: 'rain' });
-  const showersColor = getAccent({ categoryName: 'showers' });
-  const snowColor = getAccent({ categoryName: 'snow' });
+  const rainColor = getAccentColor('rain', true);
+  const showersColor = getAccentColor('showers', true);
+  const snowColor = getAccentColor('snow', true);
 
   // Calcula a opacidade final (de 0.1 até 0.9) baseada no maior valor do dataset
   const dynamicOpacity = useMemo(() => {
@@ -47,7 +47,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
       rain: 0.1 + rainRatio * 0.8,
       showers: 0.1 + showersRatio * 0.8,
       snowfall: 0.1 + snowfallRatio * 0.8,
-    }
+    };
   }, [data]);
 
   const max = useMemo(() => {
@@ -63,7 +63,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
     rain: { color: rainColor, getTopColor: v => rainIntensityColor(v) },
     showers: { color: showersColor, getTopColor: v => showersIntensityColor(v) },
     snowfall: { color: snowColor, getTopColor: v => snowIntensityColor(v) },
-  }
+  };
 
   const gradients = precipitationAreas.map(area => {
     const { color, getTopColor } = colors[area];
@@ -72,7 +72,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
       id: area, color,
       topColor: getTopColor(max[area]),
       stopOpacity: dynamicOpacity[area]
-    }
+    };
   });
 
   const customTicks = useMemo(() => {
@@ -151,7 +151,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
                 accent={accent}
                 hasPrecip={Boolean(firstData && firstData.rain > 0)}
               />
-            )
+            );
           }}
         />
         <Tooltip wrapperStyle={{ zIndex: 99 }} content={<PrecipitationTooltip />} />
@@ -170,7 +170,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
         ))}
       </AreaChart>
     </ResponsiveContainer>
-  )
+  );
 }
 
 interface CustomTickProps {
@@ -232,7 +232,7 @@ const CustomAreaDot = (props: any) => {
     rain: !payload.rain || payload.rain <= 0,
     showers: !payload.showers || payload.showers <= 0,
     snowfall: !payload.snowfall || payload.snowfall <= 0,
-  }
+  };
 
   if (no.rain && no.showers && no.snowfall) return null;
 

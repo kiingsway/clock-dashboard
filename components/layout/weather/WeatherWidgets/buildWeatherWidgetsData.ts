@@ -1,4 +1,4 @@
-import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard'
+import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard';
 import { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
 import { VISIBILITY_COLORS, WIND_GUSTS_COLORS } from '@/constants/colors';
 import { createIconUrl } from '@/constants/iconFiles';
@@ -52,8 +52,8 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
     }
   } = weather;
 
-  const nowIndex = getCurrentIndex({ date: now, time: hourlyTime })
-  const todayIndex = getCurrentIndex({ date: now, time: dailyTime })
+  const nowIndex = getCurrentIndex(now, hourlyTime);
+  const todayIndex = getCurrentIndex(now, dailyTime);
 
   const moonNow = daily_moon.find(m => m.date === now.toISODate());
   const uvIndex = uv_index[nowIndex];
@@ -77,7 +77,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
   const visibilityDesc = buildVisibilityDescription(visibility, visibilityUnit, locale, true, t);
 
   const dewPointdesc = getDewPointDescription(dewPoint, t);
-  const windSpeedDesc = getWindSummary({ currentSpeed: windSpeedNow, averageSpeed: windSpeedDay, direction: compass.title }, t)
+  const windSpeedDesc = getWindSummary({ currentSpeed: windSpeedNow, averageSpeed: windSpeedDay, direction: compass.title }, t);
   const daylightDesc = getDaylightDurationDescription(daylight, t);
   const sunshineDesc = getSunshineDurationDescription(sunshine, t);
 
@@ -87,12 +87,12 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
   const daylightDuration = formatDuration(daylight);
   const sunshineDuration = formatDuration(sunshine);
 
-  const { level } = getBeaufortScale(windSpeedNow);
+  const level = getBeaufortScale(windSpeedNow);
   const beaufortSrc = createIconUrl(`wind-beaufort-${level}`);
   const beaufortDuration = getWindGustAnimationDuration(windSpeedNow);
 
   const beaufortTitle = `Beaufort Scale: ${level} (${windSpeedNow})`;
-  const directionText = `${capitalizeWords(t('wind'))} ${compass.name}`
+  const directionText = `${capitalizeWords(t('wind'))} ${compass.name}`;
 
   const dewPointStops = [-10, 0, 7, 13, 18, 27];
   const dewPointZones: { value: number; color: string }[] =

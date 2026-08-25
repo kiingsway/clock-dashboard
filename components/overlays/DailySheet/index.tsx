@@ -80,7 +80,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
 
           const iconProps = icons.length === 1
             ? <WeatherIcon {...icons[0]} size={60} />
-            : undefined
+            : undefined;
 
           return (
             <Fragment key={key}>
@@ -107,11 +107,11 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
                 />
               )}
             </Fragment>
-          )
+          );
         })}
       </div>
     </BottomSheet>
-  )
+  );
 }
 
 function getForecastTitle(now: DateTime, date: DateTime, locale = "en-US", t: TFunction): string {

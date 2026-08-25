@@ -54,6 +54,6 @@ export function DailyForecast({ weather }: Props) {
         ))}
       </ul>
     </section>
-  )
+  );
 }
 

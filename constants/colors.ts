@@ -3,7 +3,7 @@ import { WeatherCategoryName } from "@/types/weather.types";
 export const DEFAULT_COLOR = {
   WEATHER: "#6b7280",
   WHITE: "#e8ecf4"
-}
+};
 
 export const WEATHER_ACCENT_COLORS: Record<WeatherCategoryName, string | { day: string; night: string }> = {
   clear: { day: "#f4b860", night: "#8695f0" },
@@ -82,10 +82,4 @@ export const DAYLIGHT_COLORS = {
   DARK: "#a98cf0",
   NORMAL: DEFAULT_COLOR.WHITE,
   LIGHT: "#fef08a",
-} as const;
-
-export const SUNSHINE_COLORS = {
-  NOTHING: DEFAULT_COLOR.WHITE,
-  HALF: "#fde047",
-  FULL: "#fdba74",
 } as const;

@@ -4,12 +4,6 @@ export const DAYLIGHT_HOURS = {
   MAX: 18,
 } as const;
 
-export const SUNSHINE_PERCENTAGE = {
-  MIN: 0,
-  MID: 50,
-  MAX: 100,
-} as const;
-
 export const DEW_POINT_VALUES = {
   MIN: 0,
   MID: 12,
@@ -20,10 +14,4 @@ export const HUMIDITY_PERCENTAGE = {
   MIN: 0,
   MID: 30,
   MAX: 100,
-} as const;
-
-export const VISIBILITY_PERCENTAGE = {
-  MIN: 1000,
-  MID: 2000,
-  MAX: 10000,
 } as const;

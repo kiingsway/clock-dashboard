@@ -1,8 +1,8 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { TooltipPayload } from "recharts";
 import styles from "./PrecipitationTooltip.module.scss";
-import { getAccent } from "@/utils/weather/getAccentColor";
-import {  precipitationAreas } from "..";
+import getAccentColor from "@/utils/weather/getAccentColor";
+import { precipitationAreas } from "..";
 import getWeatherCategory from "@/utils/weather/getWeatherCategory";
 import { useTranslation } from "react-i18next";
 import { getWindColor } from "@/utils/weather/getColors";
@@ -90,8 +90,8 @@ export default function PrecipitationTooltip({
 
   const items = [...areaItems, ...infoItems];
 
-  const accent = getAccent({ isDay, weatherCode, t });
   const weatherCategory = getWeatherCategory(weatherCode, t);
+  const accent = getAccentColor(weatherCategory.name, isDay);
 
   return (
     <div className={styles.tooltip} style={{ '--wc-accent': accent } as CSSProperties}>
@@ -136,7 +136,7 @@ export default function PrecipitationTooltip({
                 {unit}
               </span>
             </div>
-          )
+          );
         })}
 
       </div>

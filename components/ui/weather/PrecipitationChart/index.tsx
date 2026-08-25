@@ -23,7 +23,7 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
   const { get: { precipHoursRange } } = useAppSettings();
   const { now } = useNow();
 
-  const startIndex = getCurrentIndex({ date: now, time: hourly.time });
+  const startIndex = getCurrentIndex(now, hourly.time);
   const endIndex = Math.min(startIndex + precipHoursRange, hourly.time.length);
 
   const data: IPrecipChartData[] = hourly.time.slice(startIndex, endIndex).map((time, i) => {
@@ -42,7 +42,7 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
       showers: current.showers,
       snowfall: current.snowfall,
       windGusts,
-    }
+    };
 
     return {
       hour,
@@ -53,7 +53,7 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
       showers: hourly.showers[index] ?? 0,
       snowfall: hourly.snowfall[index] ?? 0,
       windGusts: hourly.wind_gusts_10m[index] ?? 0,
-    }
+    };
   });
 
   const lastPrecipitationIndex = data.findLastIndex(item => precipitationAreas.some(area => item[area] > 0));
@@ -70,5 +70,5 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
         <PrecipStackedAreaChart data={filteredData} hoursAhead={filteredData.length} />
       </ResponsiveContainer>
     </div>
-  )
+  );
 }

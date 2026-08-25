@@ -19,7 +19,7 @@ export default function HourlyList({ date, weather, hoursAhead = 24, kind = 'now
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
 
-  const startIndex = getCurrentIndex({ date, time: weather.hourly.time }) + (kind === 'now' ? 1 : 0);
+  const startIndex = getCurrentIndex(date, weather.hourly.time) + (kind === 'now' ? 1 : 0);
 
   const data = useMemo(() =>
     buildHourlyListData({ startIndex, weather, hoursAhead, kind, locale, now, t }),

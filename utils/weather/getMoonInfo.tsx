@@ -5,6 +5,7 @@ import { getMoonIllumination, getMoonPosition } from "suncalc";
 import Image from "next/image";
 import { createIconUrl } from "@/constants/iconFiles";
 import { IMoonDaily } from "@/types/weather.types";
+import { getProgressBetweenDates } from "../formatters/dateFormatters";
 
 export function getMoonPhaseInfo(phase: number) {
   let moon: NameIcon;
@@ -60,7 +61,7 @@ interface MoonTimes {
   progress: number | undefined;
 }
 
-export type IMoonInfoWithTimes = IMoonInfo & MoonTimes;
+type IMoonInfoWithTimes = IMoonInfo & MoonTimes;
 
 function getMoonInfo(
   props: GetMoonInfoWithDailyMoonProps
@@ -172,17 +173,7 @@ function getMoonInfo({
     return { moonrisePhase, moonsetPhase };
   })();
 
-  const progress = ((): number => {
-    if (!moonrise?.isValid || !moonset?.isValid) return 0;
-
-    if (now >= moonset) return 1;
-    if (now <= moonrise) return 0;
-
-    const elapsed = now.diff(moonrise, "milliseconds").milliseconds;
-    const duration = moonset.diff(moonrise, "milliseconds").milliseconds;
-
-    return elapsed / duration;
-  })();
+  const progress = getProgressBetweenDates(moonrise, moonset, now);
 
   return {
     ...baseInfo,

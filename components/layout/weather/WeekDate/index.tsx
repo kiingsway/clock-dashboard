@@ -5,9 +5,9 @@ export default function WeekDate() {
   const { now } = useNow();
 
   const dateText = ((): string => {
-    if (!now) return '-'
+    if (!now) return '-';
     return now.toLocaleString({ day: "numeric", month: "long" });
-  })()
+  })();
 
   return (
     <p className={styles.dateLine}>
@@ -23,5 +23,5 @@ export default function WeekDate() {
         {dateText}
       </span>
     </p>
-  )
+  );
 }

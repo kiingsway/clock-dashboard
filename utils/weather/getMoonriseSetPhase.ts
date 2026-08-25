@@ -1,8 +1,7 @@
 import { DateTime } from "luxon";
 import { getMoonIllumination } from "suncalc";
 import { getMoonPhaseInfo } from "./getMoonInfo";
-
-type MoonPhaseIcon = { iconName: string | undefined; phase: number | undefined };
+import { MoonPhaseIcon } from "@/types/weather.types";
 
 export default function getMoonriseSetPhase(moonrise: DateTime | undefined, moonset: DateTime | undefined) {
   const phaseIconDefault: MoonPhaseIcon = { iconName: undefined, phase: undefined };

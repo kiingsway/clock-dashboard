@@ -5,7 +5,7 @@ import { MdError } from "react-icons/md";
 import { IoMdInformationCircle } from "react-icons/io";
 import styles from "./Alert.module.scss";
 
-export type AlertVariant = "success" | "warning" | "danger" | "info";
+type AlertVariant = "success" | "warning" | "danger" | "info";
 
 interface Props {
   variant?: AlertVariant;

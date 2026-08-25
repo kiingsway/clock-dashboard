@@ -18,7 +18,7 @@ export default function buildDailyForecastItem({ weather, today, locale, t }: Pr
 
   const { timezone: zone, daily, daily_units: { temperature_2m_max: tempUnit } } = weather;
 
-  const startIndex = getCurrentIndex({ date: today, time: daily.time });
+  const startIndex = getCurrentIndex(today, daily.time);
 
   const datetimes = daily.time.slice(startIndex, daily.time.length);
 
@@ -30,7 +30,7 @@ export default function buildDailyForecastItem({ weather, today, locale, t }: Pr
   const dailyItems: IDailyData[] = datetimes.map((time, i) => {
 
     const dailyIndex = startIndex + i;
-    const timedate = DateTime.fromISO(time, { zone })
+    const timedate = DateTime.fromISO(time, { zone });
 
     const dayName = getForecastDateLabel(today, timedate, locale, t);
 
@@ -57,7 +57,7 @@ export default function buildDailyForecastItem({ weather, today, locale, t }: Pr
       accent,
       range: { left, width },
       index: dailyIndex,
-    }
+    };
   });
 
   return dailyItems;

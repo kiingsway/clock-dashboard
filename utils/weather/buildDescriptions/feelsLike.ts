@@ -1,7 +1,7 @@
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 
-export type FeelsLikeDifferenceLevel =
+type FeelsLikeDifferenceLevel =
   | "none"
   | "verySmall"
   | "small"
@@ -20,7 +20,7 @@ interface FeelsLikeDifference {
 const icon = {
   cold: "thermometer-mercury-cold",
   hot: "thermometer-mercury"
-}
+};
 
 const recommendations: Record<Direction, Record<FeelsLikeDifferenceLevel, string>> = {
   warmer: {
@@ -41,7 +41,7 @@ const recommendations: Record<Direction, Record<FeelsLikeDifferenceLevel, string
   },
 };
 
-export function getFeelsLikeDifference(temperature: number, feelsLike: number): FeelsLikeDifference {
+function getFeelsLikeDifference(temperature: number, feelsLike: number): FeelsLikeDifference {
   const delta = feelsLike - temperature;
   const absDelta = Math.abs(delta);
 
@@ -71,5 +71,5 @@ export default function buildFeelsLikeDescription(tempMean: number, feelsLike: n
     title,
     desc: t(recommendations[direction][level]) + ` (${tempMean}ºC)`,
     icons: [{ iconName: feelsLike > tempMean ? icon.hot : icon.cold }]
-  }
+  };
 }

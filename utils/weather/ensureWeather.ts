@@ -30,7 +30,7 @@ export function ensureWeather(weather: IWeather | undefined, now: DateTime, isLo
 
   const isDay = current.is_day === 1;
 
-  const todayIndex = getCurrentIndex({ date: now, time: daily.time });
+  const todayIndex = getCurrentIndex(now, daily.time);
   const tempMin = daily.temperature_2m_min?.[todayIndex] ?? -999;
   const tempMax = daily.temperature_2m_max?.[todayIndex] ?? -999;
 
@@ -49,5 +49,5 @@ export function ensureWeather(weather: IWeather | undefined, now: DateTime, isLo
     tempMin,
     tempMax,
     sunWindow,
-  }
+  };
 }

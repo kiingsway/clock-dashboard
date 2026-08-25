@@ -14,7 +14,7 @@ interface CompassFullInfo extends CompassInfo {
   iconSrc: string;
 }
 
-export const compassMap: Record<CompassDirection, Omit<CompassInfo, 'title'>> = {
+const compassMap: Record<CompassDirection, Omit<CompassInfo, 'title'>> = {
   N: { abbreviation: 'N', name: 'north' },
   NE: { abbreviation: 'NE', name: 'northeast' },
   E: { abbreviation: 'E', name: 'east' },
@@ -40,5 +40,5 @@ export function getCompassDirection(degrees: number, t: TFunction): CompassFullI
 
   const iconSrc = createIconUrl(`wind-direction-${compassItem.abbreviation.toLowerCase()}`);
 
-  return { ...compassItem, title, iconSrc }
+  return { ...compassItem, title, iconSrc };
 }

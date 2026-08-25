@@ -4,7 +4,7 @@ export type CanadaAlertType =
   | "advisory"
   | "statement";
 
-export type CanadaRiskColour =
+type CanadaRiskColour =
   | "yellow"
   | "orange"
   | "red"
@@ -18,7 +18,7 @@ export type CanadaRiskColour =
  * a prop. Your real object has more fields than this; TypeScript is fine
  * with that since it only checks that the ones listed here are present.
  */
-export interface IWeatherAlertCanadaProps {
+interface IWeatherAlertCanadaProps {
   id: string;
   alert_code: string;
   alert_type: CanadaAlertType;

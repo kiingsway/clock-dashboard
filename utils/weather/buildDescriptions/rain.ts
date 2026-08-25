@@ -23,7 +23,7 @@ export default function buildRainDescription(
 
   const description = (key: keyof typeof RAIN_DESCRIPTIONS) => `${hoursPrefix}${t(RAIN_DESCRIPTIONS[key])}`;
 
-  const title = t('precipitationTexts.precipInHours', { precip: precipMM, chance: precipChance })
+  const title = t('precipitationTexts.precipInHours', { precip: precipMM, chance: precipChance });
 
   // Sem chuva
   if (precipMM <= 0 && hoursOfRain <= 0) {

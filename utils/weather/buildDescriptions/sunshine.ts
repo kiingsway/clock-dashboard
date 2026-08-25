@@ -1,4 +1,4 @@
-import { DailySheetItemDesc } from '@/types/weatherInfo.types'
+import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 import { getSunshineDurationDescription } from '../getDaylightDurationDescription';
 import { formatDuration } from '@/utils/formatters/dateFormatters';
@@ -12,5 +12,5 @@ export default function buildSunshineDescription(sunshine: number, t: TFunction)
     title: `${t('sunshine')}: ${text}`,
     desc,
     icons: [{ category: "sunrise" }]
-  }
+  };
 }

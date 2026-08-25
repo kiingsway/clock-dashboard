@@ -1,6 +1,5 @@
 import { TABS } from "@/constants/tabs";
 import { TLocation, IWeatherLocationItem } from "./location.types";
-import { WeatherIconProps } from "@/components/ui/weather/WeatherIcon";
 
 export type TTabs = keyof typeof TABS;
 
@@ -21,14 +20,6 @@ export interface UseAppSettings {
   get: AppSettings;
   weatherLocation: IWeatherLocationItem;
   resetSettings: () => void;
-}
-
-export interface DetailItem {
-  key: string;
-  icon: WeatherIconProps;
-  label: string;
-  value: string | number;
-  title?: string;
 }
 
 export type IColorValueGradient = {

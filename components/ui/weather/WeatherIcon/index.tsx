@@ -92,23 +92,23 @@ export default function WeatherIcon({
   size = 34,
   hideGlow = false,
 }: WeatherIconProps): JSX.Element {
-  const { now } = useNow()
+  const { now } = useNow();
   const { get: { location: timezone } } = useAppSettings();
   const { t } = useTranslation();
 
-  if (duration) return <AnimatedWeatherIcon src={src} alt={alt} title={title} size={size} duration={duration} />
+  if (duration) return <AnimatedWeatherIcon src={src} alt={alt} title={title} size={size} duration={duration} />;
 
   const weatherIcon = (() => {
     if (src) return { src, alt, title };
 
     if (iconName) {
       const src = createIconUrl(iconName);
-      const alt = capitalizeWords(iconName.split('-').join(' '))
+      const alt = capitalizeWords(iconName.split('-').join(' '));
       return { src, alt, title };
     }
 
     if (typeof weatherCode === 'number') {
-      const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now, t })
+      const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now, t });
       return { src, alt, title };
     }
 
@@ -117,17 +117,17 @@ export default function WeatherIcon({
         if (typeof category === 'string') return {
           name: category,
           title: splitCamelCase(category)
-        }
+        };
         else return {
           name: category.name,
           title: category.title || splitCamelCase(category.name)
-        }
+        };
       })();
 
       const src = createIconUrl(getWeatherIconName({ name, title }, isDay));
-      return { src, alt: title, title }
+      return { src, alt: title, title };
     }
-  })()
+  })();
 
   if (!weatherIcon) return <></>;
 
@@ -152,5 +152,5 @@ export default function WeatherIcon({
     <Tooltip content={title || weatherIcon.title}>
       {content}
     </Tooltip>
-  )
+  );
 }

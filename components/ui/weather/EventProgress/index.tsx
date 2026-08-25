@@ -26,9 +26,9 @@ export default function EventProgress({ start, end, startIcon, endIcon, hideDate
 
   const onDebugClick = (): void => {
     const f = (d: DateTime | undefined) => !d ? '--:--' : d.toFormat('LLL dd HH:mm');
-    const t = `${f(start)} -> ${f(now)} (${(progress * 100).toFixed(1)}%) -> ${f(end)}.${hideDate ? ' Hiding Date.' : ''}`
+    const t = `${f(start)} -> ${f(now)} (${(progress * 100).toFixed(1)}%) -> ${f(end)}.${hideDate ? ' Hiding Date.' : ''}`;
     console.info(`Event Progress: ${t}`, { startIcon, endIcon });
-  }
+  };
 
   return (
     <div className={styles.arc} aria-label={`start ${start?.toFormat('HH:mm')}, end ${end?.toFormat('HH:mm')}`} onDoubleClick={onDebugClick}>
@@ -51,7 +51,7 @@ export default function EventProgress({ start, end, startIcon, endIcon, hideDate
         <ProgressLabel date={end} hideDate={hideDate} />
       </div>
     </div>
-  )
+  );
 }
 
 const ProgressLabel = ({ date, hideDate }: { date?: DateTime, hideDate?: boolean }): JSX.Element => {

@@ -38,7 +38,7 @@ export function DetailCard({ title, icon, iconProps, iconsProps, bigText, textCo
       return <>{iconsProps.map((p, i) => <WeatherIcon key={i} size={size} {...p} />)}</>;
     }
     
-    if (iconProps) return <WeatherIcon size={120} {...iconProps} />
+    if (iconProps) return <WeatherIcon size={120} {...iconProps} />;
     return null;
   })();
 

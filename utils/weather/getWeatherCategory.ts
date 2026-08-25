@@ -9,7 +9,7 @@ import { TFunction } from "i18next";
 export default function getWeatherCategory(weatherCode: number | undefined, t: TFunction): WeatherCategory {
   let name: WeatherCategoryName = "unknown";
 
-  if (typeof weatherCode !== 'number') return { name, title: t(name) }
+  if (typeof weatherCode !== 'number') return { name, title: t(name) };
 
   if (weatherCode === 0 || weatherCode === 1) {
     name = "clear";

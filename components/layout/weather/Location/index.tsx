@@ -13,7 +13,7 @@ interface Props {
 export default function Location({ onClick, showAlert = false }: Props) {
   const { weatherLocation: { name, country, province } } = useAppSettings();
 
-  const locationText = `${name}${(province || country) ? `, ${(province || country)}` : ''}`
+  const locationText = `${name}${(province || country) ? `, ${(province || country)}` : ''}`;
 
   return (
     <ErrorBoundary>

@@ -24,7 +24,7 @@ export function canadaAlertMapper(rawAlerts?: IWeatherAlertCanada[]): IWeatherAl
       alert_code,
     } } = rawAlert;
 
-    const shortTitle = capitalizeWords(alert_short_name_en)
+    const shortTitle = capitalizeWords(alert_short_name_en);
     const title = alert_name_en ? capitalizeWords(alert_name_en) : shortTitle;
 
     return {
@@ -45,7 +45,7 @@ export function canadaAlertMapper(rawAlerts?: IWeatherAlertCanada[]): IWeatherAl
         { label: 'Code', value: alert_code },
       ].filter(p => Boolean(p.value)),
       descriptions: []
-    }
+    };
   });
 }
 
@@ -90,6 +90,6 @@ export function usaAlertMapper(rawAlerts?: IWeatherAlertUSAItemProps[]): IWeathe
       descriptions: [
         { label: 'Instructions', value: instruction },
       ].filter(p => Boolean(p.value)),
-    }
+    };
   });
 }

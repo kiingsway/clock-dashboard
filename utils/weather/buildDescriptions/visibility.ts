@@ -1,4 +1,4 @@
-import { DailySheetItemDesc } from '@/types/weatherInfo.types'
+import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 import getVisibilityDescription from '../getVisibilityDescription';
 import { getVisibilityColor } from '../getColors';
@@ -17,5 +17,5 @@ export default function buildVisibilityDescription(visibility: number, unit: str
     desc: getVisibilityDescription(visibility, t),
     icons: [{ iconName }],
     textColor: getVisibilityColor(visibility)
-  }
+  };
 }

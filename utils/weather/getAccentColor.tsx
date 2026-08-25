@@ -1,6 +1,7 @@
 import { IWeatherCurrent, WeatherCategory, WeatherCategoryName } from "@/types/weather.types";
 import getWeatherCategory from "./getWeatherCategory";
 import { TFunction } from "i18next";
+import { DEFAULT_COLOR, WEATHER_ACCENT_COLORS } from "@/constants/colors";
 
 interface WeatherCodeProps {
   weatherCode: number;
@@ -34,11 +35,11 @@ type GetAccentProps = (WeatherCodeProps | CategoryProps | CategoryNameProps) & I
 
 export function getAccent({ isDay = true, categoryName: cName, category, weatherCode, t }: GetAccentProps): string {
   const categoryName = (() => {
-    if (typeof weatherCode === 'number' && t) return getWeatherCategory(weatherCode, t).name
-    return category?.name || cName
+    if (typeof weatherCode === 'number' && t) return getWeatherCategory(weatherCode, t).name;
+    return category?.name || cName;
   })();
 
-  if (!categoryName) return "#6b7280";
+  if (!categoryName) return DEFAULT_COLOR.WEATHER;
   return getAccentColor(categoryName, typeof isDay === 'boolean' ? isDay : isDay !== 0);
 }
 
@@ -48,57 +49,9 @@ export function getAccent({ isDay = true, categoryName: cName, category, weather
  * these (clear, fog) since the mood genuinely changes; the rest stay stable.
  */
 export default function getAccentColor(categoryName: WeatherCategoryName, isDay: boolean): string {
-  switch (categoryName) {
-    case "clear":
-      return isDay ? "#f4b860" : "#8695f0"; // Sol quente / Céu estrelado azulado
+  const color = WEATHER_ACCENT_COLORS[categoryName] ?? WEATHER_ACCENT_COLORS.unknown;
 
-    case "partlyCloudy":
-      return isDay ? "#e5be85" : "#7f8cb8"; // Tons mistos entre o céu e nuvens
+  if (typeof color === "string") return color;
 
-    case "cloudy":
-    case "smoke":
-    case "haze":
-      return "#8b93a6"; // Cinza neutro suave para visibilidade reduzida e nuvens
-
-    case "lightFog":
-    case "fog":
-      return isDay ? "#a7b8bd" : "#7c8b95"; // Azul acinzentado/névoa fria
-
-    case "drizzle":
-    case "showers":
-      return "#6fc1e0"; // Ciano elétrico suave para chuva leve/pancadas rápidas
-
-    case "rain":
-    case "heavyRain":
-      return "#4fa0e0"; // Azul clássico e profundo para precipitação contínua
-
-    case "freezingDrizzle":
-    case "freezingRain":
-      return "#4dd0e1"; // Azul-gelo/ciano neon para destacar o perigo de congelamento
-
-    case "snow":
-    case "snowShowers":
-    case "sleet":
-      return "#cfe3f0"; // Branco azulado (neve padrão)
-
-    case "heavySnow":
-    case "heavySleet":
-    case "hail":
-      return "#9fa8da"; // Tom de gelo mais escuro/índigo para acúmulo e granizo leve
-
-    case "thunderstorm":
-    case "moderateHail":
-    case "heavyHail":
-      return "#a98cf0"; // Roxo/violeta elétrico para tempestades severas e descargas
-
-    case "loading":
-      return "#4b5563"; // Cinza médio discreto
-
-    case "error":
-      return "#ef4444"; // Vermelho de alerta (opaco para o dark-room)
-
-    case "unknown":
-    default:
-      return "#6b7280"; // Cinza padrão de fallback
-  }
+  return isDay ? color.day : color.night;
 }

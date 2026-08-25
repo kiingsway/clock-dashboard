@@ -1,7 +1,7 @@
-import { useMemo, type JSX } from 'react'
-import styles from './WeatherWidgets.module.scss'
-import { useNow } from '@/contexts/NowContext'
-import { IWeather } from '@/types/weather.types'
+import { useMemo, type JSX } from 'react';
+import styles from './WeatherWidgets.module.scss';
+import { useNow } from '@/contexts/NowContext';
+import { IWeather } from '@/types/weather.types';
 import { DetailCard } from '@/components/ui/DetailCard/DetailCard';
 import ZoneGaugeBar from '@/components/ui/ZoneGaugeBar';
 import useBoolean from '@/hooks/useBoolean';
@@ -17,7 +17,7 @@ export default function WeatherWidgets({ weather }: Props): JSX.Element | null {
   const { now } = useNow();
   const { t } = useTranslation();
 
-  const data = useMemo(() => buildWeatherWidgetsData(weather, now, locale, t), [locale, now, t, weather])
+  const data = useMemo(() => buildWeatherWidgetsData(weather, now, locale, t), [locale, now, t, weather]);
 
   return (
     <div className={styles.main}>
@@ -35,5 +35,5 @@ const DetailCardRender = ({ data }: { data: TWeatherWidgetsDataItem }) => {
     <DetailCard {...data} onClick={onClick}>
       {gaugeShowing && data.zoneGauge && <ZoneGaugeBar {...data.zoneGauge} />}
     </DetailCard>
-  )
-}
+  );
+};

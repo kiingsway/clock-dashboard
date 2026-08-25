@@ -3,7 +3,7 @@ import ICON_FILES, { createIconUrl } from '@/constants/iconFiles';
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 
-export function getUvSrc(uv: number | undefined, isDay: boolean = true): string {
+function getUvSrc(uv: number | undefined, isDay: boolean = true): string {
   if ((!uv || uv < 1) && !isDay) return createIconUrl(ICON_FILES.clearNight);
   let name: string = 'uv-index';
   if (typeof uv === 'number') {
@@ -48,7 +48,7 @@ export default function buildUVDescription(uvIndex: number, isDay: boolean, t: T
     src: getUvSrc(uvIndex, isDay),
     alt, title: alt,
     duration: getUvAnimationDuration(uvIndex)
-  }
+  };
 
   const title = `${t('uvIndex')}: ${uvIndex || '-'}`;
 
@@ -56,5 +56,5 @@ export default function buildUVDescription(uvIndex: number, isDay: boolean, t: T
     title,
     desc,
     icons: [iconProps]
-  }
+  };
 }

@@ -25,7 +25,7 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
     wind_gusts_10m_mean: windUnit,
   } } = weather;
 
-  const todayIndex = getCurrentIndex({ date, time: daily.time });
+  const todayIndex = getCurrentIndex(date, daily.time);
 
   const weatherCode = daily.weather_code[todayIndex];
   const feelsLike = daily.apparent_temperature_mean[todayIndex];
@@ -76,5 +76,5 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
     { key: 'dewPoint', ...dewPointDescription },
     { key: 'daylight', ...daylightDescription },
     { key: 'sunshine', ...sunshineDescription },
-  ]
+  ];
 }

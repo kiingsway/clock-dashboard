@@ -139,9 +139,6 @@ export interface IWeather {
   daily_moon: IMoonDaily[];
 }
 
-/** Supported UI languages. Extend here if the host app adds more locales. */
-export type SupportedLocale = "pt-BR" | "en-US";
-
 /** Grouped WMO weather-code buckets used for both icon selection and the ambient glow accent. */
 export type WeatherCategoryName =
   | "clear"
@@ -177,11 +174,6 @@ export type WeatherCategoryName =
 export interface WeatherCategory {
   name: WeatherCategoryName;
   title: string;
-}
-
-export interface SelectOption {
-  value: string;
-  label: string;
 }
 
 export interface WeatherIconInfo {

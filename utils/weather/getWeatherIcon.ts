@@ -1,4 +1,4 @@
-import { DateTime } from "luxon"
+import { DateTime } from "luxon";
 import getWeatherCategory from "./getWeatherCategory";
 import getWeatherIconName from "./getWeatherIconName";
 import getMoonInfo from "./getMoonInfo";
@@ -26,7 +26,7 @@ export default function getWeatherIcon({
   t,
 }: Props): WeatherIconInfo {
 
-  const category = getWeatherCategory(weatherCode, t)
+  const category = getWeatherCategory(weatherCode, t);
   const weatherIconSrc = createIconUrl(getWeatherIconName(category, isDay));
 
   const moonInfo = lat && lon ? getMoonInfo({ now, lat, lon }) : undefined;
@@ -37,7 +37,7 @@ export default function getWeatherIcon({
     moon = {
       alt: `${moonInfo.name} (${(moonInfo.phase * 100).toFixed(1)}%)`,
       src: moonInfo.iconSrc
-    }
+    };
   }
 
   const hasMoon = !isDay && moonInfo?.isVisible && (weatherCode >= 0 && weatherCode <= 2);
@@ -52,5 +52,5 @@ export default function getWeatherIcon({
       alt: `${category.title}${hasMoon && moon ? ` | Moon: ${moon.alt}` : ''}`,
       src: hasMoon && moon ? moon.src : weatherIconSrc
     }
-  }
+  };
 }

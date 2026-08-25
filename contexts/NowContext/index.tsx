@@ -37,7 +37,7 @@ export function NowProvider({ children }: NowProviderProps) {
 
     if (timezone) {
       const nowWithTimezone = now.setZone(timezone);
-      if (nowWithTimezone.isValid) now = nowWithTimezone
+      if (nowWithTimezone.isValid) now = nowWithTimezone;
     }
 
     if (locale) return now.setLocale(locale);

@@ -55,5 +55,5 @@ export default function HourlyCard({
 
       <RainGauge mm={precipitation} />
     </Component>
-  )
+  );
 }

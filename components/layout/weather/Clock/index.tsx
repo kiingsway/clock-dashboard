@@ -13,5 +13,5 @@ export default function Clock({ onClick, onDoubleClick }: Props) {
     <p className={styles.time} aria-live="polite" onClick={onClick} onDoubleClick={onDoubleClick}>
       {now.toFormat("HH:mm") ?? "--:--"}
     </p>
-  )
+  );
 }

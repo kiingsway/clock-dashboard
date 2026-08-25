@@ -26,16 +26,16 @@ export default function getSeverityColor(riskColourEn: string): string {
 export function getUSASeverityColor(severity?: NWSSeverity): string {
   switch (severity?.trim().toLowerCase()) {
     case "extreme":
-      return 'red' // "#e5484d"; // Vermelho
+      return 'red'; // "#e5484d"; // Vermelho
     case "severe":
-      return 'orange' //"#f2994a"; // Laranja
+      return 'orange'; //"#f2994a"; // Laranja
     case "moderate":
-      return 'yellow' // "#f2c94c"; // Amarelo
+      return 'yellow'; // "#f2c94c"; // Amarelo
     case "minor":
-      return "green"// "#4caf72"; // Verde
+      return "green";// "#4caf72"; // Verde
     case "unknown":
-      return "grey"// "#8b93a6"; // Cinza
+      return "grey";// "#8b93a6"; // Cinza
     default:
-      return "noColor" //"#8892a4"; // Neutro
+      return "noColor"; //"#8892a4"; // Neutro
   }
 }

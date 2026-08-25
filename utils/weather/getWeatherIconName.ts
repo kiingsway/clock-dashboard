@@ -2,7 +2,7 @@ import ICON_FILES from "@/constants/iconFiles";
 import { WeatherCategory } from "@/types/weather.types";
 
 export default function getWeatherIconName(category: WeatherCategory, isDay: boolean): string {
-  const unknownIcon = ICON_FILES.unknown
+  const unknownIcon = ICON_FILES.unknown;
 
   const map: Record<WeatherCategory['name'], string> = {
     clear: isDay ? ICON_FILES.clearDay : ICON_FILES.clearNight,

@@ -1,15 +1,6 @@
 import { DateTime } from "luxon";
 
-interface GetCurrentProps {
-  date: DateTime;
-  time: string[];
-}
-
-interface GetCurrentValueProps<T> extends GetCurrentProps {
-  values: T[];
-}
-
-export function getCurrentIndex({ date, time }: GetCurrentProps): number {
+export function getCurrentIndex(date: DateTime, time: string[]): number {
   const isHourlyTime = time[0].includes('T');
   const keyFormat = `yyyy-MM-dd${isHourlyTime ? 'THH:00' : ''}`;
 
@@ -17,9 +8,4 @@ export function getCurrentIndex({ date, time }: GetCurrentProps): number {
   const currentKey = current.toFormat(keyFormat);
 
   return time.findIndex((t) => DateTime.fromISO(t).toFormat(keyFormat) === currentKey);
-}
-
-export function getCurrentValue<T>({ date, time, values }: GetCurrentValueProps<T>): T | undefined {
-  const index = getCurrentIndex({ date, time });
-  return index >= 0 ? values[index] : undefined;
 }

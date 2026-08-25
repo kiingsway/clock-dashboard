@@ -1,15 +1,15 @@
-import { IWeather } from "@/types/weather.types"
-import styles from './CurrentWeather.module.css'
-import CurrentWeatherIcon from "@/components/ui/weather/CurrentWeatherIcon"
-import WeatherAlerts from "@/components/layout/weather/WeatherAlerts"
-import SunProgressBar from "@/components/ui/weather/SunProgressBar"
-import { useNow } from "@/contexts/NowContext"
-import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts"
-import { JSX } from "react"
-import { WeatherNow } from "@/components/ui/weather/WeatherNow"
-import { ensureWeather } from "@/utils/weather/ensureWeather"
-import PrecipitationChart from "@/components/ui/weather/PrecipitationChart"
-import ErrorBoundary from "@/components/ui/ErrorBoundary"
+import { IWeather } from "@/types/weather.types";
+import styles from './CurrentWeather.module.css';
+import CurrentWeatherIcon from "@/components/ui/weather/CurrentWeatherIcon";
+import WeatherAlerts from "@/components/layout/weather/WeatherAlerts";
+import SunProgressBar from "@/components/ui/weather/SunProgressBar";
+import { useNow } from "@/contexts/NowContext";
+import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts";
+import { JSX } from "react";
+import { WeatherNow } from "@/components/ui/weather/WeatherNow";
+import { ensureWeather } from "@/utils/weather/ensureWeather";
+import PrecipitationChart from "@/components/ui/weather/PrecipitationChart";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 
 interface Props {
   weather: IWeather | undefined;

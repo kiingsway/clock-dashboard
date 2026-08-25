@@ -45,8 +45,6 @@ export function WeatherNow({
   const max = noMaxTemp ? '-' : `${r(maxTemp)}°`;
   const min = noMinTemp ? '-' : `${r(minTemp)}°`;
 
-  console.log({ feelsLike: r(feelsLike), temp });
-
   const hideFeelsLike = r(feelsLike) === temp;
 
   return (

@@ -15,7 +15,7 @@ export default function useBoolean(initialValue = false): TUseBoolean {
 
   const setTrue = (): void => setBool(true);
   const setFalse = (): void => setBool(false);
-  const toggle = (): void => setBool(prev => !prev)
+  const toggle = (): void => setBool(prev => !prev);
 
   return [bool, { setTrue, setFalse, toggle }] as const;
 

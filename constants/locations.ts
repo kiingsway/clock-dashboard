@@ -59,4 +59,4 @@ export const LOCATION_TO_WEATHER: TLocationToWeather = {
   },
 };
 
-export const LOCATION_OPTIONS = Object.keys(LOCATION_TO_WEATHER) as TLocation[]
+export const LOCATION_OPTIONS = Object.keys(LOCATION_TO_WEATHER) as TLocation[];

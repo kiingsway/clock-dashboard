@@ -2,6 +2,7 @@ import styles from "./DateHeader.module.scss";
 import Clock from "../Clock";
 import WeekDate from "../WeekDate";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onClick?: () => void
@@ -13,10 +14,11 @@ interface Props {
  * rolls over on its own — the host app never needs to re-render this.
  */
 export function DateHeader({ onClick }: Props) {
-  
+  const { t } = useTranslation();
+
   return (
     <ErrorBoundary>
-      <header className={styles.header} aria-label="Relógio" onClick={onClick}>
+      <header className={styles.header} aria-label={t('clock')} onClick={onClick}>
         <Clock />
         <WeekDate />
       </header>

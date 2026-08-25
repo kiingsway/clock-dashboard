@@ -19,8 +19,8 @@ interface Props {
 }
 
 export default function WeatherAlertCard({ alert, autoExpand }: Props): JSX.Element {
-  const { t, i18n: { language: locale } } = useTranslation()
-  const { get: { location: timezone } } = useAppSettings()
+  const { t, i18n: { language: locale } } = useTranslation();
+  const { get: { location: timezone } } = useAppSettings();
   const { now } = useNow();
   const [expanded, { toggle: toggleExpand }] = useBoolean(autoExpand);
   const showMore = (): void => autoExpand ? undefined : toggleExpand();

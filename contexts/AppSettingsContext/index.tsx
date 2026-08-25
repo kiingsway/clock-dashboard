@@ -100,7 +100,8 @@ export function AppSettingsProvider({ children }: Props) {
   }, []);
 
   const setPrecipHoursRange = useCallback((precipHoursRangeData: number) => {
-    const precipHoursRange = Math.max(MIN_RAIN_ALERT_HOURS, Math.min((precipHoursRangeData ?? MIN_RAIN_ALERT_HOURS), MAX_RAIN_ALERT_HOURS))
+    const precipHoursRange = Math.max(MIN_RAIN_ALERT_HOURS, Math.min((precipHoursRangeData ?? MIN_RAIN_ALERT_HOURS), MAX_RAIN_ALERT_HOURS));
+    
     setSettings((prev) => ({
       ...prev,
       precipHoursRange,

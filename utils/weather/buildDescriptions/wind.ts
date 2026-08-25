@@ -1,4 +1,4 @@
-import { DailySheetItemDesc } from '@/types/weatherInfo.types'
+import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 import { getCompassDirection } from '@/utils/geo/getCompassDirection';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
@@ -12,12 +12,12 @@ export default function buildWindDescription(windSpeed: number, windGusts: numbe
 
   const desc = getWindSummary2(windSpeed, windGusts, unit, compass.name, t);
 
-  const { level } = getBeaufortScale(windSpeed);
+  const level = getBeaufortScale(windSpeed);
   const beaufortSrc = createIconUrl(`wind-beaufort-${level}`);
-  const beaufortDuration = getWindGustAnimationDuration(windSpeed)
+  const beaufortDuration = getWindGustAnimationDuration(windSpeed);
 
   const beaufortTitle = `Beaufort Scale: ${level} (${windSpeed})`;
-  const directionText = `${capitalizeWords(t('wind'))} ${compass.name}`
+  const directionText = `${capitalizeWords(t('wind'))} ${compass.name}`;
 
   return {
     title: `${t('windSpeed')}: ${windSpeed} ${unit}`,
@@ -36,5 +36,5 @@ export default function buildWindDescription(windSpeed: number, windGusts: numbe
         duration: beaufortDuration,
       },
     ]
-  }
+  };
 }

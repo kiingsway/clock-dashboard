@@ -242,7 +242,7 @@ function SettingRow({ icon, title, description, value, control, htmlFor, hide, o
 
 function VersionBadge() {
 
-  const isBeta = (process.env.NEXT_PUBLIC_APP_NAME || "")?.toLowerCase().includes('beta')
+  const isBeta = (process.env.NEXT_PUBLIC_APP_NAME || "")?.toLowerCase().includes('beta');
 
   return (
     <div className={styles.version}>
@@ -250,5 +250,5 @@ function VersionBadge() {
       {APP_INFO.isDev && <Badge variant="accent">DEV</Badge>}
       {APP_INFO.version}
     </div>
-  )
+  );
 }

@@ -7,7 +7,3 @@ export const TABS = {
     component: WeatherTab
   },
 } as const;
-
-export const TABS_NAMES = Object.keys(TABS) as TTabs[];
-
-export type TTabs = keyof typeof TABS;

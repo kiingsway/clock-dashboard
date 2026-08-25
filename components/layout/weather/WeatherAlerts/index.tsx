@@ -1,6 +1,6 @@
 import useBoolean from "@/hooks/useBoolean";
 import { useTranslation } from "react-i18next";
-import styles from './WeatherAlerts.module.css'
+import styles from './WeatherAlerts.module.css';
 import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
 import sortWeatherAlerts from "@/utils/weatherAlerts/sortWeatherAlerts";
 import { BottomSheet } from "@/components/ui/BottomSheet";
@@ -23,22 +23,22 @@ interface Props {
 export default function WeatherAlerts({ alerts }: Props) {
   const { t } = useTranslation();
 
-  const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean()
+  const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean();
 
   const portalContainer = usePortalContainer();
 
-  const onDebugClick = (): void => console.info('Alerts:', alerts)
+  const onDebugClick = (): void => console.info('Alerts:', alerts);
 
   if (!alerts?.length) return <></>;
 
   const worstAlerts = sortWeatherAlerts(alerts);
 
-  const riskColors = [... new Set(worstAlerts.map(wa => getSeverityColor(wa.color)))].reverse()
+  const riskColors = [... new Set(worstAlerts.map(wa => getSeverityColor(wa.color)))].reverse();
   const worstColor = riskColors.at(-1);
 
-  const titles = [...new Set(worstAlerts.map(a => a.title))]
-  const title = titles.length === 1 ? worstAlerts[0].title : titles[0]
-  const titlePlus = titles.length > 1 ? ` + ${titles.length - 1}` : ''
+  const titles = [...new Set(worstAlerts.map(a => a.title))];
+  const title = titles.length === 1 ? worstAlerts[0].title : titles[0];
+  const titlePlus = titles.length > 1 ? ` + ${titles.length - 1}` : '';
 
   return (
     <>

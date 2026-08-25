@@ -3,14 +3,6 @@ import { DateTime } from "luxon";
 import { IMoonDaily } from "@/types/weather.types";
 import { getMoonPhaseInfo } from "@/utils/weather/getMoonInfo";
 
-export interface MoonDay {
-  date: string;
-  moonrise: string | null;
-  moonset: string | null;
-  alwaysUp: boolean;
-  alwaysDown: boolean;
-}
-
 interface MoonEvent {
   time: DateTime;
   type: "moonrise" | "moonset";

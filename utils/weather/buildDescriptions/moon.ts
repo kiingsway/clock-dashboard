@@ -1,4 +1,4 @@
-import { DailySheetItemDesc } from '@/types/weatherInfo.types'
+import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 import { getMoonPhaseInfo } from '../getMoonInfo';
 import { IMoonDaily } from '@/types/weather.types';
@@ -22,16 +22,12 @@ export default function buildMoonDescription(moonDaily: IMoonDaily | undefined, 
     const [moonriseText, moonsetText] = [moonrise, moonset]
       .map(d => d ? d.toFormat(`dd/LL HH:mm`) : '--:--');
 
-    return `${t('moonrise')}: ${moonriseText} | ${t('moonset')}: ${moonsetText}`
+    return `${t('moonrise')}: ${moonriseText} | ${t('moonset')}: ${moonsetText}`;
   })();
 
   return {
     title: `${t(name)} (${moonrisePhaseText})`,
     desc,
     icons: [{ iconName }],
-  }
-}
-
-export function getMoonInfo() {
-
+  };
 }

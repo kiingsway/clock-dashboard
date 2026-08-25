@@ -41,7 +41,7 @@ export default function CurrentWeatherIcon({ weatherCode, sunWindow, isDay, weat
     } : {
       category: 'error'
     })
-  }
+  };
 
   return (
     <div className={styles.iconStage}>
@@ -50,5 +50,5 @@ export default function CurrentWeatherIcon({ weatherCode, sunWindow, isDay, weat
         <WeatherIcon {...weatherIconProps} />
       </Tooltip>
     </div>
-  )
+  );
 }

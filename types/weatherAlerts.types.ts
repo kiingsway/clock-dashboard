@@ -18,7 +18,7 @@ export interface IWeatherAlert {
   properties: { label: string, value: string }[];
 }
 
-export interface WeatherAlertRequestParams {
+interface WeatherAlertRequestParams {
   lat: number;
   lon: number;
   radiusKm: number;

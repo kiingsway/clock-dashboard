@@ -1,6 +1,6 @@
 import { IWeather } from '@/types/weather.types';
 import { getLocaleHour, formatDateTime } from '@/utils/formatters/dateFormatters';
-import { getAccent } from '@/utils/weather/getAccentColor';
+import getAccentColor from '@/utils/weather/getAccentColor';
 import { getRainColor } from '@/utils/weather/getRainIntensityLabel';
 import getWeatherCategory from '@/utils/weather/getWeatherCategory';
 import { TFunction } from 'i18next';
@@ -58,7 +58,7 @@ export default function buildHourlyListData({ startIndex, weather, hoursAhead, n
     const isDay = isDays[index] === 1;
 
     const category = getWeatherCategory(weatherCode, t);
-    const accent = getAccent({ category, isDay });
+    const accent = getAccentColor(category.name, isDay);
     const accentPeak = getRainColor(precipitation);
 
     const minDiff = indexDate.diff(now, 'minutes').minutes;

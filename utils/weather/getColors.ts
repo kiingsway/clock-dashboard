@@ -1,9 +1,40 @@
-import { WIND_SPEED_COLORS, WIND_GUSTS_COLORS } from "@/constants/wind";
+import { WIND_SPEED_COLORS, WIND_GUSTS_COLORS } from "@/constants/colors";
 import { hexToRgb, lerp } from "../formatters/textFormatters";
 import { WindType } from "@/types/weather.types";
 import { IColorValueGradient } from "@/types/app.types";
-import { DAYLIGHT_HOURS, DEW_POINT_VALUES, HUMIDITY_PERCENTAGE, SUNSHINE_PERCENTAGE } from "@/constants/anchors";
-import { DAYLIGHT_COLORS, DEW_COLORS, HUMIDITY_COLORS, SUNSHINE_COLORS, VISIBILITY_COLORS } from "@/constants/colors";
+import { DAYLIGHT_HOURS, DEW_POINT_VALUES, HUMIDITY_PERCENTAGE } from "@/constants/anchors";
+import { DAYLIGHT_COLORS, DEW_COLORS, HUMIDITY_COLORS, VISIBILITY_COLORS } from "@/constants/colors";
+
+interface ColorRange {
+  min: number;
+  mid: number;
+  max: number;
+}
+
+interface ColorPalette {
+  low: string;    // Ex: COLD, DRY, DARK
+  mid: string;    // Ex: NORMAL
+  high: string;   // Ex: HOT, WET, LIGHT
+}
+
+function interpolateThreePointColor(
+  value: number,
+  range: ColorRange,
+  colors: ColorPalette
+): string {
+  const { min, mid, max } = range;
+  const { low, mid: midColor, high } = colors;
+
+  const clamped = Math.max(min, Math.min(max, value));
+
+  if (clamped <= mid) {
+    const factor = (clamped - min) / (mid - min);
+    return interpolateColor(low, midColor, factor);
+  }
+
+  const factor = (clamped - mid) / (max - mid);
+  return interpolateColor(midColor, high, factor);
+}
 
 /**
  * Interpola linearmente entre duas cores HEX.
@@ -22,7 +53,7 @@ function interpolateColor(color1: string, color2: string, factor: number): strin
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
-export function getGradientColor(value: number, stops: readonly IColorValueGradient[], max?: number): string {
+function getGradientColor(value: number, stops: readonly IColorValueGradient[], max?: number): string {
   // if (value == null || !Number.isFinite(value)) return undefined;
 
   const maxValue = max ?? stops[stops.length - 1].value;
@@ -86,18 +117,9 @@ export function showersIntensityColor(value: number): string {
  * @returns Código da cor em HEX
  */
 export function getDewPointColor(dewPoint: number): string {
-  const { COLD, NORMAL, HOT } = DEW_COLORS;
-  const { MIN, MID, MAX } = DEW_POINT_VALUES;
-
-  if (dewPoint <= MID) {
-    const clamped = Math.max(MIN, dewPoint);
-    const factor = (clamped - MIN) / (MID - MIN);
-    return interpolateColor(COLD, NORMAL, factor);
-  }
-
-  const clamped = Math.min(MAX, dewPoint);
-  const factor = (clamped - MID) / (MAX - MID);
-  return interpolateColor(NORMAL, HOT, factor);
+  const { COLD: low, NORMAL: mid, HOT: high } = DEW_COLORS;
+  const { MIN: min, MID: midVal, MAX: max } = DEW_POINT_VALUES;
+  return interpolateThreePointColor(dewPoint, { min, mid: midVal, max }, { low, mid, high });
 }
 
 /**
@@ -111,18 +133,9 @@ export function getDewPointColor(dewPoint: number): string {
  * @returns Código da cor em HEX
  */
 export function getHumidityColor(humidity: number): string {
-  const { DRY, NORMAL, WET } = HUMIDITY_COLORS;
-  const { MIN, MID, MAX } = HUMIDITY_PERCENTAGE;
-
-  const clamped = Math.max(MIN, Math.min(MAX, humidity));
-
-  if (clamped <= MID) {
-    const factor = (clamped - MIN) / (MID - MIN);
-    return interpolateColor(DRY, NORMAL, factor);
-  }
-
-  const factor = (clamped - MID) / (MAX - MID);
-  return interpolateColor(NORMAL, WET, factor);
+  const { DRY: low, NORMAL: mid, WET: high } = HUMIDITY_COLORS;
+  const { MIN: min, MID: midVal, MAX: max } = HUMIDITY_PERCENTAGE;
+  return interpolateThreePointColor(humidity, { min, mid: midVal, max }, { low, mid, high });
 }
 
 /**
@@ -145,39 +158,9 @@ export function getWindColor(windKmH: number, type: WindType = "speed"): string 
  * Âncoras: <= 8h (Violeta) | 12h (Branco) | >= 16h (Amarelo Céu)
  */
 export function getDaylightColor(seconds: number): string {
-  const { DARK, LIGHT, NORMAL } = DAYLIGHT_COLORS;
-  const { MIN, MID, MAX } = DAYLIGHT_HOURS;
-
-  const hours = seconds / 3600;
-
-  if (hours <= MID) {
-    const clamped = Math.max(MIN, hours);
-    const factor = (clamped - MIN) / (MID - MIN);
-    return interpolateColor(DARK, NORMAL, factor);
-  }
-
-  const clamped = Math.min(MAX, hours);
-  const factor = (clamped - MID) / (MAX - MID);
-  return interpolateColor(NORMAL, LIGHT, factor);
-}
-
-/**
- * Cor para Sunshine Duration (baseado no % de sol direto no período).
- * Âncoras: 0% (Branco) | 50% (Amarelo) | 100% (Laranja)
- */
-export function getSunshineColor(percentage: number): string {
-  const { NOTHING, HALF, FULL } = SUNSHINE_COLORS;
-  const { MIN, MID, MAX } = SUNSHINE_PERCENTAGE;
-
-  const clamped = Math.max(MIN, Math.min(MAX, percentage));
-
-  if (clamped <= MID) {
-    const factor = (clamped - MIN) / (MID - MIN);
-    return interpolateColor(NOTHING, HALF, factor);
-  }
-
-  const factor = (clamped - MID) / (MAX - MID);
-  return interpolateColor(HALF, FULL, factor);
+  const { DARK: low, NORMAL: mid, LIGHT: high } = DAYLIGHT_COLORS;
+  const { MIN: min, MID: midVal, MAX: max } = DAYLIGHT_HOURS;
+  return interpolateThreePointColor(seconds / 3600, { min, mid: midVal, max }, { low, mid, high });
 }
 
 /**

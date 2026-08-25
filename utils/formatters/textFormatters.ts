@@ -27,7 +27,7 @@ export function capitalizeWords(text: string): string {
     .join(" ");
 }
 
-export function formatLocaleNumber(n: number, locale: string) {
+function formatLocaleNumber(n: number, locale: string) {
   return new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(n);
 }
 
