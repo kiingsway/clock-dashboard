@@ -21,7 +21,7 @@ export default function CurrentWeatherIcon({ weatherCode, sunWindow, isDay, weat
   const { t } = useTranslation();
 
   const weatherCategory = getWeatherCategory(weatherCode, t);
-  const isBeforeSunRiseSet = !sunWindow ? false : isXMinBefore(now, sunWindow.end, 30);
+  const isBeforeSunRiseSet = !sunWindow ? false : isXMinBefore(now, sunWindow.end, 50);
 
   const weatherIconProps: WeatherIconProps = {
     size,

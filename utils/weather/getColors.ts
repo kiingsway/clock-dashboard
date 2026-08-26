@@ -4,37 +4,7 @@ import { WindType } from "@/types/weather.types";
 import { IColorValueGradient } from "@/types/app.types";
 import { DAYLIGHT_HOURS, DEW_POINT_VALUES, HUMIDITY_PERCENTAGE } from "@/constants/anchors";
 import { DAYLIGHT_COLORS, DEW_COLORS, HUMIDITY_COLORS, VISIBILITY_COLORS } from "@/constants/colors";
-
-interface ColorRange {
-  min: number;
-  mid: number;
-  max: number;
-}
-
-interface ColorPalette {
-  low: string;    // Ex: COLD, DRY, DARK
-  mid: string;    // Ex: NORMAL
-  high: string;   // Ex: HOT, WET, LIGHT
-}
-
-function interpolateThreePointColor(
-  value: number,
-  range: ColorRange,
-  colors: ColorPalette
-): string {
-  const { min, mid, max } = range;
-  const { low, mid: midColor, high } = colors;
-
-  const clamped = Math.max(min, Math.min(max, value));
-
-  if (clamped <= mid) {
-    const factor = (clamped - min) / (mid - min);
-    return interpolateColor(low, midColor, factor);
-  }
-
-  const factor = (clamped - mid) / (max - mid);
-  return interpolateColor(midColor, high, factor);
-}
+import { IColorRange, IInterpolateColor } from "@/types/colors.types";
 
 /**
  * Interpola linearmente entre duas cores HEX.
@@ -53,8 +23,22 @@ function interpolateColor(color1: string, color2: string, factor: number): strin
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
+function interpolateThreePointColor(value: number, range: IColorRange, colors: IInterpolateColor): string {
+  const { min, med, max } = range;
+  const { low, mid, high } = colors;
+
+  const clamped = Math.max(min, Math.min(max, value));
+
+  if (clamped <= med) {
+    const factor = (clamped - min) / (med - min);
+    return interpolateColor(low, mid, factor);
+  }
+
+  const factor = (clamped - med) / (max - med);
+  return interpolateColor(mid, high, factor);
+}
+
 function getGradientColor(value: number, stops: readonly IColorValueGradient[], max?: number): string {
-  // if (value == null || !Number.isFinite(value)) return undefined;
 
   const maxValue = max ?? stops[stops.length - 1].value;
   const v = Math.max(0, Math.min(maxValue, value));
@@ -117,9 +101,7 @@ export function showersIntensityColor(value: number): string {
  * @returns Código da cor em HEX
  */
 export function getDewPointColor(dewPoint: number): string {
-  const { COLD: low, NORMAL: mid, HOT: high } = DEW_COLORS;
-  const { MIN: min, MID: midVal, MAX: max } = DEW_POINT_VALUES;
-  return interpolateThreePointColor(dewPoint, { min, mid: midVal, max }, { low, mid, high });
+  return interpolateThreePointColor(dewPoint, DEW_POINT_VALUES, DEW_COLORS);
 }
 
 /**
@@ -133,9 +115,7 @@ export function getDewPointColor(dewPoint: number): string {
  * @returns Código da cor em HEX
  */
 export function getHumidityColor(humidity: number): string {
-  const { DRY: low, NORMAL: mid, WET: high } = HUMIDITY_COLORS;
-  const { MIN: min, MID: midVal, MAX: max } = HUMIDITY_PERCENTAGE;
-  return interpolateThreePointColor(humidity, { min, mid: midVal, max }, { low, mid, high });
+  return interpolateThreePointColor(humidity, HUMIDITY_PERCENTAGE, HUMIDITY_COLORS);
 }
 
 /**
@@ -158,9 +138,7 @@ export function getWindColor(windKmH: number, type: WindType = "speed"): string 
  * Âncoras: <= 8h (Violeta) | 12h (Branco) | >= 16h (Amarelo Céu)
  */
 export function getDaylightColor(seconds: number): string {
-  const { DARK: low, NORMAL: mid, LIGHT: high } = DAYLIGHT_COLORS;
-  const { MIN: min, MID: midVal, MAX: max } = DAYLIGHT_HOURS;
-  return interpolateThreePointColor(seconds / 3600, { min, mid: midVal, max }, { low, mid, high });
+  return interpolateThreePointColor(seconds / 3600, DAYLIGHT_HOURS, DAYLIGHT_COLORS);
 }
 
 /**
@@ -169,4 +147,15 @@ export function getDaylightColor(seconds: number): string {
  */
 export function getVisibilityColor(visibility: number): string {
   return getGradientColor(visibility, VISIBILITY_COLORS, 10000);
+}
+
+export function getRainColor(rainMm: number): string {
+  const maxRain = 20;
+  const t = Math.pow(Math.min(Math.max(rainMm / maxRain, 0), 1), 0.6);
+
+  const hue = 205 + (270 - 205) * t;
+  const saturation = 90;
+  const lightness = 72 - 22 * t;
+
+  return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 }

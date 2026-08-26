@@ -40,7 +40,8 @@ export function getAccent({ isDay = true, categoryName: cName, category, weather
   })();
 
   if (!categoryName) return DEFAULT_COLOR.WEATHER;
-  return getAccentColor(categoryName, typeof isDay === 'boolean' ? isDay : isDay !== 0);
+  const isDayBool = isDay === true || isDay === 1;
+  return getAccentColor(categoryName, isDayBool);
 }
 
 /**

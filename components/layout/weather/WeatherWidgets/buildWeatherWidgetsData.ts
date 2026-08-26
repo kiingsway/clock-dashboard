@@ -1,6 +1,7 @@
 import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard';
 import { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
 import { VISIBILITY_COLORS, WIND_GUSTS_COLORS } from '@/constants/colors';
+import { getDaylightDurationDescription, getDewPointDescription, getHumidityDescription, getSunshineDurationDescription } from '@/constants/descriptions';
 import { createIconUrl } from '@/constants/iconFiles';
 import { IWeather } from '@/types/weather.types';
 import { formatDuration } from '@/utils/formatters/dateFormatters';
@@ -12,9 +13,6 @@ import buildMoonDescription from '@/utils/weather/buildDescriptions/moon';
 import buildUVDescription from '@/utils/weather/buildDescriptions/uvIndex';
 import buildVisibilityDescription from '@/utils/weather/buildDescriptions/visibility';
 import { getDaylightColor, getDewPointColor, getHumidityColor, getWindColor } from '@/utils/weather/getColors';
-import getDaylightDurationDescription, { getSunshineDurationDescription } from '@/utils/weather/getDaylightDurationDescription';
-import { getDewPointDescription } from '@/utils/weather/getDewPointDescription';
-import getHumidityDescription from '@/utils/weather/getHumidityDescription';
 import { getWindGustAnimationDuration, getWindSummary } from '@/utils/weather/getWindInfo';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -138,8 +136,6 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
 
   const daylightHours = [0, 4, 8, 12, 16, 20, 24];
   const daylightZones = daylightHours.map(value => ({ value, color: getDaylightColor(value * 60 * 60) }));
-
-  // console.log('uvIndexDesc.icons[0]', uvIndexDesc.icons[0]);
 
   return [
     {

@@ -34,7 +34,7 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
   const tempMin = daily.temperature_2m_min[todayIndex];
   const precipMM = daily.precipitation_sum[todayIndex];
   const precipChance = daily.precipitation_probability_max[todayIndex];
-  const hoursOfRain = daily.precipitation_hours[todayIndex];
+  const rainHours = daily.precipitation_hours[todayIndex];
   const uvIndex = daily.uv_index_max[todayIndex];
   const visibility = daily.visibility_mean[todayIndex];
   const humidity = daily.relative_humidity_2m_mean[todayIndex];
@@ -49,7 +49,7 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
   const weatherCategory = getWeatherCategory(weatherCode, t);
 
   const feelsLikeDesc = buildFeelsLikeDescription(tempMean, feelsLike, t);
-  const rainDesc = buildRainDescription(t, { precipChance, precipMM: precipMM, hoursOfRain });
+  const rainDesc = buildRainDescription(rainHours, precipMM, precipChance, t);
   const uvDesc = buildUVDescription(uvIndex, true, t);
   const moonDesc = buildMoonDescription(moonDaily, timezone, t);
   const visibilityDescription = buildVisibilityDescription(visibility, visibilityUnit, locale, true, t);

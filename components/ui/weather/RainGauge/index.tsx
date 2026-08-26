@@ -3,8 +3,8 @@ import styles from "./RainGauge.module.css";
 import { clamp } from "../../BottomSheet/utils";
 import { useTranslation } from "react-i18next";
 import classNames from "classnames";
-import { getRainIntensityLabel } from "@/utils/weather/getRainIntensityLabel";
 import { Tooltip } from "../../Tooltip";
+import { getRainDescription } from "@/constants/descriptions";
 
 export interface RainGaugeProps {
   /** Precipitation in millimeters. */
@@ -28,7 +28,7 @@ export function RainGauge({ mm, max = 10, precision = 1, className }: RainGaugeP
   const pct = clamp(mm / max, 0, 1) * 100;
 
   const label = `${mm.toFixed(precision)}mm`;
-  const title = getRainIntensityLabel(mm, t);
+  const title = getRainDescription(mm, t);
 
   const content = (
     <div

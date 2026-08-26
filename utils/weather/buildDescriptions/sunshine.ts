@@ -1,7 +1,7 @@
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
-import { getSunshineDurationDescription } from '../getDaylightDurationDescription';
 import { formatDuration } from '@/utils/formatters/dateFormatters';
+import { getSunshineDurationDescription } from '@/constants/descriptions';
 
 export default function buildSunshineDescription(sunshine: number, t: TFunction): DailySheetItemDesc {
 

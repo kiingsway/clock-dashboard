@@ -1,11 +1,11 @@
 import { IWeather } from '@/types/weather.types';
 import { getLocaleHour, formatDateTime } from '@/utils/formatters/dateFormatters';
 import getAccentColor from '@/utils/weather/getAccentColor';
-import { getRainColor } from '@/utils/weather/getRainIntensityLabel';
 import getWeatherCategory from '@/utils/weather/getWeatherCategory';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 import { HourlyCardProps } from '../HourlyCard';
+import { getRainColor } from '@/utils/weather/getColors';
 
 interface Props {
   weather: IWeather;

@@ -1,8 +1,8 @@
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
-import getVisibilityDescription from '../getVisibilityDescription';
 import { getVisibilityColor } from '../getColors';
 import { formatMetricValue } from '@/utils/formatters/textFormatters';
+import { getVisibilityDescription } from '@/constants/descriptions';
 
 export default function buildVisibilityDescription(visibility: number, unit: string, locale: string, isDay: boolean, t: TFunction): DailySheetItemDesc {
 

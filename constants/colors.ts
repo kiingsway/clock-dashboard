@@ -1,11 +1,11 @@
-import { WeatherCategoryName } from "@/types/weather.types";
+import { IColor, IColorDay, IGradientColor, IInterpolateColor } from "@/types/colors.types";
 
-export const DEFAULT_COLOR = {
+export const DEFAULT_COLOR: IColor = {
   WEATHER: "#6b7280",
   WHITE: "#e8ecf4"
 };
 
-export const WEATHER_ACCENT_COLORS: Record<WeatherCategoryName, string | { day: string; night: string }> = {
+export const WEATHER_ACCENT_COLORS: IColorDay = {
   clear: { day: "#f4b860", night: "#8695f0" },
   partlyCloudy: { day: "#e5be85", night: "#7f8cb8" },
   cloudy: "#8b93a6",
@@ -35,7 +35,7 @@ export const WEATHER_ACCENT_COLORS: Record<WeatherCategoryName, string | { day: 
   sunset: "#f4b860"
 } as const;
 
-export const WIND_SPEED_COLORS = [
+export const WIND_SPEED_COLORS: IGradientColor[] = [
   { value: 0, hex: "#E0F2F1" },   // Calmo
   { value: 10, hex: "#D9F99D" },  // Brisa leve
   { value: 20, hex: "#FFF59D" },  // Perceptível
@@ -46,7 +46,7 @@ export const WIND_SPEED_COLORS = [
   { value: 90, hex: "#6A1B9A" },  // Extremo
 ] as const;
 
-export const WIND_GUSTS_COLORS = [
+export const WIND_GUSTS_COLORS: IGradientColor[] = [
   { value: 0, hex: "#E0F2F1" },   // Sem rajadas relevantes
   { value: 20, hex: "#D9F99D" },  // Leve
   { value: 40, hex: "#FFF59D" },  // Perceptível
@@ -57,7 +57,7 @@ export const WIND_GUSTS_COLORS = [
   { value: 140, hex: "#6A1B9A" }, // Extrema
 ] as const;
 
-export const VISIBILITY_COLORS = [
+export const VISIBILITY_COLORS: IGradientColor[] = [
   { value: 0, hex: "#6E5033" }, // Crítico
   { value: 500, hex: "#9E7B56" }, // Névoa intensa
   { value: 1000, hex: "#C4A482" }, // Baixa
@@ -66,20 +66,20 @@ export const VISIBILITY_COLORS = [
   { value: 10000, hex: "#F5F0E6" }  // Excelente
 ] as const;
 
-export const HUMIDITY_COLORS = {
-  DRY: "#f59e0b",
-  NORMAL: DEFAULT_COLOR.WHITE,
-  WET: "#3b82f6",
+export const HUMIDITY_COLORS: IInterpolateColor = {
+  low: "#f59e0b",
+  mid: DEFAULT_COLOR.WHITE,
+  high: "#3b82f6",
 } as const;
 
-export const DEW_COLORS = {
-  COLD: '#a5f3fc',
-  NORMAL: DEFAULT_COLOR.WHITE,
-  HOT: '#fca5a5',
+export const DEW_COLORS: IInterpolateColor = {
+  low: '#a5f3fc',
+  mid: DEFAULT_COLOR.WHITE,
+  high: '#fca5a5',
 } as const;
 
-export const DAYLIGHT_COLORS = {
-  DARK: "#a98cf0",
-  NORMAL: DEFAULT_COLOR.WHITE,
-  LIGHT: "#fef08a",
+export const DAYLIGHT_COLORS: IInterpolateColor = {
+  low: "#a98cf0",
+  mid: DEFAULT_COLOR.WHITE,
+  high: "#fef08a",
 } as const;
