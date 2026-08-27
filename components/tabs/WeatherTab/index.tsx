@@ -48,6 +48,7 @@ export default function WeatherTab() {
             alerts={alerts}
             loading={isLoading}
             error={weatherError || alertsError}
+            isFocused={focus}
           />
         </div>
 

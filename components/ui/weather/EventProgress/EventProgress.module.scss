@@ -57,3 +57,11 @@
   box-shadow: 0 0 15px 1px color-mix(in srgb, var(--wc-accent) 80%, transparent);
   transform: translate(-50%, -50%);
 }
+
+.progressLabel {
+  display: flex;
+  flex-direction: column;
+  margin-top: calc(var(--is-focused) * -10px);
+
+  transition: margin-top 500ms ease-in-out;
+}

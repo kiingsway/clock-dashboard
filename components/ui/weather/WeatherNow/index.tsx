@@ -47,7 +47,7 @@ export function WeatherNow({
   const temp = hasNoTemp ? '-' : r(temperature);
   const feelsLikeTemp = hasNoFLike ? '-' : `${r(feelsLike)}°`;
 
-  const hideFeelsLike = !showFeelsLikeWhenEqual && r(feelsLike) === temp;
+  const hideFeelsLike = hasNoFLike || (!showFeelsLikeWhenEqual && r(feelsLike) === temp);
 
   return (
     <div className={styles.root}>

@@ -72,9 +72,9 @@ const ProgressLabel = ({ date, hideDate }: { date?: DateTime, hideDate?: boolean
     : '--:--';
 
   return (
-    <>
+    <div className={styles.progressLabel}>
       {dateLabel && !hideDate && <span>{dateLabel}</span>}
       <span>{timeLabel}</span>
-    </>
+    </div>
   );
 };
