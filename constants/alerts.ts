@@ -4,12 +4,6 @@ import { IWeatherAlertUSA } from "@/types/WeatherAlerts/usa.types";
 import { canadaAlertMapper, usaAlertMapper } from "@/utils/weatherAlerts/alertMapper";
 import { DEFAULT_SETTINGS } from "./settings";
 
-export const ALERT_RADIUS_KM = {
-  MIN: 10,
-  MAX: 4000,
-  STEP: 50,
-};
-
 /**
  * Um país novo = uma entrada nova aqui. O hook (useWeatherAlerts) não muda.
  * A chave é o country code (location.country), então precisa bater com o

@@ -1,4 +1,4 @@
-import { JSX, useEffect, useState } from "react";
+import { CSSProperties, JSX, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
 import { TLocation } from "@/types/location.types";
@@ -7,13 +7,14 @@ import { Badge } from "@/components/ui/Badge";
 import styles from "./SettingsSheet.module.css";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon, RainCardIcon } from "./Icons";
-import { ALERT_RADIUS_KM } from "@/constants/alerts";
-import { LOCATION_OPTIONS, LOCATION_TO_WEATHER } from "@/constants/locations";
+import { LOCATION_OPTIONS } from "@/constants/locations";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import Alert from "@/components/ui/Alert";
 import Slider from "@/components/ui/Slider";
-import { MIN_RAIN_ALERT_HOURS, MAX_RAIN_ALERT_HOURS } from "@/constants/rainDescriptions";
+import { ALERT_RADIUS_KM, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES, LANGUAGES } from "@/constants/settings";
+import { capitalizeWords } from "@/utils/formatters/textFormatters";
+import { Switch } from "@/components/ui/Switch";
 
 interface Props {
   open: boolean;
@@ -22,6 +23,7 @@ interface Props {
   onUpdatedAtClick?: () => void;
 
   alertsError?: unknown;
+  accent: string;
 }
 
 /**
@@ -35,28 +37,35 @@ export function SettingsSheet({
   onClose,
   updatedAt,
   onUpdatedAtClick,
-  alertsError
+  alertsError,
+  accent
 }: Props) {
   const { t, i18n } = useTranslation();
-  const { set, get: { alertRadiusKm, location, precipHoursRange } } = useAppSettings();
+  const { set, get, weatherLocation } = useAppSettings();
 
-  const [draftRadius, setDraftRadius] = useState(alertRadiusKm);
-  const [draftPrecipHrs, setDraftPrecipHrs] = useState(precipHoursRange);
+  const [draftRadius, setDraftRadius] = useState(get.alertRadiusKm);
+  const [draftPrecipHrs, setDraftPrecipHrs] = useState(get.precipHoursRange);
+  const [draftSunAlertThresholdMinutes, setDraftSunAlertThresholdMinutes] = useState(get.sunAlertThresholdMinutes);
   const portalContainer = usePortalContainer(".root");
 
   // se o valor mudar por fora (ex: carregado do storage depois), sincroniza
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDraftRadius(alertRadiusKm);
-    setDraftPrecipHrs(precipHoursRange);
-  }, [alertRadiusKm, precipHoursRange]);
+    setDraftRadius(get.alertRadiusKm);
+    setDraftPrecipHrs(get.precipHoursRange);
+    setDraftSunAlertThresholdMinutes(get.sunAlertThresholdMinutes);
+  }, [get.alertRadiusKm, get.precipHoursRange, get.sunAlertThresholdMinutes]);
 
   const commitRadius = (raw: number) => {
-    if (raw !== alertRadiusKm) set.alertRadiusKm(raw);
+    if (raw !== get.alertRadiusKm) set.alertRadiusKm(raw);
   };
 
   const commitPrecipHrs = (raw: number) => {
-    if (raw !== precipHoursRange) set.precipHoursRange(raw);
+    if (raw !== get.precipHoursRange) set.precipHoursRange(raw);
+  };
+
+  const commitDraftSunAlertThresholdMinutes = (raw: number) => {
+    if (raw !== get.sunAlertThresholdMinutes) set.sunAlertThresholdMinutes(raw);
   };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -64,10 +73,14 @@ export function SettingsSheet({
   };
 
   const updatedAtHour = updatedAt
-    ? DateTime.fromISO(updatedAt, { zone: location }).toFormat("HH:mm")
+    ? DateTime.fromISO(updatedAt, { zone: get.location }).toFormat("HH:mm")
     : "--:--";
 
-  const loc = LOCATION_TO_WEATHER[location];
+  const booleanSettingsKeys = [
+    'showFeelsLikeWhenEqual',
+    'showMinMaxPeakBadge',
+    'focusCurrentWeatherOnLaunch',
+  ] as const;
 
   return (
     <BottomSheet
@@ -75,12 +88,12 @@ export function SettingsSheet({
       onClose={onClose}
       title={t("settings")}
       ariaLabel={t("settings")}
-      snapPoints={[0.6, 0.9]}
+      snapPoints={[0.4, 0.6, 0.9]}
       initialSnap={0}
       dismissible
       container={portalContainer}
     >
-      <form className={styles.form} onSubmit={(e) => e.preventDefault()} tabIndex={-1}>
+      <form className={styles.form} onSubmit={(e) => e.preventDefault()} tabIndex={-1} style={{ '--wc-accent': accent } as CSSProperties}>
         {Boolean(alertsError) && (
           <Alert
             title="Failed to fetch weather alerts"
@@ -100,11 +113,8 @@ export function SettingsSheet({
                 value={i18n.language}
                 onChange={handleLanguageChange}
               >
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="pt">Português</option>
-                <option value="es">Español</option>
-                <option value="ko">한국어</option>
+                {LANGUAGES.map(({ label, value }) =>
+                  <option key={value} value={value}>{label}</option>)}
               </select>
             }
           />
@@ -117,10 +127,9 @@ export function SettingsSheet({
               <select
                 id="location"
                 className={styles.select}
-                value={location}
+                value={get.location}
                 onChange={(e) => set.location(e.target.value as TLocation)}
               >
-                {/* <option value="auto">Auto</option> */}
                 {LOCATION_OPTIONS.map((loc) => (
                   <option key={loc} value={loc}>
                     {t(`cities.${loc.split("/")[1]}`)}
@@ -131,23 +140,57 @@ export function SettingsSheet({
           />
         </SettingsSection>
 
+        <SettingsSection title={t("settingsTexts.appearance.title")}>
+          <SettingRow
+            icon={<InfoIcon />}
+            title={t("settingsTexts.appearance.sunAlertThresholdMinutes.title")}
+            description={t('settingsTexts.appearance.sunAlertThresholdMinutes.desc')}
+            value={`${draftSunAlertThresholdMinutes} ${t('min_minute')}`}
+            htmlFor="sunWindowIconBeforeMinutes"
+            control={
+              <Slider
+                id="sunWindowIconBeforeMinutes"
+                min={SUNWINDOW_BEFORE_MINUTES.MIN}
+                max={SUNWINDOW_BEFORE_MINUTES.MAX}
+                step={SUNWINDOW_BEFORE_MINUTES.STEP}
+                value={draftSunAlertThresholdMinutes}
+                onChange={setDraftSunAlertThresholdMinutes}
+                onCommit={commitDraftSunAlertThresholdMinutes}
+                unit={t('min_minute')}
+              />
+            }
+          />
+
+          {booleanSettingsKeys.map(key => (
+            <SettingRow
+              key={key}
+              icon={<InfoIcon />}
+              title={t(`settingsTexts.appearance.${key}.title`)}
+              description={t(`settingsTexts.appearance.${key}.desc`)}
+              value={capitalizeWords(String(t(get[key] ? 'active': 'inactive')))}
+              htmlFor={key}
+              control={<Switch id={key} value={get[key]} onChange={set[key]} />}
+            />
+          ))}
+        </SettingsSection>
+
         <SettingsSection title={t("settingsTexts.alerts.title")}>
           <SettingRow
             icon={<RainCardIcon />}
             title={t('precipitationRange')}
             description={t('precipitationRangeDescription')}
-            value={`${draftPrecipHrs} hrs`}
+            value={`${draftPrecipHrs} ${t('hrs')}`}
             htmlFor="alertPrecipHrs"
             control={
               <Slider
                 id="alertPrecipHrs"
-                min={MIN_RAIN_ALERT_HOURS}
-                max={MAX_RAIN_ALERT_HOURS}
+                min={RAIN_ALERT_HOURS.MIN}
+                max={RAIN_ALERT_HOURS.MAX}
                 step={1}
                 value={draftPrecipHrs}
                 onChange={setDraftPrecipHrs}
                 onCommit={commitPrecipHrs}
-                unit="hrs"
+                unit={t('hrs')}
               />
             }
           />
@@ -155,9 +198,9 @@ export function SettingsSheet({
             icon={<RadiusIcon />}
             title={t("settingsTexts.alerts.radius.title")}
             description={t("settingsTexts.alerts.radius.description")}
-            value={`${draftRadius} km`}
+            value={`${draftRadius} ${t('km')}`}
             htmlFor="alertRadius"
-            hide={!(['CA'].includes(loc.country || ""))}
+            hide={!(['CA'].includes(weatherLocation?.country || ""))}
             control={
               <Slider
                 id="alertRadius"
@@ -167,7 +210,7 @@ export function SettingsSheet({
                 value={draftRadius}
                 onChange={setDraftRadius}
                 onCommit={commitRadius}
-                unit="km"
+                unit={t("km")}
                 snapToMultiples
               />
             }
@@ -210,6 +253,7 @@ interface SettingRowProps {
   icon: React.ReactNode;
   title: string;
   description: string;
+  subtext?: string;
   /** Compact value shown inline next to the title (for static/quick-glance settings). */
   value?: React.ReactNode;
   /** Full-width interactive control rendered below the description (select, slider, etc). */
@@ -219,7 +263,7 @@ interface SettingRowProps {
   onDoubleClick?: () => void;
 }
 
-function SettingRow({ icon, title, description, value, control, htmlFor, hide, onDoubleClick }: SettingRowProps) {
+function SettingRow({ icon, title, description, value, subtext, control, htmlFor, hide, onDoubleClick }: SettingRowProps) {
   if (hide) return null;
   return (
     <div className={styles.row} onDoubleClick={onDoubleClick}>
@@ -236,6 +280,7 @@ function SettingRow({ icon, title, description, value, control, htmlFor, hide, o
         {value !== undefined && <span className={styles.rowValue}>{value}</span>}
       </div>
       {control && <div className={styles.rowControl}>{control}</div>}
+      {subtext && <span className={styles.subtext}>{subtext}</span>}
     </div>
   );
 }

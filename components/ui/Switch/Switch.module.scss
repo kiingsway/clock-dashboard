@@ -1,0 +1,70 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 40px;
+  height: 22px;
+}
+
+/* Input real: fica invisível mas continua focável/clicável e acessível a leitores de tela */
+.input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.track {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--wc-radius-full);
+  background: var(--wc-surface-alt);
+  border: 1px solid var(--wc-hairline);
+  box-shadow: var(--wc-shadow-xs);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: var(--wc-radius-full);
+  background: var(--wc-text-muted);
+  box-shadow: var(--wc-shadow-sm);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+/* Estado ligado */
+.input:checked ~ .track {
+  background: var(--wc-accent-muted);
+  border-color: color-mix(in srgb, var(--wc-accent) 45%, var(--wc-hairline));
+}
+
+.input:checked ~ .track .thumb {
+  background: var(--wc-accent);
+  transform: translateX(18px);
+}
+
+/* Foco visível via teclado */
+.input:focus-visible ~ .track {
+  box-shadow: 0 0 0 3px var(--wc-accent-muted), var(--wc-shadow-xs);
+}
+
+/* Hover só quando habilitado */
+.wrapper:not([data-disabled]):hover .track {
+  border-color: color-mix(in srgb, var(--wc-accent) 30%, var(--wc-hairline));
+}
+
+.wrapper[data-disabled] {
+  opacity: 0.45;
+}

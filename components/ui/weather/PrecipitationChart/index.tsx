@@ -8,8 +8,8 @@ import { useAppSettings } from '@/contexts/AppSettingsContext';
 import { ResponsiveContainer } from 'recharts';
 import { getLocaleHour } from '@/utils/formatters/dateFormatters';
 import PrecipStackedAreaChart from './PrecipitationAreaChart';
-import { MIN_RAIN_ALERT_HOURS, MAX_RAIN_ALERT_HOURS } from '@/constants/rainDescriptions';
 import { IPrecipChartData } from '@/types/chart.types';
+import { RAIN_ALERT_HOURS } from '@/constants/settings';
 
 export type TPrecipAreas = "rain" | "showers" | "snowfall";
 export const precipitationAreas: TPrecipAreas[] = ["snowfall", "rain", "showers"];
@@ -62,7 +62,8 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
 
   const onDebugClick = () => console.info('Chart Data', { times: hourly.time, data, timeIndex: startIndex, precipHoursRange });
 
-  const filteredData = lastPrecipitationIndex === -1 ? [] : data.slice(0, Math.min(Math.max(lastPrecipitationIndex + 1, MIN_RAIN_ALERT_HOURS), MAX_RAIN_ALERT_HOURS));
+  const { MIN, MAX } = RAIN_ALERT_HOURS;
+  const filteredData = lastPrecipitationIndex === -1 ? [] : data.slice(0, Math.min(Math.max(lastPrecipitationIndex + 1, MIN), MAX));
 
   return (
     <div onDoubleClick={onDebugClick} className={styles.main}>

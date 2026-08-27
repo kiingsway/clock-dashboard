@@ -3,19 +3,12 @@ import { usePortalContainer } from '@/hooks/usePortalContainer';
 import { IWeather } from '@/types/weather.types';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
-import styles from './DailySheet.module.scss';
-import { getSunWindow } from '@/utils/weather/getSunWindow';
-import SunProgressBar from '@/components/ui/weather/SunProgressBar';
-import HourlyList from '@/components/ui/weather/HourlyList';
-import MoonProgressBar from '@/components/ui/weather/MoonProgressBar';
 import { useNow } from '@/contexts/NowContext';
 import { TFunction } from 'i18next';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
-import { getAccent } from '@/utils/weather/getAccentColor';
-import { Fragment, JSX } from 'react';
-import WeatherIcon from '@/components/ui/weather/WeatherIcon';
-import MiniCard from '@/components/ui/MiniCard';
-import buildDailySheetInfo from './buildDailySheetInfo';
+import { JSX } from 'react';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
+import DailySheetContent from './DailySheetContent';
 
 interface Props {
   weather: IWeather | undefined
@@ -34,30 +27,10 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
   const { daily, timezone } = weather;
 
   const iso = daily.time[index];
-  const weatherCode = daily.weather_code[index];
 
   const indexDate = DateTime.fromISO(iso, { zone: timezone });
-  const indexDateWithCurrentTime = now.set({
-    year: indexDate.year,
-    month: indexDate.month,
-    day: indexDate.day,
-  });
-
-  const isToday = indexDate.hasSame(now, "day");
-  const sunDate = isToday ? indexDateWithCurrentTime : indexDate;
-
-  const sunWindow = getSunWindow({
-    sunriseTimes: daily.sunrise,
-    sunsetTimes: daily.sunset,
-    timezone,
-    date: sunDate
-  });
 
   const title = getForecastTitle(now, indexDate, locale, t);
-
-  const accent = getAccent({ weatherCode, t });
-
-  const dailySheetInfo = buildDailySheetInfo(weather, indexDate, locale, t);
 
   return (
     <BottomSheet
@@ -70,46 +43,11 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
       dismissible
       container={portalContainer}
     >
-      <div className={styles.main} style={{ ["--wc-accent" as string]: accent }}>
-        {sunWindow && <SunProgressBar sunWindow={sunWindow} />}
-        {dailySheetInfo.map(({ key, title, desc, icons }, index) => {
-
-          const iconsProps = icons.length > 1
-            ? icons.map((icon, i) => <WeatherIcon key={i} {...icon} size={60} />)
-            : undefined;
-
-          const iconProps = icons.length === 1
-            ? <WeatherIcon {...icons[0]} size={60} />
-            : undefined;
-
-          return (
-            <Fragment key={key}>
-              <MiniCard
-                title={title}
-                desc={desc}
-                icons={iconsProps}
-                icon={iconProps}
-              />
-
-              {index === 2 && (
-                <HourlyList
-                  date={indexDate}
-                  weather={weather}
-                  kind="day"
-                />
-              )}
-
-              {index === 4 && (
-                <MoonProgressBar
-                  date={indexDate}
-                  dailyMoon={weather.daily_moon}
-                  timezone={weather.timezone}
-                />
-              )}
-            </Fragment>
-          );
-        })}
-      </div>
+      <ErrorBoundary>
+        {Boolean(weather) && typeof index === 'number' && (
+          <DailySheetContent weather={weather} index={index} />
+        )}
+      </ErrorBoundary>
     </BottomSheet>
   );
 }

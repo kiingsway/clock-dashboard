@@ -8,6 +8,7 @@
     "timezone": "Fuso horário",
     "weather": "Clima",
     "location": "Localização",
+    "deviceLocation": "Localização do dispositivo",
     "updatedAt": "Atualizado em",
     "weatherUpdatedAt": "Clima atualizado em",
     "precipitationRange": "Faixa de precipitação",
@@ -25,6 +26,11 @@
     "max": "Máx.",
     "min": "Mín.",
     "maxMin": "Máx/Mín",
+    "min_minute": "min",
+    "hrs": "h",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "km": "km",
     "precipitation": "Precipitação",
     "humidity": "Umidade",
     "dewPoint": "Ponto de orvalho",
@@ -38,6 +44,7 @@
     "moonset": "Pôr da lua",
     "moon": "Lua",
     "now": "Agora",
+    "yesterday": "Ontem",
     "today": "Hoje",
     "tomorrow": "Amanhã",
     "night": "Noite",
@@ -70,7 +77,7 @@
       "alerts": {
         "title": "Alertas",
         "radius": {
-          "title": "Raio (KM)",
+          "title": "Raio (km)",
           "description": "Distância máxima para buscar alertas meteorológicos"
         }
       },
@@ -79,6 +86,25 @@
         "updatedAt": "Clima atualizado em",
         "updatedAtDesc": "Horário da última atualização do clima",
         "version": "Versão do aplicativo instalada"
+      },
+      "appearance": {
+        "title": "Aparência",
+        "sunAlertThresholdMinutes": {
+          "title": "Antecipação do Sol",
+          "desc": "Define com quantos minutos de antecedência os ícones de nascer ou pôr do sol devem ser exibidos antes do evento ocorrer. Ícone só aparecerá em clima limpo."
+        },
+        "showFeelsLikeWhenEqual": {
+          "title": "Sensação Térmica Redundante",
+          "desc": "Exibe a sensação térmica mesmo quando o seu valor for igual à temperatura atual. Se desativado, oculta o campo nessa condição."
+        },
+        "showMinMaxPeakBadge": {
+          "title": "Indicador de Mínima/Máxima Atual",
+          "desc": "Exibe os rótulos \"MIN\" ou \"MAX\" caso a temperatura atual atinja exatamente a mínima ou a máxima prevista para o dia."
+        },
+        "focusCurrentWeatherOnLaunch": {
+          "title": "Focar Clima Atual ao Iniciar",
+          "desc": "Define se o aplicativo deve abrir com a seção do clima atual selecionada e em destaque por padrão."
+        }
       }
     },
     "weatherTexts": {
@@ -302,6 +328,7 @@
     "timezone": "Timezone",
     "weather": "Weather",
     "location": "Location",
+    "deviceLocation": "Device location",
     "updatedAt": "Updated at",
     "weatherUpdatedAt": "Weather updated at",
     "precipitationRange": "Precipitation Range",
@@ -319,6 +346,11 @@
     "max": "Max",
     "min": "Min",
     "maxMin": "Max/Min",
+    "min_minute": "min",
+    "hrs": "hr",
+    "active": "Active",
+    "inactive": "Inactive",
+    "km": "km",
     "precipitation": "Precipitation",
     "humidity": "Humidity",
     "dewPoint": "Dew Point",
@@ -332,6 +364,7 @@
     "moonset": "Moonset",
     "moon": "Moon",
     "now": "Now",
+    "yesterday": "Yesterday",
     "today": "Today",
     "tomorrow": "Tomorrow",
     "night": "Night",
@@ -364,7 +397,7 @@
       "alerts": {
         "title": "Alerts",
         "radius": {
-          "title": "Radius (KM)",
+          "title": "Radius (km)",
           "description": "Maximum distance to search for weather alerts"
         }
       },
@@ -373,6 +406,25 @@
         "updatedAt": "Weather updated at",
         "updatedAtDesc": "Time of the last weather refresh",
         "version": "Installed app version"
+      },
+      "appearance": {
+        "title": "Appearance",
+        "sunAlertThresholdMinutes": {
+          "title": "Sun Alert Lead Time",
+          "desc": "Sets how many minutes before sunrise or sunset the icons should be displayed. The icon will only appear in clear weather."
+        },
+        "showFeelsLikeWhenEqual": {
+          "title": "Redundant Feels Like",
+          "desc": "Displays the feels-like temperature even when its value equals the current temperature. If disabled, the field is hidden in this condition."
+        },
+        "showMinMaxPeakBadge": {
+          "title": "Current Min/Max Indicator",
+          "desc": "Displays the \"MIN\" or \"MAX\" labels when the current temperature exactly reaches the day's forecast minimum or maximum."
+        },
+        "focusCurrentWeatherOnLaunch": {
+          "title": "Focus Current Weather on Launch",
+          "desc": "Sets whether the app should open with the current weather section selected and highlighted by default."
+        }
       }
     },
     "weatherTexts": {
@@ -596,6 +648,7 @@
     "timezone": "Fuseau horaire",
     "weather": "Climat",
     "location": "Emplacement",
+    "deviceLocation": "Localisation de l'appareil",
     "updatedAt": "Mis à jour",
     "weatherUpdatedAt": "Météo mise à jour à",
     "precipitationRange": "Plage de précipitations",
@@ -613,6 +666,11 @@
     "max": "Max",
     "min": "Min",
     "maxMin": "Max/Min",
+    "min_minute": "min",
+    "hrs": "h",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "km": "km",
     "precipitation": "Précipitation",
     "humidity": "Humidité",
     "dewPoint": "Point de rosée",
@@ -626,6 +684,7 @@
     "moonset": "Coucher de la lune",
     "moon": "Lune",
     "now": "Maintenant",
+    "yesterday": "Hier",
     "today": "Aujourd'hui",
     "tomorrow": "Demain",
     "night": "Nuit",
@@ -658,7 +717,7 @@
       "alerts": {
         "title": "Alertes",
         "radius": {
-          "title": "Rayon (KM)",
+          "title": "Rayon (km)",
           "description": "Distance maximale pour rechercher les alertes météo"
         }
       },
@@ -667,6 +726,25 @@
         "updatedAt": "Météo mise à jour à",
         "updatedAtDesc": "Heure de la dernière actualisation météo",
         "version": "Version de l'application installée"
+      },
+      "appearance": {
+        "title": "Apparence",
+        "sunAlertThresholdMinutes": {
+          "title": "Anticipation du soleil",
+          "desc": "Définit combien de minutes avant le lever ou le coucher du soleil les icônes doivent être affichées. L'icône n'apparaîtra que par temps clair."
+        },
+        "showFeelsLikeWhenEqual": {
+          "title": "Ressenti redondant",
+          "desc": "Affiche la température ressentie même lorsque sa valeur est égale à la température actuelle. Si désactivé, le champ est masqué dans ce cas."
+        },
+        "showMinMaxPeakBadge": {
+          "title": "Indicateur du minimum/maximum actuel",
+          "desc": "Affiche les étiquettes \"MIN\" ou \"MAX\" lorsque la température actuelle atteint exactement le minimum ou le maximum prévu pour la journée."
+        },
+        "focusCurrentWeatherOnLaunch": {
+          "title": "Mettre la météo actuelle en évidence au démarrage",
+          "desc": "Définit si l'application doit s'ouvrir avec la section de la météo actuelle sélectionnée et mise en évidence par défaut."
+        }
       }
     },
     "weatherTexts": {
@@ -890,6 +968,7 @@
     "timezone": "Zona horaria",
     "weather": "Clima",
     "location": "Ubicación",
+    "deviceLocation": "Ubicación del dispositivo",
     "updatedAt": "Actualizado",
     "weatherUpdatedAt": "Clima actualizado a las",
     "precipitationRange": "Rango de precipitación",
@@ -907,6 +986,11 @@
     "max": "Máx.",
     "min": "Mín.",
     "maxMin": "Máx/Mín",
+    "min_minute": "min",
+    "hrs": "h",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "km": "km",
     "precipitation": "Precipitación",
     "humidity": "Humedad",
     "dewPoint": "Punto de rocío",
@@ -920,6 +1004,7 @@
     "moonset": "Puesta de la luna",
     "moon": "Luna",
     "now": "Ahora",
+    "yesterday": "Ayer",
     "today": "Hoy",
     "tomorrow": "Mañana",
     "night": "Noche",
@@ -952,7 +1037,7 @@
       "alerts": {
         "title": "Alertas",
         "radius": {
-          "title": "Radio (KM)",
+          "title": "Radio (km)",
           "description": "Distancia máxima para buscar alertas meteorológicas"
         }
       },
@@ -961,6 +1046,25 @@
         "updatedAt": "Clima actualizado a las",
         "updatedAtDesc": "Hora de la última actualización del clima",
         "version": "Versión instalada de la aplicación"
+      },
+      "appearance": {
+        "title": "Apariencia",
+        "sunAlertThresholdMinutes": {
+          "title": "Anticipación del sol",
+          "desc": "Define con cuántos minutos de antelación deben mostrarse los iconos del amanecer o el atardecer. El icono solo aparecerá con clima despejado."
+        },
+        "showFeelsLikeWhenEqual": {
+          "title": "Sensación térmica redundante",
+          "desc": "Muestra la sensación térmica incluso cuando su valor es igual a la temperatura actual. Si se desactiva, el campo se oculta en esta condición."
+        },
+        "showMinMaxPeakBadge": {
+          "title": "Indicador del mínimo/máximo actual",
+          "desc": "Muestra las etiquetas \"MIN\" o \"MAX\" cuando la temperatura actual alcanza exactamente la mínima o máxima prevista para el día."
+        },
+        "focusCurrentWeatherOnLaunch": {
+          "title": "Enfocar el clima actual al iniciar",
+          "desc": "Define si la aplicación debe abrirse con la sección del clima actual seleccionada y destacada de forma predeterminada."
+        }
       }
     },
     "weatherTexts": {
@@ -1184,6 +1288,7 @@
     "timezone": "시간대",
     "weather": "날씨",
     "location": "위치",
+    "deviceLocation": "기기 위치",
     "updatedAt": "업데이트됨",
     "weatherUpdatedAt": "날씨 업데이트 시간",
     "precipitationRange": "강수 범위",
@@ -1201,6 +1306,11 @@
     "max": "최대",
     "min": "최소",
     "maxMin": "최고/최저",
+    "min_minute": "분",
+    "hrs": "시간",
+    "active": "활성",
+    "inactive": "비활성",
+    "km": "km",
     "precipitation": "강수량",
     "humidity": "습도",
     "dewPoint": "이슬점",
@@ -1214,6 +1324,7 @@
     "moonset": "월몰",
     "moon": "달",
     "now": "지금",
+    "yesterday": "어제",
     "today": "오늘",
     "tomorrow": "내일",
     "night": "밤",
@@ -1246,7 +1357,7 @@
       "alerts": {
         "title": "알림",
         "radius": {
-          "title": "반경 (KM)",
+          "title": "반경 (km)",
           "description": "기상 특보를 검색할 최대 거리"
         }
       },
@@ -1255,6 +1366,25 @@
         "updatedAt": "날씨 업데이트 시간:",
         "updatedAtDesc": "마지막 날씨 새로고침 시간",
         "version": "설치된 앱 버전"
+      },
+      "appearance": {
+        "title": "화면 표시",
+        "sunAlertThresholdMinutes": {
+          "title": "일출·일몰 사전 표시",
+          "desc": "일출 또는 일몰이 발생하기 몇 분 전부터 아이콘을 표시할지 설정합니다. 아이콘은 맑은 날씨에서만 표시됩니다."
+        },
+        "showFeelsLikeWhenEqual": {
+          "title": "동일한 체감 온도 표시",
+          "desc": "체감 온도가 현재 온도와 같을 때도 체감 온도를 표시합니다. 비활성화하면 이 조건에서 해당 항목을 숨깁니다."
+        },
+        "showMinMaxPeakBadge": {
+          "title": "현재 최저·최고 기온 표시",
+          "desc": "현재 온도가 오늘 예보된 최저 또는 최고 기온과 정확히 같을 때 \"MIN\" 또는 \"MAX\" 라벨을 표시합니다."
+        },
+        "focusCurrentWeatherOnLaunch": {
+          "title": "시작 시 현재 날씨에 초점 맞추기",
+          "desc": "앱을 열 때 현재 날씨 섹션을 기본으로 선택하고 강조 표시할지 설정합니다."
+        }
       }
     },
     "weatherTexts": {

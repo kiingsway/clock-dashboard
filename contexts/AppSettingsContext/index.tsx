@@ -14,13 +14,13 @@ import { useTranslation } from 'react-i18next';
 
 import { AppSettings, UseAppSettings } from '@/types/app.types';
 import { STORAGE_KEY } from '@/constants/keys';
-import { DEFAULT_SETTINGS } from '@/constants/settings';
+import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from '@/constants/settings';
 import { TLocation } from '@/types/location.types';
 
 import loadSettings from './loadSettings';
 import persistSettings from './persistSettings';
 import { getLocationToWeather } from '@/utils/location/getLocationToWeather';
-import { MAX_RAIN_ALERT_HOURS, MIN_RAIN_ALERT_HOURS } from '@/constants/rainDescriptions';
+import { LOCATION_OPTIONS } from '@/constants/locations';
 
 const AppSettingsContext = createContext<UseAppSettings | undefined>(undefined);
 
@@ -85,26 +85,65 @@ export function AppSettingsProvider({ children }: Props) {
     };
   }, []);
 
-  const setLocation = useCallback((location: TLocation) => {
+  const setLocation = useCallback((value: TLocation) => {
+    const location = LOCATION_OPTIONS.includes(value as TLocation)
+      ? (value as TLocation)
+      : DEFAULT_SETTINGS.location;
+
     setSettings((prev) => ({
       ...prev,
       location,
     }));
   }, []);
 
-  const setAlertRadiusKm = useCallback((alertRadiusKm: number) => {
+  const setAlertRadiusKm = useCallback((value: number) => {
+    const { MIN, MAX } = ALERT_RADIUS_KM;
+    const alertRadiusKm = Math.max(MIN, Math.min(MAX, value ?? DEFAULT_SETTINGS.alertRadiusKm));
     setSettings((prev) => ({
       ...prev,
       alertRadiusKm,
     }));
   }, []);
 
-  const setPrecipHoursRange = useCallback((precipHoursRangeData: number) => {
-    const precipHoursRange = Math.max(MIN_RAIN_ALERT_HOURS, Math.min((precipHoursRangeData ?? MIN_RAIN_ALERT_HOURS), MAX_RAIN_ALERT_HOURS));
-    
+  const setPrecipHoursRange = useCallback((value: number) => {
+    const { MIN, MAX } = RAIN_ALERT_HOURS;
+    const precipHoursRange = Math.max(MIN, Math.min(MAX, value ?? DEFAULT_SETTINGS.precipHoursRange));
     setSettings((prev) => ({
       ...prev,
       precipHoursRange,
+    }));
+  }, []);
+
+  const setSunAlertThresholdMinutes = useCallback((value: number) => {
+    const { MIN, MAX } = SUNWINDOW_BEFORE_MINUTES;
+    const sunAlertThresholdMinutes = Math.max(MIN, Math.min(MAX, value ?? DEFAULT_SETTINGS.sunAlertThresholdMinutes));
+    setSettings((prev) => ({
+      ...prev,
+      sunAlertThresholdMinutes,
+    }));
+  }, []);
+
+  const setShowFeelsLikeWhenEqual = useCallback((value: boolean) => {
+    const showFeelsLikeWhenEqual = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.showFeelsLikeWhenEqual;
+    setSettings((prev) => ({
+      ...prev,
+      showFeelsLikeWhenEqual,
+    }));
+  }, []);
+
+  const setShowMinMaxPeakBadge = useCallback((value: boolean) => {
+    const showMinMaxPeakBadge = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.showMinMaxPeakBadge;
+    setSettings((prev) => ({
+      ...prev,
+      showMinMaxPeakBadge,
+    }));
+  }, []);
+
+  const setFocusCurrentWeatherOnLaunch = useCallback((value: boolean) => {
+    const focusCurrentWeatherOnLaunch = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.focusCurrentWeatherOnLaunch;
+    setSettings((prev) => ({
+      ...prev,
+      focusCurrentWeatherOnLaunch,
     }));
   }, []);
 
@@ -114,16 +153,33 @@ export function AppSettingsProvider({ children }: Props) {
 
   const value = useMemo<UseAppSettings>(
     () => ({
+      isLoaded,
+      resetSettings,
+      weatherLocation: locations[settings.location],
+      get: settings,
       set: {
         location: setLocation,
         alertRadiusKm: setAlertRadiusKm,
         precipHoursRange: setPrecipHoursRange,
+        sunAlertThresholdMinutes: setSunAlertThresholdMinutes,
+        showFeelsLikeWhenEqual: setShowFeelsLikeWhenEqual,
+        showMinMaxPeakBadge: setShowMinMaxPeakBadge,
+        focusCurrentWeatherOnLaunch: setFocusCurrentWeatherOnLaunch,
       },
-      get: settings,
-      weatherLocation: locations[settings.location],
-      resetSettings,
     }),
-    [setLocation, setAlertRadiusKm, setPrecipHoursRange, settings, locations, resetSettings]
+    [
+      isLoaded,
+      settings,
+      locations,
+      setLocation,
+      setAlertRadiusKm,
+      setPrecipHoursRange,
+      setSunAlertThresholdMinutes,
+      setShowFeelsLikeWhenEqual,
+      setShowMinMaxPeakBadge,
+      setFocusCurrentWeatherOnLaunch,
+      resetSettings,
+    ]
   );
 
   return (

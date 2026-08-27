@@ -14,12 +14,14 @@ import useBoolean from "@/hooks/useBoolean";
 import { getAccent } from "@/utils/weather/getAccentColor";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { useTranslation } from "react-i18next";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
 
 export default function WeatherTab() {
   const { t } = useTranslation();
   const { weather, isLoading, error: weatherError } = useWeather();
+  const { get: { focusCurrentWeatherOnLaunch } } = useAppSettings();
   const { data: alerts, error: alertsError } = useWeatherAlerts();
-  const { focus, toggleFocus } = useFocusMode({ onFocus: 12000, offFocus: 0 });
+  const { focus, toggleFocus } = useFocusMode({ initialValue: focusCurrentWeatherOnLaunch, onFocus: 12000, offFocus: 0 });
   const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
 
   const accent = getAccent({ weatherCode: weather?.current.weather_code ?? -1, isDay: weather?.current.is_day === 1, t });
@@ -31,6 +33,7 @@ export default function WeatherTab() {
         onClose={closeSettings}
         updatedAt={weather?.current.time}
         alertsError={alertsError}
+        accent={accent}
       />
 
       <div style={{ ["--wc-accent" as string]: accent }}>

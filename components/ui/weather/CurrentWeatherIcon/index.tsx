@@ -7,6 +7,7 @@ import WeatherIcon, { WeatherIconProps } from '../WeatherIcon';
 import { Tooltip } from '../../Tooltip';
 import { useNow } from '@/contexts/NowContext';
 import { useTranslation } from 'react-i18next';
+import { useAppSettings } from '@/contexts/AppSettingsContext';
 
 interface Props {
   weatherCode: number;
@@ -19,9 +20,10 @@ interface Props {
 export default function CurrentWeatherIcon({ weatherCode, sunWindow, isDay, weather, size = 160 }: Props) {
   const { now } = useNow();
   const { t } = useTranslation();
+  const { get: { sunAlertThresholdMinutes } } = useAppSettings();
 
   const weatherCategory = getWeatherCategory(weatherCode, t);
-  const isBeforeSunRiseSet = !sunWindow ? false : isXMinBefore(now, sunWindow.end, 50);
+  const isBeforeSunRiseSet = !sunWindow ? false : isXMinBefore(now, sunWindow.end, sunAlertThresholdMinutes);
 
   const weatherIconProps: WeatherIconProps = {
     size,

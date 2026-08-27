@@ -83,3 +83,26 @@ export const DAYLIGHT_COLORS: IInterpolateColor = {
   mid: DEFAULT_COLOR.WHITE,
   high: "#fef08a",
 } as const;
+
+export function getTemperatureMinMaxColors(tempMin: number = -10, tempMax: number = 30) {
+
+  const range = Math.abs(tempMax - tempMin);
+
+  // 0 = quase sem variação
+  // 1 = variação de 10°C ou mais
+  const intensity = Math.min(range / 10, 1);
+
+  const minColor = `color-mix(
+  in srgb,
+  var(--wc-info) ${60 + intensity * 40}%,
+  white
+)`;
+
+  const maxColor = `color-mix(
+  in srgb,
+  var(--wc-danger) ${60 + intensity * 40}%,
+  white
+)`;
+
+  return { minColor, maxColor };
+}

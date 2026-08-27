@@ -16,12 +16,13 @@ interface IUseFocusMode {
 }
 
 interface Props {
+  initialValue?: boolean;
   onFocus: number;
   offFocus: number;
 }
 
-export function useFocusMode({ onFocus, offFocus }: Props): IUseFocusMode {
-  const [focus, { toggle: toggleFocus }] = useBoolean();
+export function useFocusMode({ initialValue = false, onFocus, offFocus }: Props): IUseFocusMode {
+  const [focus, { toggle: toggleFocus }] = useBoolean(initialValue);
 
   const delay = focus ? onFocus : offFocus;
 

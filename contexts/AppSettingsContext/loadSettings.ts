@@ -1,10 +1,20 @@
-import { ALERT_RADIUS_KM } from "@/constants/alerts";
 import { STORAGE_KEY } from "@/constants/keys";
 import { LOCATION_OPTIONS } from "@/constants/locations";
-import { MAX_RAIN_ALERT_HOURS, MIN_RAIN_ALERT_HOURS } from "@/constants/rainDescriptions";
-import { DEFAULT_SETTINGS } from "@/constants/settings";
+import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from "@/constants/settings";
 import { AppSettings } from "@/types/app.types";
 import { TLocation } from "@/types/location.types";
+
+const getValidNumber = (value: unknown, range: { MIN: number; MAX: number }, defaultValue: number): number => {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return defaultValue;
+
+  return Math.min(range.MAX, Math.max(range.MIN, value));
+};
+
+const getValidBoolean = (value: unknown, defaultValue: boolean): boolean => {
+  return typeof value === 'boolean'
+    ? value
+    : defaultValue;
+};
 
 /**
  * Carrega as configurações salvas no localStorage.
@@ -24,17 +34,32 @@ export default function loadSettings(): AppSettings {
       ? (parsed.location as TLocation)
       : DEFAULT_SETTINGS.location;
 
-    const alertRadiusKm =
-      typeof parsed.alertRadiusKm === "number" && Number.isFinite(parsed.alertRadiusKm)
-        ? Math.min(ALERT_RADIUS_KM.MAX, Math.max(ALERT_RADIUS_KM.MIN, parsed.alertRadiusKm))
-        : DEFAULT_SETTINGS.alertRadiusKm;
+    const numberKeys = [
+      { key: 'alertRadiusKm', range: ALERT_RADIUS_KM },
+      { key: 'precipHoursRange', range: RAIN_ALERT_HOURS },
+      { key: 'sunAlertThresholdMinutes', range: SUNWINDOW_BEFORE_MINUTES },
+    ] as const;
 
-    const precipHoursRange =
-      typeof parsed.precipHoursRange === "number" && Number.isFinite(parsed.precipHoursRange)
-        ? Math.min(MAX_RAIN_ALERT_HOURS, Math.max(MIN_RAIN_ALERT_HOURS, parsed.precipHoursRange))
-        : DEFAULT_SETTINGS.precipHoursRange;
+    const [
+      alertRadiusKm,
+      precipHoursRange,
+      sunAlertThresholdMinutes
+    ] = numberKeys.map(({ key, range }) => getValidNumber(parsed[key], range, DEFAULT_SETTINGS[key]));
 
-    return { location, alertRadiusKm, precipHoursRange };
+    const booleanKeys = [
+      'showFeelsLikeWhenEqual',
+      'showMinMaxPeakBadge',
+      'focusCurrentWeatherOnLaunch'
+    ] as const;
+
+    const [
+      showFeelsLikeWhenEqual,
+      showMinMaxPeakBadge,
+      focusCurrentWeatherOnLaunch
+    ] = booleanKeys.map(key => getValidBoolean(parsed[key], DEFAULT_SETTINGS[key]));
+
+    return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes };
+
   } catch (error) {
     console.error('Falha ao carregar configurações do localStorage:', error);
     return DEFAULT_SETTINGS;

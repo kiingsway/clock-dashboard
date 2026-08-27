@@ -1,8 +1,12 @@
 import { useMemo } from "react";
 import styles from "./WeatherNow.module.scss";
 import { useTranslation } from "react-i18next";
+import { useAppSettings } from "@/contexts/AppSettingsContext";
+import MinMaxProgress from "./MinMaxProgress";
 
-export interface WeatherNowProps {
+const r = (n: number) => Math.round(n);
+
+interface Props {
   /** Current temperature, in the app's active unit */
   temperature: number;
   /** "Feels like" temperature */
@@ -24,9 +28,9 @@ export function WeatherNow({
   minTemp,
   unit = "C",
   icon,
-}: WeatherNowProps) {
+}: Props) {
   const { t } = useTranslation();
-  const r = (n: number) => Math.round(n);
+  const { get: { showFeelsLikeWhenEqual } } = useAppSettings();
 
   // Where the current temp sits between today's min/max, clamped 0–100.
   const rangePosition = useMemo(() => {
@@ -42,10 +46,8 @@ export function WeatherNow({
 
   const temp = hasNoTemp ? '-' : r(temperature);
   const feelsLikeTemp = hasNoFLike ? '-' : `${r(feelsLike)}°`;
-  const max = noMaxTemp ? '-' : `${r(maxTemp)}°`;
-  const min = noMinTemp ? '-' : `${r(minTemp)}°`;
 
-  const hideFeelsLike = r(feelsLike) === temp;
+  const hideFeelsLike = !showFeelsLikeWhenEqual && r(feelsLike) === temp;
 
   return (
     <div className={styles.root}>
@@ -60,13 +62,14 @@ export function WeatherNow({
         {t('feelsLike')} <span className={styles.feelsLikeValue}>{feelsLikeTemp}</span>
       </div>}
 
-      <div className={styles.rangeCard}>
-        <span className={styles.rangeMin}>{r(temperature) === minTemp ? t('min').toUpperCase() : min}</span>
-        <div className={styles.rangeTrack}>
-          <div className={styles.rangeDot} style={{ left: `${rangePosition}%` }} />
-        </div>
-        <span className={styles.rangeMax}>{r(temperature) === maxTemp ? t('max').toUpperCase() : max}</span>
-      </div>
+      <MinMaxProgress
+        temp={hasNoTemp ? undefined : r(temperature)}
+        min={noMinTemp ? undefined : minTemp}
+        max={noMaxTemp ? undefined : maxTemp}
+        unit="º"
+        progress={rangePosition}
+      />
+
     </div>
   );
 }
