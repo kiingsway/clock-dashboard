@@ -2,6 +2,11 @@ import { IWeatherCurrent, WeatherCategory, WeatherCategoryName } from "@/types/w
 import getWeatherCategory from "./getWeatherCategory";
 import { TFunction } from "i18next";
 import { DEFAULT_COLOR, WEATHER_ACCENT_COLORS } from "@/constants/colors";
+import { IWeatherLocationItem } from "@/types/location.types";
+import { SunWindow } from "@/types/sun.types";
+import { DateTime } from "luxon";
+import { getTimes } from "suncalc";
+import { getSolarStyle } from "./getSolarStyle";
 
 interface WeatherCodeProps {
   weatherCode: number;
@@ -55,4 +60,25 @@ export default function getAccentColor(categoryName: WeatherCategoryName, isDay:
   if (typeof color === "string") return color;
 
   return isDay ? color.day : color.night;
+}
+
+export function getGoldenHourAccent(now: DateTime, sunWindow: SunWindow | undefined, weatherLocation: IWeatherLocationItem, initialColor = 'var(--wc-accent)') {
+
+  if (sunWindow) {
+    const times = getTimes(
+      now.toJSDate(),
+      weatherLocation.lat,
+      weatherLocation.lon,
+    );
+
+    if (times.goldenHour && times.goldenHourEnd) {
+      const solarNoon = DateTime.fromJSDate(times.solarNoon);
+      const goldenHour = DateTime.fromJSDate(times.goldenHour);
+      const goldenHourEnd = DateTime.fromJSDate(times.goldenHourEnd);
+
+      return getSolarStyle(now, sunWindow.start, sunWindow.end, solarNoon, goldenHour, goldenHourEnd, initialColor);
+    }
+  }
+
+  return undefined;
 }

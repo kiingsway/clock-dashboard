@@ -1,7 +1,6 @@
 import MiniCard from '@/components/ui/MiniCard';
 import HourlyList from '@/components/ui/weather/HourlyList';
 import MoonProgressBar from '@/components/ui/weather/MoonProgressBar';
-import SunProgressBar from '@/components/ui/weather/SunProgressBar';
 import { Fragment, useMemo } from 'react';
 import styles from './DailySheet.module.scss';
 import { IWeather } from '@/types/weather.types';
@@ -12,6 +11,7 @@ import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import buildDailySheetInfo from './buildDailySheetInfo';
 import WeatherIcon from '@/components/ui/weather/WeatherIcon';
+import SunProgressBar from '@/components/ui/weather/SunProgressBar';
 
 interface Props {
   weather: IWeather;
@@ -50,7 +50,9 @@ export default function DailySheetContent({ weather, index }: Props) {
 
   return (
     <div className={styles.main} style={{ ["--wc-accent" as string]: accent }}>
-      {sunWindow && <SunProgressBar sunWindow={sunWindow} />}
+
+      <SunProgressBar sunWindow={sunWindow} />
+
       {dailySheetInfo.map(({ key, title, desc, icons }, index) => {
 
         const iconsProps = icons.length > 1

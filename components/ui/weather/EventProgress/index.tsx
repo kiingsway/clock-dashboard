@@ -5,6 +5,7 @@ import { JSX } from 'react/jsx-runtime';
 import { useNow } from '@/contexts/NowContext';
 import { useTranslation } from 'react-i18next';
 import { getProgressBetweenDates } from '@/utils/formatters/dateFormatters';
+import { CSSProperties } from 'react';
 
 interface Props {
   start?: DateTime;
@@ -12,10 +13,12 @@ interface Props {
   end?: DateTime;
   endIcon?: WeatherIconProps
   onDoubleClick?: () => void;
-  hideDate?: boolean
+  hideDate?: boolean;
+  markerStrength?: number;
+  style?: CSSProperties;
 }
 
-export default function EventProgress({ start, end, startIcon, endIcon, hideDate }: Props) {
+export default function EventProgress({ start, end, startIcon, endIcon, hideDate, markerStrength = 0.3, style: styleProp }: Props) {
 
   const { now } = useNow();
   const progress = (() => {
@@ -24,14 +27,28 @@ export default function EventProgress({ start, end, startIcon, endIcon, hideDate
     return 0;
   })();
 
+  const ariaLabel = `start ${start?.toFormat('HH:mm')}, end ${end?.toFormat('HH:mm')}`;
   const onDebugClick = (): void => {
     const f = (d: DateTime | undefined) => !d ? '--:--' : d.toFormat('LLL dd HH:mm');
     const t = `${f(start)} -> ${f(now)} (${(progress * 100).toFixed(1)}%) -> ${f(end)}.${hideDate ? ' Hiding Date.' : ''}`;
     console.info(`Event Progress: ${t}`, { startIcon, endIcon });
   };
 
+  const blur = calculateProgress(10, 27, markerStrength) + 'px';
+  const spread = calculateProgress(1, 9, markerStrength) + 'px';
+
+  const style = {
+    ...styleProp,
+    '--blur': blur,
+    '--spread': spread
+  } as CSSProperties;
+
   return (
-    <div className={styles.arc} aria-label={`start ${start?.toFormat('HH:mm')}, end ${end?.toFormat('HH:mm')}`} onDoubleClick={onDebugClick}>
+    <div
+      style={style}
+      className={styles.arc}
+      aria-label={ariaLabel}
+      onDoubleClick={onDebugClick}>
       <div className={styles.point}>
         {startIcon && <WeatherIcon size={18} {...startIcon} />}
         <ProgressLabel date={start} hideDate={hideDate} />
@@ -53,6 +70,12 @@ export default function EventProgress({ start, end, startIcon, endIcon, hideDate
     </div>
   );
 }
+
+const calculateProgress = (min: number, max: number, progress: number) => {
+  if (progress <= 0) return min;
+  if (progress >= 1) return max;
+  return ((max - min) * progress) + min;
+};
 
 const ProgressLabel = ({ date, hideDate }: { date?: DateTime, hideDate?: boolean }): JSX.Element => {
   const { i18n: { language: locale } } = useTranslation();

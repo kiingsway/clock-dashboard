@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -11,6 +12,7 @@ import {
 import { DateTime } from 'luxon';
 import { useAppSettings } from "@/contexts/AppSettingsContext";
 import { useTranslation } from 'react-i18next';
+import { setZoneOnDate } from './utils';
 
 interface NowContextValue {
   now: DateTime;
@@ -25,84 +27,82 @@ interface NowProviderProps {
   children: ReactNode;
 }
 
+const TEST_DATE: DateTime | undefined = undefined;
+// const TEST_DATE: DateTime | undefined = DateTime.now().set({ hour: 5, minute: 30 });
+
 export function NowProvider({ children }: NowProviderProps) {
-  const { i18n: { language: locale } } = useTranslation();
-  const { get: { location: timezone } } = useAppSettings();
+  const {
+    i18n: { language: locale },
+  } = useTranslation();
+
+  const {
+    get: { location: timezone },
+  } = useAppSettings();
 
   const [simulatedDate, setSimulatedDateState] =
-    useState<DateTime | undefined>();
+    useState<DateTime | undefined>(TEST_DATE);
 
-  const getRealNow = () => {
-    let now = DateTime.now();
-
-    if (timezone) {
-      const nowWithTimezone = now.setZone(timezone);
-      if (nowWithTimezone.isValid) now = nowWithTimezone;
-    }
-
-    if (locale) return now.setLocale(locale);
-
-    return now;
-  };
-
-  const getNow = () => {
-    if (simulatedDate) {
-      let date = simulatedDate;
-      if (timezone) date = date.setZone(timezone);
-      if (locale) date = date.setLocale(locale);
-      return date;
-    }
-
-    return getRealNow();
-  };
+  const getNow = useCallback((forceNow: boolean | undefined = false) => {
+    const date = forceNow || !simulatedDate ? DateTime.now() : simulatedDate;
+    return setZoneOnDate(date, timezone, locale);
+  }, [locale, simulatedDate, timezone]);
 
   const [now, setNow] = useState<DateTime>(getNow);
   const [today, setToday] = useState<DateTime>(getNow);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setNow(getNow());
+    if (simulatedDate) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setNow(setZoneOnDate(simulatedDate, timezone, locale));
 
-    if (simulatedDate) return;
+      const interval = setInterval(() => {
+        setSimulatedDateState(previous => {
+          if (!previous) return previous;
 
-    let timeout: ReturnType<typeof setTimeout>;
+          const next = previous.plus({ minutes: 15 });
+
+          setNow(setZoneOnDate(next, timezone, locale));
+
+          setToday(previousToday => {
+            const nextToday = next
+              .setZone(timezone ?? next.zoneName)
+              .startOf('day');
+
+            return previousToday.hasSame(nextToday, 'day')
+              ? previousToday
+              : nextToday;
+          });
+
+          return next;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
 
     const update = () => {
-      const realNow = getRealNow();
+      const realNow = getNow(true);
 
       setNow(realNow);
 
-      setToday((previous) => {
-        const next = realNow.startOf("day");
+      setToday(previous => {
+        const next = realNow.startOf('day');
 
-        return previous.hasSame(next, "day")
+        return previous.hasSame(next, 'day')
           ? previous
           : next;
       });
-
-      const current = DateTime.now();
-
-      const millisecondsUntilNextMinute =
-        60_000 -
-        (current.second * 1_000 + current.millisecond);
-
-      timeout = setTimeout(update, millisecondsUntilNextMinute);
     };
 
-    const current = DateTime.now();
+    update();
 
-    const millisecondsUntilNextMinute =
-      60_000 -
-      (current.second * 1_000 + current.millisecond);
+    const interval = setInterval(update, 60_000);
 
-    timeout = setTimeout(update, millisecondsUntilNextMinute);
-
-    return () => clearTimeout(timeout);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timezone, locale, simulatedDate]);
+    return () => clearInterval(interval);
+  }, [simulatedDate, timezone, locale, getNow]);
 
   const setSimulatedDate = (
-    date: DateTime | string | undefined
+    date: DateTime | string | undefined,
   ) => {
     if (date === undefined) {
       setSimulatedDateState(undefined);
@@ -129,7 +129,7 @@ export function NowProvider({ children }: NowProviderProps) {
       simulatedDate,
       setSimulatedDate,
     }),
-    [now, today, simulatedDate]
+    [now, today, simulatedDate],
   );
 
   return (

@@ -43,7 +43,7 @@
   inset: 0 auto 0 0;
   border-radius: var(--wc-radius-xs);
   opacity: 0.55;
-  background: var(--wc-accent);
+  background: var(--wc-sun-accent, purple);
 }
 
 .marker {
@@ -51,17 +51,17 @@
   top: 50%;
   width: 9px;
   height: 9px;
-  border: 1px solid color-mix(in srgb, var(--wc-accent), white 30%);
+  border: 1px solid color-mix(in srgb, var(--wc-sun-accent, purple), white 30%);
   border-radius: var(--wc-radius-full);
-  background: var(--wc-accent);
-  box-shadow: 0 0 15px 1px color-mix(in srgb, var(--wc-accent) 80%, transparent);
+  background: var(--wc-sun-accent, purple);
+  box-shadow: 0 0 var(--blur, 15px) var(--spread, 3px) color-mix(in srgb, var(--wc-sun-accent, purple) 80%, transparent);
   transform: translate(-50%, -50%);
 }
 
 .progressLabel {
   display: flex;
   flex-direction: column;
-  margin-top: calc(var(--is-focused) * -10px);
+  margin-top: calc(var(--is-focused) * -6px);
 
   transition: margin-top 500ms ease-in-out;
 }
