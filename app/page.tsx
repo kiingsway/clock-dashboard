@@ -5,21 +5,32 @@ import { TABS } from '@/constants/tabs';
 import classNames from 'classnames';
 import styles from './App.module.scss';
 import { NowProvider } from '@/contexts/NowContext';
-import { AppSettingsProvider } from '@/contexts/AppSettingsContext';
+import { AppSettingsProvider, useAppSettings } from '@/contexts/AppSettingsContext';
 import { TTabs } from '@/types/app.types';
 
 export default function Home() {
-  const [tab] = useState<TTabs>('weather');
-
-  const Component = TABS[tab].component;
 
   return (
     <div className={classNames(styles.root, 'root')}>
       <AppSettingsProvider>
-        <NowProvider>
-          <Component />
-        </NowProvider>
+        <HomeContent />
       </AppSettingsProvider>
     </div>
+  );
+}
+
+function HomeContent() {
+  const [tab] = useState<TTabs>('weather');
+
+  const { isLoaded } = useAppSettings();
+
+  const Component = TABS[tab].component;
+
+  if (!isLoaded) return null;
+
+  return (
+    <NowProvider>
+      <Component />
+    </NowProvider>
   );
 }
