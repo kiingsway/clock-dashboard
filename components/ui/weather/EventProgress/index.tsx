@@ -17,9 +17,10 @@ interface Props {
   markerStrength?: number;
   style?: CSSProperties;
   progress?: number;
+  type?: 'default' | 'ghost'
 }
 
-export default function EventProgress({ start: startProp, end: endProp, startIcon, endIcon, hideDate, markerStrength = 0.3, style: styleProp, progress: progressProp }: Props) {
+export default function EventProgress({ type = 'default', start: startProp, end: endProp, startIcon, endIcon, hideDate, markerStrength = 0.3, style: styleProp, progress: progressProp }: Props) {
 
   const start = typeof startProp === 'string' ? DateTime.fromISO(startProp) : startProp;
   const end = typeof endProp === 'string' ? DateTime.fromISO(endProp) : endProp;
@@ -59,11 +60,11 @@ export default function EventProgress({ start: startProp, end: endProp, startIco
         <ProgressLabel date={start} hideDate={hideDate} />
       </div>
 
-      <div className={styles.track} aria-hidden={typeof progress !== 'number'}>
+      <div className={styles.track} style={{ background: type === 'ghost' ? 'transparent' : undefined }} aria-hidden={typeof progress !== 'number'}>
         {typeof progress === 'number' ? (
           <>
             <div className={styles.trackFill} style={{ width: `${progress * 100}%` }} />
-            <div className={styles.marker} style={{ left: `${progress * 100}%` }} />
+            <div className={styles.marker} style={{ display: type === 'ghost' ? 'none' : undefined, left: `${progress * 100}%` }} />
           </>
         ) : null}
       </div>

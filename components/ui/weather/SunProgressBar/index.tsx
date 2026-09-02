@@ -5,16 +5,19 @@ import EventProgress from "../EventProgress";
 import useAppSettings from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
 import { getGoldenHourAccent } from "@/utils/weather/getAccentColor";
+import buildMarkerStrength from "@/components/layout/weather/CurrentWeather/buildMarkerStrength";
 
 interface Props {
   sunWindow: SunWindow | undefined;
   loading?: boolean;
+  isError?: boolean;
   includeNight?: boolean;
   isFocused?: boolean;
   disableEffects?: boolean;
+  precipitation?: number,
 }
 
-export default function SunProgressBar({ sunWindow, loading = false, includeNight = false, isFocused = false, disableEffects = false }: Props): JSX.Element {
+export default function SunProgressBar({ sunWindow, precipitation = 0, isError = false, loading = false, includeNight = false, isFocused = false, disableEffects = false }: Props): JSX.Element {
   const { now } = useNow();
   const { weatherLocation } = useAppSettings();
 
@@ -25,9 +28,8 @@ export default function SunProgressBar({ sunWindow, loading = false, includeNigh
     if (sunWindow) {
       rise = sunWindow.startKind;
       set = sunWindow.endKind;
-    }
 
-    if (loading) {
+    } else if (loading && !isError) {
       rise = 'loading';
       set = 'loading';
     }
@@ -35,27 +37,27 @@ export default function SunProgressBar({ sunWindow, loading = false, includeNigh
     return { rise, set };
   })();
 
-  const { progress, sunAccent } = useMemo(() => {
-    let sunAccent = 'var(--wc-accent)';
-    if (disableEffects) return { progress: 0.3, sunAccent };
+  const { progress, accent } = useMemo(() => buildMarkerStrength(now, weatherLocation, sunWindow, precipitation, disableEffects), [disableEffects, now, precipitation, sunWindow, weatherLocation]);
+  // const { progress, sunAccent } = useMemo(() => {
+  //   let sunAccent = 'var(--wc-accent)';
+  //   if (disableEffects) return { progress: 0.3, sunAccent };
 
-    const data = getGoldenHourAccent(now, sunWindow, weatherLocation);
-    const p = [data?.goldenHour.progress, data?.noon.progress].filter(n => typeof n === 'number');
-    const progress = Math.min(1, Math.max(...p, 0.3));
+  //   const data = getGoldenHourAccent(now, sunWindow, weatherLocation);
+  //   const p = [data?.goldenHour.progress, data?.noon.progress].filter(n => typeof n === 'number');
+  //   const progress = Math.min(1, Math.max(...p, 0.3));
 
+  //   if (data) {
+  //     const { goldenHour, noon } = data;
+  //     if (goldenHour.progress > 0.3) sunAccent = goldenHour.color;
+  //     else if (noon.progress > 0.3) sunAccent = noon.color;
+  //   }
 
-    if (data) {
-      const { goldenHour, noon } = data;
-      if (goldenHour.progress > 0.3) sunAccent = goldenHour.color;
-      else if (noon.progress > 0.3) sunAccent = noon.color;
-    }
-
-    return { sunAccent, progress };
-  }, [disableEffects, now, sunWindow, weatherLocation]);
+  //   return { sunAccent, progress };
+  // }, [disableEffects, now, sunWindow, weatherLocation]);
 
   const style = {
     '--is-focused': +isFocused,
-    '--wc-sun-accent': sunAccent,
+    '--wc-sun-accent': accent,
   } as CSSProperties;
 
   return (

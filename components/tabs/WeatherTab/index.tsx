@@ -26,8 +26,6 @@ export default function WeatherTab() {
 
   const { accent } = getWeatherCodeInfo(weather?.current?.weather_code ?? -1, weather?.current?.is_day !== 0, t);
 
-  console.log('weather', weather);
-
   return (
     <>
       <SettingsSheet

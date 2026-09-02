@@ -18,20 +18,27 @@ export default function MoonProgressBar({ dailyMoon, date }: Props): JSX.Element
 
   const moonNow = dailyMoon.find(m => m.date.date === date.toISODate());
 
+  const isSetBeforeRise = (() => {
+    if (!moonNow || !moonNow?.rise?.date || !moonNow?.set?.date) return false;
+    return moonNow.set.date < moonNow.rise.date;
+  })();
+
+  const startEvent = isSetBeforeRise ? moonNow?.set : moonNow?.rise;
+  const endEvent = !isSetBeforeRise ? moonNow?.set : moonNow?.rise;
+
   const progress = (() => {
-    if (!moonNow || !moonNow?.rise?.date || !moonNow?.set?.date) return 0;
-    const start = DateTime.fromISO(moonNow.rise.date);
-    const end = DateTime.fromISO(moonNow.set.date);
+    if (!moonNow || !startEvent || !endEvent) return 0;
+    const start = DateTime.fromISO(startEvent.date);
+    const end = DateTime.fromISO(endEvent.date);
 
     if (isValidDateTime(start) && isValidDateTime(end)) return getProgressBetweenDates(start, end, now);
     return 0;
   })();
 
   const accentPhase = (() => {
-    if (!moonNow) return undefined;
-    if (moonNow.rise?.date && progress < 0.5) return moonNow.rise.phase;
-    if (moonNow.set?.date && progress >= 0.5) return moonNow.set.phase;
-    return moonNow.date.phase ?? undefined;
+    if (startEvent && progress < 0.5) return startEvent.phase;
+    if (endEvent && progress >= 0.5) return endEvent.phase;
+    return moonNow?.date?.phase ?? undefined;
   })();
 
   const style = {
@@ -41,11 +48,14 @@ export default function MoonProgressBar({ dailyMoon, date }: Props): JSX.Element
   return (
     <EventProgress
       style={style}
-      start={moonNow?.rise?.date}
-      end={moonNow?.set?.date}
-      startIcon={moonNow?.rise?.iconName ? { iconName: moonNow?.rise?.iconName } : undefined}
-      endIcon={moonNow?.set?.iconName ? { iconName: moonNow?.set?.iconName } : undefined}
+      start={startEvent?.date}
+      end={endEvent?.date}
+      startIcon={getIconProp(startEvent?.iconName)}
+      endIcon={getIconProp(endEvent?.iconName)}
       progress={progress}
+      type={isSetBeforeRise ? 'ghost' : 'default'}
     />
   );
 }
+
+const getIconProp = (iconName?: string) => iconName ? ({ iconName }) : undefined;

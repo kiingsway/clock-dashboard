@@ -11,6 +11,17 @@ export default function getForecastDateLabel(now: DateTime, date: DateTime, loca
 
   const localDate = date.setLocale(locale);
 
+  console.log('diffInDays', {
+    diffInDays,
+    initialNow: initialNow.toISO(),
+    targetDate: targetDate.toISO(),
+    initialZone: initialNow.zoneName,
+    targetZone: targetDate.zoneName,
+    initialOffset: initialNow.offset,
+    targetOffset: targetDate.offset,
+  });
+
+
   // Até 7 dias: exibe apenas o dia da semana curto (ex: "ter.")
   if (diffInDays <= 7) return localDate.toFormat("ccc");
 

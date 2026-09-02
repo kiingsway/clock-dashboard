@@ -35,7 +35,7 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
     tempMin, tempMax, sunWindow
   } = ensureWeather(weather, now, loading);
 
-  const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow });;
+  const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow });
 
   return (
     <ErrorBoundary>
@@ -51,18 +51,20 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
           weather={weather}
         />
 
-        {Boolean(error) ? <Alert
+        {Boolean(error) && <Alert
           style={{ width: '100%' }}
           title="Weather Error"
           message={String(error)}
           variant="danger"
-        /> : <WeatherNow
+        />}
+
+        <WeatherNow
           temperature={current.temperature_2m}
           feelsLike={current.apparent_temperature}
           maxTemp={Math.round(tempMax)}
           minTemp={Math.round(tempMin)}
           unit={currentUnits.temperature_2m}
-        />}
+        />
 
         {weather && <PrecipitationChart weather={weather} />}
 
@@ -72,8 +74,10 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
           sunWindow={sunWindow}
           isFocused={isFocused}
           loading={loading}
+          isError={Boolean(error)}
           includeNight
-          disableEffects={!isDay || current.weather_code < 0 || current.weather_code >= 2}
+          precipitation={current.precipitation}
+        // disableEffects={!isDay || current.weather_code < 0 || current.weather_code >= 2}
         />
 
       </section>
