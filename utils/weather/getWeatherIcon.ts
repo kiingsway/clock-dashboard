@@ -1,10 +1,8 @@
 import { DateTime } from "luxon";
-import getWeatherCategory from "./getWeatherCategory";
-import getWeatherIconName from "./getWeatherIconName";
 import getMoonInfo from "./getMoonInfo";
 import { WeatherIconInfo } from "@/types/weather.types";
 import { TFunction } from "i18next";
-import { createIconUrl } from "@/constants/iconFiles";
+import getWeatherCodeInfo from "./getWeatherCodeInfo";
 
 interface Props {
   weatherCode: number;
@@ -26,8 +24,7 @@ export default function getWeatherIcon({
   t,
 }: Props): WeatherIconInfo {
 
-  const category = getWeatherCategory(weatherCode, t);
-  const weatherIconSrc = createIconUrl(getWeatherIconName(category, isDay));
+  const weatherCodeInfo = getWeatherCodeInfo(weatherCode, isDay, t);
 
   const moonInfo = lat && lon ? getMoonInfo({ now, lat, lon }) : undefined;
 
@@ -40,17 +37,17 @@ export default function getWeatherIcon({
     };
   }
 
-  const hasMoon = !isDay && moonInfo?.isVisible && (weatherCode >= 0 && weatherCode <= 2);
+  const hasMoon = !isDay && moonInfo?.isVisible && weatherCodeInfo.name === 'clear';
 
   return {
     moon,
     weather: {
-      alt: category.title,
-      src: weatherIconSrc
+      alt: weatherCodeInfo.title,
+      src: weatherCodeInfo.iconSrc
     },
     current: {
-      alt: `${category.title}${hasMoon && moon ? ` | Moon: ${moon.alt}` : ''}`,
-      src: hasMoon && moon ? moon.src : weatherIconSrc
+      alt: `${weatherCodeInfo.title}${hasMoon && moon ? ` | Moon: ${moon.alt}` : ''}`,
+      src: hasMoon && moon ? moon.src : weatherCodeInfo.iconSrc
     }
   };
 }

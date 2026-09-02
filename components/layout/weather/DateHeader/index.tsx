@@ -13,7 +13,7 @@ interface Props {
  * ("10 de julho" / "July 10"). Ticks every second internally so the minute
  * rolls over on its own — the host app never needs to re-render this.
  */
-export function DateHeader({ onClick }: Props) {
+export default function DateHeader({ onClick }: Props) {
   const { t } = useTranslation();
 
   return (

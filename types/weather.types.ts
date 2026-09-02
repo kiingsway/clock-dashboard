@@ -120,6 +120,21 @@ export interface IMoonDaily {
   alwaysUp: boolean;
   alwaysDown: boolean;
   phase: number;
+  isSwapped: boolean;
+}
+
+export interface IMoonDailyItemDate {
+  name: string;
+  date: string;
+  iconName: string;
+  phase: number;
+}
+
+export interface IMoonDailyItem {
+  key: string;
+  date: IMoonDailyItemDate;
+  rise: IMoonDailyItemDate | undefined;
+  set: IMoonDailyItemDate | undefined;
 }
 
 export interface IWeather {
@@ -136,7 +151,7 @@ export interface IWeather {
   hourly: IHourly;
   daily_units: IDailyUnits;
   daily: IDaily;
-  daily_moon: IMoonDaily[];
+  daily_moon: IMoonDailyItem[];
 }
 
 /** Grouped WMO weather-code buckets used for both icon selection and the ambient glow accent. */

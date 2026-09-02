@@ -1,33 +1,41 @@
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
-import { getMoonPhaseInfo } from '../getMoonInfo';
-import { IMoonDaily } from '@/types/weather.types';
-import getMoonriseSetPhase, { getMoonriseSetDate } from '../getMoonriseSetPhase';
+import { IMoonDailyItem } from '@/types/weather.types';
+import { DateTime } from 'luxon';
+import getMoonEvent from '../getMoonEvent';
 
-export default function buildMoonDescription(moonDaily: IMoonDaily | undefined, timezone: string, t: TFunction): DailySheetItemDesc {
+export default function buildMoonDescription(dailyMoon: IMoonDailyItem[], date: DateTime, timezone: string, t: TFunction): DailySheetItemDesc {
 
-  if (!moonDaily) return { desc: '-', title: '-', icons: [{ category: 'unknown' }] };
+  const moonDateIndex = dailyMoon.findIndex(m => m.date.date === date.toISODate());
 
-  const { moonrise, moonset } = getMoonriseSetDate(moonDaily.moonrise, moonDaily.moonset, timezone);
+  const moonDate = dailyMoon[moonDateIndex];
 
-  const { moonrisePhase } = getMoonriseSetPhase(moonrise, moonset);
+  if (!moonDate) return { desc: '', title: '', icons: [{ category: 'error' }] };
 
-  const phase = moonrisePhase.phase || moonDaily.phase;
+  const { rise, set } = moonDate;
 
-  const { name, icon: iconName } = getMoonPhaseInfo(phase);
+  const eventRise = getMoonEvent(dailyMoon, moonDateIndex, 'rise', t);
+  const eventSet = getMoonEvent(dailyMoon, moonDateIndex, 'set', t);
 
+  const isSetBeforeRise = rise?.date && set?.date ? set.date < rise.date : false;
+  const [start, end] = isSetBeforeRise ? [eventSet, eventRise] : [eventRise, eventSet];
+
+  const name = rise?.name ?? set?.name ?? moonDate.date.name;
+  const phase = rise?.phase ?? set?.phase ?? moonDate.date.phase;
   const moonrisePhaseText = typeof phase === 'number' ? `${(phase * 100).toFixed(2)}%` : `-%`;
 
-  const desc = (() => {
-    const [moonriseText, moonsetText] = [moonrise, moonset]
-      .map(d => d ? d.toFormat(`dd/LL HH:mm`) : '--:--');
+  const icons = (() => {
+    if (rise || set) {
+      if (rise && set && rise.iconName !== set.iconName) return [rise.iconName, set.iconName];
+      else return [rise?.iconName ?? set?.iconName] as string[];
+    }
 
-    return `${t('moonrise')}: ${moonriseText} | ${t('moonset')}: ${moonsetText}`;
-  })();
+    return [moonDate.date.iconName ?? 'night'];
+  })().map(iconName => ({ iconName }));
 
   return {
     title: `${t(name)} (${moonrisePhaseText})`,
-    desc,
-    icons: [{ iconName }],
+    desc: `${start} | ${end}`,
+    icons,
   };
 }

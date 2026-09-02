@@ -2,7 +2,7 @@ import { WeatherCategoryName } from "@/types/weather.types";
 import { useMemo, type CSSProperties, type JSX } from "react";
 import { SunWindow } from "@/types/sun.types";
 import EventProgress from "../EventProgress";
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
 import { getGoldenHourAccent } from "@/utils/weather/getAccentColor";
 
@@ -51,7 +51,7 @@ export default function SunProgressBar({ sunWindow, loading = false, includeNigh
     }
 
     return { sunAccent, progress };
-  }, [now, sunWindow, weatherLocation]);
+  }, [disableEffects, now, sunWindow, weatherLocation]);
 
   const style = {
     '--is-focused': +isFocused,

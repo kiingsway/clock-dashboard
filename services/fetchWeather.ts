@@ -14,7 +14,10 @@ import { IWeather } from "@/types/weather.types";
 export async function fetchWeather(latitude: number, longitude: number): Promise<IWeather> {
   const res = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`);
 
-  if (!res.ok) throw new Error("Failed to fetch weather.");
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message ?? error.error ?? 'Failed to fetch weather.');
+  }
 
   return res.json();
 }

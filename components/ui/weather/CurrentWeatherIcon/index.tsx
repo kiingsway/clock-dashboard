@@ -1,5 +1,4 @@
 import styles from './CurrentWeatherIcon.module.scss';
-import getWeatherCategory from '@/utils/weather/getWeatherCategory';
 import { SunWindow } from '@/types/sun.types';
 import { IWeather } from '@/types/weather.types';
 import { isXMinBefore } from '@/utils/formatters/mathDateFormatters';
@@ -7,7 +6,8 @@ import WeatherIcon, { WeatherIconProps } from '../WeatherIcon';
 import { Tooltip } from '../../Tooltip';
 import { useNow } from '@/contexts/NowContext';
 import { useTranslation } from 'react-i18next';
-import { useAppSettings } from '@/contexts/AppSettingsContext';
+import useAppSettings from '@/contexts/AppSettingsContext';
+import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
 
 interface Props {
   weatherCode: number;
@@ -22,7 +22,8 @@ export default function CurrentWeatherIcon({ weatherCode, sunWindow, isDay, weat
   const { t } = useTranslation();
   const { get: { sunAlertThresholdMinutes } } = useAppSettings();
 
-  const weatherCategory = getWeatherCategory(weatherCode, t);
+  const weatherCategory = getWeatherCodeInfo(weatherCode, true, t);
+
   const isBeforeSunRiseSet = !sunWindow ? false : isXMinBefore(now, sunWindow.end, sunAlertThresholdMinutes);
 
   const weatherIconProps: WeatherIconProps = {
@@ -32,13 +33,13 @@ export default function CurrentWeatherIcon({ weatherCode, sunWindow, isDay, weat
 
     } : weather ? {
       isDay,
-      weatherCode: weatherCode,
+      weatherCode,
       timezone: weather.timezone,
       lat: weather.latitude,
       lon: weather.longitude,
 
     } : weatherCode < 0 ? {
-      weatherCode: weatherCode,
+      weatherCode,
 
     } : {
       category: 'error'

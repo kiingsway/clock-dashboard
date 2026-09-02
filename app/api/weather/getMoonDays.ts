@@ -1,129 +1,132 @@
-import { getMoonIllumination, getMoonTimes } from "suncalc";
+import { getMoonTimes } from "suncalc";
 import { DateTime } from "luxon";
-import { IMoonDaily } from "@/types/weather.types";
-import { getMoonPhaseInfo } from "@/utils/weather/getMoonInfo";
-
-interface MoonEvent {
-  time: DateTime;
-  type: "moonrise" | "moonset";
-}
+import { IMoonDailyItem, IMoonDailyItemDate } from "@/types/weather.types";
+import { isValidDateTime } from "@/utils/formatters/dateFormatters";
+import getMoonNameIconPhase from "@/utils/weather/getMoonNameIconPhase";
+import { TFunction } from "i18next";
 
 interface GetMoonDaysParams {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lon: number;
   timezone: string;
   startDate: DateTime;
-  days?: number;
+  days: number;
+  t?: TFunction
 }
 
-export function getMoonDays({
-  latitude,
-  longitude,
-  timezone,
+type MoonDate = {
+  date: DateTime<true> | undefined;
+  kind: 'rise' | 'set';
+};
+
+const toDateTime = (
+  date: Date | undefined,
+  timezone?: string,
+): DateTime<true> | undefined => {
+  if (!date) return undefined;
+
+  const dateTime = DateTime.fromJSDate(date).setZone(timezone);
+
+  return dateTime.isValid ? dateTime : undefined;
+};
+
+const getDateRange = (
+  date: DateTime,
+  days: number,
+): DateTime[] => {
+  const start = date.startOf('day');
+
+  return Array.from(
+    { length: days + 2 },
+    (_, index) => start.plus({ days: index - 1 }),
+  );
+};
+
+const getDayMillis = (
+  date: DateTime | undefined,
+): number | undefined => {
+  return date?.isValid
+    ? date.startOf('day').toMillis()
+    : undefined;
+};
+
+const getMoonEventDate = (
+  date: DateTime,
+  kind: MoonDate['kind'],
+  moonDates: MoonDate[],
+): DateTime<true> | undefined => {
+  const findEvent = (targetDate: DateTime): DateTime<true> | undefined => {
+    const targetMillis = getDayMillis(targetDate);
+
+    if (targetMillis === undefined) return undefined;
+
+    return moonDates.find(
+      moonDate =>
+        moonDate.kind === kind &&
+        getDayMillis(moonDate.date) === targetMillis,
+    )?.date;
+  };
+
+  // Moonrise may belong to the previous day.
+  // Moonset may belong to the following day.
+  const offset = kind === 'rise' ? -1 : 1;
+
+  return (
+    findEvent(date) ??
+    findEvent(date.plus({ days: offset }))
+  );
+};
+
+export default function getMoonDays({
   startDate,
-  days = 14,
-}: GetMoonDaysParams): IMoonDaily[] {
-  if (days <= 0) return [];
+  timezone,
+  lat,
+  lon,
+  days,
+  t,
+}: GetMoonDaysParams): IMoonDailyItem[] {
+  const additionalDates = getDateRange(startDate.setZone(timezone), days);
 
-  const firstDay = startDate
-    .setZone(timezone)
-    .startOf("day");
+  const dates = additionalDates.slice(1, -1);
 
-  const lastDay = firstDay.plus({ days: days - 1 });
+  const moonDates: MoonDate[] = additionalDates.flatMap(date => {
+    const { rise, set } = getMoonTimes(date.toJSDate(), lat, lon);
 
-  /*
-   * Pegamos alguns dias antes e depois para garantir que
-   * os eventos que atravessam a meia-noite sejam encontrados.
-   */
-  const calculationStart = firstDay.minus({ days: 2 });
-  const calculationEnd = lastDay.plus({ days: 2 });
-
-  const events: MoonEvent[] = [];
-
-  let currentDay = calculationStart;
-
-  while (currentDay <= calculationEnd) {
-    const result = getMoonTimes(
-      currentDay.toJSDate(),
-      latitude,
-      longitude
-    );
-
-    if (result.rise) {
-      events.push({
-        time: DateTime
-          .fromJSDate(result.rise)
-          .setZone(timezone),
-        type: "moonrise",
-      });
-    }
-
-    if (result.set) {
-      events.push({
-        time: DateTime
-          .fromJSDate(result.set)
-          .setZone(timezone),
-        type: "moonset",
-      });
-    }
-
-    currentDay = currentDay.plus({ days: 1 });
-  }
-
-  /** Ordena todos os eventos cronologicamente. */
-  events.sort((a, b) => a.time.toMillis() - b.time.toMillis());
-
-  /** Remove possíveis eventos duplicados. */
-  const uniqueEvents = events.filter((event, index, array) => {
-    if (index === 0) return true;
-
-    const previous = array[index - 1];
-
-    return !(
-      event.type === previous.type &&
-      event.time.toMillis() === previous.time.toMillis()
-    );
+    return [
+      {
+        date: toDateTime(rise, timezone),
+        kind: 'rise' as const,
+      },
+      {
+        date: toDateTime(set, timezone),
+        kind: 'set' as const,
+      },
+    ];
   });
 
-  return Array.from({ length: days }, (_, index) => {
-    const date = firstDay.plus({ days: index });
-    const dateKey = date.toISODate()!;
+  return dates.map(date => {
+    if (!isValidDateTime(date)) {
+      throw new Error(`getMoonDays2. Invalid Date: "${date}"`);
+    }
 
-    /*
-     * Procuramos o primeiro moonrise que ocorre nesse dia.
-     */
-    const moonrise = uniqueEvents.find(
-      (event) =>
-        event.type === "moonrise" &&
-        event.time.hasSame(date, "day")
-    );
-
-    /*
-     * O moonset pertence à janela iniciada pelo moonrise.
-     *
-     * Portanto, procuramos o primeiro moonset DEPOIS
-     * desse moonrise, mesmo que ele aconteça no dia seguinte.
-     */
-    const moonset = moonrise
-      ? uniqueEvents.find(
-        (event) =>
-          event.type === "moonset" &&
-          event.time.toMillis() > moonrise.time.toMillis()
-      )
-      : undefined;
-
-    const { phase } = getMoonIllumination(date.toJSDate());
-    const { name, icon: iconName } = getMoonPhaseInfo(phase);
+    const moonrise = getMoonEventDate(date, 'rise', moonDates);
+    const moonset = getMoonEventDate(date, 'set', moonDates);
 
     return {
-      name,
-      iconName,
-      date: dateKey,
-      moonrise: moonrise?.time.toISO() ?? undefined,
-      moonset: moonset?.time.toISO() ?? undefined,
-      phase,
-      alwaysUp: false,
-      alwaysDown: false,
-    };
+      key: date.toISO(),
+      date: getMoonInfo(date, d => d.toISODate() ?? '-', t),
+      rise: getMoonInfo(moonrise, d => d.toISO() ?? '-', t),
+      set: getMoonInfo(moonset, d => d.toISO() ?? '-', t),
+    } as IMoonDailyItem;
   });
 }
+
+const getMoonInfo = (date: DateTime<true> | undefined, toDate: (d: DateTime) => string, t?: TFunction): IMoonDailyItemDate | undefined => {
+  if (!date) return undefined;
+  const info = getMoonNameIconPhase(date, t);
+  if (!info) return undefined;
+  return {
+    ...info,
+    date: toDate(info.date),
+  };
+};

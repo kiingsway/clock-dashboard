@@ -10,6 +10,7 @@ import { ensureWeather } from "@/utils/weather/ensureWeather";
 import PrecipitationChart from "@/components/ui/weather/PrecipitationChart";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import SunProgressBar from "@/components/ui/weather/SunProgressBar";
+import Alert from "@/components/ui/Alert";
 
 interface Props {
   weather: IWeather | undefined;
@@ -26,7 +27,7 @@ interface Props {
  * gotten. Values and units are rendered exactly as given — no conversion
  * happens in this component.
  */
-export function CurrentWeather({ weather, loading, alerts, isFocused }: Props): JSX.Element {
+export default function CurrentWeather({ weather, loading, alerts, isFocused, error }: Props): JSX.Element {
   const { now } = useNow();
 
   const {
@@ -34,7 +35,7 @@ export function CurrentWeather({ weather, loading, alerts, isFocused }: Props): 
     tempMin, tempMax, sunWindow
   } = ensureWeather(weather, now, loading);
 
-  const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow });
+  const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow });;
 
   return (
     <ErrorBoundary>
@@ -50,13 +51,18 @@ export function CurrentWeather({ weather, loading, alerts, isFocused }: Props): 
           weather={weather}
         />
 
-        <WeatherNow
+        {Boolean(error) ? <Alert
+          style={{ width: '100%' }}
+          title="Weather Error"
+          message={String(error)}
+          variant="danger"
+        /> : <WeatherNow
           temperature={current.temperature_2m}
           feelsLike={current.apparent_temperature}
           maxTemp={Math.round(tempMax)}
           minTemp={Math.round(tempMin)}
           unit={currentUnits.temperature_2m}
-        />
+        />}
 
         {weather && <PrecipitationChart weather={weather} />}
 

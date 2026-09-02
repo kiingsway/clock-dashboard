@@ -30,8 +30,3 @@ export interface UseAppSettings {
   resetSettings: () => void;
   isLoaded: boolean;
 }
-
-export type IColorValueGradient = {
-  readonly value: number;
-  readonly hex: string;
-};

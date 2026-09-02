@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import styles from './PrecipitationChart.module.scss';
 import { useTranslation } from 'react-i18next';
 import { IWeather } from '@/types/weather.types';
-import { useAppSettings } from '@/contexts/AppSettingsContext';
+import useAppSettings from '@/contexts/AppSettingsContext';
 import { ResponsiveContainer } from 'recharts';
 import { getLocaleHour } from '@/utils/formatters/dateFormatters';
 import PrecipStackedAreaChart from './PrecipitationAreaChart';

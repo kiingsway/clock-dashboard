@@ -1,30 +1,27 @@
 import type { CSSProperties, ReactNode } from "react";
 import type { TooltipPayload } from "recharts";
 import styles from "./PrecipitationTooltip.module.scss";
-import getAccentColor from "@/utils/weather/getAccentColor";
 import { precipitationAreas } from "..";
-import getWeatherCategory from "@/utils/weather/getWeatherCategory";
 import { useTranslation } from "react-i18next";
 import { getWindColor } from "@/utils/weather/getColors";
 import WeatherIcon from "../../WeatherIcon";
 import { getRainWindCondition } from "@/utils/weather/getRainWindCondition";
 import { IPrecipChartData } from "@/types/chart.types";
+import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
 
 type TPrecipAreas = "rain" | "showers" | "snowfall";
 
 function getPrecipitationIcon(area: TPrecipAreas, isDay = true): string {
   const time = isDay ? "day" : "night";
 
-  switch (area) {
-    case "rain":
-      return `mostly-clear-${time}-drizzle`;
+  const areas = {
+    rain: 'drizzle',
+    showers: 'rain',
+    snowfall: 'snow',
+  };
 
-    case "showers":
-      return `mostly-clear-${time}-rain`;
+  return `mostly-clear-${time}-${areas[area]}`;
 
-    case "snowfall":
-      return `mostly-clear-${time}-snow`;
-  }
 }
 
 interface Props {
@@ -90,14 +87,13 @@ export default function PrecipitationTooltip({
 
   const items = [...areaItems, ...infoItems];
 
-  const weatherCategory = getWeatherCategory(weatherCode, t);
-  const accent = getAccentColor(weatherCategory.name, isDay);
+  const weatherInfo = getWeatherCodeInfo(weatherCode, true, t);
 
   return (
-    <div className={styles.tooltip} style={{ '--wc-accent': accent } as CSSProperties}>
+    <div className={styles.tooltip} style={{ '--wc-accent': weatherInfo.accent } as CSSProperties}>
       <div className={styles.header}>
         <span className={styles.time}>
-          {labelFormatter ? labelFormatter(label) : label} - {Math.round(temp)}ºC, {weatherCategory.title}
+          {labelFormatter ? labelFormatter(label) : label} - {Math.round(temp)}ºC, {weatherInfo.title}
         </span>
 
         <span className={styles.dot} />
@@ -106,7 +102,7 @@ export default function PrecipitationTooltip({
       <div className={styles.values}>
         {!items.length && (
           <div className={styles.item}>
-            <WeatherIcon category={weatherCategory} size={30} />
+            <WeatherIcon category={weatherInfo} size={30} />
 
             <span className={styles.label}>
             </span>

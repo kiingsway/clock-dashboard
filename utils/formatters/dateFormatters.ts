@@ -50,7 +50,7 @@ export function formatDuration(totalSeconds: number): string {
 
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
+  const seconds = Math.floor(totalSeconds % 60);
 
   if (hours === 0) return seconds > 0 ? `${minutes}m ${seconds}s` : `${minutes}m`;
 
@@ -75,6 +75,14 @@ export function formatDateTime({ date, locale, timezone }: FormatDateTimeOptions
 
 type D = DateTime<boolean> | undefined
 
+/**
+ * Returns the progress of `now` between two dates, from 0 to 1.
+ *
+ * @param dateBefore - The start date of the interval.
+ * @param dateAfter - The end date of the interval.
+ * @param now - The date used to calculate the current progress.
+ * @returns A value from 0 to 1, where 0 is the start and 1 is the end.
+ */
 export function getProgressBetweenDates(dateBefore: D, dateAfter: D, now: DateTime) {
   if (!dateBefore?.isValid || !dateAfter?.isValid) return 0;
 
@@ -86,3 +94,5 @@ export function getProgressBetweenDates(dateBefore: D, dateAfter: D, now: DateTi
 
   return elapsed / duration;
 }
+
+export const isValidDateTime = (date: DateTime | undefined): date is DateTime<true> => Boolean(date?.isValid);

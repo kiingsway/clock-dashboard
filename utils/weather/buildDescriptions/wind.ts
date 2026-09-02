@@ -4,7 +4,7 @@ import { getCompassDirection } from '@/utils/geo/getCompassDirection';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import getBeaufortScale from '@/utils/geo/getBeaufortScale';
 import { getWindGustAnimationDuration, getWindSummary2 } from '../getWindInfo';
-import { createIconUrl } from '@/constants/iconFiles';
+import { getIconUrl } from '@/constants/iconFiles';
 
 export default function buildWindDescription(windSpeed: number, windGusts: number, windDirection: number, unit: string, t: TFunction): DailySheetItemDesc {
 
@@ -13,7 +13,7 @@ export default function buildWindDescription(windSpeed: number, windGusts: numbe
   const desc = getWindSummary2(windSpeed, windGusts, unit, compass.name, t);
 
   const level = getBeaufortScale(windSpeed);
-  const beaufortSrc = createIconUrl(`wind-beaufort-${level}`);
+  const beaufortSrc = getIconUrl(`wind-beaufort-${level}`);
   const beaufortDuration = getWindGustAnimationDuration(windSpeed);
 
   const beaufortTitle = `Beaufort Scale: ${level} (${windSpeed})`;
@@ -30,7 +30,7 @@ export default function buildWindDescription(windSpeed: number, windGusts: numbe
         duration: beaufortDuration,
       },
       {
-        src: createIconUrl(`wind-direction-${compass.abbreviation.toLowerCase()}`),
+        src: getIconUrl(`wind-direction-${compass.abbreviation.toLowerCase()}`),
         title: directionText,
         alt: directionText,
         duration: beaufortDuration,

@@ -3,7 +3,7 @@ import { IMoonInfo, NameIcon } from "@/types/weatherInfo.types";
 import { DateTime } from "luxon";
 import { getMoonIllumination, getMoonPosition } from "suncalc";
 import Image from "next/image";
-import { createIconUrl } from "@/constants/iconFiles";
+import { getIconUrl } from "@/constants/iconFiles";
 import { IMoonDaily } from "@/types/weather.types";
 import { getProgressBetweenDates } from "../formatters/dateFormatters";
 
@@ -88,7 +88,7 @@ function getMoonInfo({
 
   const isVisible = altitude > 2;
 
-  const iconSrc = createIconUrl(iconName);
+  const iconSrc = getIconUrl(iconName);
 
   const icon = (
     <Image

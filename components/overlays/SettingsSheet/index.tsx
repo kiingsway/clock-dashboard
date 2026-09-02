@@ -9,12 +9,13 @@ import { BottomSheet } from "@/components/ui/BottomSheet";
 import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon, RainCardIcon } from "./Icons";
 import { LOCATION_OPTIONS } from "@/constants/locations";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
 import Alert from "@/components/ui/Alert";
 import Slider from "@/components/ui/Slider";
 import { ALERT_RADIUS_KM, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES, LANGUAGES } from "@/constants/settings";
 import { capitalizeWords } from "@/utils/formatters/textFormatters";
 import { Switch } from "@/components/ui/Switch";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 
 interface Props {
   open: boolean;
@@ -32,7 +33,15 @@ interface Props {
  * icon / title / description / control shape so new settings drop in
  * without new layout work.
  */
-export function SettingsSheet({
+export default function SettingsSheet(p: Props) {
+  return (
+    <ErrorBoundary>
+      <SettingsSheetContent {...p} />
+    </ErrorBoundary>
+  );
+}
+
+export function SettingsSheetContent({
   open,
   onClose,
   updatedAt,
@@ -167,7 +176,7 @@ export function SettingsSheet({
               icon={<InfoIcon />}
               title={t(`settingsTexts.appearance.${key}.title`)}
               description={t(`settingsTexts.appearance.${key}.desc`)}
-              value={capitalizeWords(String(t(get[key] ? 'active': 'inactive')))}
+              value={capitalizeWords(String(t(get[key] ? 'active' : 'inactive')))}
               htmlFor={key}
               control={<Switch id={key} value={get[key]} onChange={set[key]} />}
             />

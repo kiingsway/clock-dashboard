@@ -4,7 +4,7 @@ import { TbMapPin } from "react-icons/tb";
 import { Badge } from '../../Badge';
 import { IWeatherAlert } from '@/types/weatherAlerts.types';
 import { useNow } from '@/contexts/NowContext';
-import { useAppSettings } from '@/contexts/AppSettingsContext';
+import useAppSettings from '@/contexts/AppSettingsContext';
 import { useTranslation } from 'react-i18next';
 import formatAlertUntil from '@/utils/weatherAlerts/formatAlertUntil';
 import useBoolean from '@/hooks/useBoolean';

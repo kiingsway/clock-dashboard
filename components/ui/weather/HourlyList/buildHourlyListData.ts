@@ -1,11 +1,10 @@
 import { IWeather } from '@/types/weather.types';
 import { getLocaleHour, formatDateTime } from '@/utils/formatters/dateFormatters';
-import getAccentColor from '@/utils/weather/getAccentColor';
-import getWeatherCategory from '@/utils/weather/getWeatherCategory';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 import { HourlyCardProps } from '../HourlyCard';
 import { getRainColor } from '@/utils/weather/getColors';
+import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
 
 interface Props {
   weather: IWeather;
@@ -57,8 +56,7 @@ export default function buildHourlyListData({ startIndex, weather, hoursAhead, n
     const precipitation = precipitations[index];
     const isDay = isDays[index] === 1;
 
-    const category = getWeatherCategory(weatherCode, t);
-    const accent = getAccentColor(category.name, isDay);
+    const { accent, title: categoryTitle } = getWeatherCodeInfo(weatherCode, isDay, t);
     const accentPeak = getRainColor(precipitation);
 
     const minDiff = indexDate.diff(now, 'minutes').minutes;
@@ -78,7 +76,7 @@ export default function buildHourlyListData({ startIndex, weather, hoursAhead, n
       accent,
       accentPeak,
       precipitation,
-      icon: { weatherCode, isDay, lat: latitude, lon: longitude, title: category.title },
+      icon: { weatherCode, isDay, lat: latitude, lon: longitude, title: categoryTitle },
     };
   });
 }

@@ -1,20 +1,20 @@
-import { useFocusMode } from "@/hooks/useFocusMode";
+import useFocusMode from "@/hooks/useFocusMode";
 import classNames from "classnames";
 import styles from './WeatherTab.module.scss';
-import { useWeather } from "@/hooks/useWeather";
-import { DateHeader } from "@/components/layout/weather/DateHeader";
+import useWeather from "@/hooks/useWeather";
+import DateHeader from "@/components/layout/weather/DateHeader";
 import Location from '@/components/layout/weather/Location';
-import { CurrentWeather } from "@/components/layout/weather/CurrentWeather";
+import CurrentWeather from "@/components/layout/weather/CurrentWeather";
 import useWeatherAlerts from "@/hooks/useWeatherAlerts";
-import { HourlyForecast } from "@/components/layout/weather/HourlyForecast";
-import { DailyForecast } from "@/components/layout/weather/DailyForecast";
+import HourlyForecast from "@/components/layout/weather/HourlyForecast";
+import DailyForecast from "@/components/layout/weather/DailyForecast";
 import WeatherWidgets from "@/components/layout/weather/WeatherWidgets";
-import { SettingsSheet } from "@/components/overlays/SettingsSheet";
+import SettingsSheet from "@/components/overlays/SettingsSheet";
 import useBoolean from "@/hooks/useBoolean";
-import { getAccent } from "@/utils/weather/getAccentColor";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { useTranslation } from "react-i18next";
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
+import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
 
 export default function WeatherTab() {
   const { t } = useTranslation();
@@ -24,14 +24,16 @@ export default function WeatherTab() {
   const { focus, toggleFocus } = useFocusMode({ initialValue: focusCurrentWeatherOnLaunch, onFocus: 12000, offFocus: 0 });
   const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
 
-  const accent = getAccent({ weatherCode: weather?.current.weather_code ?? -1, isDay: weather?.current.is_day === 1, t });
+  const { accent } = getWeatherCodeInfo(weather?.current?.weather_code ?? -1, weather?.current?.is_day !== 0, t);
+
+  console.log('weather', weather);
 
   return (
     <>
       <SettingsSheet
         open={isSettingsOpen}
         onClose={closeSettings}
-        updatedAt={weather?.current.time}
+        updatedAt={weather?.current?.time}
         alertsError={alertsError}
         accent={accent}
       />
@@ -39,17 +41,26 @@ export default function WeatherTab() {
       <div style={{ ["--wc-accent" as string]: accent }}>
         <div className={classNames(styles.group, { [styles.focus]: focus })}>
 
-          <DateHeader onClick={toggleFocus} />
+          <ErrorBoundary>
+            <DateHeader onClick={toggleFocus} />
+          </ErrorBoundary>
 
-          <Location onClick={openSettings} showAlert={Boolean(alertsError)} />
+          <ErrorBoundary>
+            <Location
+              onClick={openSettings}
+              showAlert={Boolean(alertsError)}
+            />
+          </ErrorBoundary>
 
-          <CurrentWeather
-            weather={weather}
-            alerts={alerts}
-            loading={isLoading}
-            error={weatherError || alertsError}
-            isFocused={focus}
-          />
+          <ErrorBoundary>
+            <CurrentWeather
+              weather={weather}
+              alerts={alerts}
+              loading={isLoading}
+              error={weatherError}
+              isFocused={focus}
+            />
+          </ErrorBoundary>
         </div>
 
         {weather && (

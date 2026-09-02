@@ -1,11 +1,11 @@
-import { IColor, IColorDay, IGradientColor, IInterpolateColor } from "@/types/colors.types";
+import { IColor, TCategoryDef, IGradientColor, IInterpolateColor } from "@/types/colors.types";
 
 export const DEFAULT_COLOR: IColor = {
   WEATHER: "#6b7280",
   WHITE: "#e8ecf4"
 };
 
-export const WEATHER_ACCENT_COLORS: IColorDay = {
+export const WEATHER_ACCENT_COLORS: TCategoryDef = {
   clear: { day: "#f4b860", night: "#8695f0" },
   partlyCloudy: { day: "#e5be85", night: "#7f8cb8" },
   cloudy: "#8b93a6",
@@ -66,11 +66,42 @@ export const VISIBILITY_COLORS: IGradientColor[] = [
   { value: 10000, hex: "#F5F0E6" }  // Excelente
 ] as const;
 
-export const HUMIDITY_COLORS: IInterpolateColor = {
-  low: "#f59e0b",
-  mid: DEFAULT_COLOR.WHITE,
-  high: "#3b82f6",
-} as const;
+export const HUMIDITY_COLORS: IGradientColor[] = [
+  { value: 0, hex: "#C9A227", },// Extremely dry
+  { value: 20, hex: "#D9A441", },// Very dry
+  { value: 30, hex: "#d8c38e", },// Dry
+  { value: 40, hex: "#cfddf4", },// Comfortable
+  { value: 60, hex: "#7db2c4", },// Slightly humid
+  { value: 70, hex: "#3D8FB8", },// Humid
+  { value: 80, hex: "#3976A8", },// Very humid
+  { value: 90, hex: "#2E5E96", },// Extremely humid
+] as const;
+
+export const MOON_COLORS: IGradientColor[] = [
+  { value: Math.round((0 / 16) * 100), hex: "#24304A" },
+  { value: Math.round((1 / 16) * 100), hex: "#405B86" },
+  { value: Math.round((3 / 16) * 100), hex: "#5F78A3" },
+  { value: Math.round((5 / 16) * 100), hex: "#8295B5" },
+  { value: Math.round((7 / 16) * 100), hex: "#D8DDE5" },
+  { value: Math.round((9 / 16) * 100), hex: "#8295B5" },
+  { value: Math.round((11 / 16) * 100), hex: "#5F78A3" },
+  { value: Math.round((13 / 16) * 100), hex: "#405B86" },
+  { value: Math.round((15 / 16) * 100), hex: "#24304A" },
+];
+
+export const UVINDEX_COLORS: IGradientColor[] = [
+  { value: 0, hex: "#86CFA3" },  // Verde — baixo
+  { value: 3, hex: "#F2D37A" },  // Amarelo — moderado
+  { value: 6, hex: "#F2A56F" },  // Laranja — alto
+  { value: 8, hex: "#E97C7C" },  // Vermelho — muito alto
+  { value: 11, hex: "#A982C7" }, // Roxo — extremo
+];
+
+// export const HUMIDITY_COLORS: IInterpolateColor = {
+//   low: "#f59e0b",
+//   mid: DEFAULT_COLOR.WHITE,
+//   high: "#3b82f6",
+// } as const;
 
 export const DEW_COLORS: IInterpolateColor = {
   low: '#a5f3fc',
@@ -83,26 +114,3 @@ export const DAYLIGHT_COLORS: IInterpolateColor = {
   mid: DEFAULT_COLOR.WHITE,
   high: "#fef08a",
 } as const;
-
-export function getTemperatureMinMaxColors(tempMin: number = -10, tempMax: number = 30) {
-
-  const range = Math.abs(tempMax - tempMin);
-
-  // 0 = quase sem variação
-  // 1 = variação de 10°C ou mais
-  const intensity = Math.min(range / 10, 1);
-
-  const minColor = `color-mix(
-  in srgb,
-  var(--wc-info) ${60 + intensity * 40}%,
-  white
-)`;
-
-  const maxColor = `color-mix(
-  in srgb,
-  var(--wc-danger) ${60 + intensity * 40}%,
-  white
-)`;
-
-  return { minColor, maxColor };
-}

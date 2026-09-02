@@ -2,7 +2,8 @@ import { WeatherCategoryName } from "./weather.types";
 
 export type IColor = Record<string, string>;
 
-export type IColorDay = Record<WeatherCategoryName, string | { day: string; night: string }>
+export type DayNNight = { day: string; night: string };
+export type TCategoryDef = Record<WeatherCategoryName, string | DayNNight>
 
 export interface IGradientColor {
   value: number;

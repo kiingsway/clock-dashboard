@@ -1,8 +1,9 @@
 import { CACHE_KEY } from "@/constants/keys";
 import { fetchWeather } from "@/services/fetchWeather";
 import { IWeather } from "@/types/weather.types";
-import useSWR, { KeyedMutator } from "swr";
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import  useAppSettings  from "@/contexts/AppSettingsContext";
+import useSWR from 'swr';
+import type { KeyedMutator } from 'swr';
 
 export interface IUseWeather {
   weather: IWeather | undefined;
@@ -12,7 +13,7 @@ export interface IUseWeather {
   refresh: KeyedMutator<IWeather>;
 }
 
-export function useWeather(): IUseWeather {
+export default function useWeather(): IUseWeather {
   const { weatherLocation: location } = useAppSettings();
 
   const { data: weather, error, isLoading, isValidating, mutate } = useSWR<IWeather>(

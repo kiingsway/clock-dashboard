@@ -7,14 +7,15 @@ import getWeatherIconName from "@/utils/weather/getWeatherIconName";
 import { capitalizeWords, splitCamelCase } from "@/utils/formatters/textFormatters";
 import AnimatedWeatherIcon from "./WeatherIconAnimated";
 import classNames from "classnames";
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "../../Tooltip";
-import { createIconUrl } from "@/constants/iconFiles";
+import { getIconUrl } from "@/constants/iconFiles";
 
 interface Props {
   size?: number;
+  title?: string;
   className?: string;
   hideGlow?: boolean;
 }
@@ -22,7 +23,6 @@ interface Props {
 interface WeatherSrcAltProps extends Props {
   src: string;
   alt: string;
-  title?: string;
   duration?: number
 
   weatherCode?: never
@@ -43,7 +43,6 @@ interface WeatherIconNameProps extends Props {
   category?: never
   src?: never;
   alt?: never;
-  title?: never;
   duration?: never;
 }
 
@@ -57,7 +56,6 @@ interface WeatherCategoryProps extends Props {
   iconName?: never
   src?: never;
   alt?: never;
-  title?: never;
   duration?: never;
 }
 
@@ -66,7 +64,6 @@ interface WeatherCodeProps extends Props {
   isDay?: boolean
   lat?: number
   lon?: number
-  title?: string;
 
   category?: never
   iconName?: never
@@ -102,7 +99,7 @@ export default function WeatherIcon({
     if (src) return { src, alt, title };
 
     if (iconName) {
-      const src = createIconUrl(iconName);
+      const src = getIconUrl(iconName);
       const alt = capitalizeWords(iconName.split('-').join(' '));
       return { src, alt, title };
     }
@@ -124,7 +121,7 @@ export default function WeatherIcon({
         };
       })();
 
-      const src = createIconUrl(getWeatherIconName({ name, title }, isDay));
+      const src = getIconUrl(getWeatherIconName({ name, title }, isDay));
       return { src, alt: title, title };
     }
   })();
@@ -146,9 +143,7 @@ export default function WeatherIcon({
     </div>
   );
 
-  if (!title && !weatherIcon.title) return content;
-
-  return (
+  return !title && !weatherIcon.title ? content : (
     <Tooltip content={title || weatherIcon.title}>
       {content}
     </Tooltip>

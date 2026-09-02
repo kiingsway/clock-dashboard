@@ -1,4 +1,4 @@
-import { createIconUrl } from "@/constants/iconFiles";
+import { getIconUrl } from "@/constants/iconFiles";
 import { TFunction } from "i18next";
 
 type CompassDirection = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW';
@@ -38,7 +38,7 @@ export function getCompassDirection(degrees: number, t: TFunction): CompassFullI
   const compassItem = compassMap[keys[index]];
   const title = t(`compass.${compassItem.name.toLowerCase()}`);
 
-  const iconSrc = createIconUrl(`wind-direction-${compassItem.abbreviation.toLowerCase()}`);
+  const iconSrc = getIconUrl(`wind-direction-${compassItem.abbreviation.toLowerCase()}`);
 
   return { ...compassItem, title, iconSrc };
 }

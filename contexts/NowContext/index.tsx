@@ -10,7 +10,7 @@ import {
   type ReactNode,
 } from 'react';
 import { DateTime } from 'luxon';
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
 import { useTranslation } from 'react-i18next';
 import { setZoneOnDate } from './utils';
 
@@ -31,16 +31,10 @@ const TEST_DATE: DateTime | undefined = undefined;
 // const TEST_DATE: DateTime | undefined = DateTime.now().set({ hour: 5, minute: 30 });
 
 export function NowProvider({ children }: NowProviderProps) {
-  const {
-    i18n: { language: locale },
-  } = useTranslation();
+  const { i18n: { language: locale } } = useTranslation();
+  const { get: { location: timezone } } = useAppSettings();
 
-  const {
-    get: { location: timezone },
-  } = useAppSettings();
-
-  const [simulatedDate, setSimulatedDateState] =
-    useState<DateTime | undefined>(TEST_DATE);
+  const [simulatedDate, setSimulatedDateState] = useState<DateTime | undefined>(TEST_DATE);
 
   const getNow = useCallback((forceNow: boolean | undefined = false) => {
     const date = forceNow || !simulatedDate ? DateTime.now() : simulatedDate;

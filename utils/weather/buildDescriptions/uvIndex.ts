@@ -1,10 +1,10 @@
 import { WeatherIconProps } from '@/components/ui/weather/WeatherIcon';
-import ICON_FILES, { createIconUrl } from '@/constants/iconFiles';
+import ICON_FILES, { getIconUrl } from '@/constants/iconFiles';
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 
 function getUvSrc(uv: number | undefined, isDay: boolean = true): string {
-  if ((!uv || uv < 1) && !isDay) return createIconUrl(ICON_FILES.clearNight);
+  if ((!uv || uv < 1) && !isDay) return getIconUrl(ICON_FILES.clearNight);
   let name: string = 'uv-index';
   if (typeof uv === 'number') {
     const uvInRange = Math.min(Math.max(Math.round(uv), 0), 12);
@@ -12,7 +12,7 @@ function getUvSrc(uv: number | undefined, isDay: boolean = true): string {
     else if (uvInRange > 11) name = `uv-index-11-plus`;
     else name = `uv-index-${uvInRange}`;
   }
-  return createIconUrl(name);
+  return getIconUrl(name);
 }
 
 function getUvAnimationDuration(uvIndex: number): number {

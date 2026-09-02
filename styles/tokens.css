@@ -75,4 +75,7 @@
   --wc-warning: #e6b800;
   --wc-danger: #e0554f;
   --wc-info: #4da3ff;
+
+  /* Weather */
+  --w-night: #8695f0;
 }

@@ -8,20 +8,25 @@ import { getProgressBetweenDates } from '@/utils/formatters/dateFormatters';
 import { CSSProperties } from 'react';
 
 interface Props {
-  start?: DateTime;
+  start?: DateTime | string;
   startIcon?: WeatherIconProps
-  end?: DateTime;
+  end?: DateTime | string;
   endIcon?: WeatherIconProps
   onDoubleClick?: () => void;
   hideDate?: boolean;
   markerStrength?: number;
   style?: CSSProperties;
+  progress?: number;
 }
 
-export default function EventProgress({ start, end, startIcon, endIcon, hideDate, markerStrength = 0.3, style: styleProp }: Props) {
+export default function EventProgress({ start: startProp, end: endProp, startIcon, endIcon, hideDate, markerStrength = 0.3, style: styleProp, progress: progressProp }: Props) {
+
+  const start = typeof startProp === 'string' ? DateTime.fromISO(startProp) : startProp;
+  const end = typeof endProp === 'string' ? DateTime.fromISO(endProp) : endProp;
 
   const { now } = useNow();
   const progress = (() => {
+    if (typeof progressProp === 'number') return progressProp;
     if (start?.isValid && end?.isValid)
       return getProgressBetweenDates(start, end, now);
     return 0;

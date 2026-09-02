@@ -16,7 +16,7 @@ export interface HourlyForecastProps {
  * hour on screen, per the brief — there can be dozens of entries in
  * `hourly`, so only a handful are ever visible at once.
  */
-export function HourlyForecast({ weather, hoursToShow = 24 * 3 }: HourlyForecastProps) {
+export default function HourlyForecast({ weather, hoursToShow = 24 * 3 }: HourlyForecastProps) {
   const { t } = useTranslation();
   const { now } = useNow();
 

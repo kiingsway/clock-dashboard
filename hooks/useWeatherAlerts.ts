@@ -1,7 +1,7 @@
 import { CACHE_KEY } from "@/constants/keys";
 import { DEFAULT_SETTINGS } from "@/constants/settings";
 import { isSupportedWeatherAlertCountry, IWeatherAlert, WeatherAlertCountryCode } from "@/types/weatherAlerts.types";
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
 import useSWR from "swr";
 import { WEATHER_ALERT_PROVIDERS } from "@/constants/alerts";
 

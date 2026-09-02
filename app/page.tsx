@@ -5,7 +5,7 @@ import { TABS } from '@/constants/tabs';
 import classNames from 'classnames';
 import styles from './App.module.scss';
 import { NowProvider } from '@/contexts/NowContext';
-import { AppSettingsProvider, useAppSettings } from '@/contexts/AppSettingsContext';
+import useAppSettings, { AppSettingsProvider } from '@/contexts/AppSettingsContext';
 import { TTabs } from '@/types/app.types';
 
 export default function Home() {

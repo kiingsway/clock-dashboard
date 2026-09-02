@@ -1,10 +1,9 @@
 import { WIND_SPEED_COLORS, WIND_GUSTS_COLORS } from "@/constants/colors";
 import { hexToRgb, lerp } from "../formatters/textFormatters";
 import { WindType } from "@/types/weather.types";
-import { IColorValueGradient } from "@/types/app.types";
-import { DAYLIGHT_HOURS, DEW_POINT_VALUES, HUMIDITY_PERCENTAGE } from "@/constants/anchors";
+import { DAYLIGHT_HOURS, DEW_POINT_VALUES } from "@/constants/anchors";
 import { DAYLIGHT_COLORS, DEW_COLORS, HUMIDITY_COLORS, VISIBILITY_COLORS } from "@/constants/colors";
-import { IColorRange, IInterpolateColor } from "@/types/colors.types";
+import { IColorRange, IGradientColor, IInterpolateColor } from "@/types/colors.types";
 
 /**
  * Interpola linearmente entre duas cores HEX.
@@ -38,7 +37,7 @@ function interpolateThreePointColor(value: number, range: IColorRange, colors: I
   return interpolateColor(mid, high, factor);
 }
 
-function getGradientColor(value: number, stops: readonly IColorValueGradient[], max?: number): string {
+export function getGradientColor(value: number, stops: IGradientColor[], max?: number): string {
 
   const maxValue = max ?? stops[stops.length - 1].value;
   const v = Math.max(0, Math.min(maxValue, value));
@@ -60,7 +59,10 @@ function getGradientColor(value: number, stops: readonly IColorValueGradient[], 
   const c1 = hexToRgb(lower.hex);
   const c2 = hexToRgb(upper.hex);
 
-  return `rgb(${Math.round(lerp(c1.r, c2.r, factor))}, ${Math.round(lerp(c1.g, c2.g, factor))}, ${Math.round(lerp(c1.b, c2.b, factor))})`;
+  const [r, g, b] = (['r', 'g', 'b'] as const).map(c => Math.round(lerp(c1[c], c2[c], factor)));
+
+  return `rgb(${r},${g},${b})`;
+  // return `rgb(${Math.round(lerp(c1.r, c2.r, factor))}, ${Math.round(lerp(c1.g, c2.g, factor))}, ${Math.round(lerp(c1.b, c2.b, factor))})`;
 }
 
 // Faixas aproximadas de intensidade de chuva (mm/h), uso meteorológico comum
@@ -115,7 +117,8 @@ export function getDewPointColor(dewPoint: number): string {
  * @returns Código da cor em HEX
  */
 export function getHumidityColor(humidity: number): string {
-  return interpolateThreePointColor(humidity, HUMIDITY_PERCENTAGE, HUMIDITY_COLORS);
+  return getGradientColor(humidity, HUMIDITY_COLORS);
+  // return interpolateThreePointColor(humidity, HUMIDITY_PERCENTAGE, HUMIDITY_COLORS);
 }
 
 /**
@@ -158,4 +161,27 @@ export function getRainColor(rainMm: number): string {
   const lightness = 72 - 22 * t;
 
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+export function getTemperatureMinMaxColors(tempMin: number = -10, tempMax: number = 30) {
+
+  const range = Math.abs(tempMax - tempMin);
+
+  // 0 = quase sem variação
+  // 1 = variação de 10°C ou mais
+  const intensity = Math.min(range / 10, 1);
+
+  const minColor = `color-mix(
+  in srgb,
+  var(--wc-info) ${60 + intensity * 40}%,
+  white
+)`;
+
+  const maxColor = `color-mix(
+  in srgb,
+  var(--wc-danger) ${60 + intensity * 40}%,
+  white
+)`;
+
+  return { minColor, maxColor };
 }

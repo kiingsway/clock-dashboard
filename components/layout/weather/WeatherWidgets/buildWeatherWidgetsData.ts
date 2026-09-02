@@ -1,8 +1,8 @@
 import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard';
 import { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
-import { VISIBILITY_COLORS, WIND_GUSTS_COLORS } from '@/constants/colors';
+import { HUMIDITY_COLORS, MOON_COLORS, UVINDEX_COLORS, VISIBILITY_COLORS, WIND_GUSTS_COLORS } from '@/constants/colors';
 import { getDaylightDurationDescription, getDewPointDescription, getHumidityDescription, getSunshineDurationDescription } from '@/constants/descriptions';
-import { createIconUrl } from '@/constants/iconFiles';
+import { getIconUrl } from '@/constants/iconFiles';
 import { IWeather } from '@/types/weather.types';
 import { formatDuration } from '@/utils/formatters/dateFormatters';
 import { getCurrentIndex } from '@/utils/formatters/getValueByArray';
@@ -53,7 +53,6 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
   const nowIndex = getCurrentIndex(now, hourlyTime);
   const todayIndex = getCurrentIndex(now, dailyTime);
 
-  const moonNow = daily_moon.find(m => m.date === now.toISODate());
   const uvIndex = uv_index[nowIndex];
   const humidity = relative_humidity_2m[nowIndex];
   const dewPoint = dew_point_2m[nowIndex];
@@ -70,7 +69,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
 
   const compass = getCompassDirection(windDirectionNow, t);
 
-  const moonDesc = buildMoonDescription(moonNow, timezone, t);
+  const moonDesc = buildMoonDescription(daily_moon, now, timezone, t);
   const uvIndexDesc = buildUVDescription(uvIndex, isDay, t);
   const visibilityDesc = buildVisibilityDescription(visibility, visibilityUnit, locale, true, t);
 
@@ -86,7 +85,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
   const sunshineDuration = formatDuration(sunshine);
 
   const level = getBeaufortScale(windSpeedNow);
-  const beaufortSrc = createIconUrl(`wind-beaufort-${level}`);
+  const beaufortSrc = getIconUrl(`wind-beaufort-${level}`);
   const beaufortDuration = getWindGustAnimationDuration(windSpeedNow);
 
   const beaufortTitle = `Beaufort Scale: ${level} (${windSpeedNow})`;
@@ -94,45 +93,13 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
 
   const dewPointStops = [-10, 0, 7, 13, 18, 27];
   const dewPointZones: { value: number; color: string }[] =
-    dewPointStops.map(value => ({
-      value,
-      color: getDewPointColor(value)
-    }));
+    dewPointStops.map(value => ({ value, color: getDewPointColor(value) }));
 
-
-  const uvIndexZones: { value: number; color: string }[] = [
-    { value: 0, color: "#86CFA3" },  // Verde — baixo
-    { value: 3, color: "#F2D37A" },  // Amarelo — moderado
-    { value: 6, color: "#F2A56F" },  // Laranja — alto
-    { value: 8, color: "#E97C7C" },  // Vermelho — muito alto
-    { value: 11, color: "#A982C7" }, // Roxo — extremo
-  ];
-
-  const moonPhaseZones: { value: number; color: string }[] = [
-    { value: Math.round((0 / 16) * 100), color: "#24304A" },
-    { value: Math.round((1 / 16) * 100), color: "#405B86" },
-    { value: Math.round((3 / 16) * 100), color: "#5F78A3" },
-    { value: Math.round((5 / 16) * 100), color: "#8295B5" },
-    { value: Math.round((7 / 16) * 100), color: "#D8DDE5" },
-    { value: Math.round((9 / 16) * 100), color: "#8295B5" },
-    { value: Math.round((11 / 16) * 100), color: "#5F78A3" },
-    { value: Math.round((13 / 16) * 100), color: "#405B86" },
-    { value: Math.round((15 / 16) * 100), color: "#24304A" },
-  ];
-
+  const uvIndexZones = UVINDEX_COLORS.map(({ hex: color, value }) => ({ value, color }));
+  const moonPhaseZones = MOON_COLORS.map(({ hex: color, value }) => ({ value, color }));
   const windZones = WIND_GUSTS_COLORS.map(({ hex: color, value }) => ({ value, color }));
   const visibilityZones = VISIBILITY_COLORS.map(({ hex: color, value }) => ({ color, value }));
-
-  const humidityZones = [
-    { value: 0, color: "#C9A227", },// Extremely dry
-    { value: 20, color: "#D9A441", },// Very dry
-    { value: 30, color: "#d8c38e", },// Dry
-    { value: 40, color: "#cfddf4", },// Comfortable
-    { value: 60, color: "#7db2c4", },// Slightly humid
-    { value: 70, color: "#3D8FB8", },// Humid
-    { value: 80, color: "#3976A8", },// Very humid
-    { value: 90, color: "#2E5E96", },// Extremely humid
-  ];
+  const humidityZones = HUMIDITY_COLORS.map(({ hex: color, value }) => ({ color, value }));
 
   const daylightHours = [0, 4, 8, 12, 16, 20, 24];
   const daylightZones = daylightHours.map(value => ({ value, color: getDaylightColor(value * 60 * 60) }));
@@ -143,7 +110,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       description: moonDesc.title,
       iconProps: moonDesc.icons[0],
       zoneGauge: {
-        value: +(Number(moonDesc.title.split('(')[1].replaceAll('%)', ''))).toFixed(1),
+        value: +(Number(moonDesc.title.split('(')?.[1]?.replaceAll('%)', '')))?.toFixed(1),
         unit: '%',
         zones: moonPhaseZones,
         max: 100,

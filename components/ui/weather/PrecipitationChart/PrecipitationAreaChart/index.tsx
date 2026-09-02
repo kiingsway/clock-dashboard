@@ -3,7 +3,7 @@ import { CSSProperties, useMemo } from 'react';
 import { XAxis, Tooltip, Area, AreaChart, ResponsiveContainer, ReferenceDot, YAxis } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import { precipitationAreas, TPrecipAreas } from '..';
-import getAccentColor, { getAccent } from '@/utils/weather/getAccentColor';
+import getAccentColor  from '@/utils/weather/getAccentColor';
 import { RiArrowDropRightFill } from 'react-icons/ri';
 import { MAX_RAIN_MM_LIMIT, MAX_SHOWERS_MM_LIMIT, MAX_SNOWFALL_CM_LIMIT } from '@/constants/rainDescriptions';
 import WeatherIcon from '../../WeatherIcon';
@@ -11,6 +11,7 @@ import { rainIntensityColor, showersIntensityColor, snowIntensityColor } from '@
 import PrecipitationTooltip from '../PrecipitationTooltip';
 import { IPrecipChartData } from '@/types/chart.types';
 import { DEFAULT_COLOR } from '@/constants/colors';
+import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
 
 interface Props {
   data: IPrecipChartData[];
@@ -95,7 +96,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
 
   const tickFormatter = (label: string) => label === firstData?.hour ? t('now') : label;
 
-  const firstAccent = firstData ? getAccent({ ...firstData, t }) : DEFAULT_COLOR.WEATHER;
+  const firstAccent = firstData ? getWeatherCodeInfo(firstData.weatherCode, firstData.isDay, t) : DEFAULT_COLOR.WEATHER;
 
   const maxPrecipitation = Math.max(
     10,
@@ -141,7 +142,8 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
           tickFormatter={tickFormatter}
           ticks={customTicks}
           tick={({ x, y, payload }) => {
-            const accent = getAccent({ ...data[payload.index], t });
+            const { weatherCode, isDay } = data[payload.index];
+            const { accent } = getWeatherCodeInfo(weatherCode, isDay, t);
             return (
               <CustomTick
                 x={x}

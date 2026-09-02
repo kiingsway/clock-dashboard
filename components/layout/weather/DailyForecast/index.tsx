@@ -20,7 +20,7 @@ interface Props {
  * the whole forecast window, so a glance at the bar shows where a day sits
  * in the week, not just its two numbers.
  */
-export function DailyForecast({ weather }: Props) {
+export default function DailyForecast({ weather }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
   const { today } = useNow();
 

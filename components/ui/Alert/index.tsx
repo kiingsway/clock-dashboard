@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { TiWarning } from "react-icons/ti";
 import { MdError } from "react-icons/md";
@@ -11,6 +11,7 @@ interface Props {
   variant?: AlertVariant;
   title: string;
   message?: ReactNode;
+  style?: CSSProperties;
   button?: {
     onClick: () => void;
     ariaLabel: string;
@@ -25,9 +26,9 @@ const ICONS: Record<AlertVariant, ReactNode> = {
   info: <IoMdInformationCircle />,
 };
 
-export default function Alert({ variant = 'info', title, message, button }: Props) {
+export default function Alert({ variant = 'info', title, message, button, style }: Props) {
   return (
-    <div className={`${styles.alert} ${styles[variant]}`} role="alert">
+    <div className={`${styles.alert} ${styles[variant]}`} style={style} role="alert">
       <div className={styles.icon}>{ICONS[variant]}</div>
 
       <div className={styles.content}>

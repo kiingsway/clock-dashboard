@@ -11,7 +11,7 @@ import buildSunshineDescription from "@/utils/weather/buildDescriptions/sunshine
 import buildUVDescription from "@/utils/weather/buildDescriptions/uvIndex";
 import buildVisibilityDescription from "@/utils/weather/buildDescriptions/visibility";
 import buildWindDescription from "@/utils/weather/buildDescriptions/wind";
-import getWeatherCategory from "@/utils/weather/getWeatherCategory";
+import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
 import { TFunction } from "i18next";
 import { DateTime } from "luxon";
 
@@ -44,14 +44,13 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
   const windSpeed = daily.wind_speed_10m_mean[todayIndex];
   const windGusts = daily.wind_gusts_10m_mean[todayIndex];
   const windDirection = daily.wind_direction_10m_dominant[todayIndex];
-  const moonDaily = daily_moon.find(m => m.date === date.toISODate());
 
-  const weatherCategory = getWeatherCategory(weatherCode, t);
+  const weatherCategory = getWeatherCodeInfo(weatherCode, true, t);
 
   const feelsLikeDesc = buildFeelsLikeDescription(tempMean, feelsLike, t);
   const rainDesc = buildRainDescription(rainHours, precipMM, precipChance, t);
   const uvDesc = buildUVDescription(uvIndex, true, t);
-  const moonDesc = buildMoonDescription(moonDaily, timezone, t);
+  const moonDesc = buildMoonDescription(daily_moon, date, timezone, t);
   const visibilityDescription = buildVisibilityDescription(visibility, visibilityUnit, locale, true, t);
   const humidityDescription = buildHumidityDescription(humidity, humidityUnit, t);
   const dewPointDescription = buildDewPointDescription(dewPoint, dewPointUnit, t);

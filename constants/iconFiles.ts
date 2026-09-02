@@ -1,6 +1,6 @@
 const ICON_BASE_URI = "https://cdn.meteocons.com/3.0.0-next.10/svg/fill/";
 
-export const createIconUrl = (iconName: string) => `${ICON_BASE_URI}${iconName}.svg`;
+export const getIconUrl = (iconName: string) => `${ICON_BASE_URI}${iconName}.svg`;
 
 const ICON_FILES = {
   clearDay: "clear-day",

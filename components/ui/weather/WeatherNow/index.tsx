@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import styles from "./WeatherNow.module.scss";
 import { useTranslation } from "react-i18next";
-import { useAppSettings } from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
 import MinMaxProgress from "./MinMaxProgress";
 
 const r = (n: number) => Math.round(n);
@@ -34,7 +34,9 @@ export function WeatherNow({
 
   // Where the current temp sits between today's min/max, clamped 0–100.
   const rangePosition = useMemo(() => {
-    if ((maxTemp === minTemp) || (maxTemp === -999 || minTemp === -999)) return 50;
+    if (maxTemp === -999 || minTemp === -999) return undefined;
+    
+    if (maxTemp === minTemp) return 50;
     const pct = ((r(temperature) - minTemp) / (maxTemp - minTemp)) * 100;
     return Math.min(100, Math.max(0, pct));
   }, [temperature, minTemp, maxTemp]);

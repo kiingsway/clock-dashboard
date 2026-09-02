@@ -110,37 +110,37 @@ export function getRainSummaryDescription(rainHours: number, precipMM: number, c
   if (precipMM <= 0 && rainHours <= 0) return t(RAIN_DESCRIPTIONS.noRain);
 
   if (precipMM < 1) {
-    if (chance < 30) return RAIN_DESCRIPTIONS.veryLowChance;
-    else return RAIN_DESCRIPTIONS.drizzle;
+    if (chance < 30) return t(RAIN_DESCRIPTIONS.veryLowChance);
+    else return t(RAIN_DESCRIPTIONS.drizzle);
   }
 
   // Chuva leve
   if (precipMM < 5) {
-    if (chance < 30) return RAIN_DESCRIPTIONS.lightLowChance;
-    if (chance < 60) return RAIN_DESCRIPTIONS.lightPossible;
+    if (chance < 30) return t(RAIN_DESCRIPTIONS.lightLowChance);
+    if (chance < 60) return t(RAIN_DESCRIPTIONS.lightPossible);
 
-    return RAIN_DESCRIPTIONS.lightExpected;
+    return t(RAIN_DESCRIPTIONS.lightExpected);
   }
 
   // Chuva moderada
   if (precipMM < 15) {
-    if (chance < 30) return RAIN_DESCRIPTIONS.moderateLowChance;
-    if (chance < 60) return RAIN_DESCRIPTIONS.moderatePossible;
+    if (chance < 30) return t(RAIN_DESCRIPTIONS.moderateLowChance);
+    if (chance < 60) return t(RAIN_DESCRIPTIONS.moderatePossible);
 
-    return RAIN_DESCRIPTIONS.moderateExpected;
+    return t(RAIN_DESCRIPTIONS.moderateExpected);
   }
 
   // Chuva forte
   if (precipMM < 30) {
-    if (chance < 30) return RAIN_DESCRIPTIONS.heavyLowChance;
-    if (chance < 60) return RAIN_DESCRIPTIONS.heavyPossible;
+    if (chance < 30) return t(RAIN_DESCRIPTIONS.heavyLowChance);
+    if (chance < 60) return t(RAIN_DESCRIPTIONS.heavyPossible);
 
-    return RAIN_DESCRIPTIONS.heavyExpected;
+    return t(RAIN_DESCRIPTIONS.heavyExpected);
   }
 
   // Chuva muito forte
-  if (chance < 30) return RAIN_DESCRIPTIONS.veryHeavyLowChance;
-  if (chance < 60) return RAIN_DESCRIPTIONS.veryHeavyPossible;
+  if (chance < 30) return t(RAIN_DESCRIPTIONS.veryHeavyLowChance);
+  if (chance < 60) return t(RAIN_DESCRIPTIONS.veryHeavyPossible);
 
-  return RAIN_DESCRIPTIONS.veryHeavyExpected;
+  return t(RAIN_DESCRIPTIONS.veryHeavyExpected);
 }

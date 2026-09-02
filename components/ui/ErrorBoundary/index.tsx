@@ -20,7 +20,12 @@ export default class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("ErrorBoundary:", error, info);
+    console.group("ErrorBoundary");
+    console.error("Error:", error);
+    console.error("Message:", error.message);
+    console.error("Stack:", error.stack);
+    console.error("Component stack:", info.componentStack);
+    console.groupEnd();
   }
 
   retry = () => {

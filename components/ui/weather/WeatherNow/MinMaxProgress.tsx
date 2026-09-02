@@ -1,8 +1,8 @@
 import { CSSProperties } from 'react';
 import styles from './WeatherNow.module.scss';
 import { useTranslation } from 'react-i18next';
-import { useAppSettings } from '@/contexts/AppSettingsContext';
-import { getTemperatureMinMaxColors } from '@/constants/colors';
+import useAppSettings from '@/contexts/AppSettingsContext';
+import { getTemperatureMinMaxColors } from '@/utils/weather/getColors';
 
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
   minColor?: string;
   meanColor?: string;
   maxColor?: string;
-  progress: number;
+  progress: number | undefined;
 }
 
 export default function MinMaxProgress({ temp, min, max, unit, progress }: Props) {
@@ -35,7 +35,7 @@ export default function MinMaxProgress({ temp, min, max, unit, progress }: Props
     <div className={styles.rangeCard} style={style}>
       <span className={styles.rangeMin}>{min === temp && showMinMaxOnTempRange ? t('min') : tempText(min)}</span>
       <div className={styles.rangeTrack}>
-        <div className={styles.rangeDot} style={{ left: `${progress}%` }} />
+        {typeof progress === 'number' && <div className={styles.rangeDot} style={{ left: `${progress}%` }} />}
       </div>
       <span className={styles.rangeMax}>{max === temp && showMinMaxOnTempRange ? t('max') : tempText(max)}</span>
     </div>

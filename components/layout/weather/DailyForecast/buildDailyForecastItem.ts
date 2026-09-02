@@ -2,8 +2,8 @@ import { IWeather } from "@/types/weather.types";
 import { IDailyData } from "@/types/weatherInfo.types";
 import { getCurrentIndex } from "@/utils/formatters/getValueByArray";
 import { roundValues } from "@/utils/formatters/mathDateFormatters";
-import { getAccent } from "@/utils/weather/getAccentColor";
 import getForecastDateLabel from "@/utils/weather/getForecastDateLabel";
+import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
 import { TFunction } from "i18next";
 import { DateTime } from "luxon";
 
@@ -38,7 +38,7 @@ export default function buildDailyForecastItem({ weather, today, locale, t }: Pr
     const tempMin = Math.round(daily.temperature_2m_min[dailyIndex]);
     const tempMax = Math.round(daily.temperature_2m_max[dailyIndex]);
 
-    const accent = getAccent({ weatherCode, t });
+    const { accent } = getWeatherCodeInfo(weatherCode, true, t);
 
     const temperatureRange = weekMax - weekMin || 1;
     const start = ((tempMin - weekMin) / temperatureRange) * 100;

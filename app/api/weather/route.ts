@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { IWeather } from "@/types/weather.types";
-import { getMoonDays } from "./getMoonDays";
 import { DateTime } from "luxon";
+import getMoonDays from "./getMoonDays";
+import isValidWeather from "./isValidWeather";
 
 const api = {
   past_days: 1,
@@ -94,13 +95,20 @@ export async function GET(request: NextRequest): TApiWeather {
   const url = `https://api.open-meteo.com/v1/forecast?${params}`;
 
   try {
-    const { data: weather } = await axios.get<IWeather>(url);
+    const { data: weather } = await axios.get<IWeather>(url, {
+      timeout: 15_000,
+    });
+
+    if (!isValidWeather(weather)) {
+      throw new Error(`Invalid weather API response. ${JSON.stringify(weather)}`);
+    }
 
     const daily_moon = getMoonDays({
-      latitude,
-      longitude,
+      lat: latitude,
+      lon: longitude,
       timezone: weather.timezone,
       startDate: DateTime.now().setZone(weather.timezone),
+      days: api.forecast_days,
     });
 
     return NextResponse.json({ ...weather, daily_moon }, {
@@ -110,8 +118,17 @@ export async function GET(request: NextRequest): TApiWeather {
       },
     });
   } catch (e) {
+    const message = axios.isAxiosError(e)
+      ? e.message
+      : e instanceof Error
+        ? e.message
+        : String(e);
+
     return NextResponse.json(
-      { error: "Failed to fetch weather.", message: String(e) },
+      {
+        error: "Failed to fetch weather.",
+        message,
+      },
       { status: 500 }
     );
   }

@@ -189,7 +189,7 @@ export function AppSettingsProvider({ children }: Props) {
   );
 }
 
-export function useAppSettings(): UseAppSettings {
+export default function useAppSettings(): UseAppSettings {
   const context = useContext(AppSettingsContext);
 
   if (!context) throw new Error('useAppSettings must be used inside AppSettingsProvider');

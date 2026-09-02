@@ -5,13 +5,13 @@ import { Fragment, useMemo } from 'react';
 import styles from './DailySheet.module.scss';
 import { IWeather } from '@/types/weather.types';
 import { useNow } from '@/contexts/NowContext';
-import { getAccent } from '@/utils/weather/getAccentColor';
 import { getSunWindow } from '@/utils/weather/getSunWindow';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import buildDailySheetInfo from './buildDailySheetInfo';
 import WeatherIcon from '@/components/ui/weather/WeatherIcon';
 import SunProgressBar from '@/components/ui/weather/SunProgressBar';
+import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
 
 interface Props {
   weather: IWeather;
@@ -44,7 +44,7 @@ export default function DailySheetContent({ weather, index }: Props) {
     date: sunDate
   });
 
-  const accent = getAccent({ weatherCode, t });
+  const { accent } = getWeatherCodeInfo(weatherCode, true, t);
 
   const dailySheetInfo = useMemo(() => buildDailySheetInfo(weather, indexDate, locale, t), [indexDate, locale, t, weather]);
 
