@@ -29,14 +29,14 @@ export default function buildDailyForecastItem({ weather, today, locale, t }: Pr
 
   const dailyItems: IDailyData[] = datetimes.map((time, i) => {
 
-    const dailyIndex = startIndex + i;
+    const index = startIndex + i;
     const timedate = DateTime.fromISO(time, { zone });
 
-    const dayName = getForecastDateLabel(today, timedate, locale, t);
+    const dayName = getForecastDateLabel(today, timedate, locale, zone, t);
 
-    const weatherCode = daily.weather_code[dailyIndex];
-    const tempMin = Math.round(daily.temperature_2m_min[dailyIndex]);
-    const tempMax = Math.round(daily.temperature_2m_max[dailyIndex]);
+    const weatherCode = daily.weather_code[index];
+    const tempMin = Math.round(daily.temperature_2m_min[index]);
+    const tempMax = Math.round(daily.temperature_2m_max[index]);
 
     const { accent } = getWeatherCodeInfo(weatherCode, true, t);
 
@@ -44,19 +44,21 @@ export default function buildDailyForecastItem({ weather, today, locale, t }: Pr
     const start = ((tempMin - weekMin) / temperatureRange) * 100;
     const end = ((tempMax - tempMin) / temperatureRange) * 100;
 
-    const left = `${start}%`;
-    const width = `${Math.max(end, 6)}%`;
+    const range = {
+      left: `${start}%`,
+      width: `${Math.max(end, 6)}%`,
+    };
 
     return {
-      key: timedate.toISODate() || dailyIndex,
+      key: timedate.toISODate() || index,
       dayName,
       weatherCode,
       tempMin,
       tempMax,
       tempUnit,
       accent,
-      range: { left, width },
-      index: dailyIndex,
+      range,
+      index,
     };
   });
 

@@ -1,16 +1,14 @@
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
-import { formatDuration } from '@/utils/formatters/dateFormatters';
-import { getDaylightDurationDescription } from '@/constants/descriptions';
+import { getDaylightSunshineInfo } from '../getDaylightSunshineInfo';
 
 export default function buildDaylightDescription(daylight: number, t: TFunction): DailySheetItemDesc {
 
-  const text = formatDuration(daylight);
-  const desc = getDaylightDurationDescription(daylight, t);
+  const { title, desc, icon, time } = getDaylightSunshineInfo(daylight, 'daylight', true, t);
 
   return {
-    title: `${t('daylight')}: ${text}`,
+    title: `${title}: ${time}`,
     desc,
-    icons: [{ category: "sunrise" }],
+    icons: [{ iconName: icon }],
   };
 }

@@ -1,10 +1,11 @@
 import { IWeather } from '@/types/weather.types';
-import { getLocaleHour, formatDateTime } from '@/utils/formatters/dateFormatters';
+import { formatDateTime } from '@/utils/formatters/dateFormatters';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 import { HourlyCardProps } from '../HourlyCard';
 import { getRainColor } from '@/utils/weather/getColors';
 import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
+import { formatClock } from '@/utils/formatters/formatClock';
 
 interface Props {
   weather: IWeather;
@@ -12,11 +13,12 @@ interface Props {
   hoursAhead: number;
   kind: 'day' | 'now';
   now: DateTime;
-  locale: string;
+  language: string;
+  is12hour: boolean;
   t: TFunction
 }
 
-export default function buildHourlyListData({ startIndex, weather, hoursAhead, now, locale, kind, t }: Props): HourlyCardProps[] {
+export default function buildHourlyListData({ startIndex, weather, hoursAhead, now, language, kind, is12hour, t }: Props): HourlyCardProps[] {
 
   const {
     timezone, latitude, longitude,
@@ -62,13 +64,13 @@ export default function buildHourlyListData({ startIndex, weather, hoursAhead, n
     const minDiff = indexDate.diff(now, 'minutes').minutes;
     const daysDiff = kind === 'now' ? minDiff / 1440 : indexDate.startOf('day').diff(now.startOf('day'), 'days').days;
 
-    const hour = Math.abs(minDiff) <= 25 ? t('now') : getLocaleHour(indexDate, locale);
+    const hour = Math.abs(minDiff) <= 25 ? t('now') : formatClock({ date: indexDate, language, short: true, localizedPeriod: true, hour12: is12hour });
 
     return {
       hour,
       subhour: `+${Math.floor(daysDiff)}`,
       hideSubhour: daysDiff < 1,
-      hourTooltip: formatDateTime({ date: indexDate.toJSDate(), locale, timezone }),
+      hourTooltip: formatDateTime({ date: indexDate.toJSDate(), language, timezone }),
       temp,
       tempUnit,
       feelsLike,

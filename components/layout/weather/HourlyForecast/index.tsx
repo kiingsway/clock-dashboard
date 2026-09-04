@@ -24,7 +24,7 @@ export default function HourlyForecast({ weather, hoursToShow = 24 * 3 }: Hourly
     0,
     (weather.hourly.time || []).findIndex((iso) => {
       const hourlyTime = DateTime.fromISO(iso, { zone: weather.timezone });
-      return hourlyTime >= now;
+      return hourlyTime.toMillis() >= now.toMillis();
     })
   );
 

@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import { IWeather } from '@/types/weather.types';
 import useAppSettings from '@/contexts/AppSettingsContext';
 import { ResponsiveContainer } from 'recharts';
-import { getLocaleHour } from '@/utils/formatters/dateFormatters';
 import PrecipStackedAreaChart from './PrecipitationAreaChart';
 import { IPrecipChartData } from '@/types/chart.types';
 import { RAIN_ALERT_HOURS } from '@/constants/settings';
+import { formatClock } from '@/utils/formatters/formatClock';
 
 export type TPrecipAreas = "rain" | "showers" | "snowfall";
 export const precipitationAreas: TPrecipAreas[] = ["snowfall", "rain", "showers"];
@@ -19,8 +19,8 @@ interface Props {
 }
 
 export default function PrecipitationChart({ weather: { current, hourly } }: Props) {
-  const { i18n: { language: locale } } = useTranslation();
-  const { get: { precipHoursRange } } = useAppSettings();
+  const { i18n: { language } } = useTranslation();
+  const { get: { precipHoursRange, is12hour } } = useAppSettings();
   const { now } = useNow();
 
   const startIndex = getCurrentIndex(now, hourly.time);
@@ -29,11 +29,14 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
   const data: IPrecipChartData[] = hourly.time.slice(startIndex, endIndex).map((time, i) => {
 
     const index = startIndex + i;
+    const date = DateTime.fromISO(time);
+    const key = date.toMillis() ?? i;
 
-    const hour = getLocaleHour(DateTime.fromISO(time), locale);
+    const hour = formatClock({ date, language, short: true, hour12: is12hour });
     const windGusts = hourly.wind_gusts_10m[index] ?? 0;
 
     if (i === 0) return {
+      key,
       hour,
       weatherCode: current.weather_code ?? -1,
       temp: current.temperature_2m,
@@ -45,6 +48,7 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
     };
 
     return {
+      key,
       hour,
       weatherCode: hourly.weather_code[index] ?? -1,
       temp: hourly.temperature_2m[index],

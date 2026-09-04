@@ -7,6 +7,7 @@ import { IWeather } from '@/types/weather.types';
 import { getCurrentIndex } from '@/utils/formatters/getValueByArray';
 import { useMemo } from 'react';
 import buildHourlyListData from './buildHourlyListData';
+import useAppSettings from '@/contexts/AppSettingsContext';
 
 interface Props {
   date: DateTime;
@@ -16,14 +17,15 @@ interface Props {
 }
 
 export default function HourlyList({ date, weather, hoursAhead = 24, kind = 'now' }: Props) {
-  const { t, i18n: { language: locale } } = useTranslation();
+  const { t, i18n: { language } } = useTranslation();
+  const { get: { is12hour } } = useAppSettings();
   const { now } = useNow();
 
   const startIndex = getCurrentIndex(date, weather.hourly.time) + (kind === 'now' ? 1 : 0);
 
   const data = useMemo(() =>
-    buildHourlyListData({ startIndex, weather, hoursAhead, kind, locale, now, t }),
-    [hoursAhead, kind, locale, now, startIndex, t, weather]);
+    buildHourlyListData({ startIndex, weather, hoursAhead, kind, language, now, is12hour, t }),
+    [hoursAhead, is12hour, kind, language, now, startIndex, t, weather]);
 
   return (
     <ul className={styles.scroller}>

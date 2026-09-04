@@ -11,12 +11,12 @@ import { getSolarStyle } from "./getSolarStyle";
  * ambient glow behind the current-weather icon. Day/night shifts a few of
  * these (clear, fog) since the mood genuinely changes; the rest stay stable.
  */
-export default function getAccentColor(categoryName: WeatherCategoryName, isDay: boolean): string {
+export default function getAccentColor(categoryName: WeatherCategoryName, isDay: "" | 0 | 1 | undefined | boolean): string {
   const color = WEATHER_ACCENT_COLORS[categoryName] ?? WEATHER_ACCENT_COLORS.unknown;
 
   if (typeof color === "string") return color;
 
-  return isDay ? color.day : color.night;
+  return Boolean(isDay) || isDay === undefined ? color.day : color.night;
 }
 
 export function getGoldenHourAccent(now: DateTime, sunWindow: SunWindow | undefined, weatherLocation: IWeatherLocationItem, initialColor = 'var(--wc-accent)') {

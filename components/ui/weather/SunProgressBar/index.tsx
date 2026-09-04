@@ -1,11 +1,12 @@
-import { WeatherCategoryName } from "@/types/weather.types";
-import { useMemo, type CSSProperties, type JSX } from "react";
+import { IWeather, WeatherCategoryName } from "@/types/weather.types";
+import { type CSSProperties, type JSX } from "react";
 import { SunWindow } from "@/types/sun.types";
 import EventProgress from "../EventProgress";
-import useAppSettings from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
-import { getGoldenHourAccent } from "@/utils/weather/getAccentColor";
-import buildMarkerStrength from "@/components/layout/weather/CurrentWeather/buildMarkerStrength";
+import getAccentColor from "@/utils/weather/getAccentColor";
+import { getGlowStrength } from "@/utils/weather/getGlowStrength";
+import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   sunWindow: SunWindow | undefined;
@@ -13,13 +14,15 @@ interface Props {
   isError?: boolean;
   includeNight?: boolean;
   isFocused?: boolean;
-  disableEffects?: boolean;
-  precipitation?: number,
+  weather?: IWeather;
 }
 
-export default function SunProgressBar({ sunWindow, precipitation = 0, isError = false, loading = false, includeNight = false, isFocused = false, disableEffects = false }: Props): JSX.Element {
+export default function SunProgressBar({ weather, sunWindow, isError = false, loading = false, includeNight = false, isFocused = false }: Props): JSX.Element {
   const { now } = useNow();
-  const { weatherLocation } = useAppSettings();
+  const { t } = useTranslation();
+
+  const { latitude, longitude, current } = weather ?? {};
+  const { weather_code, is_day, precipitation } = current ?? {};
 
   const icons = (() => {
     let rise: WeatherCategoryName = 'error';
@@ -37,23 +40,17 @@ export default function SunProgressBar({ sunWindow, precipitation = 0, isError =
     return { rise, set };
   })();
 
-  const { progress, accent } = useMemo(() => buildMarkerStrength(now, weatherLocation, sunWindow, precipitation, disableEffects), [disableEffects, now, precipitation, sunWindow, weatherLocation]);
-  // const { progress, sunAccent } = useMemo(() => {
-  //   let sunAccent = 'var(--wc-accent)';
-  //   if (disableEffects) return { progress: 0.3, sunAccent };
+  const weatherCodeInfo = getWeatherCodeInfo(weather_code, is_day === 1, t);
 
-  //   const data = getGoldenHourAccent(now, sunWindow, weatherLocation);
-  //   const p = [data?.goldenHour.progress, data?.noon.progress].filter(n => typeof n === 'number');
-  //   const progress = Math.min(1, Math.max(...p, 0.3));
+  const accent = getAccentColor(weatherCodeInfo.name, is_day);
 
-  //   if (data) {
-  //     const { goldenHour, noon } = data;
-  //     if (goldenHour.progress > 0.3) sunAccent = goldenHour.color;
-  //     else if (noon.progress > 0.3) sunAccent = noon.color;
-  //   }
-
-  //   return { sunAccent, progress };
-  // }, [disableEffects, now, sunWindow, weatherLocation]);
+  const progress1 = getGlowStrength({
+    date: now,
+    precipitation: precipitation ?? 0,
+    lat: latitude,
+    lon: longitude,
+    weatherCategory: weatherCodeInfo.name
+  });
 
   const style = {
     '--is-focused': +isFocused,
@@ -68,7 +65,8 @@ export default function SunProgressBar({ sunWindow, precipitation = 0, isError =
       startIcon={{ category: icons.rise, size: isFocused ? 50 : 20 }}
       endIcon={{ category: icons.set, size: isFocused ? 50 : 20 }}
       hideDate={includeNight}
-      markerStrength={includeNight ? progress : undefined}
+      markerStrength={includeNight ? progress1 : undefined}
+      type={isError ? 'error' : 'default'}
     />
   );
 }

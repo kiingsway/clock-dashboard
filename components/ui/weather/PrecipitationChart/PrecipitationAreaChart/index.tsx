@@ -3,7 +3,7 @@ import { CSSProperties, useMemo } from 'react';
 import { XAxis, Tooltip, Area, AreaChart, ResponsiveContainer, ReferenceDot, YAxis } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import { precipitationAreas, TPrecipAreas } from '..';
-import getAccentColor  from '@/utils/weather/getAccentColor';
+import getAccentColor from '@/utils/weather/getAccentColor';
 import { RiArrowDropRightFill } from 'react-icons/ri';
 import { MAX_RAIN_MM_LIMIT, MAX_SHOWERS_MM_LIMIT, MAX_SNOWFALL_CM_LIMIT } from '@/constants/rainDescriptions';
 import WeatherIcon from '../../WeatherIcon';
@@ -12,6 +12,9 @@ import PrecipitationTooltip from '../PrecipitationTooltip';
 import { IPrecipChartData } from '@/types/chart.types';
 import { DEFAULT_COLOR } from '@/constants/colors';
 import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
+import useAppSettings from '@/contexts/AppSettingsContext';
+import { DateTime } from 'luxon';
+import { formatClock } from '@/utils/formatters/formatClock';
 
 interface Props {
   data: IPrecipChartData[];
@@ -19,7 +22,8 @@ interface Props {
 }
 
 export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n: { language } } = useTranslation();
+  const { get: { is12hour } } = useAppSettings();
 
   const rainColor = getAccentColor('rain', true);
   const showersColor = getAccentColor('showers', true);
@@ -83,7 +87,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
 
     return data
       .filter((_, index) => index === 0 || index % mod === 0)
-      .map((item) => item.hour);
+      .map((item) => item.key);
   }, [data, hoursAhead]);
 
   const paddingLeft = (() => {
@@ -94,7 +98,6 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
   const firstData = data?.[0] as IPrecipChartData | undefined;
   const firstTop = precipitationAreas.reduce((sum, area) => sum + (firstData?.[area] || 0), 0);
 
-  const tickFormatter = (label: string) => label === firstData?.hour ? t('now') : label;
 
   const firstAccent = firstData ? getWeatherCodeInfo(firstData.weatherCode, firstData.isDay, t) : DEFAULT_COLOR.WEATHER;
 
@@ -110,7 +113,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
 
   return (
     <ResponsiveContainer width="100%" height={100}>
-      <AreaChart data={data}>
+      <AreaChart data={data} dataKey="key">
         <defs>
           {gradients.map(g => (
             <linearGradient key={g.id} id={g.id} x1="0" y1="0" x2="0" y2="1">
@@ -134,28 +137,43 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
         />
 
         <XAxis
-          dataKey="hour"
+          dataKey="key"
+          type='number'
+          domain={['dataMin', 'dataMax']}
           padding={{ left: paddingLeft, right: 0 }}
           interval={0}
           axisLine={false}
           tickLine={false}
-          tickFormatter={tickFormatter}
           ticks={customTicks}
           tick={({ x, y, payload }) => {
-            const { weatherCode, isDay } = data[payload.index];
+            const item = data.find(item => item.key === payload.value);
+
+            if (!item) return null;
+
+            const { weatherCode, isDay } = item;
             const { accent } = getWeatherCodeInfo(weatherCode, isDay, t);
+
+            const isFirstItem = data[0].key === item.key;
+
+            const date = DateTime.fromMillis(Number(item.key));
+
+            const label = isFirstItem ?
+              t('now') :
+              formatClock({ date, language, hour12: is12hour, short: true, localizedPeriod: true });
+
             return (
               <CustomTick
                 x={x}
                 y={y}
-                value={payload.value}
-                firstHour={customTicks[0]}
+                label={label}
                 accent={accent}
+                isFirstItem={data[0].key === item.key}
                 hasPrecip={Boolean(firstData && firstData.rain > 0)}
               />
             );
           }}
         />
+
         <Tooltip wrapperStyle={{ zIndex: 99 }} content={<PrecipitationTooltip />} />
         {precipitationAreas.map(area => (
           <Area
@@ -178,39 +196,27 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
 interface CustomTickProps {
   x: string | number;
   y: string | number;
-  value: string | number;
-  firstHour: string;
   accent: string
+  label: string
   hasPrecip: boolean;
+  isFirstItem: boolean;
 }
 
-const CustomTick = ({ x, y, value, firstHour, accent, hasPrecip }: CustomTickProps) => {
-  const { t } = useTranslation();
+const CustomTick = ({ x, y, accent, hasPrecip, isFirstItem, label }: CustomTickProps) => {
 
-  const isFirstHour = value === firstHour; // Verifica se é o primeiro item
-
-  const { fill, fontWeight, fontSize, opacity, label } = {
-    fill: isFirstHour ? 'var(--wc-accent)' : '#94a3b8',
-    fontWeight: isFirstHour && hasPrecip ? 700 : hasPrecip || isFirstHour ? 500 : 400,
-    fontSize: isFirstHour ? 13 : hasPrecip ? 12 : 11,
-    opacity: isFirstHour && hasPrecip ? 1 : hasPrecip ? 0.6 : isFirstHour ? 0.7 : 0.4,
-    label: isFirstHour ? t('now') : value,
-  };
+  const style = {
+    textAnchor: 'middle',
+    fill: isFirstItem ? 'var(--wc-accent)' : '#94a3b8',
+    fontWeight: isFirstItem && hasPrecip ? 700 : hasPrecip || isFirstItem ? 500 : 400,
+    fontSize: isFirstItem ? 13 : hasPrecip ? 12 : 11,
+    opacity: isFirstItem && hasPrecip ? 1 : hasPrecip ? 0.6 : isFirstItem ? 0.7 : 0.4,
+  } as const;
 
   return (
     <g
       style={{ '--wc-accent': accent } as CSSProperties}
       transform={`translate(${x},${y})`}>
-      <text
-        x={0}
-        y={0}
-        dy={12}
-        textAnchor="middle"
-        fill={fill}
-        fontWeight={fontWeight}
-        fontSize={fontSize}
-        opacity={opacity}
-      >
+      <text x={0} y={0} dy={12} {...style}>
         {label}
       </text>
     </g>

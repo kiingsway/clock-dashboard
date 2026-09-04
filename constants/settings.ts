@@ -16,6 +16,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   showFeelsLikeWhenEqual: false, // Show Feels Like on Current Weather if equals temperature.
   showMinMaxPeakBadge: true, // Show "MIN" or "MAX" when the current temperature equals min ou max.
   focusCurrentWeatherOnLaunch: false, // Whether current weather is focused or not.
+  is12hour: false,
 };
 
 export const ALERT_RADIUS_KM = {

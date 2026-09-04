@@ -6,7 +6,6 @@ import { APP_INFO } from "@/constants/appInfo";
 import { Badge } from "@/components/ui/Badge";
 import styles from "./SettingsSheet.module.css";
 import { BottomSheet } from "@/components/ui/BottomSheet";
-import { LanguageIcon, LocationIcon, RadiusIcon, ClockIcon, InfoIcon, RainCardIcon } from "./Icons";
 import { LOCATION_OPTIONS } from "@/constants/locations";
 import { usePortalContainer } from "@/hooks/usePortalContainer";
 import useAppSettings from "@/contexts/AppSettingsContext";
@@ -16,6 +15,14 @@ import { ALERT_RADIUS_KM, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES, LANGUAGES 
 import { capitalizeWords } from "@/utils/formatters/textFormatters";
 import { Switch } from "@/components/ui/Switch";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
+import { SlGlobe } from "react-icons/sl";
+import { GrMap } from "react-icons/gr";
+import { FiCloudRain, FiSunset } from "react-icons/fi";
+import { TbClock, TbTemperature, TbInfoCircle } from "react-icons/tb";
+import { PiMapPinAreaBold } from "react-icons/pi";
+import { TbClock12, TbClock24 } from "react-icons/tb";
+import { RxSlider } from "react-icons/rx";
+import { VscScreenFull, VscScreenNormal } from "react-icons/vsc";
 
 interface Props {
   open: boolean;
@@ -86,9 +93,10 @@ export function SettingsSheetContent({
     : "--:--";
 
   const booleanSettingsKeys = [
-    'showFeelsLikeWhenEqual',
-    'showMinMaxPeakBadge',
-    'focusCurrentWeatherOnLaunch',
+    { key: 'is12hour', icon: (v: boolean) => v ? <TbClock12 /> : <TbClock24 /> },
+    { key: 'showFeelsLikeWhenEqual', icon: <TbTemperature /> },
+    { key: 'showMinMaxPeakBadge', icon: <RxSlider /> },
+    { key: 'focusCurrentWeatherOnLaunch', icon: (v: boolean) => v ? <VscScreenFull /> : <VscScreenNormal /> },
   ] as const;
 
   return (
@@ -111,7 +119,7 @@ export function SettingsSheetContent({
         )}
         <SettingsSection title={t("settingsTexts.general.title")}>
           <SettingRow
-            icon={<LanguageIcon />}
+            icon={<SlGlobe />}
             title={t("language")}
             description={t("settingsTexts.general.language")}
             htmlFor="language"
@@ -128,7 +136,7 @@ export function SettingsSheetContent({
             }
           />
           <SettingRow
-            icon={<LocationIcon />}
+            icon={<GrMap />}
             title={t("location")}
             description={t("settingsTexts.general.location")}
             htmlFor="location"
@@ -149,43 +157,9 @@ export function SettingsSheetContent({
           />
         </SettingsSection>
 
-        <SettingsSection title={t("settingsTexts.appearance.title")}>
-          <SettingRow
-            icon={<InfoIcon />}
-            title={t("settingsTexts.appearance.sunAlertThresholdMinutes.title")}
-            description={t('settingsTexts.appearance.sunAlertThresholdMinutes.desc')}
-            value={`${draftSunAlertThresholdMinutes} ${t('min_minute')}`}
-            htmlFor="sunWindowIconBeforeMinutes"
-            control={
-              <Slider
-                id="sunWindowIconBeforeMinutes"
-                min={SUNWINDOW_BEFORE_MINUTES.MIN}
-                max={SUNWINDOW_BEFORE_MINUTES.MAX}
-                step={SUNWINDOW_BEFORE_MINUTES.STEP}
-                value={draftSunAlertThresholdMinutes}
-                onChange={setDraftSunAlertThresholdMinutes}
-                onCommit={commitDraftSunAlertThresholdMinutes}
-                unit={t('min_minute')}
-              />
-            }
-          />
-
-          {booleanSettingsKeys.map(key => (
-            <SettingRow
-              key={key}
-              icon={<InfoIcon />}
-              title={t(`settingsTexts.appearance.${key}.title`)}
-              description={t(`settingsTexts.appearance.${key}.desc`)}
-              value={capitalizeWords(String(t(get[key] ? 'active' : 'inactive')))}
-              htmlFor={key}
-              control={<Switch id={key} value={get[key]} onChange={set[key]} />}
-            />
-          ))}
-        </SettingsSection>
-
         <SettingsSection title={t("settingsTexts.alerts.title")}>
           <SettingRow
-            icon={<RainCardIcon />}
+            icon={<FiCloudRain />}
             title={t('precipitationRange')}
             description={t('precipitationRangeDescription')}
             value={`${draftPrecipHrs} ${t('hrs')}`}
@@ -204,7 +178,7 @@ export function SettingsSheetContent({
             }
           />
           <SettingRow
-            icon={<RadiusIcon />}
+            icon={<PiMapPinAreaBold />}
             title={t("settingsTexts.alerts.radius.title")}
             description={t("settingsTexts.alerts.radius.description")}
             value={`${draftRadius} ${t('km')}`}
@@ -226,16 +200,59 @@ export function SettingsSheetContent({
           />
         </SettingsSection>
 
+        <SettingsSection title={t("settingsTexts.appearance.title")}>
+          <SettingRow
+            icon={<FiSunset />}
+            title={t("settingsTexts.appearance.sunAlertThresholdMinutes.title")}
+            description={t('settingsTexts.appearance.sunAlertThresholdMinutes.desc')}
+            value={`${draftSunAlertThresholdMinutes} ${t('min_minute')}`}
+            htmlFor="sunWindowIconBeforeMinutes"
+            control={
+              <Slider
+                id="sunWindowIconBeforeMinutes"
+                min={SUNWINDOW_BEFORE_MINUTES.MIN}
+                max={SUNWINDOW_BEFORE_MINUTES.MAX}
+                step={SUNWINDOW_BEFORE_MINUTES.STEP}
+                value={draftSunAlertThresholdMinutes}
+                onChange={setDraftSunAlertThresholdMinutes}
+                onCommit={commitDraftSunAlertThresholdMinutes}
+                unit={t('min_minute')}
+              />
+            }
+          />
+
+          {booleanSettingsKeys.map(({ key, icon }) => {
+            const value = get[key];
+
+            const renderedIcon =
+              typeof icon === 'function'
+                ? icon(value)
+                : icon;
+
+            return (
+              <SettingRow
+                key={key}
+                icon={renderedIcon}
+                title={t(`settingsTexts.appearance.${key}.title`)}
+                description={t(`settingsTexts.appearance.${key}.desc`)}
+                value={capitalizeWords(String(t(value ? 'active' : 'inactive')))}
+                htmlFor={key}
+                control={<Switch id={key} value={value} onChange={set[key]} />}
+              />
+            );
+          })}
+        </SettingsSection>
+
         <SettingsSection title={t("settingsTexts.status.title")}>
           <SettingRow
-            icon={<ClockIcon />}
+            icon={<TbClock />}
             title={t("weatherUpdatedAt")}
             description={t("settingsTexts.status.updatedAtDesc")}
             value={updatedAtHour}
             onDoubleClick={onUpdatedAtClick}
           />
           <SettingRow
-            icon={<InfoIcon />}
+            icon={<TbInfoCircle />}
             title={t("version")}
             description={t("settingsTexts.status.version")}
             value={<VersionBadge />}

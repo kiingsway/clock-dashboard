@@ -50,6 +50,7 @@
     "night": "Noite",
     "nextHours": "Próximas horas",
     "noData": "Sem dados",
+    "error_building_item": "Não foi possível carregar as informações deste item.",
     "status": "Status",
     "until": "Até",
     "confidence": "Confiança",
@@ -104,6 +105,10 @@
         "focusCurrentWeatherOnLaunch": {
           "title": "Focar Clima Atual ao Iniciar",
           "desc": "Define se o aplicativo deve abrir com a seção do clima atual selecionada e em destaque por padrão."
+        },
+        "is12hour": {
+          "title": "Formato de hora",
+          "desc": "Use AM e PM em vez do formato de 24 horas."
         }
       }
     },
@@ -120,6 +125,14 @@
         "heavy": "Intenso",
         "torrential": "Torrencial"
       }
+    },
+    "seasonTextes": {
+      "autumn": "Outono",
+      "winter": "Inverno",
+      "spring": "Primavera",
+      "summer": "Verão",
+      "description": "{{currentSeason}} há {{daysSinceStart}} dias, {{daysToNext}} dias para o {{nextSeason}}.",
+      "daysProgress": "{{current}} de {{total}} dias"
     },
     "moonPhases": {
       "new": "Lua Nova",
@@ -370,6 +383,7 @@
     "night": "Night",
     "nextHours": "Next hours",
     "noData": "No data",
+    "error_building_item": "Could not load this item's information.",
     "status": "Status",
     "until": "Until",
     "confidence": "Confidence",
@@ -424,6 +438,10 @@
         "focusCurrentWeatherOnLaunch": {
           "title": "Focus Current Weather on Launch",
           "desc": "Sets whether the app should open with the current weather section selected and highlighted by default."
+        },
+        "is12hour": {
+          "title": "Time format",
+          "desc": "Use AM and PM instead of the 24-hour format."
         }
       }
     },
@@ -440,6 +458,14 @@
         "heavy": "Heavy",
         "torrential": "Torrential"
       }
+    },
+    "seasonTextes": {
+      "autumn": "Autumn",
+      "winter": "Winter",
+      "spring": "Spring",
+      "summer": "Summer",
+      "description": "{{currentSeason}} for {{daysSinceStart}} days, {{daysToNext}} days until {{nextSeason}}.",
+      "daysProgress": "{{current}} of {{total}} days"
     },
     "moonPhases": {
       "new": "New Moon",
@@ -690,6 +716,7 @@
     "night": "Nuit",
     "nextHours": "Prochaines heures",
     "noData": "Aucune donnée",
+    "error_building_item": "Impossible de charger les informations de cet élément.",
     "status": "Statut",
     "until": "Jusqu'à",
     "confidence": "Confiance",
@@ -744,6 +771,10 @@
         "focusCurrentWeatherOnLaunch": {
           "title": "Mettre la météo actuelle en évidence au démarrage",
           "desc": "Définit si l'application doit s'ouvrir avec la section de la météo actuelle sélectionnée et mise en évidence par défaut."
+        },
+        "is12hour": {
+          "title": "Format de l'heure",
+          "desc": "Utiliser AM et PM au lieu du format 24 heures."
         }
       }
     },
@@ -760,6 +791,14 @@
         "heavy": "Fort",
         "torrential": "Torrentiel"
       }
+    },
+    "seasonTextes": {
+      "autumn": "Automne",
+      "winter": "Hiver",
+      "spring": "Printemps",
+      "summer": "Été",
+      "description": "L'{{currentSeason}} depuis {{daysSinceStart}} jours, {{daysToNext}} jours avant l'{{nextSeason}}.",
+      "daysProgress": "{{current}} sur {{total}} jours"
     },
     "moonPhases": {
       "new": "Nouvelle lune",
@@ -1010,6 +1049,7 @@
     "night": "Noche",
     "nextHours": "Próximas horas",
     "noData": "Sin datos",
+    "error_building_item": "No se pudo cargar la información de este elemento.",
     "status": "Estado",
     "until": "Hasta",
     "confidence": "Confianza",
@@ -1064,6 +1104,10 @@
         "focusCurrentWeatherOnLaunch": {
           "title": "Enfocar el clima actual al iniciar",
           "desc": "Define si la aplicación debe abrirse con la sección del clima actual seleccionada y destacada de forma predeterminada."
+        },
+        "is12hour": {
+          "title": "Formato de hora",
+          "desc": "Usar AM y PM en lugar del formato de 24 horas."
         }
       }
     },
@@ -1080,6 +1124,14 @@
         "heavy": "Intenso",
         "torrential": "Torrencial"
       }
+    },
+    "seasonTextes": {
+      "autumn": "Otoño",
+      "winter": "Invierno",
+      "spring": "Primavera",
+      "summer": "Verano",
+      "description": "{{currentSeason}} desde hace {{daysSinceStart}} días, {{daysToNext}} días para el {{nextSeason}}.",
+      "daysProgress": "{{current}} de {{total}} días"
     },
     "moonPhases": {
       "new": "Luna nueva",
@@ -1330,6 +1382,7 @@
     "night": "밤",
     "nextHours": "다음 시간대",
     "noData": "데이터 없음",
+    "error_building_item": "이 항목의 정보를 불러오지 못했습니다.",
     "status": "상태",
     "until": "까지",
     "confidence": "신뢰도",
@@ -1384,6 +1437,10 @@
         "focusCurrentWeatherOnLaunch": {
           "title": "시작 시 현재 날씨에 초점 맞추기",
           "desc": "앱을 열 때 현재 날씨 섹션을 기본으로 선택하고 강조 표시할지 설정합니다."
+        },
+        "is12hour": {
+          "title": "시간 형식",
+          "desc": "24시간 형식 대신 AM 및 PM을 사용합니다."
         }
       }
     },
@@ -1400,6 +1457,14 @@
         "heavy": "강함",
         "torrential": "집중호우"
       }
+    },
+    "seasonTextes": {
+      "autumn": "가을",
+      "winter": "겨울",
+      "spring": "봄",
+      "summer": "여름",
+      "description": "{{currentSeason}} {{daysSinceStart}}일째, {{nextSeason}}까지 {{daysToNext}}일 남음.",
+      "daysProgress": "{{total}}일 중 {{current}}일"
     },
     "moonPhases": {
       "new": "신월",

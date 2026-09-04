@@ -8,6 +8,10 @@ import WeatherIcon from "../../WeatherIcon";
 import { getRainWindCondition } from "@/utils/weather/getRainWindCondition";
 import { IPrecipChartData } from "@/types/chart.types";
 import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
+import { DateTime } from "luxon";
+import { formatClock } from "@/utils/formatters/formatClock";
+import useAppSettings from "@/contexts/AppSettingsContext";
+import { isValidDateTime } from "@/utils/formatters/dateFormatters";
 
 type TPrecipAreas = "rain" | "showers" | "snowfall";
 
@@ -51,7 +55,9 @@ export default function PrecipitationTooltip({
   snowUnit = "cm",
   labelFormatter,
 }: Props) {
-  const { t } = useTranslation();
+  const { t, i18n: { language } } = useTranslation();
+  const { get: { is12hour } } = useAppSettings();
+
   if (!active || !payload?.length) return null;
 
   const { weatherCode, isDay, windGusts, temp, rain } = payload[0].payload as IPrecipChartData;
@@ -89,11 +95,17 @@ export default function PrecipitationTooltip({
 
   const weatherInfo = getWeatherCodeInfo(weatherCode, true, t);
 
+  const d = label ? DateTime.fromMillis(Number(label)) : undefined;
+  let time = '';
+  if (isValidDateTime(d)) {
+    time = formatClock({ date: d, language, hour12: is12hour, short: true, localizedPeriod: true });
+  }
+
   return (
     <div className={styles.tooltip} style={{ '--wc-accent': weatherInfo.accent } as CSSProperties}>
       <div className={styles.header}>
         <span className={styles.time}>
-          {labelFormatter ? labelFormatter(label) : label} - {Math.round(temp)}ºC, {weatherInfo.title}
+          {labelFormatter ? labelFormatter(label) : time} - {Math.round(temp)}ºC, {weatherInfo.title}
         </span>
 
         <span className={styles.dot} />

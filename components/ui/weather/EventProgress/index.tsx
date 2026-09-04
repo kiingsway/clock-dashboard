@@ -6,6 +6,9 @@ import { useNow } from '@/contexts/NowContext';
 import { useTranslation } from 'react-i18next';
 import { getProgressBetweenDates } from '@/utils/formatters/dateFormatters';
 import { CSSProperties } from 'react';
+import { formatClock } from '@/utils/formatters/formatClock';
+import useAppSettings from '@/contexts/AppSettingsContext';
+import classNames from 'classnames';
 
 interface Props {
   start?: DateTime | string;
@@ -17,7 +20,7 @@ interface Props {
   markerStrength?: number;
   style?: CSSProperties;
   progress?: number;
-  type?: 'default' | 'ghost'
+  type?: 'default' | 'ghost' | 'error'
 }
 
 export default function EventProgress({ type = 'default', start: startProp, end: endProp, startIcon, endIcon, hideDate, markerStrength = 0.3, style: styleProp, progress: progressProp }: Props) {
@@ -60,7 +63,7 @@ export default function EventProgress({ type = 'default', start: startProp, end:
         <ProgressLabel date={start} hideDate={hideDate} />
       </div>
 
-      <div className={styles.track} style={{ background: type === 'ghost' ? 'transparent' : undefined }} aria-hidden={typeof progress !== 'number'}>
+      <div className={classNames(styles.track, { [styles.track_error]: type === 'error' })} style={{ background: type === 'ghost' ? 'transparent' : undefined }} aria-hidden={typeof progress !== 'number'}>
         {typeof progress === 'number' ? (
           <>
             <div className={styles.trackFill} style={{ width: `${progress * 100}%` }} />
@@ -84,20 +87,21 @@ const calculateProgress = (min: number, max: number, progress: number) => {
 };
 
 const ProgressLabel = ({ date, hideDate }: { date?: DateTime, hideDate?: boolean }): JSX.Element => {
-  const { i18n: { language: locale } } = useTranslation();
+  const { i18n: { language } } = useTranslation();
   const { now } = useNow();
+  const { get: { is12hour } } = useAppSettings();
 
   const isToday = date?.isValid && date.hasSame(now, 'day');
 
   const dateLabel = date?.isValid && !isToday
-    ? new Intl.DateTimeFormat(locale, {
+    ? new Intl.DateTimeFormat(language, {
       day: '2-digit',
       month: '2-digit',
     }).format(date.toJSDate())
     : undefined;
 
   const timeLabel = date?.isValid
-    ? date.toFormat('HH:mm')
+    ? formatClock({ date, language, hour12: is12hour, localizedPeriod: true, short: false })
     : '--:--';
 
   return (

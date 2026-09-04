@@ -13,6 +13,7 @@ export interface AppSettings {
   showFeelsLikeWhenEqual: boolean; // Exibe a sensação térmica mesmo quando o seu valor for igual à temperatura atual. Se desativado, oculta o campo nessa condição. (showFeelsLikeIfEqualsTemp)
   showMinMaxPeakBadge: boolean; // Exibe os rótulos "MIN" ou "MAX" caso a temperatura atual atinja exatamente a mínima ou a máxima prevista para o dia. (showMinMaxOnTempRange)
   focusCurrentWeatherOnLaunch: boolean; // Define se o aplicativo deve abrir com a seção do clima atual em destaque por padrão. (startFocused)
+  is12hour: boolean; // Define se é 12 (true) ou 24 horas (false).
 }
 
 export interface UseAppSettings {
@@ -24,6 +25,7 @@ export interface UseAppSettings {
     showFeelsLikeWhenEqual: (value: boolean) => void;
     showMinMaxPeakBadge: (value: boolean) => void;
     focusCurrentWeatherOnLaunch: (value: boolean) => void;
+    is12hour: (value: boolean) => void;
   };
   get: AppSettings;
   weatherLocation: IWeatherLocationItem;

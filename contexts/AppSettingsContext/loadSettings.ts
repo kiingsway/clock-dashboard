@@ -49,16 +49,18 @@ export default function loadSettings(): AppSettings {
     const booleanKeys = [
       'showFeelsLikeWhenEqual',
       'showMinMaxPeakBadge',
-      'focusCurrentWeatherOnLaunch'
+      'focusCurrentWeatherOnLaunch',
+      'is12hour'
     ] as const;
 
     const [
       showFeelsLikeWhenEqual,
       showMinMaxPeakBadge,
-      focusCurrentWeatherOnLaunch
+      focusCurrentWeatherOnLaunch,
+      is12hour
     ] = booleanKeys.map(key => getValidBoolean(parsed[key], DEFAULT_SETTINGS[key]));
 
-    return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes };
+    return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour };
 
   } catch (error) {
     console.error('Falha ao carregar configurações do localStorage:', error);

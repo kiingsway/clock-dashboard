@@ -14,6 +14,7 @@
   align-items: center;
   gap: var(--wc-space-2xs);
   flex: 0 0 auto;
+  justify-content: center;
 }
 
 .point img {
@@ -38,12 +39,32 @@
   z-index: 0;
 }
 
+.track_error {
+  background: var(--wc-sun-accent, purple);
+  animation: pulse 2s ease-in-out infinite;
+}
+
 .trackFill {
   position: absolute;
   inset: 0 auto 0 0;
   border-radius: var(--wc-radius-xs);
-  opacity: 0.55;
   background: var(--wc-sun-accent, purple);
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    box-shadow: 0 0 0 0 color-mix(in srgb,
+        var(--wc-sun-accent, purple) 0%);
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 8px 2px color-mix(in srgb,
+        var(--wc-sun-accent, purple) 30%);
+  }
 }
 
 .marker {
@@ -61,6 +82,7 @@
 .progressLabel {
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-top: calc(var(--is-focused) * -6px);
 
   transition: margin-top 500ms ease-in-out;

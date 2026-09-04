@@ -1,7 +1,9 @@
 import { TFunction } from "i18next";
 import { DateTime } from "luxon";
 
-export default function getForecastDateLabel(now: DateTime, date: DateTime, locale: string, t: TFunction) {
+const f = (d: DateTime | undefined) => d ? d.toISO() : undefined;
+
+export default function getForecastDateLabel(now: DateTime, date: DateTime, locale: string, timezone: string, t: TFunction) {
   const initialNow = now.startOf("day");
   const targetDate = date.startOf("day");
   const diffInDays = Math.abs(targetDate.diff(initialNow, "days").days);
@@ -10,17 +12,6 @@ export default function getForecastDateLabel(now: DateTime, date: DateTime, loca
   if (diffInDays === 0) return t('today');
 
   const localDate = date.setLocale(locale);
-
-  console.log('diffInDays', {
-    diffInDays,
-    initialNow: initialNow.toISO(),
-    targetDate: targetDate.toISO(),
-    initialZone: initialNow.zoneName,
-    targetZone: targetDate.zoneName,
-    initialOffset: initialNow.offset,
-    targetOffset: targetDate.offset,
-  });
-
 
   // Até 7 dias: exibe apenas o dia da semana curto (ex: "ter.")
   if (diffInDays <= 7) return localDate.toFormat("ccc");

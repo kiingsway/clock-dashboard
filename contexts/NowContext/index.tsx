@@ -80,11 +80,12 @@ export function NowProvider({ children }: NowProviderProps) {
       setNow(realNow);
 
       setToday(previous => {
-        const next = realNow.startOf('day');
+        const newDay = realNow.startOf('day');
 
-        return previous.hasSame(next, 'day')
-          ? previous
-          : next;
+        const sameDay = previous.hasSame(newDay, 'day');
+        const sameZone = previous.zoneName === newDay.zoneName;
+
+        return sameDay && sameZone ? previous : newDay;
       });
     };
 

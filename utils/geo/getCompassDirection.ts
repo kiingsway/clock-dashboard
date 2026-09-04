@@ -30,12 +30,14 @@ const compassMap: Record<CompassDirection, Omit<CompassInfo, 'title'>> = {
  * @param degrees Ângulo em graus
  */
 export function getCompassDirection(degrees: number, t: TFunction): CompassFullInfo {
+  if (typeof degrees !== 'number') throw new Error(`Invalid degrees (typeof '${typeof degrees}'): ${degrees}`);
   const normalizedDegrees = ((degrees % 360) + 360) % 360;
 
   const keys: CompassDirection[] = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
   const index = Math.floor(((normalizedDegrees + 22.5) % 360) / 45);
 
   const compassItem = compassMap[keys[index]];
+  if (!compassItem) throw new Error(`Impossible to reach compassMap: degrees: ${degrees}, index: ${index}`);
   const title = t(`compass.${compassItem.name.toLowerCase()}`);
 
   const iconSrc = getIconUrl(`wind-direction-${compassItem.abbreviation.toLowerCase()}`);

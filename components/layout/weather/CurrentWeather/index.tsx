@@ -75,9 +75,8 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
           isFocused={isFocused}
           loading={loading}
           isError={Boolean(error)}
+          weather={weather}
           includeNight
-          precipitation={current.precipitation}
-        // disableEffects={!isDay || current.weather_code < 0 || current.weather_code >= 2}
         />
 
       </section>

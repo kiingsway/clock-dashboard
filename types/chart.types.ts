@@ -1,4 +1,5 @@
 export interface IPrecipChartData {
+  key: string | number;
   hour: string;
   weatherCode: number;
   temp: number

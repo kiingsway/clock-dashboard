@@ -147,6 +147,14 @@ export function AppSettingsProvider({ children }: Props) {
     }));
   }, []);
 
+  const setIs12Hour = useCallback((value: boolean) => {
+    const is12hour = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.is12hour;
+    setSettings((prev) => ({
+      ...prev,
+      is12hour,
+    }));
+  }, []);
+
   const resetSettings = useCallback(() => setSettings(DEFAULT_SETTINGS), []);
 
   const locations = useMemo(() => getLocationToWeather(t), [t]);
@@ -165,6 +173,7 @@ export function AppSettingsProvider({ children }: Props) {
         showFeelsLikeWhenEqual: setShowFeelsLikeWhenEqual,
         showMinMaxPeakBadge: setShowMinMaxPeakBadge,
         focusCurrentWeatherOnLaunch: setFocusCurrentWeatherOnLaunch,
+        is12hour: setIs12Hour,
       },
     }),
     [
@@ -178,6 +187,7 @@ export function AppSettingsProvider({ children }: Props) {
       setShowFeelsLikeWhenEqual,
       setShowMinMaxPeakBadge,
       setFocusCurrentWeatherOnLaunch,
+      setIs12Hour,
       resetSettings,
     ]
   );

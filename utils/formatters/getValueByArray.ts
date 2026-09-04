@@ -1,10 +1,12 @@
 import { DateTime } from "luxon";
 
 export function getCurrentIndex(date: DateTime, time: string[]): number {
-  const isHourlyTime = time[0].includes('T');
-  const keyFormat = `yyyy-MM-dd${isHourlyTime ? 'THH:00' : ''}`;
+  if (!date.isValid) throw new Error(`Invalid Date: ${date}`);
 
-  const current = date.startOf("hour");
+  const isHourlyTime = time[0].includes('T');
+  const keyFormat = `yyyy-MM-dd${isHourlyTime ? "'T'HH:00" : ""}`;
+
+  const current = date.startOf(isHourlyTime ? "hour" : "day");
   const currentKey = current.toFormat(keyFormat);
 
   return time.findIndex((t) => DateTime.fromISO(t).toFormat(keyFormat) === currentKey);
