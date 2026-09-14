@@ -2,6 +2,7 @@ import { STORAGE_KEY } from "@/constants/keys";
 import { LOCATION_OPTIONS } from "@/constants/locations";
 import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from "@/constants/settings";
 import { AppSettings } from "@/types/app.types";
+import { AQIScale } from "@/types/aqi.types";
 import { TLocation } from "@/types/location.types";
 
 const getValidNumber = (value: unknown, range: { MIN: number; MAX: number }, defaultValue: number): number => {
@@ -50,17 +51,24 @@ export default function loadSettings(): AppSettings {
       'showFeelsLikeWhenEqual',
       'showMinMaxPeakBadge',
       'focusCurrentWeatherOnLaunch',
-      'is12hour'
+      'is12hour',
+      'useBottomSheet',
     ] as const;
 
     const [
       showFeelsLikeWhenEqual,
       showMinMaxPeakBadge,
       focusCurrentWeatherOnLaunch,
-      is12hour
+      is12hour,
+      useBottomSheet,
     ] = booleanKeys.map(key => getValidBoolean(parsed[key], DEFAULT_SETTINGS[key]));
 
-    return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour };
+    const aqiScales: AQIScale[] = ['european', 'us'];
+    const aqiScale = aqiScales.includes(parsed.aqiScale as AQIScale)
+      ? (parsed.aqiScale as AQIScale)
+      : DEFAULT_SETTINGS.aqiScale;
+
+    return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour, aqiScale, useBottomSheet };
 
   } catch (error) {
     console.error('Falha ao carregar configurações do localStorage:', error);
