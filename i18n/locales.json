@@ -3,6 +3,7 @@
     "version": "Versão",
     "title": "Configurações",
     "settings": "Configurações",
+    "insights": "Informações",
     "close": "Fechar",
     "language": "Linguagem",
     "timezone": "Fuso horário",
@@ -17,6 +18,9 @@
     "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
     "uvIndex": "Índice UV",
+    "airQuality": "Qualidade do ar",
+    "temperature": "Temperatura",
+    "surfacePressure": "Pressão na superfície",
     "wind": "Vento",
     "windGusts": "Rajadas de Vento",
     "windSpeed": "Velocidade do Vento",
@@ -73,7 +77,8 @@
       "general": {
         "title": "Geral",
         "language": "Altere o idioma usado em todo o aplicativo",
-        "location": "Localização usada para a previsão do tempo e fuso horário do relógio"
+        "location": "Localização usada para a previsão do tempo e fuso horário do relógio",
+        "aqiScale": "Define o padrão utilizado para classificar e exibir os índices de qualidade do ar."
       },
       "alerts": {
         "title": "Alertas",
@@ -109,6 +114,10 @@
         "is12hour": {
           "title": "Formato de hora",
           "desc": "Use AM e PM em vez do formato de 24 horas."
+        },
+        "useBottomSheet": {
+          "title": "Usar Bottom Sheet",
+          "desc": "Exibe os detalhes e janelas na parte inferior da tela (Bottom Sheet) em vez de uma janela central (Modal)."
         }
       }
     },
@@ -330,12 +339,176 @@
       "error": "Erro",
       "loading": "Carregando",
       "unknown": "Desconhecido"
+    },
+    "aqiTextes": {
+      "scale": {
+        "title": "Escala AQI",
+        "us": "Escala AQI Americana",
+        "eu": "Escala AQI Europeia"
+      },
+      "legend": {
+        "concentration": "concentração em µg/m³",
+        "molecularWeight": "peso molecular do poluente (g/mol)",
+        "atmosphericPressure": "pressão atmosférica em Pa",
+        "gasConstant": "constante dos gases — {{value}} J/(mol·K)",
+        "temperature": "temperatura em Kelvin",
+        "conversionInfo": "As concentrações chegam em µg/m³ e são convertidas para {{unit}} considerando o peso molecular de cada poluente, além da temperatura e pressão do ar no momento da leitura."
+      },
+      "level": {
+        "us": {
+          "good": "Bom",
+          "fair": "Moderado",
+          "moderate": "Insalubre para grupos sensíveis",
+          "poor": "Insalubre",
+          "veryPoor": "Muito insalubre",
+          "extremelyPoor": "Perigoso"
+        },
+        "eu": {
+          "good": "Bom",
+          "fair": "Razoável",
+          "moderate": "Moderado",
+          "poor": "Ruim",
+          "veryPoor": "Muito ruim",
+          "extremelyPoor": "Extremamente ruim"
+        }
+      },
+      "pollutant": {
+        "aqi": "Índice de Qualidade do Ar",
+        "pm2_5": "Partículas Finas",
+        "pm10": "Partículas Inaláveis",
+        "ozone": "Ozônio",
+        "nitrogen_dioxide": "Dióxido de Nitrogênio",
+        "sulphur_dioxide": "Dióxido de Enxofre",
+        "carbon_monoxide": "Monóxido de Carbono",
+        "dust": "Poeira"
+      },
+      "desc": {
+        "aqi": {
+          "us": {
+            "good": "A qualidade do ar é satisfatória e o risco é mínimo ou inexistente.",
+            "fair": "A qualidade do ar é aceitável. Indivíduos extremamente sensíveis devem considerar reduzir o esforço prolongado ao ar livre.",
+            "moderate": "Pessoas com condições respiratórias ou cardíacas, idosos e crianças podem sentir efeitos. É improvável que o público geral seja afetado.",
+            "poor": "Qualquer pessoa pode começar a sentir efeitos na saúde. Grupos sensíveis podem sofrer impactos mais graves.",
+            "veryPoor": "Alerta de saúde: todos têm um risco acrescido de sofrer efeitos adversos à saúde. Evite atividades ao ar livre.",
+            "extremelyPoor": "Aviso de emergência: toda a população corre alto risco de sérios impactos à saúde. Permaneça em ambientes fechados."
+          },
+          "eu": {
+            "good": "A qualidade do ar é considerada ideal para a maioria das pessoas.",
+            "fair": "A qualidade do ar é aceitável. Desfrute de suas atividades normais ao ar livre.",
+            "moderate": "Indivíduos sensíveis que apresentem sintomas devem considerar reduzir atividades físicas intensas ao ar livre.",
+            "poor": "Qualidade do ar não saudável. Grupos sensíveis devem reduzir atividades físicas ao ar livre.",
+            "veryPoor": "Todos devem considerar reduzir o tempo ao ar livre.",
+            "extremelyPoor": "Aviso crítico: minimize a exposição externa e evite exercitar-se ao ar livre."
+          }
+        },
+        "pm2_5": {
+          "eu": {
+            "good": "Níveis ideais de partículas finas. Risco nulo de penetração profunda nos pulmões.",
+            "fair": "Nível de PM2.5 aceitável. Desfrute de suas atividades normais ao ar livre.",
+            "moderate": "Pessoas com problemas respiratórios podem sentir leve desconforto com a presença de micropartículas.",
+            "poor": "Risco moderado a alto: partículas finas podem irritar o trato respiratório de grupos sensíveis.",
+            "veryPoor": "Concentração elevada de PM2.5. Toda a população deve evitar esforços físicos prolongados fora de casa.",
+            "extremelyPoor": "Nível perigoso de micropartículas. Permaneça em ambientes fechados com ar filtrado sempre que possível."
+          },
+          "us": {
+            "good": "Concentração insignificante de partículas finas. Sem riscos à saúde.",
+            "fair": "Pessoas excepcionalmente sensíveis ao PM2.5 devem avaliar reduzir o esforço físico prolongado.",
+            "moderate": "Grupos sensíveis podem apresentar sintomas como tosse e falta de ar. O público geral não costuma ser afetado.",
+            "poor": "Aumento significativo do risco de irritação pulmonar para toda a população. Grupos de risco devem ficar em casa.",
+            "veryPoor": "Alerta grave para PM2.5: alto risco de complicações respiratórias e cardíacas. Evite qualquer atividade externa.",
+            "extremelyPoor": "Níveis de emergência de partículas finas. Mantenha portas e janelas fechadas e use purificadores de ar."
+          }
+        },
+        "pm10": {
+          "eu": {
+            "good": "Concentração de partículas inaláveis em nível seguro e ideal.",
+            "fair": "Presença baixa de poeira e partículas inaláveis. Condições normais para a população.",
+            "moderate": "Pessoas com asma ou alergias podem sentir leve irritação nos olhos ou garganta.",
+            "poor": "Qualidade do ar ruim devido a poeira e partículas. Grupos de risco devem limitar o tempo externo.",
+            "veryPoor": "Nível elevado de PM10. Recomendado limitar atividades ao ar livre para reduzir a inalação de poeira.",
+            "extremelyPoor": "Concentração crítica de partículas no ar. Toda a população deve evitar exposição e manter janelas fechadas."
+          },
+          "us": {
+            "good": "Nível insignificante de partículas inaláveis no ar.",
+            "fair": "Qualidade do ar aceitável, com baixa presença de poeira e poluição particulada.",
+            "moderate": "Pessoas com doenças pulmonares, idosos e crianças devem reduzir esforço prolongado ao ar livre.",
+            "poor": "Risco elevado de desconforto respiratório para o público geral e sintomas graves em pessoas sensíveis.",
+            "veryPoor": "Condições insalubres: risco de irritação severa nas vias aéreas. Evite permanecer ao ar livre.",
+            "extremelyPoor": "Alerta de emergência para PM10. Alta concentração de poeira e fuligem; evite qualquer exposição externa."
+          }
+        },
+        "ozone": {
+          "eu": {
+            "good": "Níveis ideais de ozônio na camada do solo. Ar limpo e puro.",
+            "fair": "Presença de ozônio dentro dos padrões normais de segurança.",
+            "moderate": "Pessoas com asma devem monitorar eventuais irritações na garganta ao se exercitarem ao ar livre.",
+            "poor": "Nível de ozônio elevado. Grupos sensíveis devem evitar atividades físicas intensas à tarde.",
+            "veryPoor": "Alta concentração de ozônio no solo. Reduza o tempo de exposição externa, especialmente em dias quentes.",
+            "extremelyPoor": "Aviso de emergência para ozônio: alto risco de inflamação pulmonar. Permaneça em locais fechados."
+          },
+          "us": {
+            "good": "Sem risco de exposição ao ozônio superficial.",
+            "fair": "Qualidade do ar aceitável. Pessoas extremamente sensíveis podem sentir leve desconforto ao entardecer.",
+            "moderate": "Crianças, idosos e praticantes de exercícios ao ar livre podem apresentar redução na capacidade pulmonar.",
+            "poor": "Risco de irritação nos olhos e vias aéreas para a população geral. Evite atividades ao ar livre nos horários de pico.",
+            "veryPoor": "Níveis muito elevados de ozônio. Alerta de saúde para toda a população; evite sair de casa.",
+            "extremelyPoor": "Risco grave de danos respiratórios. Permaneça em ambientes fechados com ar-condicionado."
+          }
+        },
+        "nitrogen_dioxide": {
+          "eu": {
+            "good": "Concentração mínima de dióxido de nitrogênio. Qualidade do ar excelente.",
+            "fair": "Nível de NO2 aceitável, proveniente principalmente do tráfego urbano leve.",
+            "moderate": "Pessoas com problemas respiratórios crônicos podem notar leve sensibilidade nas vias aéreas.",
+            "poor": "Nível elevado de NO2. Pessoas com asma ou bronquite devem evitar o trânsito intenso.",
+            "veryPoor": "Alta poluição por NO2. Toda a população deve evitar exposição prolongada em áreas de tráfego denso.",
+            "extremelyPoor": "Nível crítico de dióxido de nitrogênio. Evite sair de casa e mantenha o ambiente ventilado se longe do trânsito."
+          },
+          "us": {
+            "good": "Nenhum impacto à saúde associado ao dióxido de nitrogênio.",
+            "fair": "Nível aceitável de NO2, sem riscos evidentes para a maioria das pessoas.",
+            "moderate": "Indivíduos com asma podem apresentar aumento de sintomas respiratórios perto de vias movimentadas.",
+            "poor": "Aumento do risco de infecções e inflamações respiratórias. Grupos sensíveis devem permanecer em casa.",
+            "veryPoor": "Alerta de saúde: alto risco de bronquite e crises asmáticas severas. Evite tráfego e áreas industriais.",
+            "extremelyPoor": "Níveis perigosos de NO2. Risco de impactos graves na função pulmonar de toda a população."
+          }
+        },
+        "sulphur_dioxide": {
+          "eu": {
+            "good": "Nível de dióxido de enxofre insignificante. Qualidade do ar limpa.",
+            "fair": "Concentração de SO2 dentro dos limites seguros de emissão.",
+            "moderate": "Pessoas com asma podem sentir um leve desconforto ao respirar profundamente.",
+            "poor": "Nível elevado de SO2. Pessoas sensíveis devem evitar o ar livre, especialmente perto de zonas industriais.",
+            "veryPoor": "Alta concentração de enxofre no ar. Toda a população deve limitar o tempo no ambiente externo.",
+            "extremelyPoor": "Nível crítico de SO2. Risco de broncoespasmo imediato em asmáticos; permaneça em local fechado."
+          },
+          "us": {
+            "good": "Sem risco de irritação por SO2.",
+            "fair": "Nível de SO2 aceitável e seguro para a população geral.",
+            "moderate": "Pessoas com asma em atividade física podem sentir chiado no peito e falta de ar.",
+            "poor": "O público geral pode começar a sentir irritação na garganta e olhos. Grupos de risco devem evitar sair.",
+            "veryPoor": "Alerta de saúde: concentração perigosa de dióxido de enxofre. Evite totalmente atividades externas.",
+            "extremelyPoor": "Emergência sanitária para SO2: risco de danos graves às vias respiratórias de qualquer indivíduo."
+          }
+        },
+        "carbon_monoxide": {
+          "us": {
+            "good": "Níveis baixos de CO. Em condições normais, o risco à saúde é mínimo.",
+            "fair": "CO moderadamente elevado. Pessoas com doenças cardíacas podem ser mais sensíveis, especialmente durante esforço físico.",
+            "moderate": "Níveis elevados de CO. Pessoas sensíveis podem apresentar dor de cabeça, fadiga ou falta de ar; reduza esforços prolongados.",
+            "poor": "CO em nível insalubre. Pode causar dor de cabeça, tontura, náusea e fraqueza. Limite a exposição prolongada.",
+            "veryPoor": "CO muito elevado. Pode causar tontura, confusão, náusea e perda de coordenação. Evite a exposição e procure ar fresco.",
+            "extremelyPoor": "CO perigosamente elevado. Pode causar intoxicação grave, perda de consciência ou morte. Afaste-se da fonte e procure ar fresco imediatamente."
+          }
+        }
+      }
     }
   },
   "en": {
     "version": "Version",
     "title": "Settings",
     "settings": "Settings",
+    "insights": "Insights",
     "close": "Close",
     "language": "Language",
     "timezone": "Timezone",
@@ -350,6 +523,9 @@
     "alerts": "Alerts",
     "alert_other": "Alerts ({{count}})",
     "uvIndex": "UV Index",
+    "airQuality": "Air Quality",
+    "temperature": "Temperature",
+    "surfacePressure": "Surface pressure",
     "wind": "Wind",
     "windGusts": "Wind Gusts",
     "windSpeed": "Wind Speed",
@@ -406,7 +582,8 @@
       "general": {
         "title": "General",
         "language": "Change the language used throughout the app",
-        "location": "Location used for weather and the clock's time zone"
+        "location": "Location used for weather and the clock's time zone",
+        "aqiScale": "Sets the standard used to classify and display air quality index levels."
       },
       "alerts": {
         "title": "Alerts",
@@ -442,6 +619,10 @@
         "is12hour": {
           "title": "Time format",
           "desc": "Use AM and PM instead of the 24-hour format."
+        },
+        "useBottomSheet": {
+          "title": "Use Bottom Sheet",
+          "desc": "Displays details and windows at the bottom of the screen (Bottom Sheet) instead of a central window (Modal)."
         }
       }
     },
@@ -663,12 +844,176 @@
       "error": "Error",
       "loading": "Loading",
       "unknown": "Unknown"
+    },
+    "aqiTextes": {
+      "scale": {
+        "title": "AQI Scale",
+        "us": "American AQI Scale",
+        "eu": "European AQI Scale"
+      },
+      "legend": {
+        "concentration": "concentration in µg/m³",
+        "molecularWeight": "molecular weight of the pollutant (g/mol)",
+        "atmosphericPressure": "atmospheric pressure in Pa",
+        "gasConstant": "gas constant — {{value}} J/(mol·K)",
+        "temperature": "temperature in Kelvin",
+        "conversionInfo": "Concentrations are provided in µg/m³ and converted to {{unit}} based on the molecular weight of each pollutant, as well as the air temperature and pressure at the time of the reading."
+      },
+      "level": {
+        "us": {
+          "good": "Good",
+          "fair": "Moderate",
+          "moderate": "Unhealthy for sensitive groups",
+          "poor": "Unhealthy",
+          "veryPoor": "Very unhealthy",
+          "extremelyPoor": "Hazardous"
+        },
+        "eu": {
+          "good": "Good",
+          "fair": "Fair",
+          "moderate": "Moderate",
+          "poor": "Poor",
+          "veryPoor": "Very poor",
+          "extremelyPoor": "Extremely poor"
+        }
+      },
+      "pollutant": {
+        "aqi": "Air Quality Index",
+        "pm2_5": "Fine Particulate Matter",
+        "pm10": "Coarse Particulate Matter",
+        "ozone": "Ozone",
+        "nitrogen_dioxide": "Nitrogen Dioxide",
+        "sulphur_dioxide": "Sulphur Dioxide",
+        "carbon_monoxide": "Carbon Monoxide",
+        "dust": "Dust"
+      },
+      "desc": {
+        "aqi": {
+          "us": {
+            "good": "Air quality is satisfactory, and the risk is minimal or nonexistent.",
+            "fair": "Air quality is acceptable. Extremely sensitive individuals should consider reducing prolonged outdoor exertion.",
+            "moderate": "People with respiratory or heart conditions, older adults, and children may experience effects. The general public is unlikely to be affected.",
+            "poor": "Everyone may begin to experience health effects. Sensitive groups may experience more serious impacts.",
+            "veryPoor": "Health alert: everyone is at increased risk of experiencing adverse health effects. Avoid outdoor activities.",
+            "extremelyPoor": "Emergency warning: the entire population is at high risk of serious health impacts. Remain indoors."
+          },
+          "eu": {
+            "good": "Air quality is considered ideal for most people.",
+            "fair": "Air quality is acceptable. Enjoy your usual outdoor activities.",
+            "moderate": "Sensitive individuals experiencing symptoms should consider reducing strenuous outdoor activities.",
+            "poor": "Unhealthy air quality. Sensitive groups should reduce outdoor physical activities.",
+            "veryPoor": "Everyone should consider reducing their time outdoors.",
+            "extremelyPoor": "Critical warning: minimize outdoor exposure and avoid exercising outdoors."
+          }
+        },
+        "pm2_5": {
+          "eu": {
+            "good": "Ideal fine particle levels. Zero risk of deep lung penetration.",
+            "fair": "Acceptable PM2.5 level. Enjoy your normal outdoor activities.",
+            "moderate": "People with respiratory issues may experience minor discomfort from microparticles.",
+            "poor": "Moderate to high risk: fine particles can irritate the respiratory tract of sensitive groups.",
+            "veryPoor": "High PM2.5 concentration. Everyone should avoid prolonged physical exertion outdoors.",
+            "extremelyPoor": "Dangerous microparticle level. Stay indoors with filtered air whenever possible."
+          },
+          "us": {
+            "good": "Insignificant fine particle concentration. No health risks.",
+            "fair": "Unusually sensitive people to PM2.5 should consider reducing prolonged physical exertion.",
+            "moderate": "Sensitive groups may experience symptoms like coughing and shortness of breath. General public usually unaffected.",
+            "poor": "Significant increase in lung irritation risk for everyone. At-risk groups should stay indoors.",
+            "veryPoor": "Severe PM2.5 alert: high risk of respiratory and cardiac complications. Avoid all outdoor activity.",
+            "extremelyPoor": "Emergency fine particle levels. Keep doors and windows closed and use air purifiers."
+          }
+        },
+        "pm10": {
+          "eu": {
+            "good": "Inhalable particle concentration at a safe and ideal level.",
+            "fair": "Low presence of dust and inhalable particles. Normal conditions for the general public.",
+            "moderate": "People with asthma or allergies may experience minor eye or throat irritation.",
+            "poor": "Poor air quality due to dust and particles. At-risk groups should limit outdoor time.",
+            "veryPoor": "High PM10 levels. Recommended to limit outdoor activities to reduce dust inhalation.",
+            "extremelyPoor": "Critical particle concentration in the air. Everyone should avoid exposure and keep windows closed."
+          },
+          "us": {
+            "good": "Insignificant level of inhalable particles in the air.",
+            "fair": "Acceptable air quality with low presence of dust and particle pollution.",
+            "moderate": "People with lung disease, older adults, and children should reduce prolonged outdoor exertion.",
+            "poor": "Increased risk of respiratory discomfort for the general public and serious symptoms in sensitive individuals.",
+            "veryPoor": "Unhealthy conditions: risk of severe airway irritation. Avoid staying outdoors.",
+            "extremelyPoor": "Emergency PM10 alert. High concentration of dust and soot; avoid any outdoor exposure."
+          }
+        },
+        "ozone": {
+          "eu": {
+            "good": "Ideal ground-level ozone levels. Clean, pure air.",
+            "fair": "Ozone presence within normal safety standards.",
+            "moderate": "People with asthma should monitor potential throat irritation when exercising outdoors.",
+            "poor": "Elevated ozone level. Sensitive groups should avoid strenuous physical activity in the afternoon.",
+            "veryPoor": "High ground-level ozone concentration. Reduce outdoor exposure time, especially on warm days.",
+            "extremelyPoor": "Emergency ozone warning: high risk of lung inflammation. Stay indoors."
+          },
+          "us": {
+            "good": "No risk of ground-level ozone exposure.",
+            "fair": "Acceptable air quality. Unusually sensitive people may experience minor discomfort by late afternoon.",
+            "moderate": "Children, older adults, and outdoor exercisers may experience reduced lung capacity.",
+            "poor": "Risk of eye and airway irritation for the general public. Avoid outdoor activities during peak hours.",
+            "veryPoor": "Very high ozone levels. Health alert for the entire population; avoid leaving home.",
+            "extremelyPoor": "Severe risk of respiratory damage. Stay indoors with air conditioning."
+          }
+        },
+        "nitrogen_dioxide": {
+          "eu": {
+            "good": "Minimal nitrogen dioxide concentration. Excellent air quality.",
+            "fair": "Acceptable NO2 level, originating mainly from light urban traffic.",
+            "moderate": "People with chronic respiratory conditions may notice mild airway sensitivity.",
+            "poor": "Elevated NO2 level. People with asthma or bronchitis should avoid heavy traffic.",
+            "veryPoor": "High NO2 pollution. Everyone should avoid prolonged exposure in heavy traffic areas.",
+            "extremelyPoor": "Critical nitrogen dioxide level. Avoid leaving home and keep indoors ventilated if far from traffic."
+          },
+          "us": {
+            "good": "No health impacts associated with nitrogen dioxide.",
+            "fair": "Acceptable NO2 level with no obvious risks for most people.",
+            "moderate": "Individuals with asthma may experience increased respiratory symptoms near busy roads.",
+            "poor": "Increased risk of respiratory infections and inflammation. Sensitive groups should stay home.",
+            "veryPoor": "Health alert: high risk of bronchitis and severe asthma attacks. Avoid traffic and industrial areas.",
+            "extremelyPoor": "Dangerous NO2 levels. Risk of severe impacts on lung function for the entire population."
+          }
+        },
+        "sulphur_dioxide": {
+          "eu": {
+            "good": "Insignificant sulphur dioxide level. Clean air quality.",
+            "fair": "SO2 concentration within safe emission limits.",
+            "moderate": "People with asthma may experience mild discomfort when breathing deeply.",
+            "poor": "Elevated SO2 level. Sensitive people should avoid the outdoors, especially near industrial zones.",
+            "veryPoor": "High sulphur concentration in the air. Everyone should limit outdoor time.",
+            "extremelyPoor": "Critical SO2 level. Risk of immediate bronchospasm in asthmatics; stay indoors."
+          },
+          "us": {
+            "good": "No risk of SO2 irritation.",
+            "fair": "Acceptable and safe SO2 level for the general population.",
+            "moderate": "People with asthma during physical activity may experience wheezing and shortness of breath.",
+            "poor": "The general public may begin to feel throat and eye irritation. At-risk groups should avoid going out.",
+            "veryPoor": "Health alert: dangerous sulphur dioxide concentration. Completely avoid outdoor activities.",
+            "extremelyPoor": "Health emergency for SO2: risk of severe respiratory tract damage for anyone."
+          }
+        },
+        "carbon_monoxide": {
+          "us": {
+            "good": "Low CO levels. Under normal conditions, health risk is minimal.",
+            "fair": "Moderately elevated CO. People with heart disease may be more sensitive, especially during physical exertion.",
+            "moderate": "Elevated CO levels. Sensitive people may experience headache, fatigue, or shortness of breath; reduce prolonged exertion.",
+            "poor": "Unhealthy CO level. May cause headache, dizziness, nausea, and weakness. Limit prolonged exposure.",
+            "veryPoor": "Very high CO. May cause dizziness, confusion, nausea, and loss of coordination. Avoid exposure and seek fresh air.",
+            "extremelyPoor": "Dangerously high CO. May cause severe poisoning, loss of consciousness, or death. Move away from the source and seek fresh air immediately."
+          }
+        }
+      }
     }
   },
   "fr": {
     "version": "Version",
     "title": "Paramètres",
     "settings": "Paramètres",
+    "insights": "Analyses",
     "close": "Fermer",
     "language": "Langue",
     "timezone": "Fuseau horaire",
@@ -683,6 +1028,9 @@
     "alerts": "Alertes",
     "alert_other": "Alertes ({{count}})",
     "uvIndex": "Indice UV",
+    "airQuality": "Qualité de l'air",
+    "temperature": "Température",
+    "surfacePressure": "Pression à la surface",
     "wind": "Vent",
     "windGusts": "Rafales de Vent",
     "windSpeed": "Vitesse du Vent",
@@ -739,7 +1087,8 @@
       "general": {
         "title": "Général",
         "language": "Changer la langue utilisée dans l'application",
-        "location": "Lieu utilisé pour la météo et le fuseau horaire de l'horloge"
+        "location": "Lieu utilisé pour la météo et le fuseau horaire de l'horloge",
+        "aqiScale": "Définit la norme utilisée pour classer et afficher les indices de qualité de l'air."
       },
       "alerts": {
         "title": "Alertes",
@@ -775,6 +1124,10 @@
         "is12hour": {
           "title": "Format de l'heure",
           "desc": "Utiliser AM et PM au lieu du format 24 heures."
+        },
+        "useBottomSheet": {
+          "title": "Utiliser le Bottom Sheet",
+          "desc": "Affiche les détails et les fenêtres au bas de l'écran (Bottom Sheet) au lieu d'une fenêtre centrale (Modale)."
         }
       }
     },
@@ -996,12 +1349,176 @@
       "error": "Erreur",
       "loading": "Chargement",
       "unknown": "Inconnu"
+    },
+    "aqiTextes": {
+      "scale": {
+        "title": "Échelle IQA",
+        "us": "Échelle IQA Américaine",
+        "eu": "Échelle IQA Européenne"
+      },
+      "legend": {
+        "concentration": "concentration en µg/m³",
+        "molecularWeight": "masse moléculaire du polluant (g/mol)",
+        "atmosphericPressure": "pression atmosphérique en Pa",
+        "gasConstant": "constante des gaz — {{value}} J/(mol·K)",
+        "temperature": "température en Kelvin",
+        "conversionInfo": "Les concentrations sont fournies en µg/m³ et converties en {{unit}} en fonction de la masse moléculaire de chaque polluant, ainsi que de la température et de la pression de l’air au moment de la mesure."
+      },
+      "level": {
+        "us": {
+          "good": "Bon",
+          "fair": "Modéré",
+          "moderate": "Malsain pour les groupes sensibles",
+          "poor": "Malsain",
+          "veryPoor": "Très malsain",
+          "extremelyPoor": "Dangereux"
+        },
+        "eu": {
+          "good": "Bon",
+          "fair": "Moyen",
+          "moderate": "Modéré",
+          "poor": "Mauvais",
+          "veryPoor": "Très mauvais",
+          "extremelyPoor": "Extrêmement mauvais"
+        }
+      },
+      "pollutant": {
+        "aqi": "Indice de Qualité de l'Air",
+        "pm2_5": "Particules Fines",
+        "pm10": "Particules Grossières",
+        "ozone": "Ozone",
+        "nitrogen_dioxide": "Dioxyde de Azote",
+        "sulphur_dioxide": "Dioxyde de Soufre",
+        "carbon_monoxide": "Monoxyde de Carbone",
+        "dust": "Poussière"
+      },
+      "desc": {
+        "aqi": {
+          "us": {
+            "good": "La qualité de l'air est satisfaisante et le risque est minimal ou inexistant.",
+            "fair": "La qualité de l'air est acceptable. Les personnes extrêmement sensibles devraient envisager de réduire les efforts prolongés en extérieur.",
+            "moderate": "Les personnes souffrant de maladies respiratoires ou cardiaques, les personnes âgées et les enfants peuvent en ressentir les effets. Le grand public a peu de chances d'être affecté.",
+            "poor": "Tout le monde peut commencer à ressentir des effets sur la santé. Les groupes sensibles peuvent subir des impacts plus graves.",
+            "veryPoor": "Alerte santé : tout le monde court un risque accru d'effets néfastes sur la santé. Évitez les activités en extérieur.",
+            "extremelyPoor": "Avertissement d'urgence : toute la population présente un risque élevé d'impacts graves sur la santé. Restez à l'intérieur."
+          },
+          "eu": {
+            "good": "La qualité de l'air est considérée comme idéale pour la plupart des gens.",
+            "fair": "La qualité de l'air est acceptable. Profitez de vos activités habituelles en plein air.",
+            "moderate": "Les personnes sensibles présentant des symptômes devraient envisager de réduire les activités physiques intenses en extérieur.",
+            "poor": "Qualité de l'air malsaine. Les groupes sensibles doivent réduire leurs activités physiques en extérieur.",
+            "veryPoor": "Tout le monde devrait envisager de réduire le temps passé à l'extérieur.",
+            "extremelyPoor": "Avertissement critique : diminuez l'exposition extérieure et évitez de faire de l'exercice dehors."
+          }
+        },
+        "pm2_5": {
+          "eu": {
+            "good": "Niveaux idéaux de particules fines. Risque nul de pénétration profonde dans les poumons.",
+            "fair": "Niveau de PM2.5 acceptable. Profitez de vos activités habituelles en plein air.",
+            "moderate": "Les personnes ayant des problèmes respiratoires peuvent ressentir une légère gêne due aux microparticules.",
+            "poor": "Risque modéré à élevé : les particules fines peuvent irriter les voies respiratoires des groupes sensibles.",
+            "veryPoor": "Forte concentration de PM2.5. Tout le monde doit éviter les efforts physiques prolongés à l'extérieur.",
+            "extremelyPoor": "Niveau dangereux de microparticules. Restez à l'intérieur avec de l'air filtré dans la mesure du possible."
+          },
+          "us": {
+            "good": "Concentration insignifiante de particules fines. Aucun risque pour la santé.",
+            "fair": "Les personnes exceptionnellement sensibles au PM2.5 devraient envisager de réduire les efforts physiques prolongés.",
+            "moderate": "Les groupes sensibles peuvent ressentir des symptômes comme la toux et l'essoufflement. Le grand public n'est généralement pas affecté.",
+            "poor": "Augmentation significative du risque d'irritation pulmonaire pour tous. Les groupes à risque doivent rester à l'intérieur.",
+            "veryPoor": "Alerte grave au PM2.5 : risque élevé de complications respiratoires et cardiaques. Évitez toute activité extérieure.",
+            "extremelyPoor": "Niveaux d'urgence de particules fines. Gardez les portes et fenêtres fermées et utilisez des purificateurs d'air."
+          }
+        },
+        "pm10": {
+          "eu": {
+            "good": "Concentration de particules inhalables à un niveau sûr et idéal.",
+            "fair": "Faible présence de poussière et de particules inhalables. Conditions normales pour le grand public.",
+            "moderate": "Les personnes asthmatiques ou allergiques peuvent ressentir une légère irritation des yeux ou de la gorge.",
+            "poor": "Mauvaise qualité de l'air due à la poussière et aux particules. Les groupes à risque doivent limiter le temps passé dehors.",
+            "veryPoor": "Niveaux élevés de PM10. Recommandé de limiter les activités extérieures pour réduire l'inhalation de poussière.",
+            "extremelyPoor": "Concentration critique de particules dans l'air. Tout le monde doit éviter l'exposition et garder les fenêtres fermées."
+          },
+          "us": {
+            "good": "Niveau insignifiant de particules inhalables dans l'air.",
+            "fair": "Qualité de l'air acceptable avec une faible présence de poussière et de pollution particulaire.",
+            "moderate": "Les personnes atteintes de maladies pulmonaires, les personnes âgées et les enfants doivent réduire les efforts prolongés en extérieur.",
+            "poor": "Risque accru de gêne respiratoire pour le grand public et symptômes graves chez les personnes sensibles.",
+            "veryPoor": "Conditions malsaines : risque d'irritation sévère des voies respiratoires. Évitez de rester à l'extérieur.",
+            "extremelyPoor": "Alerte d'urgence PM10. Forte concentration de poussière et de suie ; évitez toute exposition extérieure."
+          }
+        },
+        "ozone": {
+          "eu": {
+            "good": "Niveaux idéaux d'ozone au niveau du sol. Air propre et pur.",
+            "fair": "Présence d'ozone dans les normes normales de sécurité.",
+            "moderate": "Les personnes asthmatiques doivent surveiller une éventuelle irritation de la gorge lors d'exercices en extérieur.",
+            "poor": "Niveau d'ozone élevé. Les groupes sensibles doivent éviter les activités physiques intenses l'après-midi.",
+            "veryPoor": "Forte concentration d'ozone au sol. Réduisez le temps d'exposition extérieure, surtout les jours chauds.",
+            "extremelyPoor": "Alerte d'urgence ozone : risque élevé d'inflammation pulmonaire. Restez à l'intérieur."
+          },
+          "us": {
+            "good": "Aucun risque d'exposition à l'ozone de surface.",
+            "fair": "Qualité de l'air acceptable. Les personnes extrêmement sensibles peuvent ressentir une légère gêne en fin d'après-midi.",
+            "moderate": "Les enfants, les personnes âgées et les personnes pratiquant des exercices en extérieur peuvent subir une réduction de leur capacité pulmonaire.",
+            "poor": "Risque d'irritation des yeux et des voies respiratoires pour le grand public. Évitez les activités extérieures aux heures de pointe.",
+            "veryPoor": "Niveaux d'ozone très élevés. Alerte santé pour toute la population ; évitez de sortir de chez vous.",
+            "extremelyPoor": "Risque grave de dommages respiratoires. Restez à l'intérieur avec la climatisation."
+          }
+        },
+        "nitrogen_dioxide": {
+          "eu": {
+            "good": "Concentration minimale de dioxyde d'azote. Excellente qualité de l'air.",
+            "fair": "Niveau de NO2 acceptable, provenant principalement du trafic urbain léger.",
+            "moderate": "Les personnes atteintes de maladies respiratoires chroniques peuvent remarquer une légère sensibilité des voies respiratoires.",
+            "poor": "Niveau de NO2 élevé. Les personnes souffrant d'asthme ou de bronchite doivent éviter la circulation dense.",
+            "veryPoor": "Forte pollution au NO2. Tout le monde doit éviter une exposition prolongée dans les zones à forte circulation.",
+            "extremelyPoor": "Niveau critique de dioxyde d'azote. Évitez de sortir et gardez l'intérieur ventilé si vous êtes loin du trafic."
+          },
+          "us": {
+            "good": "Aucun impact sur la santé associé au dioxyde d'azote.",
+            "fair": "Niveau de NO2 acceptable sans risque évident pour la plupart des gens.",
+            "moderate": "Les personnes asthmatiques peuvent ressentir une augmentation des symptômes respiratoires près des voies à forte circulation.",
+            "poor": "Risque accru d'infections et d'inflammations respiratoires. Les groupes sensibles doivent rester à la maison.",
+            "veryPoor": "Alerte santé : risque élevé de bronchite et de crises d'asthme sévères. Évitez la circulation et les zones industrielles.",
+            "extremelyPoor": "Niveaux dangereux de NO2. Risque d'impacts graves sur la fonction pulmonaire pour toute la population."
+          }
+        },
+        "sulphur_dioxide": {
+          "eu": {
+            "good": "Niveau de dioxyde de soufre insignifiant. Qualité de l'air propre.",
+            "fair": "Concentration de SO2 dans les limites d'émission sûres.",
+            "moderate": "Les personnes asthmatiques peuvent ressentir une légère gêne en respirant profondément.",
+            "poor": "Niveau de SO2 élevé. Les personnes sensibles doivent éviter l'extérieur, en particulier près des zones industrielles.",
+            "veryPoor": "Forte concentration de soufre dans l'air. Tout le monde doit limiter le temps passé à l'extérieur.",
+            "extremelyPoor": "Niveau critique de SO2. Risque de bronchospasme immédiat chez les asthmatiques ; restez à l'intérieur."
+          },
+          "us": {
+            "good": "Aucun risque d'irritation par le SO2.",
+            "fair": "Niveau de SO2 acceptable et sûr pour le grand public.",
+            "moderate": "Les personnes asthmatiques pratiquant une activité physique peuvent ressentir des sifflements respiratoires et un essoufflement.",
+            "poor": "Le grand public peut commencer à ressentir une irritation de la gorge et des yeux. Les groupes à risque doivent éviter de sortir.",
+            "veryPoor": "Alerte santé : concentration dangereuse de dioxyde de soufre. Évitez totalement les activités extérieures.",
+            "extremelyPoor": "Urgence sanitaire SO2 : risque de dommages graves aux voies respiratoires pour n'importe qui."
+          }
+        },
+        "carbon_monoxide": {
+          "us": {
+            "good": "Faibles niveaux de CO. Dans des conditions normales, le risque pour la santé est minimal.",
+            "fair": "CO modérément élevé. Les personnes souffrant de maladies cardiaques peuvent être plus sensibles, en particulier lors d'un effort physique.",
+            "moderate": "Niveaux élevés de CO. Les personnes sensibles peuvent ressentir des maux de tête, de la fatigue ou un essoufflement ; réduisez les efforts prolongés.",
+            "poor": "Niveau de CO malsain. Peut provoquer des maux de tête, des étourdissements, des nausées et de la faiblesse. Limitez l'exposition prolongée.",
+            "veryPoor": "CO très élevé. Peut provoquer des étourdissements, de la confusion, des nausées et une perte de coordination. Évitez l'exposition et cherchez de l'air frais.",
+            "extremelyPoor": "CO dangereusement élevé. Peut provoquer un empoisonnement grave, une perte de connaissance ou la mort. Éloignez-vous de la source et cherchez immédiatement de l'air frais."
+          }
+        }
+      }
     }
   },
   "es": {
     "version": "Versión",
     "title": "Configuración",
     "settings": "Configuración",
+    "insights": "Perspectivas",
     "close": "Cerrar",
     "language": "Idioma",
     "timezone": "Zona horaria",
@@ -1016,6 +1533,9 @@
     "alerts": "Alertas",
     "alert_other": "Alertas ({{count}})",
     "uvIndex": "Índice UV",
+    "airQuality": "Calidad del aire",
+    "temperature": "Temperatura",
+    "surfacePressure": "Presión en superficie",
     "wind": "Viento",
     "windGusts": "Ráfagas de Viento",
     "windSpeed": "Velocidad del Viento",
@@ -1072,7 +1592,8 @@
       "general": {
         "title": "General",
         "language": "Cambia el idioma utilizado en la aplicación",
-        "location": "Ubicación utilizada para el clima y la zona horaria del reloj"
+        "location": "Ubicación utilizada para el clima y la zona horaria del reloj",
+        "aqiScale": "Define la norma utilizada para clasificar y mostrar los índices de calidad del aire."
       },
       "alerts": {
         "title": "Alertas",
@@ -1108,6 +1629,10 @@
         "is12hour": {
           "title": "Formato de hora",
           "desc": "Usar AM y PM en lugar del formato de 24 horas."
+        },
+        "useBottomSheet": {
+          "title": "Usar Bottom Sheet",
+          "desc": "Muestra los detalles y ventanas en la parte inferior de la pantalla (Bottom Sheet) en lugar de una ventana central (Modal)."
         }
       }
     },
@@ -1329,12 +1854,176 @@
       "error": "Error",
       "loading": "Cargando",
       "unknown": "Desconocido"
+    },
+    "aqiTextes": {
+      "scale": {
+        "title": "Escala ICA",
+        "us": "Escala ICA Americana",
+        "eu": "Escala ICA Europea"
+      },
+      "legend": {
+        "concentration": "concentración en µg/m³",
+        "molecularWeight": "peso molecular del contaminante (g/mol)",
+        "atmosphericPressure": "presión atmosférica en Pa",
+        "gasConstant": "constante de los gases — {{value}} J/(mol·K)",
+        "temperature": "temperatura en Kelvin",
+        "conversionInfo": "Las concentraciones se proporcionan en µg/m³ y se convierten a {{unit}} teniendo en cuenta el peso molecular de cada contaminante, así como la temperatura y la presión del aire en el momento de la medición."
+      },
+      "level": {
+        "us": {
+          "good": "Bueno",
+          "fair": "Moderado",
+          "moderate": "Dañino para grupos sensibles",
+          "poor": "Dañino",
+          "veryPoor": "Muy dañino",
+          "extremelyPoor": "Peligroso"
+        },
+        "eu": {
+          "good": "Bueno",
+          "fair": "Aceptable",
+          "moderate": "Moderado",
+          "poor": "Malo",
+          "veryPoor": "Muy malo",
+          "extremelyPoor": "Extremadamente malo"
+        }
+      },
+      "pollutant": {
+        "aqi": "Índice de Calidad del Aire",
+        "pm2_5": "Partículas Finas",
+        "pm10": "Partículas Gruesas",
+        "ozone": "Ozono",
+        "nitrogen_dioxide": "Dióxido de Nitrógeno",
+        "sulphur_dioxide": "Dióxido de Azufre",
+        "carbon_monoxide": "Monóxido de Carbono",
+        "dust": "Polvo"
+      },
+      "desc": {
+        "aqi": {
+          "us": {
+            "good": "La calidad del aire es satisfactoria y el riesgo es mínimo o inexistente.",
+            "fair": "La calidad del aire es aceptable. Las personas extremadamente sensibles deben considerar reducir el esfuerzo prolongado al aire libre.",
+            "moderate": "Las personas con enfermedades respiratorias o cardíacas, los adultos mayores y los niños pueden experimentar efectos. Es poco probable que el público general se vea afectado.",
+            "poor": "Cualquier persona puede comenzar a experimentar efectos en la salud. Los grupos sensibles pueden sufrir impactos más graves.",
+            "veryPoor": "Alerta de salud: todos tienen un mayor riesgo de sufrir efectos adversos para la salud. Evite las actividades al aire libre.",
+            "extremelyPoor": "Advertencia de emergencia: toda la población corre un alto riesgo de sufrir graves impactos en la salud. Permanezca en interiores."
+          },
+          "eu": {
+            "good": "La calidad del aire se considera ideal para la mayoría de las personas.",
+            "fair": "La calidad del aire es aceptable. Disfrute de sus actividades habituales al aire libre.",
+            "moderate": "Las personas sensibles que presenten síntomas deben considerar reducir las actividades físicas intensas al aire libre.",
+            "poor": "Calidad del aire perjudicial para la salud. Los grupos sensibles deben reducir las actividades físicas al aire libre.",
+            "veryPoor": "Todos deben considerar reducir el tiempo que pasan al aire libre.",
+            "extremelyPoor": "Advertencia crítica: minimice la exposición al aire libre y evite hacer ejercicio fuera."
+          }
+        },
+        "pm2_5": {
+          "eu": {
+            "good": "Niveles ideales de partículas finas. Riesgo nulo de penetración profunda en los pulmones.",
+            "fair": "Nivel de PM2.5 aceptable. Disfrute de sus actividades habituales al aire libre.",
+            "moderate": "Las personas con problemas respiratorios pueden sentir un leve malestar debido a las micropartículas.",
+            "poor": "Riesgo moderado a alto: las partículas finas pueden irritar el tracto respiratorio de grupos sensibles.",
+            "veryPoor": "Alta concentración de PM2.5. Toda la población debe evitar esfuerzos físicos prolongados al aire libre.",
+            "extremelyPoor": "Nivel peligroso de micropartículas. Permanezca en interiores con aire filtrado siempre que sea posible."
+          },
+          "us": {
+            "good": "Concentración insignificante de partículas finas. Sin riesgos para la salud.",
+            "fair": "Las personas excepcionalmente sensibles al PM2.5 deben considerar reducir el esfuerzo físico prolongado.",
+            "moderate": "Los grupos sensibles pueden experimentar síntomas como tos y falta de aire. El público general no suele verse afectado.",
+            "poor": "Aumento significativo del riesgo de irritación pulmonar para todos. Los grupos de riesgo deben quedarse en casa.",
+            "veryPoor": "Alerta grave por PM2.5: alto riesgo de complicaciones respiratorias y cardíacas. Evite cualquier actividad al aire libre.",
+            "extremelyPoor": "Niveles de emergencia de partículas finas. Mantenga puertas y ventanas cerradas y use purificadores de aire."
+          }
+        },
+        "pm10": {
+          "eu": {
+            "good": "Concentración de partículas inhalables en un nivel seguro e ideal.",
+            "fair": "Baja presencia de polvo y partículas inhalables. Condiciones normales para el público general.",
+            "moderate": "Las personas con asma o alergias pueden experimentar una leve irritación en los ojos o la garganta.",
+            "poor": "Mala calidad del aire debido al polvo y las partículas. Los grupos de riesgo deben limitar el tiempo al aire libre.",
+            "veryPoor": "Niveles elevados de PM10. Se recomienda limitar las actividades al aire libre para reducir la inhalación de polvo.",
+            "extremelyPoor": "Concentración crítica de partículas en el aire. Todos deben evitar la exposición y mantener las ventanas cerradas."
+          },
+          "us": {
+            "good": "Nivel insignificante de partículas inhalables en el aire.",
+            "fair": "Calidad del aire aceptable con baja presencia de polvo y contaminación por partículas.",
+            "moderate": "Las personas con enfermedades pulmonares, los adultos mayores y los niños deben reducir el esfuerzo prolongado al aire libre.",
+            "poor": "Mayor riesgo de malestar respiratorio para el público general y síntomas graves en personas sensibles.",
+            "veryPoor": "Condiciones insalubres: riesgo de irritación severa en las vías respiratorias. Evite permanecer al aire libre.",
+            "extremelyPoor": "Alerta de emergencia por PM10. Alta concentración de polvo y hollín; evite cualquier exposición al aire libre."
+          }
+        },
+        "ozone": {
+          "eu": {
+            "good": "Niveles ideales de ozono al nivel del suelo. Aire limpio y puro.",
+            "fair": "Presencia de ozono dentro de las normas normales de seguridad.",
+            "moderate": "Las personas con asma deben vigilar la posible irritación de garganta al hacer ejercicio al aire libre.",
+            "poor": "Nivel de ozono elevado. Los grupos sensibles deben evitar actividades físicas intensas por la tarde.",
+            "veryPoor": "Alta concentración de ozono en el suelo. Reduzca el tiempo de exposición al aire libre, especialmente en días calurosos.",
+            "extremelyPoor": "Alerta de emergencia por ozono: alto riesgo de inflamación pulmonar. Permanezca en interiores."
+          },
+          "us": {
+            "good": "Sin riesgo de exposición al ozono de superficie.",
+            "fair": "Calidad del aire aceptable. Las personas extremadamente sensibles pueden sentir un leve malestar a última hora de la tarde.",
+            "moderate": "Los niños, adultos mayores y personas que hacen ejercicio al aire libre pueden experimentar una reducción en la capacidad pulmonar.",
+            "poor": "Riesgo de irritación en ojos y vías respiratorias para el público general. Evite actividades al aire libre en horas pico.",
+            "veryPoor": "Niveles muy elevados de ozono. Alerta de salud para toda la población; evite salir de casa.",
+            "extremelyPoor": "Riesgo grave de daño respiratorio. Permanezca en interiores con aire acondicionado."
+          }
+        },
+        "nitrogen_dioxide": {
+          "eu": {
+            "good": "Concentración mínima de dióxido de nitrógeno. Excelente calidad del aire.",
+            "fair": "Nivel de NO2 aceptable, proveniente principalmente del tráfico urbano ligero.",
+            "moderate": "Las personas con enfermedades respiratorias crónicas pueden notar una ligera sensibilidad en las vías respiratorias.",
+            "poor": "Nivel elevado de NO2. Las personas con asma o bronquitis deben evitar el tráfico denso.",
+            "veryPoor": "Alta contaminación por NO2. Todos deben evitar la exposición prolongada en zonas de tráfico intenso.",
+            "extremelyPoor": "Nivel crítico de dióxido de nitrógeno. Evite salir y mantenga el interior ventilado si está lejos del tráfico."
+          },
+          "us": {
+            "good": "Sin impactos en la salud asociados al dióxido de nitrógeno.",
+            "fair": "Nivel de NO2 aceptable sin riesgos evidentes para la mayoría de las personas.",
+            "moderate": "Las personas con asma pueden experimentar un aumento de síntomas respiratorios cerca de vías concurridas.",
+            "poor": "Mayor riesgo de infecciones e inflamaciones respiratorias. Los grupos sensibles deben quedarse en casa.",
+            "veryPoor": "Alerta de salud: alto riesgo de bronquitis y crisis asmáticas graves. Evite el tráfico y las zonas industriales.",
+            "extremelyPoor": "Niveles peligrosos de NO2. Riesgo de impactos graves en la función pulmonar para toda la población."
+          }
+        },
+        "sulphur_dioxide": {
+          "eu": {
+            "good": "Nivel de dióxido de azufre insignificante. Aire limpio.",
+            "fair": "Concentración de SO2 dentro de los límites seguros de emisión.",
+            "moderate": "Las personas con asma pueden sentir un leve malestar al respirar hondo.",
+            "poor": "Nivel elevado de SO2. Las personas sensibles deben evitar el aire libre, especialmente cerca de zonas industriales.",
+            "veryPoor": "Alta concentración de azufre en el aire. Todos deben limitar el tiempo en el exterior.",
+            "extremelyPoor": "Nivel crítico de SO2. Riesgo de broncoespasmo inmediato en asmáticos; permanezca en interiores."
+          },
+          "us": {
+            "good": "Sin riesgo de irritación por SO2.",
+            "fair": "Nivel de SO2 aceptable y seguro para el público general.",
+            "moderate": "Las personas con asma que realizan actividad física pueden experimentar sibilancias y falta de aire.",
+            "poor": "El público general puede comenzar a sentir irritación en garganta u ojos. Los grupos de riesgo deben evitar salir.",
+            "veryPoor": "Alerta de salud: concentración peligrosa de dióxido de azufre. Evite totalmente las actividades al aire libre.",
+            "extremelyPoor": "Emergencia sanitaria por SO2: riesgo de daños graves en las vías respiratorias para cualquier persona."
+          }
+        },
+        "carbon_monoxide": {
+          "us": {
+            "good": "Niveles bajos de CO. En condiciones normales, el riesgo para la salud es mínimo.",
+            "fair": "CO moderadamente elevado. Las personas con enfermedades cardíacas pueden ser más sensibles, especialmente durante el esfuerzo físico.",
+            "moderate": "Niveles elevados de CO. Las personas sensibles pueden experimentar dolor de cabeza, fatiga o falta de aire; reduzca los esfuerzos prolongados.",
+            "poor": "Nivel de CO insalubre. Puede causar dolor de cabeza, mareo, náuseas y debilidad. Limite la exposición prolongada.",
+            "veryPoor": "CO muy elevado. Puede causar mareo, confusión, náuseas y pérdida de coordinación. Evite la exposición y busque aire fresco.",
+            "extremelyPoor": "CO peligrosamente elevado. Puede causar intoxicación grave, pérdida del conocimiento o la muerte. Aléjese de la fuente y busque aire fresco de inmediato."
+          }
+        }
+      }
     }
   },
   "ko": {
     "version": "버전",
     "title": "설정",
     "settings": "설정",
+    "insights": "인사이트",
     "close": "닫기",
     "language": "언어",
     "timezone": "시간대",
@@ -1349,6 +2038,9 @@
     "alerts": "알림",
     "alert_other": "알림 ({{count}})",
     "uvIndex": "자외선 지수",
+    "airQuality": "대기질",
+    "temperature": "기온",
+    "surfacePressure": "지표면 기압",
     "wind": "바람",
     "windGusts": "돌풍",
     "windSpeed": "풍속",
@@ -1405,7 +2097,8 @@
       "general": {
         "title": "일반",
         "language": "앱 전체에서 사용할 언어 변경",
-        "location": "날씨 및 시계 시간대에 사용되는 위치"
+        "location": "날씨 및 시계 시간대에 사용되는 위치",
+        "aqiScale": "대기질 지수 등급을 분류하고 표시하는 기준을 설정합니다."
       },
       "alerts": {
         "title": "알림",
@@ -1441,6 +2134,10 @@
         "is12hour": {
           "title": "시간 형식",
           "desc": "24시간 형식 대신 AM 및 PM을 사용합니다."
+        },
+        "useBottomSheet": {
+          "title": "바텀 시트 사용",
+          "desc": "중앙 창(Modal) 대신 화면 하단에 상세 정보와 창(Bottom Sheet)을 표시합니다."
         }
       }
     },
@@ -1662,6 +2359,169 @@
       "error": "오류",
       "loading": "로딩 중",
       "unknown": "알 수 없음"
+    },
+    "aqiTextes": {
+      "scale": {
+        "title": "공기질 지수 범주",
+        "us": "미국 공기질 지수",
+        "eu": "유럽 공기질 지수"
+      },
+      "legend": {
+        "concentration": "µg/m³ 단위의 농도",
+        "molecularWeight": "오염 물질의 분자량 (g/mol)",
+        "atmosphericPressure": "Pa 단위의 대기압",
+        "gasConstant": "기체 상수 — {{value}} J/(mol·K)",
+        "temperature": "켈빈 단위의 온도",
+        "conversionInfo": "농도는 µg/m³ 단위로 제공되며, 각 오염 물질의 분자량과 측정 당시의 기온 및 기압을 고려하여 {{unit}} 단위로 변환됩니다."
+      },
+      "level": {
+        "us": {
+          "good": "좋음",
+          "fair": "보통",
+          "moderate": "민감군 영향",
+          "poor": "나쁨",
+          "veryPoor": "매우 나쁨",
+          "extremelyPoor": "위험"
+        },
+        "eu": {
+          "good": "좋음",
+          "fair": "양호",
+          "moderate": "보통",
+          "poor": "나쁨",
+          "veryPoor": "매우 나쁨",
+          "extremelyPoor": "최악"
+        }
+      },
+      "pollutant": {
+        "aqi": "대기질 지수",
+        "pm2_5": "초미세먼지",
+        "pm10": "미세먼지",
+        "ozone": "오존",
+        "nitrogen_dioxide": "이산화질소",
+        "sulphur_dioxide": "이산화황",
+        "carbon_monoxide": "일산화탄소",
+        "dust": "황사/미세먼지"
+      },
+      "desc": {
+        "aqi": {
+          "us": {
+            "good": "공기질이 만족스러우며 건강 위험이 거의 없거나 전혀 없습니다.",
+            "fair": "공기질이 보통 수준입니다. 민감한 사람은 장시간의 야외 활동을 줄이는 것을 고려해야 합니다.",
+            "moderate": "호흡기/심장 질환자, 노약자 및 어린이에게 영향을 미칠 수 있습니다. 일반 대중은 영향을 받을 가능성이 낮습니다.",
+            "poor": "모든 사람이 건강상의 영향을 받기 시작할 수 있습니다. 민감군은 더 심각한 영향을 받을 수 있습니다.",
+            "veryPoor": "건강 경고: 모든 사람의 건강에 악영향을 미칠 위험이 증가합니다. 야외 활동을 피하세요.",
+            "extremelyPoor": "비상 경고: 모든 인구 집단이 심각한 건강상의 영향을 받을 위험이 높습니다. 실내에 머무르세요."
+          },
+          "eu": {
+            "good": "대부분의 사람들에게 이상적인 공기질 수준입니다.",
+            "fair": "공기질이 보통 수준입니다. 평소대로 야외 활동을 즐기세요.",
+            "moderate": "증상을 느끼는 민감군 개인은 격렬한 야외 활동을 줄이는 것을 고려해야 합니다.",
+            "poor": "건강에 해로운 공기질입니다. 민감군은 야외 신체 활동을 줄여야 합니다.",
+            "veryPoor": "모든 사람이 야외에서 보내는 시간을 줄이는 것을 고려해야 합니다.",
+            "extremelyPoor": "심각한 경고: 야외 노출을 최소화하고 야외 운동을 피하세요."
+          }
+        },
+        "pm2_5": {
+          "eu": {
+            "good": "초미세먼지 농도가 이상적인 수준입니다. 폐 깊숙이 침투할 위험이 없습니다.",
+            "fair": "초미세먼지(PM2.5) 농도가 보통 수준입니다. 평소대로 야외 활동을 즐기세요.",
+            "moderate": "호흡기 질환이 있는 사람은 미세입자로 인해 약간의 불편함을 느낄 수 있습니다.",
+            "poor": "중등도~고위험: 초미세먼지가 민감군의 호흡기를 자극할 수 있습니다.",
+            "veryPoor": "초미세먼지 고농도 상태입니다. 모든 사람은 야외에서 장시간의 격렬한 활동을 피해야 합니다.",
+            "extremelyPoor": "미세입자가 위험한 수준입니다. 가능한 한 공기청정기를 가동한 실내에 머무르세요."
+          },
+          "us": {
+            "good": "초미세먼지 농도가 미미하여 건강 위험이 없습니다.",
+            "fair": "PM2.5에 매우 민감한 사람은 장시간의 격렬한 야외 활동을 줄이는 것을 고려해야 합니다.",
+            "moderate": "민감군은 기침이나 호흡 곤란 등의 증상을 느낄 수 있습니다. 일반 대중은 보통 영향을 받지 않습니다.",
+            "poor": "모든 사람에게 폐 자극 위험이 크게 증가합니다. 고위험군은 실내에 머물러야 합니다.",
+            "veryPoor": "심각한 PM2.5 경보: 호흡기 및 심장 합병증 위험이 높습니다. 모든 야외 활동을 피하세요.",
+            "extremelyPoor": "비상 수준의 초미세먼지 농도입니다. 문과 창문을 닫고 공기청정기를 사용하세요."
+          }
+        },
+        "pm10": {
+          "eu": {
+            "good": "미세먼지 농도가 안전하고 이상적인 수준입니다.",
+            "fair": "먼지와 미세먼지가 적은 상태입니다. 일반 대중에게 정상적인 환경입니다.",
+            "moderate": "천식이나 알레르기가 있는 사람은 눈이나 목에 약간의 자극을 느낄 수 있습니다.",
+            "poor": "먼지와 입자물질로 인해 공기질이 나쁩니다. 고위험군은 야외 활동 시간을 제한해야 합니다.",
+            "veryPoor": "미세먼지(PM10) 농도가 높습니다. 먼지 흡입을 줄이기 위해 야외 활동을 제한하는 것이 좋습니다.",
+            "extremelyPoor": "공기 중 미세먼지 농도가 심각한 수준입니다. 모든 사람은 노출을 피하고 창문을 닫아 두세요."
+          },
+          "us": {
+            "good": "공기 중 미세먼지 농도가 미미한 수준입니다.",
+            "fair": "먼지 및 입자 오염이 적어 보통 수준의 공기질입니다.",
+            "moderate": "폐 질환자, 노약자, 어린이는 장시간의 야외 활동을 줄여야 합니다.",
+            "poor": "일반 대중의 호흡기 불편 위험이 증가하며 민감군에게 심각한 증상이 나타날 수 있습니다.",
+            "veryPoor": "건강에 해로운 상태: 심각한 기도 자극 위험이 있습니다. 야외에 머무는 것을 피하세요.",
+            "extremelyPoor": "PM10 비상 경보. 먼지 및 매연 농도가 매우 높으니 모든 야외 노출을 피하세요."
+          }
+        },
+        "ozone": {
+          "eu": {
+            "good": "지표면 오존 농도가 이상적인 수준입니다. 깨끗하고 맑은 공기입니다.",
+            "fair": "오존 농도가 정상 안전 기준 내에 있습니다.",
+            "moderate": "천식 환자는 야외 운동 시 목 자극 가능성을 모니터링해야 합니다.",
+            "poor": "오존 농도가 높습니다. 민감군은 오후 시간에 격렬한 신체 활동을 피해야 합니다.",
+            "veryPoor": "지표면 오존 농도가 높습니다. 특히 더운 날에는 야외 노출 시간을 줄이세요.",
+            "extremelyPoor": "오존 비상 경고: 폐 염증 위험이 높습니다. 실내에 머무르세요."
+          },
+          "us": {
+            "good": "지표면 오존 노출 위험이 없습니다.",
+            "fair": "공기질이 보통 수준입니다. 매우 민감한 사람은 늦은 오후에 약간의 불편함을 느낄 수 있습니다.",
+            "moderate": "어린이, 노약자 및 야외 운동 전문가는 폐 기능 감소를 경험할 수 있습니다.",
+            "poor": "일반 대중의 눈과 기도 자극 위험이 있습니다. 피크 시간대에는 야외 활동을 피하세요.",
+            "veryPoor": "오존 농도가 매우 높습니다. 모든 인구 집단에 대한 건강 경보이니 외출을 자제하세요.",
+            "extremelyPoor": "심각한 호흡기 손상 위험이 있습니다. 에어컨이 가동되는 실내에 머무르세요."
+          }
+        },
+        "nitrogen_dioxide": {
+          "eu": {
+            "good": "이산화질소 농도가 최소 수준입니다. 매우 우수한 공기질입니다.",
+            "fair": "주로 원활한 도심 교통에서 발생하는 NO2 수준으로, 수용 가능한 상태입니다.",
+            "moderate": "만성 호흡기 질환자는 기도가 약간 민감해짐을 느낄 수 있습니다.",
+            "poor": "NO2 농도가 높습니다. 천식이나 기관지염이 있는 사람은 혼잡한 교통 구역을 피해야 합니다.",
+            "veryPoor": "높은 NO2 오염 상태입니다. 모든 사람은 교통량이 많은 지역에서 장시간 노출되는 것을 피해야 합니다.",
+            "extremelyPoor": "이산화질소가 심각한 수준입니다. 외출을 자제하고, 도로에서 멀리 떨어진 실내 환기를 유지하세요."
+          },
+          "us": {
+            "good": "이산화질소와 관련된 건강 영향이 없습니다.",
+            "fair": "대부분의 사람들에게 명확한 위험이 없는 보통 수준의 NO2 농도입니다.",
+            "moderate": "천식 환자는 혼잡한 도로 근처에서 호흡기 증상이 증가할 수 있습니다.",
+            "poor": "호흡기 감염 및 염증 위험이 증가합니다. 민감군은 집에 머물러야 합니다.",
+            "veryPoor": "건강 경고: 기관지염 및 심각한 천식 발작 위험이 높습니다. 교통량이 많은 곳과 공업 지역을 피하세요.",
+            "extremelyPoor": "위험한 수준의 NO2입니다. 모든 인구 집단의 폐 기능에 심각한 영향을 미칠 위험이 있습니다."
+          }
+        },
+        "sulphur_dioxide": {
+          "eu": {
+            "good": "이산화황 농도가 미미합니다. 깨끗한 공기질입니다.",
+            "fair": "SO2 농도가 안전 배출 기준 내에 있습니다.",
+            "moderate": "천식 환자는 깊게 숨을 쉴 때 약간의 불편함을 느낄 수 있습니다.",
+            "poor": "SO2 농도가 높습니다. 민감한 사람은 야외 활동을 피해야 하며, 특히 공업 지대 근처는 더욱 주의하세요.",
+            "veryPoor": "공기 중 황 농도가 높습니다. 모든 사람은 야외에 머무는 시간을 제한해야 합니다.",
+            "extremelyPoor": "SO2가 심각한 수준입니다. 천식 환자에게 즉각적인 기관지 경련 위험이 있으니 실내에 머무르세요."
+          },
+          "us": {
+            "good": "SO2로 인한 자극 위험이 없습니다.",
+            "fair": "일반 대중에게 안전하고 보통 수준인 SO2 농도입니다.",
+            "moderate": "신체 활동 중인 천식 환자는 쌕쌕거림(천명)과 호흡 곤란을 느낄 수 있습니다.",
+            "poor": "일반 대중도 목과 눈의 자극을 느끼기 시작할 수 있습니다. 고위험군은 외출을 자제하세요.",
+            "veryPoor": "건강 경고: 위험한 이산화황 농도입니다. 야외 활동을 완전히 피하세요.",
+            "extremelyPoor": "SO2 보건 비상: 누구에게나 심각한 호흡기 손상 위험이 있습니다."
+          }
+        },
+        "carbon_monoxide": {
+          "us": {
+            "good": "일산화탄소(CO) 농도가 낮습니다. 정상적인 조건에서는 건강 위험이 최소화됩니다.",
+            "fair": "CO가 약간 상승했습니다. 심장 질환자는 특히 신체 활동 중에 더 민감할 수 있습니다.",
+            "moderate": "CO 농도가 상승했습니다. 민감한 사람은 두통, 피로, 호흡 곤란을 경험할 수 있으니 장시간의 활동을 줄이세요.",
+            "poor": "건강에 해로운 CO 수준입니다. 두통, 어지러움, 메스꺼움, 무기력증을 유발할 수 있습니다. 장시간 노출을 제한하세요.",
+            "veryPoor": "CO 농도가 매우 높습니다. 현기증, 혼란, 메스꺼움, 운동 조절 능력 상실을 유발할 수 있습니다. 노출을 피하고 신선한 공기를 찾으세요.",
+            "extremelyPoor": "위험할 정도로 높은 CO 수준입니다. 심각한 중독, 의식 불명 또는 사망을 유발할 수 있습니다. 즉시 오염원에서 벗어나 신선한 공기를 마시세요."
+          }
+        }
+      }
     }
   }
 }

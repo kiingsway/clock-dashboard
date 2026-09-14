@@ -118,7 +118,6 @@ export function getDewPointColor(dewPoint: number): string {
  */
 export function getHumidityColor(humidity: number): string {
   return getGradientColor(humidity, HUMIDITY_COLORS);
-  // return interpolateThreePointColor(humidity, HUMIDITY_PERCENTAGE, HUMIDITY_COLORS);
 }
 
 /**

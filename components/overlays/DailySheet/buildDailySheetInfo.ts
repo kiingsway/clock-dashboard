@@ -21,7 +21,7 @@ function safeBuild(t: TFunction, defaultTitle: string = 'Erro', builder: () => I
   } catch (error) {
     console.error(`${t('error_building_item')} "${defaultTitle}":`, error);
     return {
-      key: 'error',
+      key: `${defaultTitle}-error`,
       title: defaultTitle,
       desc: t('error_building_item'),
       icons: [{ category: 'error' }]
@@ -29,9 +29,19 @@ function safeBuild(t: TFunction, defaultTitle: string = 'Erro', builder: () => I
   }
 }
 
+const assertNumbers = (values: Record<string, unknown>) => {
+  const errors = Object.entries(values)
+    .filter(([, value]) => typeof value !== 'number')
+    .map(([key, value]) => `${key}="${String(value)}" (${typeof value})`);
+
+  if (errors.length) {
+    throw new Error(`Invalid values: ${errors.join(', ')}`);
+  }
+};
+
 export default function buildDailySheetInfo(weather: IWeather, date: DateTime, locale: string, t: TFunction): IDailySheetInfo[] {
 
-  const { timezone, daily, daily_moon, daily_units: {
+  const { daily, daily_moon, daily_units: {
     temperature_2m_max: tempUnit,
     visibility_mean: visibilityUnit,
     relative_humidity_2m_mean: humidityUnit,
@@ -47,13 +57,15 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
       const tempMax = daily.temperature_2m_max[todayIndex];
       const tempMin = daily.temperature_2m_min[todayIndex];
 
+      assertNumbers({ weatherCode, tempMax, tempMin });
+
       const weatherCategory = getWeatherCodeInfo(weatherCode, true, t);
 
       return {
         key: "weather",
         title: weatherCategory.title,
         desc: `${t('maxMin')}: ${Math.round(tempMax)}${tempUnit} / ${Math.round(tempMin)}${tempUnit}`,
-        icons: [{ category: weatherCategory.name }]
+        icons: [{ category: weatherCategory.name }],
       };
     }),
 
@@ -61,15 +73,19 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
       const feelsLike = daily.apparent_temperature_mean[todayIndex];
       const tempMean = daily.temperature_2m_mean[todayIndex];
 
+      assertNumbers({ feelsLike, tempMean });
+
       const feelsLikeDesc = buildFeelsLikeDescription(tempMean, feelsLike, t);
 
       return { key: 'feelsLike', ...feelsLikeDesc };
     }),
 
     safeBuild(t, t('rain'), () => {
-      const precipMM = daily.precipitation_sum[todayIndex];
+      const precipMM = daily.precipitation_sum[todayIndex] ?? 0;
       const precipChance = daily.precipitation_probability_max[todayIndex];
-      const rainHours = daily.precipitation_hours[todayIndex];
+      const rainHours = daily.precipitation_hours[todayIndex] ?? 0;
+
+      assertNumbers({ precipMM, precipChance, rainHours });
 
       const rainDesc = buildRainDescription(rainHours, precipMM, precipChance, t);
 
@@ -79,19 +95,23 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
     safeBuild(t, t('uvIndex'), () => {
       const uvIndex = daily.uv_index_max[todayIndex];
 
+      assertNumbers({ uvIndex });
+
       const uvDesc = buildUVDescription(uvIndex, true, t);
 
       return { key: 'uvIndex', ...uvDesc };
     }),
 
     safeBuild(t, t('moon'), () => {
-      const moonDesc = buildMoonDescription(daily_moon, date, timezone, t);
+      const moonDesc = buildMoonDescription(daily_moon, date, t);
 
       return { key: 'moon', ...moonDesc };
     }),
 
     safeBuild(t, t('visibility'), () => {
       const visibility = daily.visibility_mean[todayIndex];
+
+      assertNumbers({ visibility });
 
       const visibilityDescription = buildVisibilityDescription(visibility, visibilityUnit, locale, true, t);
 
@@ -103,6 +123,8 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
       const windGusts = daily.wind_gusts_10m_mean[todayIndex];
       const windDirection = daily.wind_direction_10m_dominant[todayIndex];
 
+      assertNumbers({ windSpeed, windGusts, windDirection });
+
       const windDescription = buildWindDescription(windSpeed, windGusts, windDirection, windUnit, t);
 
       return { key: 'wind', ...windDescription };
@@ -110,6 +132,8 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
 
     safeBuild(t, t('humidity'), () => {
       const humidity = daily.relative_humidity_2m_mean[todayIndex];
+
+      assertNumbers({ humidity });
 
       const humidityDescription = buildHumidityDescription(humidity, humidityUnit, t);
 
@@ -119,6 +143,8 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
     safeBuild(t, t('dewPoint'), () => {
       const dewPoint = daily.dew_point_2m_mean[todayIndex];
 
+      assertNumbers({ dewPoint });
+
       const dewPointDescription = buildDewPointDescription(dewPoint, dewPointUnit, t);
 
       return { key: 'dewPoint', ...dewPointDescription };
@@ -127,6 +153,8 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
     safeBuild(t, t('daylight'), () => {
       const daylight = daily.daylight_duration[todayIndex];
 
+      assertNumbers({ daylight });
+
       const daylightDescription = buildDaylightDescription(daylight, t);
 
       return { key: 'daylight', ...daylightDescription };
@@ -134,6 +162,8 @@ export default function buildDailySheetInfo(weather: IWeather, date: DateTime, l
 
     safeBuild(t, t('sunshine'), () => {
       const sunshine = daily.sunshine_duration[todayIndex];
+
+      assertNumbers({ sunshine });
 
       const sunshineDescription = buildSunshineDescription(sunshine, t);
 

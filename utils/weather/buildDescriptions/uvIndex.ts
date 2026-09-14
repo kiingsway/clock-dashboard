@@ -1,5 +1,6 @@
 import { WeatherIconProps } from '@/components/ui/weather/WeatherIcon';
 import ICON_FILES, { getIconUrl } from '@/constants/iconFiles';
+import { getUvIndexLevel } from '@/constants/uvIndex';
 import { DailySheetItemDesc } from '@/types/weatherInfo.types';
 import { TFunction } from 'i18next';
 
@@ -33,14 +34,8 @@ function getUvAnimationDuration(uvIndex: number): number {
 }
 
 export default function buildUVDescription(uvIndex: number, isDay: boolean, t: TFunction): DailySheetItemDesc {
-  const desc = (() => {
-    if (!isDay) return t('uvIndexes.noUvIndex');
-    if (uvIndex <= 2) return t('uvIndexes.low');
-    if (uvIndex <= 5) return t('uvIndexes.moderate');
-    if (uvIndex <= 7) return t('uvIndexes.high');
-    if (uvIndex <= 10) return t('uvIndexes.veryHigh');
-    return t('uvIndexes.extreme');
-  })();
+
+  const { label } = getUvIndexLevel(uvIndex, isDay);
 
   const alt = `${t('uvIndex')}: ${uvIndex}${!isDay ? ` (${t('night')})` : ''}`;
 
@@ -54,7 +49,7 @@ export default function buildUVDescription(uvIndex: number, isDay: boolean, t: T
 
   return {
     title,
-    desc,
+    desc: t(`uvIndexes.${label}`),
     icons: [iconProps]
   };
 }

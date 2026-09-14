@@ -56,8 +56,9 @@ const api = {
     "rain",
     "showers",
     "snowfall",
+    "surface_pressure",
   ],
-};
+} as const;
 
 const getParams = (latitude: number, longitude: number) =>
   new URLSearchParams({

@@ -6,19 +6,7 @@
 
 import { ImageInfo } from "./app.types";
 
-export interface IWeatherUnits {
-  time: "iso8601";
-  interval: "seconds";
-  temperature_2m: "°C" | "°F";
-  apparent_temperature: "°C" | "°F";
-  precipitation: "mm" | "inch";
-  weather_code: "wmo code";
-  rain: "mm";
-  showers: "mm";
-  snowfall: "cm";
-}
-
-export interface IWeatherCurrent {
+export interface ICurrent {
   time: string;
   interval: number;
   temperature_2m: number;
@@ -29,6 +17,20 @@ export interface IWeatherCurrent {
   rain: number;
   showers: number;
   snowfall: number;
+  surface_pressure: number;
+}
+
+export interface ICurrentUnits {
+  time: "iso8601";
+  interval: "seconds";
+  temperature_2m: "°C" | "°F";
+  apparent_temperature: "°C" | "°F";
+  precipitation: "mm" | "inch";
+  weather_code: "wmo code";
+  rain: "mm";
+  showers: "mm";
+  snowfall: "cm";
+  surface_pressure: "hPa"
 }
 
 export interface IHourlyUnits {
@@ -72,6 +74,7 @@ export interface IHourly {
 export interface IDailyUnits {
   time: "iso8601";
   temperature_2m_max: "°C" | "°F";
+  temperature_2m_mean: "°C" | "°F";
   temperature_2m_min: "°C" | "°F";
   weather_code: "wmo code";
   wind_gusts_10m_mean: "km/h";
@@ -120,7 +123,6 @@ export interface IMoonDaily {
   alwaysUp: boolean;
   alwaysDown: boolean;
   phase: number;
-  isSwapped: boolean;
 }
 
 export interface IMoonDailyItemDate {
@@ -145,8 +147,8 @@ export interface IWeather {
   timezone: string;
   timezone_abbreviation: string;
   elevation: number;
-  current_units: IWeatherUnits;
-  current: IWeatherCurrent;
+  current_units: ICurrentUnits;
+  current: ICurrent;
   hourly_units: IHourlyUnits;
   hourly: IHourly;
   daily_units: IDailyUnits;
@@ -189,6 +191,11 @@ export type WeatherCategoryName =
 export interface WeatherCategory {
   name: WeatherCategoryName;
   title: string;
+}
+
+export interface SelectOption {
+  value: string;
+  label: string;
 }
 
 export interface WeatherIconInfo {

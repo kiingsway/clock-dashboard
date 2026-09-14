@@ -21,6 +21,7 @@ import loadSettings from './loadSettings';
 import persistSettings from './persistSettings';
 import { getLocationToWeather } from '@/utils/location/getLocationToWeather';
 import { LOCATION_OPTIONS } from '@/constants/locations';
+import { AQIScale } from '@/types/aqi.types';
 
 const AppSettingsContext = createContext<UseAppSettings | undefined>(undefined);
 
@@ -86,73 +87,59 @@ export function AppSettingsProvider({ children }: Props) {
   }, []);
 
   const setLocation = useCallback((value: TLocation) => {
-    const location = LOCATION_OPTIONS.includes(value as TLocation)
-      ? (value as TLocation)
+    const location = LOCATION_OPTIONS.includes(value)
+      ? value
       : DEFAULT_SETTINGS.location;
 
-    setSettings((prev) => ({
-      ...prev,
-      location,
-    }));
+    setSettings((prev) => ({ ...prev, location }));
   }, []);
 
   const setAlertRadiusKm = useCallback((value: number) => {
     const { MIN, MAX } = ALERT_RADIUS_KM;
     const alertRadiusKm = Math.max(MIN, Math.min(MAX, value ?? DEFAULT_SETTINGS.alertRadiusKm));
-    setSettings((prev) => ({
-      ...prev,
-      alertRadiusKm,
-    }));
+    setSettings((prev) => ({ ...prev, alertRadiusKm }));
   }, []);
 
   const setPrecipHoursRange = useCallback((value: number) => {
     const { MIN, MAX } = RAIN_ALERT_HOURS;
     const precipHoursRange = Math.max(MIN, Math.min(MAX, value ?? DEFAULT_SETTINGS.precipHoursRange));
-    setSettings((prev) => ({
-      ...prev,
-      precipHoursRange,
-    }));
+    setSettings((prev) => ({ ...prev, precipHoursRange }));
   }, []);
 
   const setSunAlertThresholdMinutes = useCallback((value: number) => {
     const { MIN, MAX } = SUNWINDOW_BEFORE_MINUTES;
     const sunAlertThresholdMinutes = Math.max(MIN, Math.min(MAX, value ?? DEFAULT_SETTINGS.sunAlertThresholdMinutes));
-    setSettings((prev) => ({
-      ...prev,
-      sunAlertThresholdMinutes,
-    }));
+    setSettings((prev) => ({ ...prev, sunAlertThresholdMinutes }));
   }, []);
 
   const setShowFeelsLikeWhenEqual = useCallback((value: boolean) => {
     const showFeelsLikeWhenEqual = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.showFeelsLikeWhenEqual;
-    setSettings((prev) => ({
-      ...prev,
-      showFeelsLikeWhenEqual,
-    }));
+    setSettings((prev) => ({ ...prev, showFeelsLikeWhenEqual }));
   }, []);
 
   const setShowMinMaxPeakBadge = useCallback((value: boolean) => {
     const showMinMaxPeakBadge = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.showMinMaxPeakBadge;
-    setSettings((prev) => ({
-      ...prev,
-      showMinMaxPeakBadge,
-    }));
+    setSettings((prev) => ({ ...prev, showMinMaxPeakBadge }));
   }, []);
 
   const setFocusCurrentWeatherOnLaunch = useCallback((value: boolean) => {
     const focusCurrentWeatherOnLaunch = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.focusCurrentWeatherOnLaunch;
-    setSettings((prev) => ({
-      ...prev,
-      focusCurrentWeatherOnLaunch,
-    }));
+    setSettings((prev) => ({ ...prev, focusCurrentWeatherOnLaunch }));
   }, []);
 
   const setIs12Hour = useCallback((value: boolean) => {
     const is12hour = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.is12hour;
-    setSettings((prev) => ({
-      ...prev,
-      is12hour,
-    }));
+    setSettings((prev) => ({ ...prev, is12hour }));
+  }, []);
+
+  const setAqiScale = useCallback((value: AQIScale) => {
+    const aqiScale = value === 'european' || value === 'us' ? value : DEFAULT_SETTINGS.aqiScale;
+    setSettings((prev) => ({ ...prev, aqiScale }));
+  }, []);
+
+  const setUseBottomSheet = useCallback((value: boolean) => {
+    const useBottomSheet = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.useBottomSheet;
+    setSettings((prev) => ({ ...prev, useBottomSheet }));
   }, []);
 
   const resetSettings = useCallback(() => setSettings(DEFAULT_SETTINGS), []);
@@ -174,6 +161,8 @@ export function AppSettingsProvider({ children }: Props) {
         showMinMaxPeakBadge: setShowMinMaxPeakBadge,
         focusCurrentWeatherOnLaunch: setFocusCurrentWeatherOnLaunch,
         is12hour: setIs12Hour,
+        aqiScale: setAqiScale,
+        useBottomSheet: setUseBottomSheet,
       },
     }),
     [
@@ -188,6 +177,8 @@ export function AppSettingsProvider({ children }: Props) {
       setShowMinMaxPeakBadge,
       setFocusCurrentWeatherOnLaunch,
       setIs12Hour,
+      setAqiScale,
+      setUseBottomSheet,
       resetSettings,
     ]
   );

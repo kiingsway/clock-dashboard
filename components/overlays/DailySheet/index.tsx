@@ -9,6 +9,8 @@ import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import { JSX } from 'react';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import DailySheetContent from './DailySheetContent';
+import { Modal } from '@/components/ui/Modal';
+import useAppSettings from '@/contexts/AppSettingsContext';
 
 interface Props {
   weather: IWeather | undefined
@@ -21,6 +23,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
   const portalContainer = usePortalContainer();
+  const { get: { useBottomSheet } } = useAppSettings();
 
   if (typeof index !== 'number' || !weather) return null;
 
@@ -32,23 +35,37 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
 
   const title = getForecastTitle(now, indexDate, locale, t);
 
-  return (
+  const content = (
+    <ErrorBoundary>
+      {Boolean(weather) && typeof index === 'number' && (
+        <DailySheetContent weather={weather} index={index} />
+      )}
+    </ErrorBoundary>
+  );
+
+  if (useBottomSheet) return (
     <BottomSheet
       open={open && typeof index === 'number'}
       onClose={onClose}
       title={title}
       ariaLabel={t('close')}
-      snapPoints={[0.7, 0.95]}
+      snapPoints={[0.7, 1]}
       initialSnap={0}
       dismissible
       container={portalContainer}
     >
-      <ErrorBoundary>
-        {Boolean(weather) && typeof index === 'number' && (
-          <DailySheetContent weather={weather} index={index} />
-        )}
-      </ErrorBoundary>
+      {content}
     </BottomSheet>
+  );
+
+  return (
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={title}
+    >
+      {content}
+    </Modal>
   );
 }
 

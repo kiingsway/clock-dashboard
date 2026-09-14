@@ -17,16 +17,14 @@ i18n
   .init({
     resources,
     fallbackLng: "en",
+    supportedLngs: ['pt', 'en', 'fr', 'es', 'ko'],
+    interpolation: { escapeValue: false },
 
     detection: {
       order: ["localStorage", "navigator"],
       caches: ["localStorage"],
       lookupLocalStorage: "i18nextLng",
     },
-
-    interpolation: {
-      escapeValue: false
-    }
   });
 
 export default i18n;

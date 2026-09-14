@@ -3,8 +3,9 @@ export const STORAGE_KEY = {
 };
 
 export const CACHE_KEY = {
+  AQI: 'air-quality-index',
   WEATHER: 'weather',
   NOTION_TASKS: 'notion-tasks',
   CURRENY_HISTORY: 'currency-history',
-  WEATHER_ALERTS: 'weather-alerts'
+  WEATHER_ALERTS: 'weather-alerts',
 };

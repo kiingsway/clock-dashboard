@@ -52,10 +52,10 @@ export default function buildHourlyListData({ startIndex, weather, hoursAhead, n
 
     const indexDate = DateTime.fromISO(indexDateString, { zone: timezone });
 
-    const weatherCode = weatherCodes[index];
-    const temp = Math.round(temps[index]);
-    const feelsLike = Math.round(feelsLikes[index]);
-    const precipitation = precipitations[index];
+    const weatherCode = weatherCodes[index] ?? -1;
+    const temp = temps[index] ? Math.round(temps[index]) : null;
+    const feelsLike = feelsLikes[index] ? Math.round(feelsLikes[index]) : null;
+    const precipitation = precipitations[index] ?? null;
     const isDay = isDays[index] === 1;
 
     const { accent, title: categoryTitle } = getWeatherCodeInfo(weatherCode, isDay, t);

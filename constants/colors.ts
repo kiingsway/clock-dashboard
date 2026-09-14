@@ -5,6 +5,34 @@ export const DEFAULT_COLOR: IColor = {
   WHITE: "#e8ecf4"
 };
 
+export const RAINBOW_COLORS = [
+  "#6FC996",
+  "#ACDC91",
+  "#F3CD62",
+  "#F29C62",
+  "#E86F72",
+  "#A477C2",
+  "#E0F2F1",
+  "#4F8FC4"
+] as const;
+
+const YELLOW_COLORS = [
+  RAINBOW_COLORS[2],
+  "#E8D97A",
+  "#DDE19A",
+  "#D8E8B8",
+  RAINBOW_COLORS[6],
+];
+
+const BLUE_COLORS = [
+  RAINBOW_COLORS[7],
+  "#5B9BD5",
+  "#72A8CC",
+  "#9FC4D5",
+  "#C0D8DB",
+  RAINBOW_COLORS[6],
+] as const;
+
 export const WEATHER_ACCENT_COLORS: TCategoryDef = {
   clear: { day: "#f4b860", night: "#8695f0" },
   partlyCloudy: { day: "#e5be85", night: "#7f8cb8" },
@@ -36,25 +64,25 @@ export const WEATHER_ACCENT_COLORS: TCategoryDef = {
 } as const;
 
 export const WIND_SPEED_COLORS: IGradientColor[] = [
-  { value: 0, hex: "#E0F2F1" },   // Calmo
-  { value: 10, hex: "#D9F99D" },  // Brisa leve
-  { value: 20, hex: "#FFF59D" },  // Perceptível
-  { value: 30, hex: "#FFD180" },  // Incômodo
-  { value: 40, hex: "#FFAB91" },  // Forte
-  { value: 55, hex: "#FF7043" },  // Muito forte
-  { value: 70, hex: "#D32F2F" },  // Severo
-  { value: 90, hex: "#6A1B9A" },  // Extremo
+  { value: 0, hex: YELLOW_COLORS[4] },   // Calmo
+  { value: 10, hex: YELLOW_COLORS[3] },  // Brisa leve
+  { value: 20, hex: YELLOW_COLORS[2] },  // Perceptível
+  { value: 30, hex: YELLOW_COLORS[1] },  // Incômodo
+  { value: 40, hex: RAINBOW_COLORS[2] },  // Forte
+  { value: 55, hex: RAINBOW_COLORS[3] },  // Muito forte
+  { value: 70, hex: RAINBOW_COLORS[4] },  // Severo
+  { value: 90, hex: RAINBOW_COLORS[5] },  // Extremo
 ] as const;
 
 export const WIND_GUSTS_COLORS: IGradientColor[] = [
-  { value: 0, hex: "#E0F2F1" },   // Sem rajadas relevantes
-  { value: 20, hex: "#D9F99D" },  // Leve
-  { value: 40, hex: "#FFF59D" },  // Perceptível
-  { value: 60, hex: "#FFD180" },  // Moderada
-  { value: 80, hex: "#FFAB91" },  // Forte
-  { value: 100, hex: "#FF7043" }, // Muito forte
-  { value: 120, hex: "#D32F2F" }, // Severa
-  { value: 140, hex: "#6A1B9A" }, // Extrema
+  { value: 0, hex: YELLOW_COLORS[4] },   // Sem rajadas relevantes
+  { value: 20, hex: YELLOW_COLORS[3] },  // Leve
+  { value: 40, hex: YELLOW_COLORS[2] },  // Perceptível
+  { value: 60, hex: YELLOW_COLORS[1] },  // Moderada
+  { value: 80, hex: RAINBOW_COLORS[2] },  // Forte
+  { value: 100, hex: RAINBOW_COLORS[3] }, // Muito forte
+  { value: 120, hex: RAINBOW_COLORS[4] }, // Severa
+  { value: 140, hex: RAINBOW_COLORS[5] }, // Extrema
 ] as const;
 
 export const VISIBILITY_COLORS: IGradientColor[] = [
@@ -64,17 +92,6 @@ export const VISIBILITY_COLORS: IGradientColor[] = [
   { value: 2000, hex: "#D9C3A5" }, // Moderada
   { value: 5000, hex: "#EADCC9" }, // Boa
   { value: 10000, hex: "#F5F0E6" }  // Excelente
-] as const;
-
-export const HUMIDITY_COLORS: IGradientColor[] = [
-  { value: 0, hex: "#C9A227", },// Extremely dry
-  { value: 20, hex: "#D9A441", },// Very dry
-  { value: 30, hex: "#d8c38e", },// Dry
-  { value: 40, hex: "#cfddf4", },// Comfortable
-  { value: 60, hex: "#7db2c4", },// Slightly humid
-  { value: 70, hex: "#3D8FB8", },// Humid
-  { value: 80, hex: "#3976A8", },// Very humid
-  { value: 90, hex: "#2E5E96", },// Extremely humid
 ] as const;
 
 export const MOON_COLORS: IGradientColor[] = [
@@ -90,27 +107,51 @@ export const MOON_COLORS: IGradientColor[] = [
 ];
 
 export const UVINDEX_COLORS: IGradientColor[] = [
-  { value: 0, hex: "#86CFA3" },  // Verde — baixo
-  { value: 3, hex: "#F2D37A" },  // Amarelo — moderado
-  { value: 6, hex: "#F2A56F" },  // Laranja — alto
-  { value: 8, hex: "#E97C7C" },  // Vermelho — muito alto
-  { value: 11, hex: "#A982C7" }, // Roxo — extremo
+  { value: 0, hex: RAINBOW_COLORS[0] },  // Verde — baixo
+  { value: 3, hex: RAINBOW_COLORS[2] },  // Amarelo — moderado
+  { value: 6, hex: RAINBOW_COLORS[3] },  // Laranja — alto
+  { value: 9, hex: RAINBOW_COLORS[4] },  // Vermelho — muito alto
+  { value: 11, hex: RAINBOW_COLORS[5] }, // Roxo — extremo
 ];
 
-// export const HUMIDITY_COLORS: IInterpolateColor = {
-//   low: "#f59e0b",
-//   mid: DEFAULT_COLOR.WHITE,
-//   high: "#3b82f6",
-// } as const;
+export const HUMIDITY_COLORS: IGradientColor[] = [
+  { value: 0, hex: YELLOW_COLORS[0], },// Extremely dry
+  { value: 20, hex: YELLOW_COLORS[1], },// Very dry
+  { value: 30, hex: YELLOW_COLORS[3], },// Dry
+  { value: 40, hex: YELLOW_COLORS[4], },// Comfortable
+  { value: 60, hex: BLUE_COLORS[3], },// Slightly humid
+  { value: 70, hex: BLUE_COLORS[2], },// Humid
+  { value: 80, hex: BLUE_COLORS[1], },// Very humid
+  { value: 90, hex: BLUE_COLORS[0], },// Extremely humid
+] as const;
+
+export const AQI_EU_COLORS: IGradientColor[] = [
+  { value: 0, hex: "#B8E6C1", }, // Good
+  { value: 20, hex: "#D8E9A8", }, // Fair
+  { value: 40, hex: "#F3E6A3", }, // Moderate
+  { value: 60, hex: "#F3C49B", }, // Poor
+  { value: 80, hex: "#EFA6A6", }, // Very poor
+  { value: 100, hex: "#CFA6D8", }, // Extremely poor
+] as const;
+
+export const AQI_USA_COLORS: IGradientColor[] = [
+  { value: 0, hex: "#B8E6C1", }, // Good
+  { value: 50, hex: "#D8E9A8", }, // Moderate
+  { value: 100, hex: "#F3E6A3", }, // Unhealthy for sensitive groups
+  { value: 150, hex: "#F3C49B", }, // Unhealthy
+  { value: 200, hex: "#EFA6A6", }, // Very unhealthy
+  { value: 300, hex: "#CFA6D8", }, // Hazardous
+] as const;
 
 export const DEW_COLORS: IInterpolateColor = {
   low: '#a5f3fc',
-  mid: DEFAULT_COLOR.WHITE,
-  high: '#fca5a5',
+  // low: BLUE_COLORS[2],
+  mid: RAINBOW_COLORS[6],
+  high: RAINBOW_COLORS[4],
 } as const;
 
 export const DAYLIGHT_COLORS: IInterpolateColor = {
-  low: "#a98cf0",
-  mid: DEFAULT_COLOR.WHITE,
-  high: "#fef08a",
+  low: RAINBOW_COLORS[5],
+  mid: RAINBOW_COLORS[6],
+  high: YELLOW_COLORS[0],
 } as const;

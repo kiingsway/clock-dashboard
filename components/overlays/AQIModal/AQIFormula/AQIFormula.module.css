@@ -1,0 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&family=Space+Mono:wght@400;700&display=swap');
+
+.main {
+  --wc-font-clock: 'Space Mono', 'SFMono-Regular', ui-monospace, monospace;
+
+  font-family: var(--wc-font-body);
+}
+
+.content {
+  /* padding-top: var(--wc-space-md); */
+  color: var(--wc-text-muted);
+  line-height: 1.5;
+}
+
+.content p {
+  font-size: 13px;
+  margin-top: var(--wc-space-lg)
+}
+
+.formula {
+  margin-top: var(--wc-space-sm);
+  padding: var(--wc-space-sm) var(--wc-space-md);
+  background: var(--wc-surface);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-sm);
+  font-family: var(--wc-font-clock);
+  color: var(--wc-text);
+  overflow-x: auto;
+  white-space: nowrap;
+
+  text-align: center;
+}
+
+.legend {
+  margin-top: var(--wc-space-sm);
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--wc-space-2xs) var(--wc-space-sm);
+  color: var(--wc-text-faint);
+  font-size: 0.75em;
+}
+
+.legend dt {
+  font-family: var(--wc-font-clock);
+  color: var(--wc-text-muted);
+}
+
+.legend dd {
+  margin: 0;
+}
+
+.rows {
+  margin-top: var(--wc-space-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.rows .row {
+  padding: var(--wc-space-md) 0;
+  border-top: 1px solid var(--wc-hairline);
+}
+
+.rows .row:first-child {
+  border-top: none;
+}
+
+.row .header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--wc-space-xs);
+  margin-bottom: var(--wc-space-xs);
+}
+
+.header .symbol {
+  font-family: var(--wc-font-display);
+  font-weight: 600;
+  font-size: 0.9375em;
+  color: var(--wc-text);
+}
+
+.header .label {
+  font-size: 0.75em;
+  color: var(--wc-text-faint);
+}
+
+.header .mw {
+  margin-left: auto;
+  font-family: var(--wc-font-clock);
+  font-size: 0.6875em;
+  color: var(--wc-text-faint);
+}
+
+.equation {
+  font-family: var(--wc-font-clock);
+  font-size: 0.8125em;
+  color: var(--wc-text-muted);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.equation .result {
+  color: var(--wc-accent);
+  font-weight: 700;
+}
+
+.meta {
+  margin-top: var(--wc-space-xl);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--wc-hairline);
+  padding-top: var(--wc-space-lg);
+}
+
+.meta .cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wc-space-2xs);
+  padding: 0 var(--wc-space-sm);
+  border-left: 1px solid var(--wc-hairline);
+}
+
+.meta .cell:first-child {
+  border-left: none;
+  padding-left: 0;
+}
+
+.meta .value {
+  font-family: var(--wc-font-clock);
+  font-size: 0.9375em;
+  color: var(--wc-text);
+}
+
+.meta .label {
+  font-size: 0.6875em;
+  color: var(--wc-text-faint);
+}

@@ -15,14 +15,18 @@ import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import useAppSettings from "@/contexts/AppSettingsContext";
 import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
+import { useAQI } from "@/hooks/useAQI";
 
 export default function WeatherTab() {
   const { t } = useTranslation();
   const { weather, isLoading, error: weatherError } = useWeather();
+  const { aqiData, error: aqiError } = useAQI();
   const { get: { focusCurrentWeatherOnLaunch } } = useAppSettings();
   const { data: alerts, error: alertsError } = useWeatherAlerts();
   const { focus, toggleFocus } = useFocusMode({ initialValue: focusCurrentWeatherOnLaunch, onFocus: 12000, offFocus: 0 });
   const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
+
+  const error = weatherError ?? aqiError ?? alertsError;
 
   const { accent } = getWeatherCodeInfo(weather?.current?.weather_code ?? -1, weather?.current?.is_day !== 0, t);
 
@@ -55,7 +59,7 @@ export default function WeatherTab() {
               weather={weather}
               alerts={alerts}
               loading={isLoading}
-              error={weatherError}
+              error={error}
               isFocused={focus}
             />
           </ErrorBoundary>
@@ -72,7 +76,7 @@ export default function WeatherTab() {
             </ErrorBoundary>
 
             <ErrorBoundary>
-              <WeatherWidgets weather={weather} />
+              <WeatherWidgets weather={weather} aqi={aqiData} />
             </ErrorBoundary>
           </div>
         )}

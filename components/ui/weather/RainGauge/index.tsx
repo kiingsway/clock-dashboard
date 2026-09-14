@@ -22,7 +22,7 @@ export interface RainGaugeProps {
  * `max` the current value represents. Text and fill both key off
  * `var(--wc-accent)`, so it re-themes with the rest of the app.
  */
-export function RainGauge({ mm, max = 10, precision = 1, className }: RainGaugeProps) {
+export function RainGauge({ mm = 0, max = 10, precision = 1, className }: RainGaugeProps) {
   const { t } = useTranslation();
 
   const pct = clamp(mm / max, 0, 1) * 100;

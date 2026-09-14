@@ -11,28 +11,38 @@ export interface HourlyCardProps {
   hideSubhour?: boolean;
   hourTooltip: string;
   icon: WeatherIconProps;
-  temp: number;
+  temp: number | null;
   tempUnit?: string;
-  feelsLike: number;
+  feelsLike: number | null;
   feelsLikeUnit?: string;
   precipitation: number;
   accent: string;
   accentPeak: string;
 }
 
+const isNumber = (n: unknown): n is number => typeof n === 'number';
+
 export default function HourlyCard({
-  as: Component = 'div',
+  as: Component = 'li',
   precipitation, icon, feelsLike, hour, temp, subhour, hideSubhour,
   tempUnit = 'ºC',
   feelsLikeUnit = 'ºC',
   hourTooltip,
   accent, accentPeak
 }: HourlyCardProps) {
+
+  const onDoubleClick = (): void => console.info({ temp, feelsLike, icon });
+
+  const style = {
+    "--wc-accent": accent,
+    "--wc-accent-peak": accentPeak,
+  } as CSSProperties;
+
+  const hasTemp = isNumber(feelsLike);
+  const hasFeelsLike = isNumber(feelsLike);
+
   return (
-    <Component className={styles.card} style={{
-      "--wc-accent": accent,
-      "--wc-accent-peak": accentPeak,
-    } as CSSProperties}>
+    <Component className={styles.card} style={style} onDoubleClick={onDoubleClick}>
       <Tooltip content={hourTooltip}>
         <div className={styles.hour} title={hourTooltip}>
 
@@ -45,15 +55,15 @@ export default function HourlyCard({
         <WeatherIcon {...icon} size={40} />
       </div>
 
-      <span className={styles.temp}>
-        {temp + tempUnit}
-      </span>
+      {<span className={styles.temp}>
+        {hasTemp ? temp + tempUnit : '—'}
+      </span>}
 
       <span className={styles.feels}>
-        {feelsLike + feelsLikeUnit}
+        {hasFeelsLike ? feelsLike + feelsLikeUnit : '—'}
       </span>
 
-      <RainGauge mm={precipitation} />
+      <RainGauge mm={precipitation ?? 0} />
     </Component>
   );
 }

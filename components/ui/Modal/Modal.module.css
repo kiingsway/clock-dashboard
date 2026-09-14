@@ -1,0 +1,137 @@
+/* Modal.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--wc-space-lg);
+
+  background: color-mix(in srgb, var(--wc-ink) 65%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  animation: overlayFadeIn 180ms ease-out;
+}
+
+.dialog {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 500px;
+  max-height: min(80vh, 800px);
+
+  background: var(--wc-surface-raised);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-lg);
+  box-shadow: var(--wc-shadow-lg);
+
+  outline: none;
+  overflow: hidden;
+
+  animation: dialogEnter 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  /* justify-content: space-between; */
+  gap: var(--wc-space-md);
+  width: 100%;
+
+  padding: var(--wc-space-lg) var(--wc-space-lg) var(--wc-space-md);
+  border-bottom: 1px solid var(--wc-hairline);
+  flex-shrink: 0;
+}
+
+.header_info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wc-space-md);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-lg);
+  font-weight: 600;
+  color: var(--wc-text);
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  color: var(--wc-text-muted);
+  background: var(--wc-surface-alt);
+  border: 1px solid transparent;
+  border-radius: var(--wc-radius-full);
+
+  transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+}
+
+.closeButton:hover {
+  color: var(--wc-text);
+  background: var(--wc-accent-muted);
+  border-color: var(--wc-hairline);
+}
+
+.closeButton:active {
+  transform: scale(0.94);
+}
+
+.content {
+  padding: var(--wc-space-lg);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+
+  font-family: var(--wc-font-body);
+  font-size: var(--wc-text-sm);
+  color: var(--wc-text-muted);
+  line-height: 1.5;
+}
+
+/* Animações */
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dialogEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Respeita preferência de menos movimento */
+@media (prefers-reduced-motion: reduce) {
+
+  .overlay,
+  .dialog {
+    animation: none;
+  }
+}

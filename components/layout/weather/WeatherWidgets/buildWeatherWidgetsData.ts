@@ -1,15 +1,19 @@
 import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard';
 import { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
-import { HUMIDITY_COLORS, MOON_COLORS, UVINDEX_COLORS, VISIBILITY_COLORS, WIND_GUSTS_COLORS } from '@/constants/colors';
+import { AQI_EU_COLORS, AQI_USA_COLORS, HUMIDITY_COLORS, MOON_COLORS, VISIBILITY_COLORS, WIND_GUSTS_COLORS, WIND_SPEED_COLORS } from '@/constants/colors';
 import { getDewPointDescription, getHumidityDescription } from '@/constants/descriptions';
 import { getIconUrl } from '@/constants/iconFiles';
+import { UV_INDEX_LEVELS } from '@/constants/uvIndex';
+import { IAQI, AQIScale } from '@/types/aqi.types';
 import { IWeather } from '@/types/weather.types';
+import { AQI_COLORS } from '@/utils/aqi/getAQIInfo';
 import { formatDuration } from '@/utils/formatters/dateFormatters';
 import { getCurrentIndex } from '@/utils/formatters/getValueByArray';
 import { capitalizeWords, formatMetricValue } from '@/utils/formatters/textFormatters';
 import { getAstronomicalSeasonInfo } from '@/utils/geo/getAstronomicalSeason';
 import getBeaufortScale from '@/utils/geo/getBeaufortScale';
 import { getCompassDirection } from '@/utils/geo/getCompassDirection';
+import buildAQIDescription from '@/utils/weather/buildDescriptions/aqi';
 import buildMoonDescription from '@/utils/weather/buildDescriptions/moon';
 import buildUVDescription from '@/utils/weather/buildDescriptions/uvIndex';
 import buildVisibilityDescription from '@/utils/weather/buildDescriptions/visibility';
@@ -19,11 +23,14 @@ import { getWindGustAnimationDuration, getWindSummary } from '@/utils/weather/ge
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 
-export type TWeatherWidgetsDataItem = (DetailCardProps & { zoneGauge?: ZoneGaugeBarProps });
+export type TWeatherWidgetsDataItem = (DetailCardProps & {
+  showZoneGauge?: boolean;
+  zoneGauge?: ZoneGaugeBarProps
+});
 
-function safeBuild(t: TFunction, defaultTitle: string = 'Erro', builder: () => TWeatherWidgetsDataItem): TWeatherWidgetsDataItem {
+function safeBuild(t: TFunction, defaultTitle: string = 'Erro', builder: (title: string) => TWeatherWidgetsDataItem | undefined): TWeatherWidgetsDataItem | undefined {
   try {
-    return builder();
+    return builder ? builder(defaultTitle) : undefined;
   } catch (error) {
     console.error(`${t('error_building_item')} "${defaultTitle}":`, error);
     return {
@@ -34,10 +41,9 @@ function safeBuild(t: TFunction, defaultTitle: string = 'Erro', builder: () => T
   }
 }
 
-export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime, locale: string, t: TFunction): TWeatherWidgetsDataItem[] {
+export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | undefined, aqiScale: AQIScale, now: DateTime, locale: string, t: TFunction): TWeatherWidgetsDataItem[] {
 
   const {
-    timezone,
     daily_moon,
     hourly_units: {
       relative_humidity_2m: humidityUnit,
@@ -75,14 +81,64 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
 
   const daylightHours = [0, 4, 8, 12, 16, 20, 24];
   const daylightZones = daylightHours.map(value => ({ value, color: getDaylightColor(value * 60 * 60) }));
-  const windZones = WIND_GUSTS_COLORS.map(({ hex: color, value }) => ({ value, color }));
+  const windSpeedZones = WIND_SPEED_COLORS.map(({ hex: color, value }) => ({ value, color }));
+  const windGustsZones = WIND_GUSTS_COLORS.map(({ hex: color, value }) => ({ value, color }));
 
   return [
-    safeBuild(t, t('moon'), () => {
-      const moonDesc = buildMoonDescription(daily_moon, now, timezone, t);
+
+    safeBuild(t, t('airQuality'), title => {
+      if (!aqi) return undefined;
+      const isEUType = aqiScale === 'european';
+
+      const { european_aqi, us_aqi } = aqi.current;
+
+      const aqIndex = isEUType ? european_aqi : us_aqi;
+      const aqiDesc = buildAQIDescription(aqIndex, aqiScale, t);
+
+      const zones = (isEUType ? AQI_EU_COLORS : AQI_USA_COLORS).map(({ value }, index) => ({ value, color: AQI_COLORS[index] }));
+
+      return {
+        title,
+        description: aqiDesc.desc,
+        bigText: aqIndex,
+        colspan: 2,
+        showZoneGauge: true,
+        zoneGauge: {
+          value: aqIndex ?? 0,
+          valueDesc: aqiDesc.title,
+          zones,
+          max: isEUType ? 120 : 400,
+          hideZoneLabel: true,
+        }
+      };
+    }),
+
+    safeBuild(t, t('uvIndex'), title => {
+
+      const uvIndex = uv_index[nowIndex];
+      const isDay = is_day[nowIndex] === 1;
+
+      const uvIndexDesc = buildUVDescription(uvIndex, isDay, t);
+      const zones = UV_INDEX_LEVELS.map(({ value, color }) => ({ value, color }));
+
+      return {
+        title,
+        description: uvIndexDesc.desc,
+        iconProps: uvIndexDesc.icons[0],
+        zoneGauge: {
+          value: uvIndex ?? 0,
+          zones,
+          max: 13,
+          hideZoneLabel: true,
+        }
+      };
+    }),
+
+    safeBuild(t, t('moon'), title => {
+      const moonDesc = buildMoonDescription(daily_moon, now, t);
       const moonPhaseZones = MOON_COLORS.map(({ hex: color, value }) => ({ value, color }));
       return {
-        title: t('moon'),
+        title,
         description: moonDesc.title,
         iconProps: moonDesc.icons[0],
         zoneGauge: {
@@ -95,47 +151,25 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('uvIndex'), () => {
-
-      const uvIndex = uv_index[nowIndex];
-      const isDay = is_day[nowIndex] === 1;
-
-      const uvIndexDesc = buildUVDescription(uvIndex, isDay, t);
-      const uvIndexZones = UVINDEX_COLORS.map(({ hex: color, value }) => ({ value, color }));
-
-      return {
-        title: t('uvIndex'),
-        description: uvIndexDesc.desc,
-        iconProps: uvIndexDesc.icons[0],
-        zoneGauge: {
-          value: uvIndex ?? 0,
-          zones: uvIndexZones,
-          max: 12,
-          hideZoneLabel: true,
-        }
-      };
-    }),
-
-    safeBuild(t, t('windSpeed'), () => {
+    safeBuild(t, t('windSpeed'), title => {
       const windDirectionNow = wind_direction_10m[nowIndex];
       const windSpeedNow = wind_speed_10m[nowIndex];
       const windSpeedDay = wind_speed_10m_mean[todayIndex];
 
       const compass = getCompassDirection(windDirectionNow, t);
       const windSpeedDesc = getWindSummary({ currentSpeed: windSpeedNow, averageSpeed: windSpeedDay, direction: compass.title }, t);
-      const level = getBeaufortScale(windSpeedNow);
-      const beaufortSrc = getIconUrl(`wind-beaufort-${level}`);
+      const beaufortLevel = getBeaufortScale(windSpeedNow);
       const beaufortDuration = getWindGustAnimationDuration(windSpeedNow);
-      const beaufortTitle = `Beaufort Scale: ${level} (${windSpeedNow})`;
+      const beaufortTitle = `Beaufort Scale: ${beaufortLevel} (${windSpeedNow})`;
       const directionText = `${capitalizeWords(t('wind'))} ${compass.name}`;
 
       return {
-        title: t('windSpeed'),
+        title,
         description: windSpeedDesc,
         textColor: getWindColor(windSpeedNow, 'gusts'),
         iconsProps: [
           {
-            src: beaufortSrc,
+            src: getIconUrl(`wind-beaufort-${beaufortLevel}`),
             title: beaufortTitle,
             alt: beaufortTitle,
             duration: beaufortDuration,
@@ -150,7 +184,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
         zoneGauge: {
           value: windSpeedNow,
           unit: ` ${windUnit}`,
-          zones: windZones,
+          zones: windSpeedZones,
           hideZoneLabel: true,
           referenceZones: [
             { label: `${t('mean')}: ${windSpeedDay} ${windUnit}`, value: windSpeedDay }
@@ -159,20 +193,20 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('windGusts'), () => {
+    safeBuild(t, t('windGusts'), title => {
 
       const windGustsNow = wind_gusts_10m[nowIndex];
       const windGustsDay = wind_gusts_10m_mean[todayIndex];
 
       return {
-        title: t('windGusts'),
+        title,
         textColor: getWindColor(windGustsNow, 'gusts'),
         bigText: `${windGustsNow} ${windUnit}`,
         description: t('averageSpeedForDay', { speed: windGustsDay + windUnit }),
         zoneGauge: {
           value: windGustsNow,
           unit: ` ${windUnit}`,
-          zones: windZones,
+          zones: windGustsZones,
           hideZoneLabel: true,
           referenceZones: [
             { label: `${t('mean')}: ${windGustsDay} ${windUnit}`, value: windGustsDay }
@@ -181,7 +215,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('visibility'), () => {
+    safeBuild(t, t('visibility'), title => {
 
       const visibility = visibilityProp[nowIndex];
 
@@ -189,7 +223,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       const visibilityZones = VISIBILITY_COLORS.map(({ hex: color, value }) => ({ color, value }));
 
       return {
-        title: t('visibility'),
+        title,
         bigText: visibilityDesc.title,
         description: visibilityDesc.desc,
         textColor: visibilityDesc.textColor,
@@ -205,13 +239,13 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('humidity'), () => {
+    safeBuild(t, t('humidity'), title => {
 
       const humidity = relative_humidity_2m[nowIndex];
       const humidityZones = HUMIDITY_COLORS.map(({ hex: color, value }) => ({ color, value }));
 
       return {
-        title: t('humidity'),
+        title,
         bigText: humidity + humidityUnit,
         description: getHumidityDescription(humidity, t),
         textColor: getHumidityColor(humidity),
@@ -224,7 +258,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('dewPoint'), () => {
+    safeBuild(t, t('dewPoint'), title => {
 
       const dewPoint = dew_point_2m[nowIndex];
 
@@ -234,7 +268,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
         dewPointStops.map(value => ({ value, color: getDewPointColor(value) }));
 
       return {
-        title: t('dewPoint'),
+        title,
         description: dewPointdesc,
         bigText: dewPoint + dewPointUnit,
         textColor: getDewPointColor(dewPoint),
@@ -249,13 +283,13 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('daylight'), () => {
+    safeBuild(t, t('daylight'), title => {
 
       const daylight = daylight_duration[todayIndex];
       const daylightInfo = getDaylightSunshineInfo(daylight, 'daylight', true, t);
 
       return {
-        title: daylightInfo.title,
+        title,
         description: daylightInfo.desc,
         bigText: daylightInfo.time,
         textColor: daylightInfo.color,
@@ -271,13 +305,13 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('sunshine'), () => {
+    safeBuild(t, t('sunshine'), title => {
 
       const sunshine = sunshine_duration[todayIndex];
       const sunshineInfo = getDaylightSunshineInfo(sunshine, 'sunshine', true, t);
 
       return {
-        title: sunshineInfo.title,
+        title,
         description: sunshineInfo.desc,
         bigText: sunshineInfo.time,
         textColor: sunshineInfo.color,
@@ -293,15 +327,16 @@ export default function buildWeatherWidgetsData(weather: IWeather, now: DateTime
       };
     }),
 
-    safeBuild(t, t('season'), () => {
+    safeBuild(t, t('season'), title => {
       const { desc, daysProgressText, color } = getAstronomicalSeasonInfo(weather.latitude, now, t);
 
       return {
-        title: t('season'),
+        title,
         bigText: daysProgressText,
         description: desc,
         textColor: color
       };
     }),
-  ];
+
+  ].filter(i => i !== undefined) as TWeatherWidgetsDataItem[];
 }

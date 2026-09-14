@@ -1,9 +1,9 @@
 import styles from "./Switch.module.scss";
 
 interface SwitchProps {
-  id: string;
-  value: boolean;
-  onChange: (value: boolean) => void;
+  id?: string;
+  value?: boolean;
+  onChange?: (value: boolean) => void;
   disabled?: boolean;
   /** Usado apenas para acessibilidade quando não há um <label htmlFor> visível na tela */
   ariaLabel?: string;
@@ -20,7 +20,7 @@ export function Switch({ id, value, onChange, disabled, ariaLabel }: SwitchProps
         checked={value}
         disabled={disabled}
         aria-label={ariaLabel}
-        onChange={(e) => onChange(e.target.checked)}
+        onChange={(e) => onChange?.(e.target.checked)}
       />
       <span className={styles.track}>
         <span className={styles.thumb} />

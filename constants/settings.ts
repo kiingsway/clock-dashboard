@@ -1,4 +1,5 @@
 import { AppSettings } from "@/types/app.types";
+import { AQIScale } from "@/types/aqi.types";
 
 export const LANGUAGES = [
   { value: 'en', label: 'English' },
@@ -7,6 +8,8 @@ export const LANGUAGES = [
   { value: 'es', label: 'Español' },
   { value: 'ko', label: '한국어' },
 ] as const;
+
+export const AQI_SCALES: AQIScale[] = ['european', 'us'] as const;
 
 export const DEFAULT_SETTINGS: AppSettings = {
   location: 'America/Toronto',
@@ -17,6 +20,8 @@ export const DEFAULT_SETTINGS: AppSettings = {
   showMinMaxPeakBadge: true, // Show "MIN" or "MAX" when the current temperature equals min ou max.
   focusCurrentWeatherOnLaunch: false, // Whether current weather is focused or not.
   is12hour: false,
+  aqiScale: AQI_SCALES[0],
+  useBottomSheet: true,
 };
 
 export const ALERT_RADIUS_KM = {

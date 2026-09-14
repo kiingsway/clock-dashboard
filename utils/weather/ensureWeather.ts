@@ -1,4 +1,4 @@
-import { IDaily, IWeather, IWeatherCurrent, IWeatherUnits } from "@/types/weather.types";
+import { IDaily, IWeather, ICurrent, IWeatherUnits } from "@/types/weather.types";
 import { DateTime } from "luxon";
 import { getCurrentIndex } from "../formatters/getValueByArray";
 import { getSunWindow } from "./getSunWindow";
@@ -13,7 +13,7 @@ export function ensureWeather(weather: IWeather | undefined, now: DateTime, isLo
     weather_code: isLoading ? -2 : -1,
     is_day: 1,
     time: now.toISO(),
-  } as IWeatherCurrent;
+  } as ICurrent;
 
   const currentUnits = weather?.current_units ?? {
     temperature_2m: "°C",

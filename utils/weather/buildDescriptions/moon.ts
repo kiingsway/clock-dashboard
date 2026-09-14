@@ -4,7 +4,7 @@ import { IMoonDailyItem } from '@/types/weather.types';
 import { DateTime } from 'luxon';
 import getMoonEvent from '../getMoonEvent';
 
-export default function buildMoonDescription(dailyMoon: IMoonDailyItem[], date: DateTime, timezone: string, t: TFunction): DailySheetItemDesc {
+export default function buildMoonDescription(dailyMoon: IMoonDailyItem[], date: DateTime, t: TFunction): DailySheetItemDesc {
 
   const moonDateIndex = dailyMoon.findIndex(m => m.date.date === date.toISODate());
 

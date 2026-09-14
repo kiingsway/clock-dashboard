@@ -105,9 +105,7 @@ export default function getMoonDays({
   });
 
   return dates.map(date => {
-    if (!isValidDateTime(date)) {
-      throw new Error(`getMoonDays2. Invalid Date: "${date}"`);
-    }
+    if (!isValidDateTime(date)) throw new Error(`getMoonDays. Invalid Date: "${date}"`);
 
     const moonrise = getMoonEventDate(date, 'rise', moonDates);
     const moonset = getMoonEventDate(date, 'set', moonDates);

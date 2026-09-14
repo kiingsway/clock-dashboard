@@ -1,4 +1,4 @@
-import React, { useId, useMemo } from 'react';
+import React, { JSX, useId, useMemo } from 'react';
 import {
   ComposedChart,
   Bar,
@@ -12,6 +12,7 @@ import {
 export interface ZoneGaugeBarProps {
   value: number;
   valueLabel?: (value: number) => string
+  valueDesc?: string;
   min?: number;
   max?: number;
   unit?: string;
@@ -33,6 +34,7 @@ const clamp = (v: number, min: number, max: number) =>
 export default function ZoneGaugeBar({
   value,
   valueLabel,
+  valueDesc,
   zones,
   min = zones?.[0]?.value ?? 0,
   max = zones?.[(zones?.length || 0) - 1]?.value ?? 0,
@@ -201,36 +203,76 @@ export default function ZoneGaugeBar({
               />
             ))}
 
-            <ReferenceDot
+            <ValueDot
               x={clampedValue}
-              y="gauge"
-              r={13}
-              fill={phaseColor}
-              fillOpacity={0.25}
-              stroke="none"
-              ifOverflow="visible"
+              phaseColor={phaseColor}
+              value={value}
+              unit={unit}
+              valueLabel={valueLabel}
+              valueDesc={valueDesc}
             />
 
-            <ReferenceDot
-              x={clampedValue}
-              y="gauge"
-              r={7}
-              fill="#ffffff"
-              stroke={phaseColor}
-              strokeWidth={3}
-              ifOverflow="visible"
-              label={{
-                value: valueLabel ? valueLabel(value) : `${value}${unit ?? ""}`,
-                position: "top",
-                fill: phaseColor,
-                fontSize: 16,
-                fontWeight: 700,
-                offset: 14,
-              }}
-            />
           </ComposedChart>
         </ResponsiveContainer>
       </div>
     </div>
   );
 }
+
+interface ValueDotProps {
+  x: number
+  phaseColor: string
+  value: number
+  valueLabel?: (value: number) => string
+  valueDesc?: string;
+  unit?: string;
+}
+
+const ValueDot = ({ x: clampedValue, phaseColor, value, valueDesc, valueLabel, unit }: ValueDotProps): JSX.Element => (
+  <>
+    <ReferenceDot
+      x={clampedValue}
+      y="gauge"
+      r={13}
+      fill={phaseColor}
+      fillOpacity={0.25}
+      stroke="none"
+      ifOverflow="visible"
+    />
+
+    <ReferenceDot
+      x={clampedValue}
+      y="gauge"
+      r={7}
+      fill="#ffffff"
+      stroke={phaseColor}
+      strokeWidth={3}
+      ifOverflow="visible"
+      label={{
+        value: valueLabel ? valueLabel(value) : `${value}${unit ?? ""}`,
+        position: "top",
+        fill: phaseColor,
+        fontSize: 16,
+        fontWeight: 700,
+        offset: 14,
+      }}
+    />
+    {valueDesc && (
+
+      <ReferenceDot
+        x={clampedValue}
+        y="gauge"
+        r={7}
+        ifOverflow="visible"
+        label={{
+          value: valueDesc,
+          position: "bottom",
+          fill: phaseColor,
+          fontSize: 16,
+          fontWeight: 700,
+          offset: 14,
+        }}
+      />
+    )}
+  </>
+);
