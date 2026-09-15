@@ -21,6 +21,7 @@ export interface ZoneGaugeBarProps {
   zones: {
     value: number;
     color: string;
+    label?: string;
   }[];
   referenceZones?: {
     value: number;
@@ -185,7 +186,7 @@ export default function ZoneGaugeBar({
               />
             ))}
 
-            {normalizedZones.map(({ value }, index) => (value === min || value === max) ? null : (
+            {normalizedZones.map(({ value, label }, index) => (value === min || value === max) ? null : (
               <ReferenceLine
                 key={`${value}-${index}`}
                 x={value}
@@ -193,7 +194,7 @@ export default function ZoneGaugeBar({
                 strokeWidth={1}
                 ifOverflow="visible"
                 label={{
-                  value: hideZoneLabel ? undefined : `${value}${unit ?? ""}`,
+                  value: hideZoneLabel ? undefined : label ? label : `${value}${unit ?? ""}`,
                   position: "bottom",
                   fill: "rgba(255,255,255,0.55)",
                   fontSize: 11,

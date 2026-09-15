@@ -13,6 +13,7 @@ import { capitalizeWords, formatMetricValue } from '@/utils/formatters/textForma
 import { getAstronomicalSeasonInfo } from '@/utils/geo/getAstronomicalSeason';
 import getBeaufortScale from '@/utils/geo/getBeaufortScale';
 import { getCompassDirection } from '@/utils/geo/getCompassDirection';
+import { getSeasonZones } from '@/utils/geo/getSeasonColor';
 import buildAQIDescription from '@/utils/weather/buildDescriptions/aqi';
 import buildMoonDescription from '@/utils/weather/buildDescriptions/moon';
 import buildUVDescription from '@/utils/weather/buildDescriptions/uvIndex';
@@ -328,13 +329,21 @@ export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | u
     }),
 
     safeBuild(t, t('season'), title => {
-      const { desc, daysProgressText, color } = getAstronomicalSeasonInfo(weather.latitude, now, t);
+      const { desc, daysProgressText, color, title: season } = getAstronomicalSeasonInfo(weather.latitude, now, t);
+      const zones = getSeasonZones(now, weather.latitude > 0, locale);
 
       return {
         title,
         bigText: daysProgressText,
         description: desc,
-        textColor: color
+        textColor: color,
+        zoneGauge: {
+          value: now.ordinal,
+          valueLabel: () => season,
+          min: 1,
+          max: 365,
+          zones,
+        }
       };
     }),
 

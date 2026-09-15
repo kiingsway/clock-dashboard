@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
-import getSeasonDynamicColor from './getSeasonDynamicColor';
+import { getSeasonColor } from './getSeasonColor';
 
 export interface ISeasonInfo {
   title: string;
@@ -87,7 +87,7 @@ export function getAstronomicalSeasonInfo(latitude: number, date: DateTime, t: T
     total: totalSeasonDays,
   });
 
-  const color = getSeasonDynamicColor(currentEvent.key, daysSinceStart, totalSeasonDays);
+  const color = getSeasonColor(date.toJSDate(), latitude);
 
   return {
     title,
