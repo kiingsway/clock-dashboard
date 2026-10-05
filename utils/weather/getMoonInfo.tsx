@@ -7,7 +7,7 @@ import { getIconUrl } from "@/constants/iconFiles";
 import { IMoonDaily } from "@/types/weather.types";
 import { getProgressBetweenDates } from "../formatters/dateFormatters";
 
-export function getMoonPhaseInfo(phase: number) {
+export function getMoonPhaseInfo(phase: number): NameIcon {
   let moon: NameIcon;
 
   if (phase < 1 / 16 || phase >= 15 / 16) {

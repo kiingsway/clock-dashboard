@@ -1,11 +1,12 @@
 import { DateTime } from "luxon";
-import { IWeatherCountry } from "./location.types";
 import { CanadaAlertType } from "./WeatherAlerts/canada.types";
 import { NWSSeverity } from "./WeatherAlerts/usa.types";
 import { WEATHER_ALERT_PROVIDERS } from "@/constants/alerts";
 
+export type WeatherAlertCountryCode = keyof typeof WEATHER_ALERT_PROVIDERS;
+
 export interface IWeatherAlert {
-  country: IWeatherCountry;
+  country: WeatherAlertCountryCode;
   id: string;
   title: string;
   status: CanadaAlertType | NWSSeverity;
@@ -30,8 +31,6 @@ export interface WeatherAlertProvider<TRaw = unknown> {
   /** Converte a resposta bruta da API do país pro formato comum IWeatherAlert */
   mapper: (raw: TRaw | undefined) => IWeatherAlert[];
 }
-
-export type WeatherAlertCountryCode = keyof typeof WEATHER_ALERT_PROVIDERS;
 
 export function isSupportedWeatherAlertCountry(
   country: string

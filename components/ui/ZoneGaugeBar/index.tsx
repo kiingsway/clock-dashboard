@@ -1,4 +1,5 @@
-import React, { JSX, useId, useMemo } from 'react';
+import { IReferenceZone } from '@/types/chart.types';
+import { JSX, useId, useMemo } from 'react';
 import {
   ComposedChart,
   Bar,
@@ -18,15 +19,8 @@ export interface ZoneGaugeBarProps {
   unit?: string;
   height?: number;
   hideZoneLabel?: boolean;
-  zones: {
-    value: number;
-    color: string;
-    label?: string;
-  }[];
-  referenceZones?: {
-    value: number;
-    label: string;
-  }[]
+  zones: IReferenceZone[];
+  referenceZones?: IReferenceZone[];
 }
 
 const clamp = (v: number, min: number, max: number) =>
@@ -37,12 +31,12 @@ export default function ZoneGaugeBar({
   valueLabel,
   valueDesc,
   zones,
+  referenceZones,
   min = zones?.[0]?.value ?? 0,
   max = zones?.[(zones?.length || 0) - 1]?.value ?? 0,
   unit,
   height = 87,
   hideZoneLabel,
-  referenceZones
 }: ZoneGaugeBarProps) {
   const rawId = useId();
 
@@ -106,11 +100,8 @@ export default function ZoneGaugeBar({
                 y2="0"
               >
                 {normalizedZones.flatMap((zone, index) => {
-                  const previousZone =
-                    normalizedZones[index - 1];
-
-                  const previousColor =
-                    previousZone?.color ?? zone.color;
+                  const previousZone = normalizedZones[index - 1];
+                  const previousColor = previousZone?.color ?? zone.color;
 
                   const offset = toPct(zone.value);
 
@@ -130,10 +121,7 @@ export default function ZoneGaugeBar({
 
                 <stop
                   offset="100%"
-                  stopColor={
-                    normalizedZones.at(-1)?.color ??
-                    "#38bdf8"
-                  }
+                  stopColor={normalizedZones.at(-1)?.color ?? "#38bdf8"}
                 />
               </linearGradient>
             </defs>
@@ -168,17 +156,19 @@ export default function ZoneGaugeBar({
               barSize={10}
             />
 
-            {referenceZones?.map(({ label, value }) => (
+            {referenceZones?.map(({ label, value, color }) => (
               <ReferenceLine
                 key={value}
                 x={value}
-                stroke="rgba(255,255,255,0.8)"
+                // stroke="rgba(255,255,255,0.8)"
+                stroke={color ?? "rgba(255,255,255,0.8)"}
                 strokeWidth={3}
                 ifOverflow="visible"
                 label={{
                   value: label,
                   position: "bottom",
-                  fill: "rgba(255,255,255,0.55)",
+                  // fill: "rgba(255,255,255,0.55)",
+                  fill: color ?? "rgba(255,255,255,0.55)",
                   fontSize: 11,
                   fontWeight: 600,
                   offset: 10,
@@ -186,17 +176,19 @@ export default function ZoneGaugeBar({
               />
             ))}
 
-            {normalizedZones.map(({ value, label }, index) => (value === min || value === max) ? null : (
+            {normalizedZones.map(({ value, label, color }, index) => (value === min || value === max) ? null : (
               <ReferenceLine
                 key={`${value}-${index}`}
                 x={value}
-                stroke="rgba(255,255,255,0.45)"
+                // stroke="rgba(255,255,255,0.45)"
+                stroke={color ?? "rgba(255,255,255,0.45)"}
                 strokeWidth={1}
                 ifOverflow="visible"
                 label={{
                   value: hideZoneLabel ? undefined : label ? label : `${value}${unit ?? ""}`,
                   position: "bottom",
-                  fill: "rgba(255,255,255,0.55)",
+                  // fill: "rgba(255,255,255,0.55)",
+                  fill: color ?? "rgba(255,255,255,0.55)",
                   fontSize: 11,
                   fontWeight: 600,
                   offset: 10,

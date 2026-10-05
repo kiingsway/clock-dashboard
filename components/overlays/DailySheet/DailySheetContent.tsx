@@ -1,7 +1,7 @@
 import MiniCard from '@/components/ui/MiniCard';
 import HourlyList from '@/components/ui/weather/HourlyList';
 import MoonProgressBar from '@/components/ui/weather/MoonProgressBar';
-import { Fragment, useMemo } from 'react';
+import { CSSProperties, Fragment, useMemo } from 'react';
 import styles from './DailySheet.module.scss';
 import { IWeather } from '@/types/weather.types';
 import { useNow } from '@/contexts/NowContext';
@@ -16,9 +16,10 @@ import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
 interface Props {
   weather: IWeather;
   index: number;
+  style?: CSSProperties;
 }
 
-export default function DailySheetContent({ weather, index }: Props) {
+export default function DailySheetContent({ weather, index, style: styleProp }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
 
@@ -48,8 +49,13 @@ export default function DailySheetContent({ weather, index }: Props) {
 
   const dailySheetInfo = useMemo(() => buildDailySheetInfo(weather, indexDate, locale, t), [indexDate, locale, t, weather]);
 
+  const style = {
+    ...styleProp,
+    "--wc-accent": accent,
+  } as CSSProperties;
+
   return (
-    <div className={styles.main} style={{ ["--wc-accent" as string]: accent }}>
+    <div className={styles.main} style={style}>
 
       <SunProgressBar sunWindow={sunWindow} />
 

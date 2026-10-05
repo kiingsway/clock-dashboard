@@ -1,8 +1,5 @@
-import { BottomSheet } from "@/components/ui/BottomSheet";
-import { Modal } from "@/components/ui/Modal";
 import { Switch } from "@/components/ui/Switch";
 import useAppSettings from "@/contexts/AppSettingsContext";
-import { usePortalContainer } from "@/hooks/usePortalContainer";
 import { AirQualityMetric, IAQI } from "@/types/aqi.types";
 import getAQIInfo from "@/utils/aqi/getAQIInfo";
 import { DateTime } from "luxon";
@@ -11,6 +8,7 @@ import styles from './AQIModal.module.css';
 import { convertUgM3 } from "@/utils/aqi/convertUgM3";
 import AQIFormula from "./AQIFormula";
 import AirQualityList from "./AirQualityList";
+import ModalOrSheet from "@/components/ui/ModalOrSheet";
 
 interface Props {
   aqi: IAQI;
@@ -40,9 +38,7 @@ const pollutantKeys: IPollutantKey[] = [
 
 export default function AQIModal({ aqi, onClose, open, pressure, temp }: Props) {
   const { t } = useTranslation();
-  const portalContainer = usePortalContainer();
-  // const { now } = useNow();
-  const { get: { aqiScale, location: timezone, useBottomSheet }, set } = useAppSettings();
+  const { set, get: { aqiScale, location } } = useAppSettings();
 
   const { current, current_units } = aqi;
 
@@ -87,56 +83,38 @@ export default function AQIModal({ aqi, onClose, open, pressure, temp }: Props) 
 
   const { color: accent } = getAQIInfo(current[aqiScale === 'european' ? 'european_aqi' : 'us_aqi'], aqiScale, 'aqi', t);
 
-  const updatedAt = DateTime.fromISO(current.time, { zone: aqi.timezone }).setZone(timezone);
-
-  const content = (
-    <div className={styles.content} style={{ marginBottom: useBottomSheet ? 60 : 0 }}>
-      <div className={styles.header}>
-        <div className={styles.header_info}>
-          <Switch value={aqiScale === 'us'} onChange={v => set.aqiScale(v ? 'us' : 'european')} />
-          <span>{aqiScale === 'us' ? t('aqiTextes.scale.us') : t('aqiTextes.scale.eu')}</span>
-        </div>
-      </div>
-
-      <AirQualityList items={itemsList} />
-
-      <AQIFormula
-        showDateOnly={aqiScale === 'european'}
-        temperatureC={temp}
-        pressureHpa={pressure}
-        updatedAt={updatedAt}
-        pollutants={[
-          { pollutant: "ozone", valueUgM3: current.ozone },
-          { pollutant: "nitrogen_dioxide", valueUgM3: current.nitrogen_dioxide },
-          { pollutant: "sulphur_dioxide", valueUgM3: current.sulphur_dioxide },
-          { pollutant: "carbon_monoxide", valueUgM3: current.carbon_monoxide, unit: 'ppm' },
-        ]}
-      />
-
-    </div>
-  );
-
-  if (useBottomSheet) return (
-    <BottomSheet
-      open={open}
-      onClose={onClose}
-      title={t('airQuality')}
-      ariaLabel={t('close')}
-      snapPoints={[0.7, 0.95]}
-      initialSnap={0}
-      dismissible
-      container={portalContainer}>
-      {content}
-    </BottomSheet>
-  );
+  const updatedAt = DateTime.fromISO(current.time, { zone: aqi.timezone }).setZone(location.timezone);
 
   return (
-    <Modal
+    <ModalOrSheet
       open={open}
       onClose={onClose}
-      accentColor={accent}
+      accent={accent}
       title={t('airQuality')}>
-      {content}
-    </Modal>
+      <div className={styles.content}>
+        <div className={styles.header}>
+          <div className={styles.header_info}>
+            <Switch value={aqiScale === 'us'} onChange={v => set.aqiScale(v ? 'us' : 'european')} />
+            <span>{aqiScale === 'us' ? t('aqiTextes.scale.us') : t('aqiTextes.scale.eu')}</span>
+          </div>
+        </div>
+
+        <AirQualityList items={itemsList} />
+
+        <AQIFormula
+          showDateOnly={aqiScale === 'european'}
+          temperatureC={temp}
+          pressureHpa={pressure}
+          updatedAt={updatedAt}
+          pollutants={[
+            { pollutant: "ozone", valueUgM3: current.ozone },
+            { pollutant: "nitrogen_dioxide", valueUgM3: current.nitrogen_dioxide },
+            { pollutant: "sulphur_dioxide", valueUgM3: current.sulphur_dioxide },
+            { pollutant: "carbon_monoxide", valueUgM3: current.carbon_monoxide, unit: 'ppm' },
+          ]}
+        />
+
+      </div>
+    </ModalOrSheet>
   );
 }

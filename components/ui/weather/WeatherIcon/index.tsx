@@ -90,7 +90,7 @@ export default function WeatherIcon({
   hideGlow = false,
 }: WeatherIconProps): JSX.Element {
   const { now } = useNow();
-  const { get: { location: timezone } } = useAppSettings();
+  const { get: { location: { timezone } } } = useAppSettings();
   const { t } = useTranslation();
 
   if (duration) return <AnimatedWeatherIcon src={src} alt={alt} title={title} size={size} duration={duration} />;

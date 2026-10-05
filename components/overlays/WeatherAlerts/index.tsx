@@ -3,10 +3,9 @@ import { useTranslation } from "react-i18next";
 import styles from './WeatherAlerts.module.css';
 import getSeverityColor from "@/utils/weatherAlerts/getSeverityColor";
 import sortWeatherAlerts from "@/utils/weatherAlerts/sortWeatherAlerts";
-import { BottomSheet } from "@/components/ui/BottomSheet";
-import { usePortalContainer } from "@/hooks/usePortalContainer";
 import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts";
 import WeatherAlertCard from "@/components/ui/weather/WeatherAlertCard";
+import ModalOrSheet from "@/components/ui/ModalOrSheet";
 
 interface Props {
   alerts: UseWeatherAlerts['data']
@@ -25,8 +24,6 @@ export default function WeatherAlerts({ alerts }: Props) {
 
   const [alertsModalOpen, { setTrue: openModal, setFalse: closeModal }] = useBoolean();
 
-  const portalContainer = usePortalContainer();
-
   const onDebugClick = (): void => console.info('Alerts:', alerts);
 
   if (!alerts?.length) return <></>;
@@ -42,20 +39,16 @@ export default function WeatherAlerts({ alerts }: Props) {
 
   return (
     <>
-      <BottomSheet
+      <ModalOrSheet
         open={alertsModalOpen}
         onClose={closeModal}
         title={t('alert', { count: alerts.length })}
-        ariaLabel={t('close')}
         snapPoints={[0.6, 0.95]}
-        initialSnap={0}
-        dismissible
-        container={portalContainer}
       >
         <div className={styles.modalList} onDoubleClick={onDebugClick}>
           {worstAlerts.map(alert => <WeatherAlertCard key={alert.id} alert={alert} autoExpand={alerts.length === 1} />)}
         </div>
-      </BottomSheet>
+      </ModalOrSheet>
 
       <div className={styles.main} style={{ ["--wc-accent" as string]: worstColor }} onClick={openModal}>
         <div className={styles.stripe} aria-hidden="true" />

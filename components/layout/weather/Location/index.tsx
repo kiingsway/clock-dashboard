@@ -10,10 +10,10 @@ interface Props {
 }
 
 /** Small pin + city label shown between the date and the weather icon. */
-export default function Location({ showAlert = false, onClick }: Props) {
-  const { weatherLocation: { name, country, province } } = useAppSettings();
+export default function Location({ onClick, showAlert = false }: Props) {
+  const { get: { location: { name, countryCode } } } = useAppSettings();
 
-  const locationText = `${name}${(province || country) ? `, ${(province || country)}` : ''}`;
+  const locationText = `${name}${countryCode ? `, ${countryCode}` : ''}`;
 
   return (
     <ErrorBoundary>
@@ -26,7 +26,7 @@ export default function Location({ showAlert = false, onClick }: Props) {
         >
           <FiMapPin className={styles.pin} aria-hidden="true" />
           <span className={classNames(styles.locationText, {
-            [styles.hasAlert]: Boolean(showAlert),
+            [styles.hasAlert]: showAlert,
           })}>
             {locationText}
           </span>

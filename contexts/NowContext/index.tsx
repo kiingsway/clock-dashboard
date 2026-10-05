@@ -32,7 +32,7 @@ const TEST_DATE: DateTime | undefined = undefined;
 
 export function NowProvider({ children }: NowProviderProps) {
   const { i18n: { language: locale } } = useTranslation();
-  const { get: { location: timezone } } = useAppSettings();
+  const { get: { location: { timezone } } } = useAppSettings();
 
   const [simulatedDate, setSimulatedDateState] = useState<DateTime | undefined>(TEST_DATE);
 

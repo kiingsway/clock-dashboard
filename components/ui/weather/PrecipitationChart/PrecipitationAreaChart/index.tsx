@@ -1,12 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { CSSProperties, useMemo } from 'react';
+import { useMemo } from 'react';
 import { XAxis, Tooltip, Area, AreaChart, ResponsiveContainer, ReferenceDot, YAxis } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import { precipitationAreas, TPrecipAreas } from '..';
 import getAccentColor from '@/utils/weather/getAccentColor';
-import { RiArrowDropRightFill } from 'react-icons/ri';
 import { MAX_RAIN_MM_LIMIT, MAX_SHOWERS_MM_LIMIT, MAX_SNOWFALL_CM_LIMIT } from '@/constants/rainDescriptions';
-import WeatherIcon from '../../WeatherIcon';
 import { rainIntensityColor, showersIntensityColor, snowIntensityColor } from '@/utils/weather/getColors';
 import PrecipitationTooltip from '../PrecipitationTooltip';
 import { IPrecipChartData } from '@/types/chart.types';
@@ -15,6 +12,7 @@ import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
 import useAppSettings from '@/contexts/AppSettingsContext';
 import { DateTime } from 'luxon';
 import { formatClock } from '@/utils/formatters/formatClock';
+import { Arrow, CustomTick, CustomAreaDot } from './Components';
 
 interface Props {
   data: IPrecipChartData[];
@@ -99,7 +97,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
   const firstTop = precipitationAreas.reduce((sum, area) => sum + (firstData?.[area] || 0), 0);
 
 
-  const firstAccent = firstData ? getWeatherCodeInfo(firstData.weatherCode, firstData.isDay, t) : DEFAULT_COLOR.WEATHER;
+  const firstAccent = firstData ? getWeatherCodeInfo(firstData.weatherCode, firstData.isDay, t).accent : DEFAULT_COLOR.WEATHER;
 
   const maxPrecipitation = Math.max(
     10,
@@ -192,72 +190,3 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
     </ResponsiveContainer>
   );
 }
-
-interface CustomTickProps {
-  x: string | number;
-  y: string | number;
-  accent: string
-  label: string
-  hasPrecip: boolean;
-  isFirstItem: boolean;
-}
-
-const CustomTick = ({ x, y, accent, hasPrecip, isFirstItem, label }: CustomTickProps) => {
-
-  const style = {
-    textAnchor: 'middle',
-    fill: isFirstItem ? 'var(--wc-accent)' : '#94a3b8',
-    fontWeight: isFirstItem && hasPrecip ? 700 : hasPrecip || isFirstItem ? 500 : 400,
-    fontSize: isFirstItem ? 13 : hasPrecip ? 12 : 11,
-    opacity: isFirstItem && hasPrecip ? 1 : hasPrecip ? 0.6 : isFirstItem ? 0.7 : 0.4,
-  } as const;
-
-  return (
-    <g
-      style={{ '--wc-accent': accent } as CSSProperties}
-      transform={`translate(${x},${y})`}>
-      <text x={0} y={0} dy={12} {...style}>
-        {label}
-      </text>
-    </g>
-  );
-};
-
-const Arrow = ({ cx, cy, accent }: any & { accent: string }) => (
-  <RiArrowDropRightFill
-    x={cx - 12}
-    y={cy - 12}
-    size={24}
-    color={accent}
-  />
-);
-
-const CustomAreaDot = (props: any) => {
-  const { cx, cy, payload: p } = props;
-  const payload = p as IPrecipChartData;
-
-  const no = {
-    rain: !payload.rain || payload.rain <= 0,
-    showers: !payload.showers || payload.showers <= 0,
-    snowfall: !payload.snowfall || payload.snowfall <= 0,
-  };
-
-  if (no.rain && no.showers && no.snowfall) return null;
-
-  const size = 30;
-
-  return (
-    <foreignObject
-      x={cx - (size / 2)}
-      y={(cy - (size + 2)) + 2}
-      width={size}
-      height={size}
-    >
-      <WeatherIcon
-        size={size}
-        weatherCode={payload.weatherCode}
-        hideGlow
-      />
-    </foreignObject>
-  );
-};

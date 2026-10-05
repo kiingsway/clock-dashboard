@@ -1,5 +1,4 @@
 import { CACHE_KEY } from "@/constants/keys";
-import { LOCATION_TO_WEATHER } from "@/constants/locations";
 import useAppSettings from "@/contexts/AppSettingsContext";
 import { fetchAQIData } from "@/services/fetchAQIData";
 import { IAQI } from "@/types/aqi.types";
@@ -14,12 +13,7 @@ export interface IUseWeather {
 }
 
 export function useAQI(): IUseWeather {
-  const { get: { location } } = useAppSettings();
-
-  const { lat, lon } = {
-    lat: LOCATION_TO_WEATHER[location].lat,
-    lon: LOCATION_TO_WEATHER[location].lon,
-  };
+  const { get: { location: { latitude: lat, longitude: lon } } } = useAppSettings();
 
   const { data: aqiData, error, isLoading, isValidating, mutate } =
     useSWR<IAQI>(

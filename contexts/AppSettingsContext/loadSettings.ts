@@ -1,9 +1,8 @@
 import { STORAGE_KEY } from "@/constants/keys";
-import { LOCATION_OPTIONS } from "@/constants/locations";
 import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from "@/constants/settings";
 import { AppSettings } from "@/types/app.types";
 import { AQIScale } from "@/types/aqi.types";
-import { TLocation } from "@/types/location.types";
+import isValidLocationObject from "@/utils/locations/isValidLocationObject";
 
 const getValidNumber = (value: unknown, range: { MIN: number; MAX: number }, defaultValue: number): number => {
   if (typeof value !== 'number' || !Number.isFinite(value)) return defaultValue;
@@ -31,8 +30,8 @@ export default function loadSettings(): AppSettings {
 
     const parsed = JSON.parse(raw) as Partial<AppSettings>;
 
-    const location = LOCATION_OPTIONS.includes(parsed.location as TLocation)
-      ? (parsed.location as TLocation)
+    const location = 'location' in parsed && isValidLocationObject(parsed.location)
+      ? parsed.location
       : DEFAULT_SETTINGS.location;
 
     const numberKeys = [

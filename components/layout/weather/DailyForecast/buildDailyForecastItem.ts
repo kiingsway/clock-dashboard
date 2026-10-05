@@ -32,7 +32,7 @@ export default function buildDailyForecastItem({ weather, today, locale, t }: Pr
     const index = startIndex + i;
     const timedate = DateTime.fromISO(time, { zone });
 
-    const dayName = getForecastDateLabel(today, timedate, locale, zone, t);
+    const dayName = getForecastDateLabel(today, timedate, locale, t);
 
     const weatherCode = daily.weather_code[index];
     const tempMin = Math.round(daily.temperature_2m_min[index]);

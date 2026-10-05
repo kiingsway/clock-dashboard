@@ -9,3 +9,9 @@ export interface IPrecipChartData {
   snowfall: number;
   windGusts: number
 }
+
+export interface IReferenceZone {
+  value: number;
+  color: string;
+  label?: string;
+}

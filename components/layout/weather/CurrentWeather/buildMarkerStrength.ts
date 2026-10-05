@@ -1,11 +1,11 @@
-import { IWeatherLocationItem } from '@/types/location.types';
+import { ILocation } from '@/types/location.types';
 import { SunWindow } from '@/types/sun.types';
 import { getGoldenHourAccent } from '@/utils/weather/getAccentColor';
 import { DateTime } from 'luxon';
 
 export default function buildMarkerStrength(
   now: DateTime,
-  location: IWeatherLocationItem,
+  location: ILocation,
   sunWindow: SunWindow | undefined,
   precipitation: number,
   disable: boolean = false,
@@ -14,7 +14,7 @@ export default function buildMarkerStrength(
   let accent = 'var(--wc-accent)';
   if (disable) return { progress: 0.3, accent };
 
-  const data = getGoldenHourAccent(now, sunWindow, location);
+  const data = getGoldenHourAccent(now, sunWindow, location.latitude, location.longitude);
 
   const precipProgress = getRainScale(precipitation);
 

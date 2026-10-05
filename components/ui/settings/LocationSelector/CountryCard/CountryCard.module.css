@@ -1,0 +1,97 @@
+.card {
+  display: flex;
+  align-items: stretch;
+  gap: var(--wc-space-lg);
+  padding: var(--wc-space-md);
+  background: var(--wc-ink);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-sm, 8px);
+  box-shadow: var(--wc-shadow-sm);
+  font-family: var(--wc-font-body);
+  color: var(--wc-text);
+  width: 100%;
+  max-width: 420px;
+}
+
+.media {
+  position: relative;
+  flex: 0 0 96px;
+  min-height: 72px;
+  border-radius: var(--wc-radius-md);
+  overflow: hidden;
+  background: var(--wc-surface-raised);
+  border: 1px solid var(--wc-hairline);
+}
+
+.image {
+  object-fit: cover;
+}
+
+.placeholder {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-xl);
+  color: var(--wc-text-faint);
+  background: var(--wc-accent-muted);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--wc-space-2xs);
+  min-width: 0;
+}
+
+.cityCountry {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: var(--wc-space-sm);
+}
+
+.city {
+  margin: 0;
+  font-family: var(--wc-font-display);
+  font-size: var(--wc-text-lg);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--wc-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.country {
+  margin: 0;
+  font-size: var(--wc-text-sm);
+  color: var(--wc-text-muted);
+}
+
+.timezone {
+  font-size: var(--wc-text-xs);
+  color: var(--wc-text-muted);
+}
+
+.population {
+  margin: var(--wc-space-xs) 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--wc-space-sm);
+}
+
+.populationLabel {
+  font-size: var(--wc-text-2xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--wc-text-faint);
+}
+
+.populationValue {
+  font-family: var(--wc-font-clock);
+  font-size: var(--wc-text-sm);
+  color: var(--wc-accent);
+}

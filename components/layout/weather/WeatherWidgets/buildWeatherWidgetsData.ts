@@ -1,10 +1,11 @@
 import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard';
 import { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
-import { AQI_EU_COLORS, AQI_USA_COLORS, HUMIDITY_COLORS, MOON_COLORS, VISIBILITY_COLORS, WIND_GUSTS_COLORS, WIND_SPEED_COLORS } from '@/constants/colors';
+import { AQI_EU_COLORS, AQI_USA_COLORS, DEFAULT_COLOR, HUMIDITY_COLORS, MOON_COLORS, VISIBILITY_COLORS, WIND_GUSTS_COLORS, WIND_SPEED_COLORS } from '@/constants/colors';
 import { getDewPointDescription, getHumidityDescription } from '@/constants/descriptions';
 import { getIconUrl } from '@/constants/iconFiles';
 import { UV_INDEX_LEVELS } from '@/constants/uvIndex';
 import { IAQI, AQIScale } from '@/types/aqi.types';
+import { IReferenceZone } from '@/types/chart.types';
 import { IWeather } from '@/types/weather.types';
 import { AQI_COLORS } from '@/utils/aqi/getAQIInfo';
 import { formatDuration } from '@/utils/formatters/dateFormatters';
@@ -82,8 +83,8 @@ export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | u
 
   const daylightHours = [0, 4, 8, 12, 16, 20, 24];
   const daylightZones = daylightHours.map(value => ({ value, color: getDaylightColor(value * 60 * 60) }));
-  const windSpeedZones = WIND_SPEED_COLORS.map(({ hex: color, value }) => ({ value, color }));
-  const windGustsZones = WIND_GUSTS_COLORS.map(({ hex: color, value }) => ({ value, color }));
+  const windSpeedZones = WIND_SPEED_COLORS.map(({ hex: color, value }) => ({ value, color } as IReferenceZone));
+  const windGustsZones = WIND_GUSTS_COLORS.map(({ hex: color, value }) => ({ value, color } as IReferenceZone));
 
   return [
 
@@ -163,11 +164,12 @@ export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | u
       const beaufortDuration = getWindGustAnimationDuration(windSpeedNow);
       const beaufortTitle = `Beaufort Scale: ${beaufortLevel} (${windSpeedNow})`;
       const directionText = `${capitalizeWords(t('wind'))} ${compass.name}`;
+      const color = getWindColor(windSpeedNow, 'gusts');
 
       return {
         title,
         description: windSpeedDesc,
-        textColor: getWindColor(windSpeedNow, 'gusts'),
+        textColor: color,
         iconsProps: [
           {
             src: getIconUrl(`wind-beaufort-${beaufortLevel}`),
@@ -188,7 +190,11 @@ export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | u
           zones: windSpeedZones,
           hideZoneLabel: true,
           referenceZones: [
-            { label: `${t('mean')}: ${windSpeedDay} ${windUnit}`, value: windSpeedDay }
+            {
+              label: `${t('mean')}: ${windSpeedDay} ${windUnit}`,
+              value: windSpeedDay,
+              color: getWindColor(windSpeedDay, 'speed') ?? DEFAULT_COLOR.WEATHER,
+            }
           ]
         }
       };
@@ -210,7 +216,11 @@ export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | u
           zones: windGustsZones,
           hideZoneLabel: true,
           referenceZones: [
-            { label: `${t('mean')}: ${windGustsDay} ${windUnit}`, value: windGustsDay }
+            {
+              label: `${t('mean')}: ${windGustsDay} ${windUnit}`,
+              value: windGustsDay,
+              color: getWindColor(windGustsDay, 'gusts') ?? DEFAULT_COLOR.WEATHER,
+            }
           ]
         }
       };
@@ -341,7 +351,7 @@ export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | u
           value: now.ordinal,
           valueLabel: () => season,
           min: 1,
-          max: 365,
+          max: now.isInLeapYear ? 366 : 365,
           zones,
         }
       };

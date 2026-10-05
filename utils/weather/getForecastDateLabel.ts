@@ -1,9 +1,7 @@
 import { TFunction } from "i18next";
 import { DateTime } from "luxon";
 
-const f = (d: DateTime | undefined) => d ? d.toISO() : undefined;
-
-export default function getForecastDateLabel(now: DateTime, date: DateTime, locale: string, timezone: string, t: TFunction) {
+export default function getForecastDateLabel(now: DateTime, date: DateTime, locale: string, t: TFunction) {
   const initialNow = now.startOf("day");
   const targetDate = date.startOf("day");
   const diffInDays = Math.abs(targetDate.diff(initialNow, "days").days);

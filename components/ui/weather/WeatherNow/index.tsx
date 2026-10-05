@@ -34,9 +34,7 @@ export function WeatherNow({
 
   // Where the current temp sits between today's min/max, clamped 0–100.
   const rangePosition = useMemo(() => {
-    if (maxTemp === -999 || minTemp === -999) return undefined;
-    
-    if (maxTemp === minTemp) return 50;
+    if ((maxTemp === minTemp) || (maxTemp === -999 || minTemp === -999)) return 50;
     const pct = ((r(temperature) - minTemp) / (maxTemp - minTemp)) * 100;
     return Math.min(100, Math.max(0, pct));
   }, [temperature, minTemp, maxTemp]);
@@ -66,8 +64,8 @@ export function WeatherNow({
 
       <MinMaxProgress
         temp={hasNoTemp ? undefined : r(temperature)}
-        min={noMinTemp ? undefined : minTemp}
-        max={noMaxTemp ? undefined : maxTemp}
+        min={noMinTemp ? undefined : r(minTemp)}
+        max={noMaxTemp ? undefined : r(maxTemp)}
         unit="º"
         progress={rangePosition}
       />

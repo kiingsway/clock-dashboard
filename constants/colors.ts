@@ -1,9 +1,9 @@
-import { IColor, TCategoryDef, IGradientColor, IInterpolateColor } from "@/types/colors.types";
+import { TCategoryDef, IGradientColor, IInterpolateColor } from "@/types/colors.types";
 
-export const DEFAULT_COLOR: IColor = {
+export const DEFAULT_COLOR = {
   WEATHER: "#6b7280",
   WHITE: "#e8ecf4"
-};
+} as const;
 
 export const RAINBOW_COLORS = [
   "#6FC996",

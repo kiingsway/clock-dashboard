@@ -12,7 +12,15 @@ export const LANGUAGES = [
 export const AQI_SCALES: AQIScale[] = ['european', 'us'] as const;
 
 export const DEFAULT_SETTINGS: AppSettings = {
-  location: 'America/Toronto',
+  location: {
+    name: "Toronto",
+    countryCode: "CA",
+    latitude: 43.70643,
+    longitude: -79.39864,
+    population: 2794356,
+    timezone: "America/Toronto",
+    geonameId: 0,
+  },
   alertRadiusKm: 10,
   precipHoursRange: 12,
   sunAlertThresholdMinutes: 50, // Minutes before Sunrise/Sunset to show sunrise/sunset icon.
@@ -25,7 +33,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
 };
 
 export const ALERT_RADIUS_KM = {
-  MIN: 10,
+  MIN: 5,
   MAX: 4000,
   STEP: 50,
 };

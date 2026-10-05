@@ -1,7 +1,7 @@
 import { CACHE_KEY } from "@/constants/keys";
 import { fetchWeather } from "@/services/fetchWeather";
 import { IWeather } from "@/types/weather.types";
-import  useAppSettings  from "@/contexts/AppSettingsContext";
+import useAppSettings from "@/contexts/AppSettingsContext";
 import useSWR from 'swr';
 import type { KeyedMutator } from 'swr';
 
@@ -14,11 +14,11 @@ export interface IUseWeather {
 }
 
 export default function useWeather(): IUseWeather {
-  const { weatherLocation: location } = useAppSettings();
+  const { get: { location: { latitude, longitude } } } = useAppSettings();
 
   const { data: weather, error, isLoading, isValidating, mutate } = useSWR<IWeather>(
-    [CACHE_KEY.WEATHER, location.lat, location.lon],
-    () => fetchWeather(location.lat, location.lon),
+    [CACHE_KEY.WEATHER, latitude, longitude],
+    () => fetchWeather(latitude, longitude),
     {
       refreshInterval: 5 * 60 * 1000,
       revalidateOnFocus: true,

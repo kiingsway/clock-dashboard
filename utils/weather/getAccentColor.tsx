@@ -1,6 +1,5 @@
 import { WeatherCategoryName } from "@/types/weather.types";
 import { WEATHER_ACCENT_COLORS } from "@/constants/colors";
-import { IWeatherLocationItem } from "@/types/location.types";
 import { SunWindow } from "@/types/sun.types";
 import { DateTime } from "luxon";
 import { getTimes } from "suncalc";
@@ -19,14 +18,10 @@ export default function getAccentColor(categoryName: WeatherCategoryName, isDay:
   return Boolean(isDay) || isDay === undefined ? color.day : color.night;
 }
 
-export function getGoldenHourAccent(now: DateTime, sunWindow: SunWindow | undefined, weatherLocation: IWeatherLocationItem, initialColor = 'var(--wc-accent)') {
+export function getGoldenHourAccent(now: DateTime, sunWindow: SunWindow | undefined, lat: number, lon: number, initialColor = 'var(--wc-accent)') {
 
   if (sunWindow) {
-    const times = getTimes(
-      now.toJSDate(),
-      weatherLocation.lat,
-      weatherLocation.lon,
-    );
+    const times = getTimes(now.toJSDate(), lat, lon);
 
     if (times.goldenHour && times.goldenHourEnd) {
       const solarNoon = DateTime.fromJSDate(times.solarNoon);

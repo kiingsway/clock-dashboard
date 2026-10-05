@@ -104,7 +104,7 @@
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
   touch-action: pan-y;
-  padding: var(--wc-space-lg, 16px) var(--wc-space-xl, 24px) calc(var(--wc-space-xl, 24px) + env(safe-area-inset-bottom, 0px));
+  padding: var(--wc-space-lg, 16px) var(--wc-space-xl, 24px) max(150px, calc(var(--wc-space-xl, 24px) + env(safe-area-inset-bottom, 0px)));
 }
 
 /* Prevent accidental text selection anywhere in the sheet while dragging. */

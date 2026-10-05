@@ -1,5 +1,7 @@
 import { WeatherCategoryName } from "./weather.types";
 
+export type RGB = [number, number, number];
+
 export type IColor = Record<string, string>;
 
 export type DayNNight = { day: string; night: string };

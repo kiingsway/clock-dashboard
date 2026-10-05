@@ -1,5 +1,3 @@
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import { usePortalContainer } from '@/hooks/usePortalContainer';
 import { IWeather } from '@/types/weather.types';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
@@ -9,8 +7,7 @@ import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import { JSX } from 'react';
 import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import DailySheetContent from './DailySheetContent';
-import { Modal } from '@/components/ui/Modal';
-import useAppSettings from '@/contexts/AppSettingsContext';
+import ModalOrSheet from '@/components/ui/ModalOrSheet';
 
 interface Props {
   weather: IWeather | undefined
@@ -22,50 +19,26 @@ interface Props {
 export default function DailySheet({ weather, open, index, onClose }: Props): JSX.Element | null {
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
-  const portalContainer = usePortalContainer();
-  const { get: { useBottomSheet } } = useAppSettings();
 
   if (typeof index !== 'number' || !weather) return null;
 
-  const { daily, timezone } = weather;
+  const { daily: { time }, timezone } = weather;
 
-  const iso = daily.time[index];
-
-  const indexDate = DateTime.fromISO(iso, { zone: timezone });
+  const indexDate = DateTime.fromISO(time[index], { zone: timezone });
 
   const title = getForecastTitle(now, indexDate, locale, t);
 
-  const content = (
-    <ErrorBoundary>
-      {Boolean(weather) && typeof index === 'number' && (
-        <DailySheetContent weather={weather} index={index} />
-      )}
-    </ErrorBoundary>
-  );
-
-  if (useBottomSheet) return (
-    <BottomSheet
-      open={open && typeof index === 'number'}
-      onClose={onClose}
-      title={title}
-      ariaLabel={t('close')}
-      snapPoints={[0.7, 1]}
-      initialSnap={0}
-      dismissible
-      container={portalContainer}
-    >
-      {content}
-    </BottomSheet>
-  );
-
   return (
-    <Modal
+    <ModalOrSheet
       open={open}
       onClose={onClose}
       title={title}
+      snapPoints={[0.7, 1]}
     >
-      {content}
-    </Modal>
+      <ErrorBoundary>
+        <DailySheetContent weather={weather} index={index} />
+      </ErrorBoundary>
+    </ModalOrSheet>
   );
 }
 

@@ -1,5 +1,6 @@
 import { IWeather } from "@/types/weather.types";
 import { IDailySheetInfo } from "@/types/weatherInfo.types";
+import { assertNumbers } from "@/utils/formatters/asserts";
 import { getCurrentIndex } from "@/utils/formatters/getValueByArray";
 import buildDaylightDescription from "@/utils/weather/buildDescriptions/daylight";
 import buildDewPointDescription from "@/utils/weather/buildDescriptions/dewPoint";
@@ -28,16 +29,6 @@ function safeBuild(t: TFunction, defaultTitle: string = 'Erro', builder: () => I
     } as IDailySheetInfo;
   }
 }
-
-const assertNumbers = (values: Record<string, unknown>) => {
-  const errors = Object.entries(values)
-    .filter(([, value]) => typeof value !== 'number')
-    .map(([key, value]) => `${key}="${String(value)}" (${typeof value})`);
-
-  if (errors.length) {
-    throw new Error(`Invalid values: ${errors.join(', ')}`);
-  }
-};
 
 export default function buildDailySheetInfo(weather: IWeather, date: DateTime, locale: string, t: TFunction): IDailySheetInfo[] {
 

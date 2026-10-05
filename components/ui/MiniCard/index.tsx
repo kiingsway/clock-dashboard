@@ -6,8 +6,8 @@ interface Props {
   icons?: ReactNode[];
   size?: number;
   iconSize?: number;
-  title?: string;
-  desc?: string;
+  title?: string | ReactNode;
+  desc?: string | ReactNode;
   onDoubleClick?: () => void;
 }
 

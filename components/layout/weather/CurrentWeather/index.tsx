@@ -1,7 +1,7 @@
 import { IWeather } from "@/types/weather.types";
 import styles from './CurrentWeather.module.css';
 import CurrentWeatherIcon from "@/components/ui/weather/CurrentWeatherIcon";
-import WeatherAlerts from "@/components/layout/weather/WeatherAlerts";
+import WeatherAlerts from "@/components/overlays/WeatherAlerts";
 import { useNow } from "@/contexts/NowContext";
 import { UseWeatherAlerts } from "@/hooks/useWeatherAlerts";
 import { JSX } from "react";
@@ -61,8 +61,8 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
         <WeatherNow
           temperature={current.temperature_2m}
           feelsLike={current.apparent_temperature}
-          maxTemp={Math.round(tempMax)}
-          minTemp={Math.round(tempMin)}
+          maxTemp={tempMax}
+          minTemp={tempMin}
           unit={currentUnits.temperature_2m}
         />
 

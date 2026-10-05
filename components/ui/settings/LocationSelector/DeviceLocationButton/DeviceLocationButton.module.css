@@ -1,0 +1,85 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  border: 1px solid var(--wc-hairline, #232838);
+  border-radius: var(--wc-radius-sm, 8px);
+
+  background: var(--wc-ink, #0b0e14);
+  color: var(--wc-text, #e8ecf4);
+
+  padding: var(--wc-space-sm, 8px) var(--wc-space-md, 12px);
+
+  cursor: pointer;
+
+  transition:
+    background 50ms ease,
+    color 150ms ease,
+    border-color 150ms ease;
+
+  &:hover {
+    background: var(--wc-surface-raised, #232838);
+  }
+
+  &:active {
+    background: var(--wc-surface, #232838);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wc-accent, #8695f0);
+    outline-offset: 2px;
+  }
+
+  /* Aguardando permissão / GPS / API */
+  &[data-status='locating'],
+  &[data-status='loading'] {
+    color: var(--wc-text-muted, #8892a4);
+    cursor: progress;
+
+    svg {
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+  }
+
+  /* Usando a localização do dispositivo */
+  &[data-status='active'] {
+    color: var(--wc-accent, #8695f0);
+    border-color: var(--wc-accent, #8695f0);
+    background: var(--wc-accent-muted, rgba(134, 149, 240, 0.15));
+
+    &:hover {
+      background: color-mix(in srgb, var(--wc-accent, #8695f0) 25%, transparent);
+    }
+  }
+
+  /* Permissão recusada */
+  &[data-status='denied'] {
+    color: var(--wc-danger, #e0554f);
+    border-color: color-mix(in srgb, var(--wc-danger, #e0554f) 50%, transparent);
+  }
+
+  /* Indisponível ou erro na requisição */
+  &[data-status='unavailable'],
+  &[data-status='error'] {
+    color: var(--wc-danger, #e0554f);
+    border-color: color-mix(in srgb, var(--wc-danger, #e0554f) 50%, transparent);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button svg {
+    animation: none !important;
+  }
+}

@@ -1,26 +1,7 @@
-/**
- * Retorna uma cor (hex) baseada na data informada, de acordo com a estação
- * do ano. Funciona para hemisfério norte ou sul (parâmetro `hemisphere`).
- *
- * A maior parte dos dias de uma estação ficam com a cor "sólida" daquela
- * estação. Perto da troca de estação (transitionDays antes e depois da
- * data de virada), a cor faz uma transição (interpolação linear em RGB)
- * entre a cor da estação atual e a da próxima.
- */
-
+import { IReferenceZone } from "@/types/chart.types";
+import { RGB } from "@/types/colors.types";
+import { Hemisphere, SeasonDef, SeasonName } from "@/types/seasons.types";
 import { DateTime } from "luxon";
-
-type RGB = [number, number, number];
-
-type SeasonName = 'winter' | 'spring' | 'summer' | 'autumn';
-type Hemisphere = 'north' | 'south';
-
-interface SeasonDef {
-  name: SeasonName;
-  color: RGB;
-  month: number; // 1-12, data (aproximada) em que essa estação começa
-  day: number;
-}
 
 // Cor de cada estação. Ajuste como quiser.
 const SEASON_COLORS: Record<SeasonName, RGB> = {
@@ -47,7 +28,16 @@ const SEASON_ORDER: Record<Hemisphere, SeasonName[]> = {
   south: ['autumn', 'winter', 'spring', 'summer'],
 };
 
-export function getSeasonZones(date: DateTime, isNorth: boolean, locale: string) {
+/**
+ * Retorna uma cor (hex) baseada na data informada, de acordo com a estação
+ * do ano. Funciona para hemisfério norte ou sul (parâmetro `isNorth`).
+ *
+ * A maior parte dos dias de uma estação ficam com a cor "sólida" daquela
+ * estação. Perto da troca de estação (transitionDays antes e depois da
+ * data de virada), a cor faz uma transição (interpolação linear em RGB)
+ * entre a cor da estação atual e a da próxima.
+ */
+export function getSeasonZones(date: DateTime, isNorth: boolean, locale: string): IReferenceZone[] {
 
   const { north, south } = SEASON_ORDER;
   const seasons = isNorth ? north : south;

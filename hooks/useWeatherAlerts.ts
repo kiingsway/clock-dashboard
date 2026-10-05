@@ -28,14 +28,11 @@ async function fetchAlertJson(url: string, countryCode: string | undefined) {
 }
 
 export default function useWeatherAlerts(): UseWeatherAlerts {
-  const { weatherLocation: location, get: { alertRadiusKm } } = useAppSettings();
-
-  const country = location.country;
-  const isSupported = !country ? false : isSupportedWeatherAlertCountry(country);
+  const { get: { location: { latitude, countryCode, longitude }, alertRadiusKm } } = useAppSettings();
 
   const { data, error, isLoading } = useSWR(
-    isSupported
-      ? [CACHE_KEY.WEATHER_ALERTS, country, location.lat, location.lon, alertRadiusKm]
+    isSupportedWeatherAlertCountry(countryCode)
+      ? [CACHE_KEY.WEATHER_ALERTS, countryCode, latitude, longitude, alertRadiusKm]
       : null,
     async ([, countryCode, lat, lon, radius]) => {
       const provider = WEATHER_ALERT_PROVIDERS[countryCode as WeatherAlertCountryCode];

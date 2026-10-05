@@ -1,5 +1,5 @@
 import { TABS } from "@/constants/tabs";
-import { TLocation, IWeatherLocationItem } from "./location.types";
+import { ILocation } from "./location.types";
 import { AQIScale } from "./aqi.types";
 
 export type TTabs = keyof typeof TABS;
@@ -7,7 +7,7 @@ export type TTabs = keyof typeof TABS;
 export type ImageInfo = { alt: string, src: string };
 
 export interface AppSettings {
-  location: TLocation; // Localização selecionada do clima.
+  location: ILocation; // Localização selecionada do clima.
   alertRadiusKm: number; // Define área em km para busca de alertas de clima (apenas Canadá)
   precipHoursRange: number; // Define quantas horas de antecedencia para mostrar proxima precipitação
   sunAlertThresholdMinutes: number; // Define com quantos minutos de antecedência os ícones de nascer ou pôr do sol devem ser exibidos antes do evento ocorrer. (sunWindowIconBeforeMinutes)
@@ -20,7 +20,7 @@ export interface AppSettings {
 }
 
 export interface SaveAppSettings {
-  location: (value: TLocation) => void;
+  location: (value: ILocation) => void;
   alertRadiusKm: (value: number) => void;
   precipHoursRange: (value: number) => void;
   sunAlertThresholdMinutes: (value: number) => void;
@@ -35,7 +35,6 @@ export interface SaveAppSettings {
 export interface UseAppSettings {
   set: SaveAppSettings;
   get: AppSettings;
-  weatherLocation: IWeatherLocationItem;
   resetSettings: () => void;
   isLoaded: boolean;
 }

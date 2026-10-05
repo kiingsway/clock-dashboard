@@ -57,6 +57,7 @@
     "error_building_item": "Não foi possível carregar as informações deste item.",
     "status": "Status",
     "until": "Até",
+    "population": "População",
     "confidence": "Confiança",
     "impact": "Impacto",
     "showLess": "Mostrar menos",
@@ -78,6 +79,7 @@
         "title": "Geral",
         "language": "Altere o idioma usado em todo o aplicativo",
         "location": "Localização usada para a previsão do tempo e fuso horário do relógio",
+        "searchLocation": "Pesquisar local…",
         "aqiScale": "Define o padrão utilizado para classificar e exibir os índices de qualidade do ar."
       },
       "alerts": {
@@ -502,6 +504,15 @@
           }
         }
       }
+    },
+    "devLocStatusTextes": {
+      "idle": "Usar localização do dispositivo",
+      "locating": "Obtendo sua localização…",
+      "loading": "Encontrando a cidade mais próxima…",
+      "active": "Usando localização do dispositivo",
+      "denied": "Permissão de localização negada. Ative-a nas configurações do navegador e tente novamente.",
+      "unavailable": "Localização do dispositivo indisponível. Tente novamente ou digite um local.",
+      "error": "Não foi possível encontrar uma cidade para sua localização. Tente novamente."
     }
   },
   "en": {
@@ -562,6 +573,7 @@
     "error_building_item": "Could not load this item's information.",
     "status": "Status",
     "until": "Until",
+    "population": "Population",
     "confidence": "Confidence",
     "impact": "Impact",
     "showLess": "Show less",
@@ -583,6 +595,7 @@
         "title": "General",
         "language": "Change the language used throughout the app",
         "location": "Location used for weather and the clock's time zone",
+        "searchLocation": "Search location…",
         "aqiScale": "Sets the standard used to classify and display air quality index levels."
       },
       "alerts": {
@@ -1007,6 +1020,15 @@
           }
         }
       }
+    },
+    "devLocStatusTextes": {
+      "idle": "Use device location",
+      "locating": "Getting your location…",
+      "loading": "Finding the nearest city…",
+      "active": "Using device location",
+      "denied": "Location permission denied. Enable it in your browser settings and try again.",
+      "unavailable": "Device location is unavailable. Try again or type a location.",
+      "error": "Could not find a city for your location. Try again."
     }
   },
   "fr": {
@@ -1067,6 +1089,7 @@
     "error_building_item": "Impossible de charger les informations de cet élément.",
     "status": "Statut",
     "until": "Jusqu'à",
+    "population": "Population",
     "confidence": "Confiance",
     "impact": "Impact",
     "showLess": "Afficher moins",
@@ -1088,6 +1111,7 @@
         "title": "Général",
         "language": "Changer la langue utilisée dans l'application",
         "location": "Lieu utilisé pour la météo et le fuseau horaire de l'horloge",
+        "searchLocation": "Rechercher un lieu…",
         "aqiScale": "Définit la norme utilisée pour classer et afficher les indices de qualité de l'air."
       },
       "alerts": {
@@ -1512,6 +1536,15 @@
           }
         }
       }
+    },
+    "devLocStatusTextes": {
+      "idle": "Utiliser la position de l'appareil",
+      "locating": "Obtention de votre position…",
+      "loading": "Recherche de la ville la plus proche…",
+      "active": "Utilisation de la position de l'appareil",
+      "denied": "Autorisation de localisation refusée. Activez-la dans les paramètres de votre navigateur et réessayez.",
+      "unavailable": "La position de l'appareil est indisponible. Réessayez ou saisissez une localização.",
+      "error": "Impossible de trouver une ville pour votre position. Réessayez."
     }
   },
   "es": {
@@ -1572,6 +1605,7 @@
     "error_building_item": "No se pudo cargar la información de este elemento.",
     "status": "Estado",
     "until": "Hasta",
+    "population": "Población",
     "confidence": "Confianza",
     "impact": "Impacto",
     "showLess": "Mostrar menos",
@@ -1593,6 +1627,7 @@
         "title": "General",
         "language": "Cambia el idioma utilizado en la aplicación",
         "location": "Ubicación utilizada para el clima y la zona horaria del reloj",
+        "searchLocation": "Buscar ubicación…",
         "aqiScale": "Define la norma utilizada para clasificar y mostrar los índices de calidad del aire."
       },
       "alerts": {
@@ -2017,6 +2052,15 @@
           }
         }
       }
+    },
+    "devLocStatusTextes": {
+      "idle": "Usar ubicación del dispositivo",
+      "locating": "Obteniendo tu ubicación…",
+      "loading": "Buscando la ciudad más cercana…",
+      "active": "Usando la ubicación del dispositivo",
+      "denied": "Permiso de ubicación denegado. Actívalo en la configuración de tu navegador e inténtalo de nuevo.",
+      "unavailable": "Ubicación del dispositivo no disponible. Inténtalo de nuevo o escribe una ubicación.",
+      "error": "No se pudo encontrar una ciudad para tu ubicación. Inténtalo de nuevo."
     }
   },
   "ko": {
@@ -2077,6 +2121,7 @@
     "error_building_item": "이 항목의 정보를 불러오지 못했습니다.",
     "status": "상태",
     "until": "까지",
+    "population": "인구",
     "confidence": "신뢰도",
     "impact": "영향",
     "showLess": "간략히 보기",
@@ -2098,6 +2143,7 @@
         "title": "일반",
         "language": "앱 전체에서 사용할 언어 변경",
         "location": "날씨 및 시계 시간대에 사용되는 위치",
+        "searchLocation": "위치 검색…",
         "aqiScale": "대기질 지수 등급을 분류하고 표시하는 기준을 설정합니다."
       },
       "alerts": {
@@ -2522,6 +2568,15 @@
           }
         }
       }
+    },
+    "devLocStatusTextes": {
+      "idle": "기기 위치 사용",
+      "locating": "위치 정보를 가져오는 중…",
+      "loading": "가장 가까운 도시 찾는 중…",
+      "active": "기기 위치 사용 중",
+      "denied": "위치 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용한 후 다시 시도해 주세요.",
+      "unavailable": "기기 위치를 사용할 수 없습니다. 다시 시도하거나 위치를 직접 입력해 주세요.",
+      "error": "현재 위치에서 도시를 찾을 수 없습니다. 다시 시도해 주세요."
     }
   }
 }

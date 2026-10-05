@@ -10,18 +10,14 @@ import {
   type ReactNode,
 } from 'react';
 
-import { useTranslation } from 'react-i18next';
-
 import { AppSettings, UseAppSettings } from '@/types/app.types';
 import { STORAGE_KEY } from '@/constants/keys';
 import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from '@/constants/settings';
-import { TLocation } from '@/types/location.types';
-
 import loadSettings from './loadSettings';
 import persistSettings from './persistSettings';
-import { getLocationToWeather } from '@/utils/location/getLocationToWeather';
-import { LOCATION_OPTIONS } from '@/constants/locations';
 import { AQIScale } from '@/types/aqi.types';
+import isValidLocationObject from '@/utils/locations/isValidLocationObject';
+import { ILocation } from '@/types/location.types';
 
 const AppSettingsContext = createContext<UseAppSettings | undefined>(undefined);
 
@@ -30,7 +26,6 @@ interface Props {
 }
 
 export function AppSettingsProvider({ children }: Props) {
-  const { t } = useTranslation();
   const [isLoaded, setIsLoaded] = useState(false);
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
 
@@ -38,10 +33,7 @@ export function AppSettingsProvider({ children }: Props) {
     const loadedSettings = loadSettings();
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSettings({
-      ...DEFAULT_SETTINGS,
-      ...loadedSettings,
-    });
+    setSettings({ ...DEFAULT_SETTINGS, ...loadedSettings });
 
     setIsLoaded(true);
   }, []);
@@ -86,8 +78,11 @@ export function AppSettingsProvider({ children }: Props) {
     };
   }, []);
 
-  const setLocation = useCallback((value: TLocation) => {
-    const location = LOCATION_OPTIONS.includes(value)
+  const setLocation = useCallback((value: ILocation) => {
+
+    const isValidLoc = isValidLocationObject(value);
+
+    const location = isValidLoc
       ? value
       : DEFAULT_SETTINGS.location;
 
@@ -144,13 +139,10 @@ export function AppSettingsProvider({ children }: Props) {
 
   const resetSettings = useCallback(() => setSettings(DEFAULT_SETTINGS), []);
 
-  const locations = useMemo(() => getLocationToWeather(t), [t]);
-
   const value = useMemo<UseAppSettings>(
     () => ({
       isLoaded,
       resetSettings,
-      weatherLocation: locations[settings.location],
       get: settings,
       set: {
         location: setLocation,
@@ -165,23 +157,7 @@ export function AppSettingsProvider({ children }: Props) {
         useBottomSheet: setUseBottomSheet,
       },
     }),
-    [
-      isLoaded,
-      settings,
-      locations,
-      setLocation,
-      setAlertRadiusKm,
-      setPrecipHoursRange,
-      setSunAlertThresholdMinutes,
-      setShowFeelsLikeWhenEqual,
-      setShowMinMaxPeakBadge,
-      setFocusCurrentWeatherOnLaunch,
-      setIs12Hour,
-      setAqiScale,
-      setUseBottomSheet,
-      resetSettings,
-    ]
-  );
+    [isLoaded, resetSettings, settings, setLocation, setAlertRadiusKm, setPrecipHoursRange, setSunAlertThresholdMinutes, setShowFeelsLikeWhenEqual, setShowMinMaxPeakBadge, setFocusCurrentWeatherOnLaunch, setIs12Hour, setAqiScale, setUseBottomSheet]);
 
   return (
     <AppSettingsContext.Provider value={value}>

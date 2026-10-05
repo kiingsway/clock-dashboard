@@ -1,5 +1,6 @@
 export const STORAGE_KEY = {
-  SETTINGS: 'app-settings'
+  SETTINGS: 'app-settings',
+  FAV_LOCATIONS: 'favorite-locations',
 };
 
 export const CACHE_KEY = {
