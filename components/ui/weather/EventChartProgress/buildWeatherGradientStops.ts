@@ -23,18 +23,14 @@ export default function buildWeatherGradientStops({ hourly, start, end, timezone
 
   const hourMs = 60 * 60 * 1000;
 
-  const { time, weather_code, is_day } = hourly;
-
-  const stops = time.flatMap((time, index) => {
+  const stops = hourly.time.flatMap((time, index) => {
     const date = DateTime.fromISO(time, { zone: timezone });
     if (!date.isValid) return [];
 
     const ms = date.toMillis();
     if (ms < startMs - hourMs || ms > startMs + range + hourMs) return [];
 
-    const isDay = is_day[index] === 1;
-
-    const color = getWeatherCodeInfo(weather_code[index], isDay, t).accent;
+    const color = getWeatherCodeInfo(hourly.weather_code[index], hourly.is_day[index] === 1, t).accent;
 
     return [{ offset: (ms - startMs) / range, color }];
   });

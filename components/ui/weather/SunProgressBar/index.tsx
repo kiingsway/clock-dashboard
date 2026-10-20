@@ -3,7 +3,6 @@ import { type CSSProperties, type JSX } from "react";
 import { SunWindow } from "@/types/sun.types";
 import EventProgress from "../EventProgress";
 import { useNow } from "@/contexts/NowContext";
-import getAccentColor from "@/utils/weather/getAccentColor";
 import { getGlowStrength } from "@/utils/weather/getGlowStrength";
 import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
 import { useTranslation } from "react-i18next";
@@ -42,8 +41,6 @@ export default function SunProgressBar({ weather, sunWindow, isError = false, lo
 
   const weatherCodeInfo = getWeatherCodeInfo(weather_code, is_day === 1, t);
 
-  const accent = getAccentColor(weatherCodeInfo.name, is_day);
-
   const progress1 = getGlowStrength({
     date: now,
     precipitation: precipitation ?? 0,
@@ -54,7 +51,7 @@ export default function SunProgressBar({ weather, sunWindow, isError = false, lo
 
   const style = {
     '--is-focused': +isFocused,
-    '--wc-sun-accent': accent,
+    '--wc-sun-accent': weatherCodeInfo.accent,
   } as CSSProperties;
 
   return (
