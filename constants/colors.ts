@@ -34,7 +34,7 @@ const BLUE_COLORS = [
 ] as const;
 
 export const WEATHER_ACCENT_COLORS: TCategoryDef = {
-  clear: { day: "#f4b860", night: "#8695f0" },
+  clear: { day: "#F8B820", night: "#8695f0" },
   partlyCloudy: { day: "#e5be85", night: "#7f8cb8" },
   cloudy: "#8b93a6",
   smoke: "#8b93a6",
