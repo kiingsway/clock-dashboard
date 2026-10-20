@@ -5,13 +5,12 @@ import { CSSProperties, Fragment, useMemo } from 'react';
 import styles from './DailySheet.module.scss';
 import { IWeather } from '@/types/weather.types';
 import { useNow } from '@/contexts/NowContext';
-import { getSunWindow } from '@/utils/weather/getSunWindow';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import buildDailySheetInfo from './buildDailySheetInfo';
 import WeatherIcon from '@/components/ui/weather/WeatherIcon';
-import SunProgressBar from '@/components/ui/weather/SunProgressBar';
 import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
+import EventChartProgress from '@/components/ui/weather/EventChartProgress';
 
 interface Props {
   weather: IWeather;
@@ -23,27 +22,12 @@ export default function DailySheetContent({ weather, index, style: styleProp }: 
   const { t, i18n: { language: locale } } = useTranslation();
   const { now } = useNow();
 
-  const { daily, timezone } = weather;
+  const { daily, hourly, timezone } = weather;
 
   const iso = daily.time[index];
   const weatherCode = daily.weather_code[index];
 
   const indexDate = DateTime.fromISO(iso, { zone: timezone });
-  const indexDateWithCurrentTime = now.set({
-    year: indexDate.year,
-    month: indexDate.month,
-    day: indexDate.day,
-  });
-
-  const isToday = indexDate.hasSame(now, "day");
-  const sunDate = isToday ? indexDateWithCurrentTime : indexDate;
-
-  const sunWindow = getSunWindow({
-    sunriseTimes: daily.sunrise,
-    sunsetTimes: daily.sunset,
-    timezone,
-    date: sunDate
-  });
 
   const { accent } = getWeatherCodeInfo(weatherCode, true, t);
 
@@ -57,7 +41,15 @@ export default function DailySheetContent({ weather, index, style: styleProp }: 
   return (
     <div className={styles.main} style={style}>
 
-      <SunProgressBar sunWindow={sunWindow} />
+      <EventChartProgress
+        fullDay
+        date={indexDate}
+        daily={daily}
+        hourly={hourly}
+        timezone={weather?.timezone ?? now.zoneName ?? ""}
+        latitude={weather?.latitude ?? 0}
+        longitude={weather?.longitude ?? 0}
+      />
 
       {dailySheetInfo.map(({ key, title, desc, icons }, index) => {
 

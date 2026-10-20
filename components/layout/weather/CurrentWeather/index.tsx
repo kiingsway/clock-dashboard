@@ -9,8 +9,8 @@ import { WeatherNow } from "@/components/ui/weather/WeatherNow";
 import { ensureWeather } from "@/utils/weather/ensureWeather";
 import PrecipitationChart from "@/components/ui/weather/PrecipitationChart";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
-import SunProgressBar from "@/components/ui/weather/SunProgressBar";
 import Alert from "@/components/ui/Alert";
+import EventChartProgress from "@/components/ui/weather/EventChartProgress";
 
 interface Props {
   weather: IWeather | undefined;
@@ -31,8 +31,8 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
   const { now } = useNow();
 
   const {
-    current, currentUnits, isDay,
-    tempMin, tempMax, sunWindow
+    current, currentUnits, daily, hourly,
+    isDay, tempMin, tempMax, sunWindow
   } = ensureWeather(weather, now, loading);
 
   const onDebugClick = (): void => console.info('Current Weather:', { weather, sunWindow });
@@ -70,13 +70,14 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
 
         <WeatherAlerts alerts={alerts} />
 
-        <SunProgressBar
-          sunWindow={sunWindow}
-          isFocused={isFocused}
-          loading={loading}
-          isError={Boolean(error)}
-          weather={weather}
-          includeNight
+        <EventChartProgress
+          isAppFocused={isFocused}
+          isDay={current.is_day === 1}
+          daily={daily}
+          hourly={hourly}
+          timezone={weather?.timezone ?? now.zoneName ?? ""}
+          latitude={weather?.latitude ?? 0}
+          longitude={weather?.longitude ?? 0}
         />
 
       </section>

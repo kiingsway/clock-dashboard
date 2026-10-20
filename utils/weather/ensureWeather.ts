@@ -1,4 +1,4 @@
-import { IDaily, IWeather, ICurrent, ICurrentUnits } from "@/types/weather.types";
+import { IDaily, IWeather, ICurrent, ICurrentUnits, IHourly } from "@/types/weather.types";
 import { DateTime } from "luxon";
 import { getCurrentIndex } from "../formatters/getValueByArray";
 import { getSunWindow } from "./getSunWindow";
@@ -20,13 +20,19 @@ export function ensureWeather(weather: IWeather | undefined, now: DateTime, isLo
     precipitation: "mm",
   } as ICurrentUnits;
 
-  const daily = weather?.daily ?? {
+    const daily = weather?.daily ?? {
     time: [now.toISO()],
     sunrise: [now.toISO()],
     sunset: [now.toISO()],
     temperature_2m_max: [0],
     temperature_2m_min: [0],
   } as IDaily;
+
+  const hourly = weather?.hourly ?? {
+    time: [now.toISO()],
+    weather_code: [isLoading ? -2 : -1],
+    is_day: [1],
+  } as IHourly;
 
   const isDay = current.is_day === 1;
 
@@ -45,6 +51,8 @@ export function ensureWeather(weather: IWeather | undefined, now: DateTime, isLo
   return {
     current,
     currentUnits,
+    daily,
+    hourly,
     isDay,
     tempMin,
     tempMax,

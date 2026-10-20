@@ -1,0 +1,51 @@
+.root {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--wc-space-md);
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--wc-space-2xs);
+  flex: 0 0 auto;
+
+  img {
+    opacity: 0.85;
+  }
+
+  span {
+    font-family: var(--wc-font-body);
+    font-size: var(--wc-text-xs);
+    font-weight: 600;
+    color: var(--wc-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.chart {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 60px;
+
+  // Deixa o brilho da bolinha passar das bordas do SVG.
+  :global(.recharts-surface) {
+    overflow: visible;
+  }
+}
+
+.horizon line {
+  stroke: var(--wc-text-faint);
+  stroke-opacity: 0.35;
+  stroke-dasharray: 3 5;
+}
+
+.marker {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--wc-radius-full, 50%);
+  background: var(--marker-color);
+  box-shadow: 0 0 var(--blur, 15px) var(--spread, 3px) color-mix(in srgb, var(--marker-color) 80%, transparent);
+}
