@@ -6,8 +6,8 @@
 /* Fixed-height, internally scrolling panel: a long forecast (7–16 days)
    never pushes the rest of the page off screen. */
 .list {
-  margin: 0 16px;
-  padding: 4px 4px;
+  margin: 0 var(--wc-space-lg);
+  padding: var(--wc-space-xs);
   list-style: none;
   max-height: 246px;
   overflow-y: auto;

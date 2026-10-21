@@ -1,5 +1,5 @@
 import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard';
-import { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
+import type { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
 import { AQI_EU_COLORS, AQI_USA_COLORS, DEFAULT_COLOR, HUMIDITY_COLORS, MOON_COLORS, VISIBILITY_COLORS, WIND_GUSTS_COLORS, WIND_SPEED_COLORS } from '@/constants/colors';
 import { getDewPointDescription, getHumidityDescription } from '@/constants/descriptions';
 import { getIconUrl } from '@/constants/iconFiles';

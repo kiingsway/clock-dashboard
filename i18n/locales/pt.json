@@ -1,0 +1,516 @@
+{
+  "version": "Versão",
+  "title": "Configurações",
+  "settings": "Configurações",
+  "insights": "Informações",
+  "close": "Fechar",
+  "language": "Linguagem",
+  "timezone": "Fuso horário",
+  "weather": "Clima",
+  "location": "Localização",
+  "deviceLocation": "Localização do dispositivo",
+  "updatedAt": "Atualizado em",
+  "weatherUpdatedAt": "Clima atualizado em",
+  "precipitationRange": "Faixa de precipitação",
+  "precipitationRangeDescription": "Define com quantas horas de antecedência a próxima precipitação deve aparecer",
+  "alert": "Alerta",
+  "alerts": "Alertas",
+  "alert_other": "Alertas ({{count}})",
+  "uvIndex": "Índice UV",
+  "airQuality": "Qualidade do ar",
+  "temperature": "Temperatura",
+  "surfacePressure": "Pressão na superfície",
+  "wind": "Vento",
+  "windGusts": "Rajadas de Vento",
+  "windSpeed": "Velocidade do Vento",
+  "averageSpeedForDay": "Média de {{speed}} no dia",
+  "mean": "Média",
+  "feelsLike": "Sensação",
+  "max": "Máx.",
+  "min": "Mín.",
+  "maxMin": "Máx/Mín",
+  "min_minute": "min",
+  "hrs": "h",
+  "active": "Ativo",
+  "inactive": "Inativo",
+  "km": "km",
+  "precipitation": "Precipitação",
+  "humidity": "Umidade",
+  "dewPoint": "Ponto de orvalho",
+  "visibility": "Visibilidade",
+  "noPrecipitation": "Sem chuva",
+  "sunrise": "Nascer do sol",
+  "sunset": "Pôr do sol",
+  "sunshine": "Sol",
+  "daylight": "Luz do dia",
+  "moonrise": "Nascer da lua",
+  "moonset": "Pôr da lua",
+  "moon": "Lua",
+  "now": "Agora",
+  "yesterday": "Ontem",
+  "today": "Hoje",
+  "tomorrow": "Amanhã",
+  "night": "Noite",
+  "nextHours": "Próximas horas",
+  "noData": "Sem dados",
+  "error_building_item": "Não foi possível carregar as informações deste item.",
+  "status": "Status",
+  "until": "Até",
+  "population": "População",
+  "confidence": "Confiança",
+  "impact": "Impacto",
+  "showLess": "Mostrar menos",
+  "showMore": "Mostrar mais",
+  "cities": {
+    "New_York": "Nova Iorque",
+    "Bogota": "Bogotá",
+    "Panama": "Panamá",
+    "Panama_City": "Panamá",
+    "Chicago": "Chicago",
+    "Toronto": "Toronto",
+    "Sao_Paulo": "São Paulo",
+    "Vancouver": "Vancouver",
+    "Seoul": "Seul",
+    "Guadalcanal": "Guadalcanal"
+  },
+  "settingsTexts": {
+    "general": {
+      "title": "Geral",
+      "language": "Altere o idioma usado em todo o aplicativo",
+      "location": "Localização usada para a previsão do tempo e fuso horário do relógio",
+      "searchLocation": "Pesquisar local…",
+      "aqiScale": "Define o padrão utilizado para classificar e exibir os índices de qualidade do ar."
+    },
+    "alerts": {
+      "title": "Alertas",
+      "radius": {
+        "title": "Raio (km)",
+        "description": "Distância máxima para buscar alertas meteorológicos"
+      }
+    },
+    "status": {
+      "title": "Status",
+      "updatedAt": "Clima atualizado em",
+      "updatedAtDesc": "Horário da última atualização do clima",
+      "version": "Versão do aplicativo instalada"
+    },
+    "appearance": {
+      "title": "Aparência",
+      "sunAlertThresholdMinutes": {
+        "title": "Antecipação do Sol",
+        "desc": "Define com quantos minutos de antecedência os ícones de nascer ou pôr do sol devem ser exibidos antes do evento ocorrer. Ícone só aparecerá em clima limpo."
+      },
+      "showFeelsLikeWhenEqual": {
+        "title": "Sensação Térmica Redundante",
+        "desc": "Exibe a sensação térmica mesmo quando o seu valor for igual à temperatura atual. Se desativado, oculta o campo nessa condição."
+      },
+      "showMinMaxPeakBadge": {
+        "title": "Indicador de Mínima/Máxima Atual",
+        "desc": "Exibe os rótulos \"MIN\" ou \"MAX\" caso a temperatura atual atinja exatamente a mínima ou a máxima prevista para o dia."
+      },
+      "focusCurrentWeatherOnLaunch": {
+        "title": "Focar Clima Atual ao Iniciar",
+        "desc": "Define se o aplicativo deve abrir com a seção do clima atual selecionada e em destaque por padrão."
+      },
+      "is12hour": {
+        "title": "Formato de hora",
+        "desc": "Use AM e PM em vez do formato de 24 horas."
+      },
+      "useBottomSheet": {
+        "title": "Usar Bottom Sheet",
+        "desc": "Exibe os detalhes e janelas na parte inferior da tela (Bottom Sheet) em vez de uma janela central (Modal)."
+      }
+    }
+  },
+  "weatherTexts": {
+    "rain": {
+      "dry": "Seco",
+      "rain": "Chuva",
+      "snowfall": "Neve",
+      "showers": "Pancadas",
+      "trace": "Gotas",
+      "drizzle": "Chuvisco",
+      "light": "Leve",
+      "moderate": "Moderado",
+      "heavy": "Intenso",
+      "torrential": "Torrencial"
+    }
+  },
+  "seasonTextes": {
+    "autumn": "Outono",
+    "winter": "Inverno",
+    "spring": "Primavera",
+    "summer": "Verão",
+    "description": "{{currentSeason}} há {{daysSinceStart}} dias, {{daysToNext}} dias para o {{nextSeason}}.",
+    "daysProgress": "{{current}} de {{total}} dias"
+  },
+  "moonPhases": {
+    "new": "Lua Nova",
+    "waxingCrescent": "Lua Crescente",
+    "firstQuarter": "Primeiro Quarto",
+    "waxingGibbous": "Gibosa Crescente",
+    "full": "Lua Cheia",
+    "waningGibbous": "Gibosa Minguante",
+    "lastQuarter": "Último Quarto",
+    "waningCrescent": "Lua Minguante"
+  },
+  "uvIndexes": {
+    "noUvIndex": "Sem luz solar. A exposição UV é mínima.",
+    "low": "Baixo. Proteção mínima.",
+    "moderate": "Moderado. Use protetor.",
+    "high": "Alto. FPS 30+ e sombra.",
+    "veryHigh": "Muito alto. Evite exposição.",
+    "extreme": "Extremo. Evite o sol."
+  },
+  "windTextes": {
+    "summary": "{{current}} agora, {{average}} média. {{direction}}. {{impact}}",
+    "impact": {
+      "calm": "Efeito pouco perceptível.",
+      "light": "Confortável para a maioria das atividades ao ar livre.",
+      "moderate": "Vento perceptível que pode afetar o conforto.",
+      "strong": "Pode dificultar caminhar e atividades ao ar livre.",
+      "veryStrong": "Pode afetar significativamente o movimento e as atividades ao ar livre."
+    }
+  },
+  "precipitationTexts": {
+    "chance": "Chance",
+    "max": "Total",
+    "precipInHours": "{{precip}}mm ({{chance}}% de chance)"
+  },
+  "compass": {
+    "north": "Norte",
+    "northeast": "Nordeste",
+    "east": "Leste",
+    "southeast": "Sudeste",
+    "south": "Sul",
+    "southwest": "Sudoeste",
+    "west": "Oeste",
+    "northwest": "Noroeste"
+  },
+  "feelsLikeDifferenceTextes": {
+    "none": "Sente-se próxima da temperatura real.",
+    "warmer": {
+      "verySmall": "Sente-se um pouco mais quente.",
+      "small": "Sente-se mais quente do que o esperado.",
+      "moderate": "Sente-se notavelmente mais quente.",
+      "large": "Sente-se muito mais quente.",
+      "extreme": "Sente-se significativamente mais quente."
+    },
+    "cooler": {
+      "verySmall": "Sente-se um pouco mais frio.",
+      "small": "Sente-se mais frio do que o esperado.",
+      "moderate": "Sente-se notavelmente mais frio.",
+      "large": "Sente-se muito mais frio.",
+      "extreme": "Sente-se significativamente mais frio."
+    }
+  },
+  "rainTextes": {
+    "hoursPrefix": "{{hours}}h de chuva no dia. ",
+    "noRain": "Sem previsão de chuva. Pode sair tranquilo sem guarda-chuva.",
+    "veryLowChance": "Possibilidade de chuva muito baixa.",
+    "drizzle": "Possibilidade de garoa ou chuva fraca.",
+    "lightLowChance": "Possibilidade de chuva leve e passageira.",
+    "lightPossible": "Chuva leve possível ao longo do dia.",
+    "lightExpected": "Chuva leve prevista. É recomendável levar um guarda-chuva.",
+    "moderateLowChance": "Possibilidade de chuva moderada, embora a chance seja baixa.",
+    "moderatePossible": "Chuva moderada pode ocorrer ao longo do dia.",
+    "moderateExpected": "Chuva moderada prevista. Leve um guarda-chuva.",
+    "heavyLowChance": "Possibilidade de chuva forte, embora a chance seja baixa.",
+    "heavyPossible": "Chuva forte pode ocorrer ao longo do dia.",
+    "heavyExpected": "Chuva forte prevista. Evite ficar exposto à chuva.",
+    "veryHeavyLowChance": "Possibilidade de chuva muito intensa, embora a chance seja baixa.",
+    "veryHeavyPossible": "Chuva muito intensa pode ocorrer ao longo do dia.",
+    "veryHeavyExpected": "Chuva muito intensa prevista. Se possível, evite sair."
+  },
+  "visibilityTextes": {
+    "excellent": "Excelente. Sem impactos.",
+    "good": "Boa. Pequena redução no horizonte.",
+    "moderate": "Moderada. Atenção ao dirigir.",
+    "low": "Baixa. Reduza a velocidade.",
+    "veryLow": "Névoa intensa. Cuidado nas estradas.",
+    "critical": "Crítica. Evite deslocamentos."
+  },
+  "humidityTextes": {
+    "extremelyDry": "Extremamente seco. A pele e as vias aéreas podem ficar irritadas.",
+    "veryDry": "Muito seco. Você pode sentir ressecamento e irritação.",
+    "dry": "Seco. Um umidificador pode melhorar o conforto.",
+    "comfortable": "Confortável. A umidade está dentro de uma faixa saudável.",
+    "slightlyHumid": "Levemente úmido. O ar pode parecer mais quente.",
+    "humid": "Úmido. Você pode sentir desconforto ou pegajosidade.",
+    "veryHumid": "Muito úmido. Condensação e mofo ficam mais prováveis.",
+    "extremelyHumid": "Extremamente úmido. Espere condições opressivas e excesso de umidade."
+  },
+  "dewPointTexts": {
+    "extremelyDry": "Ar extremamente seco. A umidade é praticamente imperceptível.",
+    "veryDry": "Ar muito seco. O ar parece fresco e seco.",
+    "dryAndComfortable": "Seco e confortável. A umidade está baixa, mas geralmente agradável.",
+    "comfortable": "Confortável. O ar parece seco e agradável.",
+    "veryComfortable": "Muito confortável. A umidade é quase imperceptível.",
+    "slightlyComfortable": "Confortável, com um leve toque de umidade.",
+    "slightlyHumid": "Levemente úmido. Você pode começar a perceber um pouco de umidade no ar.",
+    "humid": "Úmido. O ar pode começar a ficar pegajoso ou desconfortável.",
+    "veryHumid": "Muito úmido. Espere condições abafadas e desconfortáveis.",
+    "oppressive": "Umidade opressiva. O ar parece extremamente abafado e pesado."
+  },
+  "daylightTextes": {
+    "veryShort": "Um dia muito curto, com muitas horas de escuridão.",
+    "short": "Um dia curto, com pouca luz do dia.",
+    "belowAverage": "Menos luz do dia do que o usual.",
+    "balanced": "Dia e noite estão quase equilibrados.",
+    "long": "Um dia longo, com muita luz do dia.",
+    "veryLong": "Um dia muito longo, com uma noite estendida.",
+    "exceptionallyLong": "Um dia excepcionalmente longo, com luz do dia durando muitas horas."
+  },
+  "sunshineTextes": {
+    "none": "Pouco ou nenhum sol. As nuvens provavelmente dominarão o dia.",
+    "veryLittle": "Muito pouco sol. Espere condições majoritariamente nubladas.",
+    "limited": "Sol limitado. O sol pode aparecer apenas ocasionalmente.",
+    "moderate": "Algum sol. Espere uma mistura de sol e nuvens.",
+    "plenty": "Muita luz do sol. O sol deve ser perceptível por grande parte do dia.",
+    "verySunny": "Um dia muito ensolarado, com longos períodos de sol.",
+    "exceptionallySunny": "Um dia excepcionalmente ensolarado, com sol quase ininterrupto."
+  },
+  "weatherConditions": {
+    "rainWind": {
+      "clear": {
+        "status": "Condições claras",
+        "description": "Condições favoráveis. Não há chuva intensa nem vento forte previsto."
+      },
+      "severeWind": {
+        "status": "Ventos severos",
+        "description": "Ventos muito fortes sem chuva. Cuidado com objetos soltos e galhos caindo."
+      },
+      "strongWind": {
+        "status": "Ventos fortes",
+        "description": "Um dia muito ventoso sem chuva. Tenha mais cuidado ao caminhar ao ar livre."
+      },
+      "moderateBreeze": {
+        "status": "Brisa moderada",
+        "description": "Ventos moderados sem chuva. As condições geralmente são confortáveis ao ar livre."
+      },
+      "heavyRain": {
+        "status": "Chuva intensa",
+        "description": "Chuva intensa com pouco vento. Leve um guarda-chuva ou roupas à prova d'água."
+      },
+      "moderateRain": {
+        "status": "Chuva moderada",
+        "description": "Chuva constante sem ventos fortes. Um guarda-chuva deve ser suficiente."
+      },
+      "lightDrizzle": {
+        "status": "Chuvisco leve",
+        "description": "Apenas um chuvisco leve com pouco vento. As condições continuam administráveis ao ar livre."
+      },
+      "storm": {
+        "status": "Condições de tempestade",
+        "description": "Chuva forte combinada com ventos muito fortes. Evite sair se possível."
+      },
+      "windDrivenRain": {
+        "status": "Chuva com vento",
+        "description": "Ventos fortes estão soprando a chuva de lado. Guarda-chuvas podem ser difíceis de usar, então é recomendável usar roupa impermeável."
+      },
+      "rainWithWind": {
+        "status": "Chuva e vento",
+        "description": "Chuva acompanhada por rajadas de vento. É recomendável usar roupa impermeável."
+      }
+    }
+  },
+  "weatherCategoryNames": {
+    "clear": "Céu Limpo",
+    "partlyCloudy": "Parcialmente Nublado",
+    "cloudy": "Nublado",
+    "smoke": "Fumaça",
+    "haze": "Névoa Seca",
+    "hail": "Granizo",
+    "lightFog": "Névoa Leve",
+    "fog": "Nevoeiro",
+    "drizzle": "Garoa",
+    "freezingDrizzle": "Garoa Congelante",
+    "rain": "Chuva",
+    "heavyRain": "Chuva Forte",
+    "freezingRain": "Chuva Congelante",
+    "snow": "Neve",
+    "heavySnow": "Neve Intensa",
+    "showers": "Pancadas de Chuva",
+    "sleet": "Granizo Fino",
+    "heavySleet": "Chuva Granizada Forte",
+    "snowShowers": "Pancadas de Neve",
+    "thunderstorm": "Tempestade",
+    "moderateHail": "Granizo Moderado",
+    "heavyHail": "Granizo Intenso",
+    "error": "Erro",
+    "loading": "Carregando",
+    "unknown": "Desconhecido"
+  },
+  "aqiTextes": {
+    "scale": {
+      "title": "Escala AQI",
+      "us": "Escala AQI Americana",
+      "eu": "Escala AQI Europeia"
+    },
+    "legend": {
+      "concentration": "concentração em µg/m³",
+      "molecularWeight": "peso molecular do poluente (g/mol)",
+      "atmosphericPressure": "pressão atmosférica em Pa",
+      "gasConstant": "constante dos gases — {{value}} J/(mol·K)",
+      "temperature": "temperatura em Kelvin",
+      "conversionInfo": "As concentrações chegam em µg/m³ e são convertidas para {{unit}} considerando o peso molecular de cada poluente, além da temperatura e pressão do ar no momento da leitura."
+    },
+    "level": {
+      "us": {
+        "good": "Bom",
+        "fair": "Moderado",
+        "moderate": "Insalubre para grupos sensíveis",
+        "poor": "Insalubre",
+        "veryPoor": "Muito insalubre",
+        "extremelyPoor": "Perigoso"
+      },
+      "eu": {
+        "good": "Bom",
+        "fair": "Razoável",
+        "moderate": "Moderado",
+        "poor": "Ruim",
+        "veryPoor": "Muito ruim",
+        "extremelyPoor": "Extremamente ruim"
+      }
+    },
+    "pollutant": {
+      "aqi": "Índice de Qualidade do Ar",
+      "pm2_5": "Partículas Finas",
+      "pm10": "Partículas Inaláveis",
+      "ozone": "Ozônio",
+      "nitrogen_dioxide": "Dióxido de Nitrogênio",
+      "sulphur_dioxide": "Dióxido de Enxofre",
+      "carbon_monoxide": "Monóxido de Carbono",
+      "dust": "Poeira"
+    },
+    "desc": {
+      "aqi": {
+        "us": {
+          "good": "A qualidade do ar é satisfatória e o risco é mínimo ou inexistente.",
+          "fair": "A qualidade do ar é aceitável. Indivíduos extremamente sensíveis devem considerar reduzir o esforço prolongado ao ar livre.",
+          "moderate": "Pessoas com condições respiratórias ou cardíacas, idosos e crianças podem sentir efeitos. É improvável que o público geral seja afetado.",
+          "poor": "Qualquer pessoa pode começar a sentir efeitos na saúde. Grupos sensíveis podem sofrer impactos mais graves.",
+          "veryPoor": "Alerta de saúde: todos têm um risco acrescido de sofrer efeitos adversos à saúde. Evite atividades ao ar livre.",
+          "extremelyPoor": "Aviso de emergência: toda a população corre alto risco de sérios impactos à saúde. Permaneça em ambientes fechados."
+        },
+        "eu": {
+          "good": "A qualidade do ar é considerada ideal para a maioria das pessoas.",
+          "fair": "A qualidade do ar é aceitável. Desfrute de suas atividades normais ao ar livre.",
+          "moderate": "Indivíduos sensíveis que apresentem sintomas devem considerar reduzir atividades físicas intensas ao ar livre.",
+          "poor": "Qualidade do ar não saudável. Grupos sensíveis devem reduzir atividades físicas ao ar livre.",
+          "veryPoor": "Todos devem considerar reduzir o tempo ao ar livre.",
+          "extremelyPoor": "Aviso crítico: minimize a exposição externa e evite exercitar-se ao ar livre."
+        }
+      },
+      "pm2_5": {
+        "eu": {
+          "good": "Níveis ideais de partículas finas. Risco nulo de penetração profunda nos pulmões.",
+          "fair": "Nível de PM2.5 aceitável. Desfrute de suas atividades normais ao ar livre.",
+          "moderate": "Pessoas com problemas respiratórios podem sentir leve desconforto com a presença de micropartículas.",
+          "poor": "Risco moderado a alto: partículas finas podem irritar o trato respiratório de grupos sensíveis.",
+          "veryPoor": "Concentração elevada de PM2.5. Toda a população deve evitar esforços físicos prolongados fora de casa.",
+          "extremelyPoor": "Nível perigoso de micropartículas. Permaneça em ambientes fechados com ar filtrado sempre que possível."
+        },
+        "us": {
+          "good": "Concentração insignificante de partículas finas. Sem riscos à saúde.",
+          "fair": "Pessoas excepcionalmente sensíveis ao PM2.5 devem avaliar reduzir o esforço físico prolongado.",
+          "moderate": "Grupos sensíveis podem apresentar sintomas como tosse e falta de ar. O público geral não costuma ser afetado.",
+          "poor": "Aumento significativo do risco de irritação pulmonar para toda a população. Grupos de risco devem ficar em casa.",
+          "veryPoor": "Alerta grave para PM2.5: alto risco de complicações respiratórias e cardíacas. Evite qualquer atividade externa.",
+          "extremelyPoor": "Níveis de emergência de partículas finas. Mantenha portas e janelas fechadas e use purificadores de ar."
+        }
+      },
+      "pm10": {
+        "eu": {
+          "good": "Concentração de partículas inaláveis em nível seguro e ideal.",
+          "fair": "Presença baixa de poeira e partículas inaláveis. Condições normais para a população.",
+          "moderate": "Pessoas com asma ou alergias podem sentir leve irritação nos olhos ou garganta.",
+          "poor": "Qualidade do ar ruim devido a poeira e partículas. Grupos de risco devem limitar o tempo externo.",
+          "veryPoor": "Nível elevado de PM10. Recomendado limitar atividades ao ar livre para reduzir a inalação de poeira.",
+          "extremelyPoor": "Concentração crítica de partículas no ar. Toda a população deve evitar exposição e manter janelas fechadas."
+        },
+        "us": {
+          "good": "Nível insignificante de partículas inaláveis no ar.",
+          "fair": "Qualidade do ar aceitável, com baixa presença de poeira e poluição particulada.",
+          "moderate": "Pessoas com doenças pulmonares, idosos e crianças devem reduzir esforço prolongado ao ar livre.",
+          "poor": "Risco elevado de desconforto respiratório para o público geral e sintomas graves em pessoas sensíveis.",
+          "veryPoor": "Condições insalubres: risco de irritação severa nas vias aéreas. Evite permanecer ao ar livre.",
+          "extremelyPoor": "Alerta de emergência para PM10. Alta concentração de poeira e fuligem; evite qualquer exposição externa."
+        }
+      },
+      "ozone": {
+        "eu": {
+          "good": "Níveis ideais de ozônio na camada do solo. Ar limpo e puro.",
+          "fair": "Presença de ozônio dentro dos padrões normais de segurança.",
+          "moderate": "Pessoas com asma devem monitorar eventuais irritações na garganta ao se exercitarem ao ar livre.",
+          "poor": "Nível de ozônio elevado. Grupos sensíveis devem evitar atividades físicas intensas à tarde.",
+          "veryPoor": "Alta concentração de ozônio no solo. Reduza o tempo de exposição externa, especialmente em dias quentes.",
+          "extremelyPoor": "Aviso de emergência para ozônio: alto risco de inflamação pulmonar. Permaneça em locais fechados."
+        },
+        "us": {
+          "good": "Sem risco de exposição ao ozônio superficial.",
+          "fair": "Qualidade do ar aceitável. Pessoas extremamente sensíveis podem sentir leve desconforto ao entardecer.",
+          "moderate": "Crianças, idosos e praticantes de exercícios ao ar livre podem apresentar redução na capacidade pulmonar.",
+          "poor": "Risco de irritação nos olhos e vias aéreas para a população geral. Evite atividades ao ar livre nos horários de pico.",
+          "veryPoor": "Níveis muito elevados de ozônio. Alerta de saúde para toda a população; evite sair de casa.",
+          "extremelyPoor": "Risco grave de danos respiratórios. Permaneça em ambientes fechados com ar-condicionado."
+        }
+      },
+      "nitrogen_dioxide": {
+        "eu": {
+          "good": "Concentração mínima de dióxido de nitrogênio. Qualidade do ar excelente.",
+          "fair": "Nível de NO2 aceitável, proveniente principalmente do tráfego urbano leve.",
+          "moderate": "Pessoas com problemas respiratórios crônicos podem notar leve sensibilidade nas vias aéreas.",
+          "poor": "Nível elevado de NO2. Pessoas com asma ou bronquite devem evitar o trânsito intenso.",
+          "veryPoor": "Alta poluição por NO2. Toda a população deve evitar exposição prolongada em áreas de tráfego denso.",
+          "extremelyPoor": "Nível crítico de dióxido de nitrogênio. Evite sair de casa e mantenha o ambiente ventilado se longe do trânsito."
+        },
+        "us": {
+          "good": "Nenhum impacto à saúde associado ao dióxido de nitrogênio.",
+          "fair": "Nível aceitável de NO2, sem riscos evidentes para a maioria das pessoas.",
+          "moderate": "Indivíduos com asma podem apresentar aumento de sintomas respiratórios perto de vias movimentadas.",
+          "poor": "Aumento do risco de infecções e inflamações respiratórias. Grupos sensíveis devem permanecer em casa.",
+          "veryPoor": "Alerta de saúde: alto risco de bronquite e crises asmáticas severas. Evite tráfego e áreas industriais.",
+          "extremelyPoor": "Níveis perigosos de NO2. Risco de impactos graves na função pulmonar de toda a população."
+        }
+      },
+      "sulphur_dioxide": {
+        "eu": {
+          "good": "Nível de dióxido de enxofre insignificante. Qualidade do ar limpa.",
+          "fair": "Concentração de SO2 dentro dos limites seguros de emissão.",
+          "moderate": "Pessoas com asma podem sentir um leve desconforto ao respirar profundamente.",
+          "poor": "Nível elevado de SO2. Pessoas sensíveis devem evitar o ar livre, especialmente perto de zonas industriais.",
+          "veryPoor": "Alta concentração de enxofre no ar. Toda a população deve limitar o tempo no ambiente externo.",
+          "extremelyPoor": "Nível crítico de SO2. Risco de broncoespasmo imediato em asmáticos; permaneça em local fechado."
+        },
+        "us": {
+          "good": "Sem risco de irritação por SO2.",
+          "fair": "Nível de SO2 aceitável e seguro para a população geral.",
+          "moderate": "Pessoas com asma em atividade física podem sentir chiado no peito e falta de ar.",
+          "poor": "O público geral pode começar a sentir irritação na garganta e olhos. Grupos de risco devem evitar sair.",
+          "veryPoor": "Alerta de saúde: concentração perigosa de dióxido de enxofre. Evite totalmente atividades externas.",
+          "extremelyPoor": "Emergência sanitária para SO2: risco de danos graves às vias respiratórias de qualquer indivíduo."
+        }
+      },
+      "carbon_monoxide": {
+        "us": {
+          "good": "Níveis baixos de CO. Em condições normais, o risco à saúde é mínimo.",
+          "fair": "CO moderadamente elevado. Pessoas com doenças cardíacas podem ser mais sensíveis, especialmente durante esforço físico.",
+          "moderate": "Níveis elevados de CO. Pessoas sensíveis podem apresentar dor de cabeça, fadiga ou falta de ar; reduza esforços prolongados.",
+          "poor": "CO em nível insalubre. Pode causar dor de cabeça, tontura, náusea e fraqueza. Limite a exposição prolongada.",
+          "veryPoor": "CO muito elevado. Pode causar tontura, confusão, náusea e perda de coordenação. Evite a exposição e procure ar fresco.",
+          "extremelyPoor": "CO perigosamente elevado. Pode causar intoxicação grave, perda de consciência ou morte. Afaste-se da fonte e procure ar fresco imediatamente."
+        }
+      }
+    }
+  },
+  "devLocStatusTextes": {
+    "idle": "Usar localização do dispositivo",
+    "locating": "Obtendo sua localização…",
+    "loading": "Encontrando a cidade mais próxima…",
+    "active": "Usando localização do dispositivo",
+    "denied": "Permissão de localização negada. Ative-a nas configurações do navegador e tente novamente.",
+    "unavailable": "Localização do dispositivo indisponível. Tente novamente ou digite um local.",
+    "error": "Não foi possível encontrar uma cidade para sua localização. Tente novamente."
+  }
+}

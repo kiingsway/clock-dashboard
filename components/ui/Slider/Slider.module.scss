@@ -1,7 +1,7 @@
 .sliderRow {
   display: flex;
   flex-direction: column;
-  gap: var(--wc-space-xs, 4px);
+  gap: var(--wc-space-xs);
 }
 
 .slider {
@@ -16,22 +16,22 @@
 
 .slider::-webkit-slider-runnable-track {
   height: 4px;
-  border-radius: var(--wc-radius-full, 9999px);
+  border-radius: var(--wc-radius-full);
   background: linear-gradient(to right,
-      var(--wc-accent, #8695f0) var(--slider-fill, 50%),
-      var(--wc-hairline, #232838) var(--slider-fill, 50%));
+      var(--wc-accent) var(--slider-fill, 50%),
+      var(--wc-hairline) var(--slider-fill, 50%));
 }
 
 .slider::-moz-range-track {
   height: 4px;
-  border-radius: var(--wc-radius-full, 9999px);
-  background: var(--wc-hairline, #232838);
+  border-radius: var(--wc-radius-full);
+  background: var(--wc-hairline);
 }
 
 .slider::-moz-range-progress {
   height: 4px;
-  border-radius: var(--wc-radius-full, 9999px);
-  background: var(--wc-accent, #8695f0);
+  border-radius: var(--wc-radius-full);
+  background: var(--wc-accent);
 }
 
 .slider::-webkit-slider-thumb {
@@ -41,9 +41,9 @@
   height: 18px;
   margin-top: -7px;
   border-radius: 50%;
-  background: var(--wc-accent, #8695f0);
-  border: 2px solid var(--wc-surface-raised, #171c27);
-  box-shadow: var(--wc-shadow-sm, 0 3px 8px rgba(0, 0, 0, 0.3));
+  background: var(--wc-accent);
+  border: 2px solid var(--wc-surface-raised);
+  box-shadow: var(--wc-shadow-sm);
   cursor: grab;
 }
 
@@ -51,9 +51,9 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: var(--wc-accent, #8695f0);
-  border: 2px solid var(--wc-surface-raised, #171c27);
-  box-shadow: var(--wc-shadow-sm, 0 3px 8px rgba(0, 0, 0, 0.3));
+  background: var(--wc-accent);
+  border: 2px solid var(--wc-surface-raised);
+  box-shadow: var(--wc-shadow-sm);
   cursor: grab;
 }
 
@@ -67,12 +67,12 @@
 }
 
 .slider:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px var(--wc-accent-muted, rgba(134, 149, 240, 0.3));
+  box-shadow: var(--wc-focus-ring);
 }
 
 .sliderScale {
   display: flex;
   justify-content: space-between;
-  font-size: var(--wc-text-2xs, 0.6875em);
-  color: var(--wc-text-faint, #565f72);
+  font-size: var(--wc-text-2xs);
+  color: var(--wc-text-faint);
 }

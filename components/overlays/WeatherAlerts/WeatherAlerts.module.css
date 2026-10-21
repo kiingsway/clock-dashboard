@@ -18,7 +18,7 @@
 .main:hover {
   background: color-mix(in srgb, var(--wc-surface) 90%, white);
   border-color: color-mix(in srgb, var(--wc-hairline) 70%, white);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+  box-shadow: var(--wc-shadow-hover);
   transform: translateY(-1px);
 }
 
@@ -34,7 +34,7 @@
   gap: var(--wc-space-xs);
   justify-content: space-between;
   width: 100%;
-  padding: 14px 16px;
+  padding: 14px var(--wc-space-lg);
 }
 
 .bodyLeft {
@@ -63,7 +63,7 @@
 }
 
 .desc {
-  margin: 2px 0 0;
+  margin: var(--wc-space-2xs) 0 0;
   font-family: var(--wc-font-body);
   font-size: var(--wc-text-2xs);
   font-weight: 600;
@@ -79,7 +79,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--wc-space-xs);
-  margin-top: 2px;
+  margin-top: var(--wc-space-2xs);
   font-family: var(--wc-font-body);
   font-size: var(--wc-text-2xs);
   font-weight: 700;
@@ -94,7 +94,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--wc-space-xs);
-  margin-top: 2px;
+  margin-top: var(--wc-space-2xs);
   font-family: var(--wc-font-body);
   font-size: var(--wc-text-2xs);
   font-weight: 700;
@@ -109,7 +109,7 @@
   height: 6px;
   border-radius: var(--wc-radius-full);
   background: var(--wc-accent);
-  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--wc-accent) 70%, transparent);
+  box-shadow: var(--wc-glow-sm) color-mix(in srgb, var(--wc-accent) 70%, transparent);
 }
 
 .modalList {

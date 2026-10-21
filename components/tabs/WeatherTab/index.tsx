@@ -9,13 +9,16 @@ import useWeatherAlerts from "@/hooks/useWeatherAlerts";
 import HourlyForecast from "@/components/layout/weather/HourlyForecast";
 import DailyForecast from "@/components/layout/weather/DailyForecast";
 import WeatherWidgets from "@/components/layout/weather/WeatherWidgets";
-import SettingsSheet from "@/components/overlays/SettingsSheet";
+import dynamic from "next/dynamic";
 import useBoolean from "@/hooks/useBoolean";
+import useHasBeenTrue from "@/hooks/useHasBeenTrue";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { useTranslation } from "react-i18next";
 import useAppSettings from "@/contexts/AppSettingsContext";
 import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
 import { useAQI } from "@/hooks/useAQI";
+
+const SettingsSheet = dynamic(() => import("@/components/overlays/SettingsSheet"));
 
 export default function WeatherTab() {
   const { t } = useTranslation();
@@ -25,6 +28,7 @@ export default function WeatherTab() {
   const { data: alerts, error: alertsError } = useWeatherAlerts();
   const { focus, toggleFocus } = useFocusMode({ initialValue: focusCurrentWeatherOnLaunch, onFocus: 12000, offFocus: 0 });
   const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
+  const shouldMountSettings = useHasBeenTrue(isSettingsOpen);
 
   const error = weatherError ?? aqiError ?? alertsError;
 
@@ -32,13 +36,15 @@ export default function WeatherTab() {
 
   return (
     <>
-      <SettingsSheet
-        open={isSettingsOpen}
-        onClose={closeSettings}
-        updatedAt={weather?.current?.time}
-        alertsError={alertsError}
-        accent={accent}
-      />
+      {shouldMountSettings && (
+        <SettingsSheet
+          open={isSettingsOpen}
+          onClose={closeSettings}
+          updatedAt={weather?.current?.time}
+          alertsError={alertsError}
+          accent={accent}
+        />
+      )}
 
       <div style={{ ["--wc-accent" as string]: accent }}>
         <div className={classNames(styles.group, { [styles.focus]: focus })}>

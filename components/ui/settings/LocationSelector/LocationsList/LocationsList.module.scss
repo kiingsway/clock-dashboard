@@ -10,16 +10,16 @@
   left: 0;
   right: 0;
 
-  border: 1px solid var(--wc-hairline, #232838);
-  border-radius: var(--wc-radius-sm, 8px);
-  background: var(--wc-ink, #0b0e14);
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-sm);
+  background: var(--wc-ink);
   box-shadow: 0 8px 24px rgb(0 0 0 / 10%);
 }
 
 .message {
-  padding: var(--wc-space-sm, 8px) var(--wc-space-md, 12px);
+  padding: var(--wc-space-sm) var(--wc-space-md);
 
-  color: var(--wc-text, #e8ecf4);
+  color: var(--wc-text);
   font-size: 13px;
   text-align: center;
 }
@@ -61,9 +61,9 @@
   flex: 1;
   min-width: 0;
 
-  padding: var(--wc-space-sm, 8px) var(--wc-space-md, 12px);
+  padding: var(--wc-space-sm) var(--wc-space-md);
 
-  color: var(--wc-text, #e8ecf4);
+  color: var(--wc-text);
   font-size: 14px;
   font-weight: 500;
   text-align: left;
@@ -71,8 +71,8 @@
   cursor: pointer;
   transition: background 120ms ease;
 
-  border-top-right-radius: var(--wc-radius-sm, 8px);
-  border-bottom-right-radius: var(--wc-radius-sm, 8px);
+  border-top-right-radius: var(--wc-radius-sm);
+  border-bottom-right-radius: var(--wc-radius-sm);
 
   &:hover {
     background: var(--wc-hairline);
@@ -87,7 +87,7 @@
   justify-content: center;
 
   width: 40px;
-  padding: var(--wc-space-sm, 8px);
+  padding: var(--wc-space-sm);
 
   cursor: pointer;
 

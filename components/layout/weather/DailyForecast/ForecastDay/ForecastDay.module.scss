@@ -8,7 +8,7 @@
   align-items: center;
   gap: var(--wc-space-lg);
   width: 100%;
-  padding: 11px 12px;
+  padding: 11px var(--wc-space-md);
   background: none;
   border: none;
   font: inherit;
@@ -57,7 +57,7 @@
   top: 0;
   bottom: 0;
   border-radius: var(--wc-radius-xs);
-  background: linear-gradient(90deg, #4fa0e0, #f4b860);
+  background: linear-gradient(90deg, var(--w-cold), var(--w-warm));
 }
 
 .chevron {

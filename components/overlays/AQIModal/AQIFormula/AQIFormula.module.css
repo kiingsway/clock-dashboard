@@ -1,8 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@600;700&family=Space+Mono:wght@400;700&display=swap');
-
 .main {
-  --wc-font-clock: 'Space Mono', 'SFMono-Regular', ui-monospace, monospace;
-
   font-family: var(--wc-font-body);
 }
 
@@ -37,7 +33,7 @@
   grid-template-columns: auto 1fr;
   gap: var(--wc-space-2xs) var(--wc-space-sm);
   color: var(--wc-text-faint);
-  font-size: 0.75em;
+  font-size: var(--wc-text-xs);
 }
 
 .legend dt {
@@ -79,14 +75,14 @@
 }
 
 .header .label {
-  font-size: 0.75em;
+  font-size: var(--wc-text-xs);
   color: var(--wc-text-faint);
 }
 
 .header .mw {
   margin-left: auto;
   font-family: var(--wc-font-clock);
-  font-size: 0.6875em;
+  font-size: var(--wc-text-2xs);
   color: var(--wc-text-faint);
 }
 
@@ -131,6 +127,6 @@
 }
 
 .meta .label {
-  font-size: 0.6875em;
+  font-size: var(--wc-text-2xs);
   color: var(--wc-text-faint);
 }

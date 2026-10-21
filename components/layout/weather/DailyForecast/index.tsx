@@ -3,11 +3,13 @@ import { IWeather } from "@/types/weather.types";
 import { useTranslation } from "react-i18next";
 import { useMemo, useState } from "react";
 import ForecastDay from "./ForecastDay";
-import DailySheet from "@/components/overlays/DailySheet";
+import dynamic from "next/dynamic";
 import { useNow } from "@/contexts/NowContext";
 import { IDailyData } from "@/types/weatherInfo.types";
 import { splitCamelCase } from "@/utils/formatters/textFormatters";
 import buildDailyForecastItem from "./buildDailyForecastItem";
+
+const DailySheet = dynamic(() => import("@/components/overlays/DailySheet"));
 
 interface Props {
   weather: IWeather

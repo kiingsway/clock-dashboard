@@ -57,7 +57,7 @@
 
 /* Foco visível via teclado */
 .input:focus-visible ~ .track {
-  box-shadow: 0 0 0 3px var(--wc-accent-muted), var(--wc-shadow-xs);
+  box-shadow: var(--wc-focus-ring), var(--wc-shadow-xs);
 }
 
 /* Hover só quando habilitado */

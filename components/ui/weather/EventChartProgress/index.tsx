@@ -5,10 +5,15 @@ import { useNow } from "@/contexts/NowContext";
 import buildSunWindow, { buildFullDayWindow } from "./buildSunWindow";
 import buildSunPathData, { getSunElevation } from "./buildSunPathData";
 import buildWeatherGradientStops from "./buildWeatherGradientStops";
+import dynamic from "next/dynamic";
 import SunEventLabel from "./components/SunEventLabel";
-import SunPathChart from "./components/SunPathChart";
 import { GradientStop, SunDaily, SunHourly } from "./types";
 import styles from './EventChartProgress.module.scss';
+
+// recharts fica fora do bundle inicial; o placeholder tem a mesma altura do gráfico.
+const SunPathChart = dynamic(() => import("./components/SunPathChart"), {
+  loading: () => <div className={styles.chart} />,
+});
 
 interface BaseProps {
   daily: SunDaily;

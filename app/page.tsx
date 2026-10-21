@@ -7,6 +7,7 @@ import styles from './App.module.scss';
 import { NowProvider } from '@/contexts/NowContext';
 import useAppSettings, { AppSettingsProvider } from '@/contexts/AppSettingsContext';
 import { TTabs } from '@/types/app.types';
+import { useTranslation } from 'react-i18next';
 
 export default function Home() {
 
@@ -23,10 +24,11 @@ function HomeContent() {
   const [tab] = useState<TTabs>('weather');
 
   const { isLoaded } = useAppSettings();
+  const { ready: translationsReady } = useTranslation();
 
   const Component = TABS[tab].component;
 
-  if (!isLoaded) return null;
+  if (!isLoaded || !translationsReady) return null;
 
   return (
     <NowProvider>

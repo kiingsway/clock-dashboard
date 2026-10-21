@@ -10,14 +10,14 @@
  *  - "Sora" for headings / current temperature — geometric, quiet, readable
  *    from arm's length.
  *  - "Inter" for body copy, stat rows and forecast lists.
+ * The fonts are loaded with next/font in app/layout.tsx.
  */
-@import url("https://fonts.googleapis.com/css2?family=Space+Mono:wght@700&family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap");
-
 .root {
   /* Surfaces & Borders */
   --wc-ink: #0b0e14;
   --wc-surface: #12161f;
   --wc-surface-raised: #171c27;
+  --wc-surface-alt: #1d2330;
   --wc-hairline: #232838;
 
   /* Typography */
@@ -44,6 +44,7 @@
   --wc-text-5xl: 5.5em;
 
   /* Spacing */
+  --wc-space-3xs: 1px;
   --wc-space-2xs: 2px;
   --wc-space-xs: 4px;
   --wc-space-sm: 8px;
@@ -66,9 +67,19 @@
   --wc-highlight: rgba(255, 255, 255, 0.05);
 
   /* Shadows */
+  --wc-shadow-xs: 0 1px 2px color-mix(in srgb, var(--wc-hairline) 30%, transparent);
   --wc-shadow-sm: 0 3px 8px color-mix(in srgb, var(--wc-hairline) 45%, transparent);
   --wc-shadow-md: 0 3px 8px color-mix(in srgb, var(--wc-hairline) 60%, transparent);
   --wc-shadow-lg: 0 8px 20px color-mix(in srgb, var(--wc-hairline) 75%, transparent);
+  --wc-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Glow. Only the geometry: the color is set where it's used, so it follows a per-instance --wc-accent. */
+  --wc-glow-sm: 0 0 6px 1px;
+  --wc-glow-md: 0 0 10px 1px;
+  --wc-glow-lg: 0 0 15px 1px;
+
+  /* Focus */
+  --wc-focus-ring: 0 0 0 3px var(--wc-accent-muted);
 
   /* Semantic Status Colors */
   --wc-success: #3ecf8e;
@@ -79,4 +90,6 @@
   /* Weather */
   --w-day: #F8B820;
   --w-night: #8695f0;
+  --w-cold: #4fa0e0;
+  --w-warm: #f4b860;
 }

@@ -19,7 +19,7 @@
   &:hover {
     background: color-mix(in srgb, var(--wc-surface) 97%, white);
     border-color: color-mix(in srgb, var(--wc-hairline) 70%, white);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
+    box-shadow: var(--wc-shadow-hover);
     transform: translateY(-1px);
   }
 
@@ -66,7 +66,7 @@
   border-radius: var(--wc-radius-full);
 
   background: var(--wc-accent);
-  box-shadow: 0 0 10px 1px color-mix(in srgb, var(--wc-accent) 70%, transparent);
+  box-shadow: var(--wc-glow-md) color-mix(in srgb, var(--wc-accent) 70%, transparent);
 }
 
 .statusText {

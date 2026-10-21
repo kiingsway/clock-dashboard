@@ -5,7 +5,7 @@
   text-align: center;
   justify-content: space-between;
   flex: 1;
-  padding: 4px 16px 20px;
+  padding: var(--wc-space-xs) var(--wc-space-lg) 20px;
   cursor: default;
   user-select: none;
   gap: var(--wc-space-lg);

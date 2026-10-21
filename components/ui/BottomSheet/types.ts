@@ -61,7 +61,7 @@ export interface BottomSheetProps {
   * If your design tokens (CSS custom properties) are scoped to a class
   * rather than declared on `:root` — e.g. `.root { --wc-accent: ...; }` —
   * `document.body` is *outside* that cascade, and every `var(--wc-*)` in
-  * the sheet's CSS will silently fall back to its default value. Pass the
+  * the sheet's CSS will silently resolve to nothing. Pass the
   * DOM node carrying that class (or one of its descendants) here so the
   * sheet stays inside the token cascade.
   */

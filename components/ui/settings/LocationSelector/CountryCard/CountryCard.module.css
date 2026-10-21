@@ -5,7 +5,7 @@
   padding: var(--wc-space-md);
   background: var(--wc-ink);
   border: 1px solid var(--wc-hairline);
-  border-radius: var(--wc-radius-sm, 8px);
+  border-radius: var(--wc-radius-sm);
   box-shadow: var(--wc-shadow-sm);
   font-family: var(--wc-font-body);
   color: var(--wc-text);

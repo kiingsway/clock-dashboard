@@ -1,6 +1,6 @@
 .scroller {
   margin: 0;
-  padding: 0 16px 6px;
+  padding: 0 var(--wc-space-lg) 6px;
   list-style: none;
   display: flex;
   gap: var(--wc-space-md);

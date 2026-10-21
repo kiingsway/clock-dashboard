@@ -79,6 +79,7 @@ const TOKEN_VARS = [
   "--wc-ink",
   "--wc-surface",
   "--wc-surface-raised",
+  "--wc-surface-alt",
   "--wc-hairline",
 
   // Typography
@@ -105,6 +106,7 @@ const TOKEN_VARS = [
   "--wc-text-5xl",
 
   // Spacing
+  "--wc-space-3xs",
   "--wc-space-2xs",
   "--wc-space-xs",
   "--wc-space-sm",
@@ -127,9 +129,19 @@ const TOKEN_VARS = [
   "--wc-highlight",
 
   // Shadows
+  "--wc-shadow-xs",
   "--wc-shadow-sm",
   "--wc-shadow-md",
   "--wc-shadow-lg",
+  "--wc-shadow-hover",
+
+  // Glow
+  "--wc-glow-sm",
+  "--wc-glow-md",
+  "--wc-glow-lg",
+
+  // Focus
+  "--wc-focus-ring",
 
   // Semantic Status Colors
   "--wc-success",

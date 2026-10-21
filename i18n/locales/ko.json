@@ -1,0 +1,516 @@
+{
+  "version": "버전",
+  "title": "설정",
+  "settings": "설정",
+  "insights": "인사이트",
+  "close": "닫기",
+  "language": "언어",
+  "timezone": "시간대",
+  "weather": "날씨",
+  "location": "위치",
+  "deviceLocation": "기기 위치",
+  "updatedAt": "업데이트됨",
+  "weatherUpdatedAt": "날씨 업데이트 시간",
+  "precipitationRange": "강수 범위",
+  "precipitationRangeDescription": "다음 강수가 몇 시간 전에 표시될지 정의합니다",
+  "alert": "알림",
+  "alerts": "알림",
+  "alert_other": "알림 ({{count}})",
+  "uvIndex": "자외선 지수",
+  "airQuality": "대기질",
+  "temperature": "기온",
+  "surfacePressure": "지표면 기압",
+  "wind": "바람",
+  "windGusts": "돌풍",
+  "windSpeed": "풍속",
+  "averageSpeedForDay": "하루 평균 {{speed}}",
+  "mean": "평균",
+  "feelsLike": "체감 온도",
+  "max": "최대",
+  "min": "최소",
+  "maxMin": "최고/최저",
+  "min_minute": "분",
+  "hrs": "시간",
+  "active": "활성",
+  "inactive": "비활성",
+  "km": "km",
+  "precipitation": "강수량",
+  "humidity": "습도",
+  "dewPoint": "이슬점",
+  "visibility": "가시거리",
+  "noPrecipitation": "강수 없음",
+  "sunrise": "일출",
+  "sunset": "일몰",
+  "sunshine": "일광",
+  "daylight": "주간 빛",
+  "moonrise": "월출",
+  "moonset": "월몰",
+  "moon": "달",
+  "now": "지금",
+  "yesterday": "어제",
+  "today": "오늘",
+  "tomorrow": "내일",
+  "night": "밤",
+  "nextHours": "다음 시간대",
+  "noData": "데이터 없음",
+  "error_building_item": "이 항목의 정보를 불러오지 못했습니다.",
+  "status": "상태",
+  "until": "까지",
+  "population": "인구",
+  "confidence": "신뢰도",
+  "impact": "영향",
+  "showLess": "간략히 보기",
+  "showMore": "더 보기",
+  "cities": {
+    "New_York": "뉴욕",
+    "Bogota": "보고타",
+    "Panama": "파나마시티",
+    "Panama_City": "파나마시티",
+    "Chicago": "시카고",
+    "Toronto": "토론토",
+    "Sao_Paulo": "상파울루",
+    "Vancouver": "밴쿠버",
+    "Seoul": "서울",
+    "Guadalcanal": "과달카날"
+  },
+  "settingsTexts": {
+    "general": {
+      "title": "일반",
+      "language": "앱 전체에서 사용할 언어 변경",
+      "location": "날씨 및 시계 시간대에 사용되는 위치",
+      "searchLocation": "위치 검색…",
+      "aqiScale": "대기질 지수 등급을 분류하고 표시하는 기준을 설정합니다."
+    },
+    "alerts": {
+      "title": "알림",
+      "radius": {
+        "title": "반경 (km)",
+        "description": "기상 특보를 검색할 최대 거리"
+      }
+    },
+    "status": {
+      "title": "상태",
+      "updatedAt": "날씨 업데이트 시간:",
+      "updatedAtDesc": "마지막 날씨 새로고침 시간",
+      "version": "설치된 앱 버전"
+    },
+    "appearance": {
+      "title": "화면 표시",
+      "sunAlertThresholdMinutes": {
+        "title": "일출·일몰 사전 표시",
+        "desc": "일출 또는 일몰이 발생하기 몇 분 전부터 아이콘을 표시할지 설정합니다. 아이콘은 맑은 날씨에서만 표시됩니다."
+      },
+      "showFeelsLikeWhenEqual": {
+        "title": "동일한 체감 온도 표시",
+        "desc": "체감 온도가 현재 온도와 같을 때도 체감 온도를 표시합니다. 비활성화하면 이 조건에서 해당 항목을 숨깁니다."
+      },
+      "showMinMaxPeakBadge": {
+        "title": "현재 최저·최고 기온 표시",
+        "desc": "현재 온도가 오늘 예보된 최저 또는 최고 기온과 정확히 같을 때 \"MIN\" 또는 \"MAX\" 라벨을 표시합니다."
+      },
+      "focusCurrentWeatherOnLaunch": {
+        "title": "시작 시 현재 날씨에 초점 맞추기",
+        "desc": "앱을 열 때 현재 날씨 섹션을 기본으로 선택하고 강조 표시할지 설정합니다."
+      },
+      "is12hour": {
+        "title": "시간 형식",
+        "desc": "24시간 형식 대신 AM 및 PM을 사용합니다."
+      },
+      "useBottomSheet": {
+        "title": "바텀 시트 사용",
+        "desc": "중앙 창(Modal) 대신 화면 하단에 상세 정보와 창(Bottom Sheet)을 표시합니다."
+      }
+    }
+  },
+  "weatherTexts": {
+    "rain": {
+      "dry": "건조",
+      "rain": "비",
+      "snowfall": "눈",
+      "showers": "소나기",
+      "trace": "미세한",
+      "drizzle": "이슬비",
+      "light": "약함",
+      "moderate": "보통",
+      "heavy": "강함",
+      "torrential": "집중호우"
+    }
+  },
+  "seasonTextes": {
+    "autumn": "가을",
+    "winter": "겨울",
+    "spring": "봄",
+    "summer": "여름",
+    "description": "{{currentSeason}} {{daysSinceStart}}일째, {{nextSeason}}까지 {{daysToNext}}일 남음.",
+    "daysProgress": "{{total}}일 중 {{current}}일"
+  },
+  "moonPhases": {
+    "new": "신월",
+    "waxingCrescent": "초승달",
+    "firstQuarter": "상현",
+    "waxingGibbous": "상현달",
+    "full": "보름달",
+    "waningGibbous": "하현달",
+    "lastQuarter": "하현",
+    "waningCrescent": "그믐달"
+  },
+  "uvIndexes": {
+    "noUvIndex": "햇빛 없음. 자외선 노출이 최소입니다.",
+    "low": "낮음. 최소 보호가 필요합니다.",
+    "moderate": "보통. 자외선 차단제를 사용하세요.",
+    "high": "높음. SPF 30+ 및 그늘을 이용하세요.",
+    "veryHigh": "매우 높음. 노출을 피하세요.",
+    "extreme": "극심함. 태양 노출을 피하세요."
+  },
+  "windTextes": {
+    "summary": "{{current}} 현재, {{average}} 평균. {{direction}}. {{impact}}",
+    "impact": {
+      "calm": "눈에 띄는 영향이 거의 없습니다.",
+      "light": "대부분의 야외 활동에 편안합니다.",
+      "moderate": "불쾌감을 줄 수 있는 느껴지는 바람입니다.",
+      "strong": "걷기와 야외 활동을 어렵게 만들 수 있습니다.",
+      "veryStrong": "이동과 야외 활동에 큰 영향을 줄 수 있습니다."
+    }
+  },
+  "precipitationTexts": {
+    "chance": "확률",
+    "max": "강수량",
+    "precipInHours": "{{precip}}mm ({{chance}}% 확률)"
+  },
+  "compass": {
+    "north": "북",
+    "northeast": "북동",
+    "east": "동",
+    "southeast": "남동",
+    "south": "남",
+    "southwest": "남서",
+    "west": "서",
+    "northwest": "북서"
+  },
+  "feelsLikeDifferenceTextes": {
+    "none": "실제 온도와 거의 비슷하게 느껴집니다.",
+    "warmer": {
+      "verySmall": "약간 더 따뜻하게 느껴집니다.",
+      "small": "기대보다 더 따뜻하게 느껴집니다.",
+      "moderate": "눈에 띄게 더 따뜻하게 느껴집니다.",
+      "large": "훨씬 더 따뜻하게 느껴집니다.",
+      "extreme": "현저히 더 따뜻하게 느껴집니다."
+    },
+    "cooler": {
+      "verySmall": "약간 더 시원하게 느껴집니다.",
+      "small": "기대보다 더 시원하게 느껴집니다.",
+      "moderate": "눈에 띄게 더 시원하게 느껴집니다.",
+      "large": "훨씬 더 시원하게 느껴집니다.",
+      "extreme": "현저히 더 시원하게 느껴집니다."
+    }
+  },
+  "rainTextes": {
+    "hoursPrefix": "{{hours}}시간의 강우가 예상됩니다. ",
+    "noRain": "예보된 비 없음. 우산 없이 나가도 됩니다.",
+    "veryLowChance": "비가 올 확률이 매우 낮음.",
+    "drizzle": "이슬비 또는 약한 비가 내릴 가능성.",
+    "lightLowChance": "약한 비가 잠깐 올 가능성.",
+    "lightPossible": "약한 비가 하루 종일 내릴 수 있습니다.",
+    "lightExpected": "약한 비가 예상됩니다. 우산을 챙기세요.",
+    "moderateLowChance": "보통 수준의 비가 올 가능성은 있으나 확률은 낮음.",
+    "moderatePossible": "보통 비가 하루 동안 내릴 수 있습니다.",
+    "moderateExpected": "보통 비가 예상됩니다. 우산을 챙기세요.",
+    "heavyLowChance": "강한 비가 올 가능성은 있으나 확률은 낮음.",
+    "heavyPossible": "강한 비가 하루 동안 내릴 수 있습니다.",
+    "heavyExpected": "강한 비가 예상됩니다. 비에 노출되지 않도록 하세요.",
+    "veryHeavyLowChance": "매우 강한 비가 올 가능성은 있으나 확률은 낮음.",
+    "veryHeavyPossible": "매우 강한 비가 하루 동안 내릴 수 있습니다.",
+    "veryHeavyExpected": "매우 강한 비가 예상됩니다. 가능하면 외출을 피하세요."
+  },
+  "visibilityTextes": {
+    "excellent": "탁월함. 영향 없음.",
+    "good": "좋음. 지평선이 약간 감소합니다.",
+    "moderate": "보통. 운전 시 주의하세요.",
+    "low": "낮음. 속도를 줄이세요.",
+    "veryLow": "짙은 안개. 도로에서 주의하세요.",
+    "critical": "매우 위험. 이동을 피하세요."
+  },
+  "humidityTextes": {
+    "extremelyDry": "극도로 건조합니다. 피부와 호흡기에 자극을 느낄 수 있습니다.",
+    "veryDry": "매우 건조합니다. 건조함과 자극을 느낄 수 있습니다.",
+    "dry": "건조합니다. 가습기를 사용하면 불편함을 줄일 수 있습니다.",
+    "comfortable": "쾌적합니다. 습도가 건강한 범위에 있습니다.",
+    "slightlyHumid": "약간 습합니다. 공기가 더 더워 보일 수 있습니다.",
+    "humid": "습합니다. 끈적거리거나 불편함을 느낄 수 있습니다.",
+    "veryHumid": "매우 습합니다. 결로와 곰팡이가 더 많이 생길 수 있습니다.",
+    "extremelyHumid": "극도로 습합니다. 답답하고 과도하게 젖은 상태가 예상됩니다."
+  },
+  "dewPointTexts": {
+    "extremelyDry": "매우 건조한 공기입니다. 습기는 거의 느껴지지 않습니다.",
+    "veryDry": "매우 건조한 공기입니다. 공기가 시원하고 건조하게 느껴집니다.",
+    "dryAndComfortable": "건조하고 편안합니다. 습도는 낮지만 일반적으로 쾌적합니다.",
+    "comfortable": "편안합니다. 공기가 건조하고 상쾌하게 느껴집니다.",
+    "veryComfortable": "매우 편안합니다. 습기는 거의 느껴지지 않습니다.",
+    "slightlyComfortable": "약간의 습기가 느껴지는 편안한 상태입니다.",
+    "slightlyHumid": "약간 습합니다. 공기에 약간의 수분이 느껴지기 시작할 수 있습니다.",
+    "humid": "습합니다. 공기가 끈적거리거나 불편하게 느껴질 수 있습니다.",
+    "veryHumid": "매우 습합니다. 답답하고 불쾌한 상태가 예상됩니다.",
+    "oppressive": "억압적인 습도입니다. 공기가 매우 답답하고 무겁게 느껴집니다."
+  },
+  "daylightTextes": {
+    "veryShort": "어두운 시간이 많은 매우 짧은 하루입니다.",
+    "short": "낮의 시간이 제한적인 짧은 하루입니다.",
+    "belowAverage": "평소보다 낮시간이 적습니다.",
+    "balanced": "낮과 밤이 거의 균형을 이룹니다.",
+    "long": "낮이 길고 햇빛이 많은 하루입니다.",
+    "veryLong": "매우 긴 하루로 저녁이 길게 이어집니다.",
+    "exceptionallyLong": "낮이 매우 길어 여러 시간 동안 햇빛이 지속되는 하루입니다."
+  },
+  "sunshineTextes": {
+    "none": "해가 거의 없거나 전혀 없습니다. 구름이 하루를 지배할 가능성이 큽니다.",
+    "veryLittle": "해가 아주 적습니다. 대부분 흐린 날씨가 예상됩니다.",
+    "limited": "햇볕이 제한적입니다. 태양이 가끔 나타날 뿐입니다.",
+    "moderate": "약간의 햇볕이 있습니다. 맑음과 흐림이 섞인 날씨가 예상됩니다.",
+    "plenty": "햇볕이 충분합니다. 하루의 많은 시간 동안 태양이 뚜렷하게 보일 것입니다.",
+    "verySunny": "햇볕이 매우 좋은 날이며 햇빛이 길게 지속됩니다.",
+    "exceptionallySunny": "매우 맑고 거의 쉬지 않고 햇빛이 지속되는 날입니다."
+  },
+  "weatherConditions": {
+    "rainWind": {
+      "clear": {
+        "status": "맑은 날씨",
+        "description": "좋은 조건입니다. 큰 비나 강한 바람이 예상되지 않습니다."
+      },
+      "severeWind": {
+        "status": "강풍",
+        "description": "비 없이 매우 강한 바람이 불고 있습니다. 느슨한 물건과 떨어지는 가지에 주의하세요."
+      },
+      "strongWind": {
+        "status": "강한 바람",
+        "description": "비 없이 매우 바람이 많이 부는 날입니다. 야외에서 걷는 동안 더 주의하세요."
+      },
+      "moderateBreeze": {
+        "status": "보통 바람",
+        "description": "비 없이 적당한 바람이 불고 있습니다. 야외 활동은 대체로 편안합니다."
+      },
+      "heavyRain": {
+        "status": "강한 비",
+        "description": "바람은 약하지만 폭우가 내립니다. 우산이나 방수 의류를 준비하세요."
+      },
+      "moderateRain": {
+        "status": "보통 비",
+        "description": "강한 바람 없이 꾸준히 비가 옵니다. 우산이면 충분합니다."
+      },
+      "lightDrizzle": {
+        "status": "약한 이슬비",
+        "description": "바람이 약하고 가벼운 이슬비만 내립니다. 야외 상황은 관리가 가능합니다."
+      },
+      "storm": {
+        "status": "폭풍 조건",
+        "description": "강한 비와 매우 강한 바람이 함께 옵니다. 가능하면 밖에 나가지 마세요."
+      },
+      "windDrivenRain": {
+        "status": "바람에 밀려오는 비",
+        "description": "강한 바람이 비를 옆으로 밀고 있습니다. 우산을 쓰기 어려울 수 있어 방수 의류를 권장합니다."
+      },
+      "rainWithWind": {
+        "status": "비와 바람",
+        "description": "바람이 불며 비가 내립니다. 방수 외투를 착용하는 것이 좋습니다."
+      }
+    }
+  },
+  "weatherCategoryNames": {
+    "clear": "맑음",
+    "partlyCloudy": "구름 조금",
+    "cloudy": "흐림",
+    "smoke": "연기",
+    "haze": "실안개",
+    "hail": "우박",
+    "lightFog": "옅은 안개",
+    "fog": "안개",
+    "drizzle": "이슬비",
+    "freezingDrizzle": "동결성 이슬비",
+    "rain": "비",
+    "heavyRain": "강한 비",
+    "freezingRain": "진눈깨비 비",
+    "snow": "눈",
+    "heavySnow": "폭설",
+    "showers": "소나기",
+    "sleet": "진눈깨비",
+    "heavySleet": "강한 진눈깨비",
+    "snowShowers": "소낙눈",
+    "thunderstorm": "뇌우",
+    "moderateHail": "보통 우박",
+    "heavyHail": "강한 우박",
+    "error": "오류",
+    "loading": "로딩 중",
+    "unknown": "알 수 없음"
+  },
+  "aqiTextes": {
+    "scale": {
+      "title": "공기질 지수 범주",
+      "us": "미국 공기질 지수",
+      "eu": "유럽 공기질 지수"
+    },
+    "legend": {
+      "concentration": "µg/m³ 단위의 농도",
+      "molecularWeight": "오염 물질의 분자량 (g/mol)",
+      "atmosphericPressure": "Pa 단위의 대기압",
+      "gasConstant": "기체 상수 — {{value}} J/(mol·K)",
+      "temperature": "켈빈 단위의 온도",
+      "conversionInfo": "농도는 µg/m³ 단위로 제공되며, 각 오염 물질의 분자량과 측정 당시의 기온 및 기압을 고려하여 {{unit}} 단위로 변환됩니다."
+    },
+    "level": {
+      "us": {
+        "good": "좋음",
+        "fair": "보통",
+        "moderate": "민감군 영향",
+        "poor": "나쁨",
+        "veryPoor": "매우 나쁨",
+        "extremelyPoor": "위험"
+      },
+      "eu": {
+        "good": "좋음",
+        "fair": "양호",
+        "moderate": "보통",
+        "poor": "나쁨",
+        "veryPoor": "매우 나쁨",
+        "extremelyPoor": "최악"
+      }
+    },
+    "pollutant": {
+      "aqi": "대기질 지수",
+      "pm2_5": "초미세먼지",
+      "pm10": "미세먼지",
+      "ozone": "오존",
+      "nitrogen_dioxide": "이산화질소",
+      "sulphur_dioxide": "이산화황",
+      "carbon_monoxide": "일산화탄소",
+      "dust": "황사/미세먼지"
+    },
+    "desc": {
+      "aqi": {
+        "us": {
+          "good": "공기질이 만족스러우며 건강 위험이 거의 없거나 전혀 없습니다.",
+          "fair": "공기질이 보통 수준입니다. 민감한 사람은 장시간의 야외 활동을 줄이는 것을 고려해야 합니다.",
+          "moderate": "호흡기/심장 질환자, 노약자 및 어린이에게 영향을 미칠 수 있습니다. 일반 대중은 영향을 받을 가능성이 낮습니다.",
+          "poor": "모든 사람이 건강상의 영향을 받기 시작할 수 있습니다. 민감군은 더 심각한 영향을 받을 수 있습니다.",
+          "veryPoor": "건강 경고: 모든 사람의 건강에 악영향을 미칠 위험이 증가합니다. 야외 활동을 피하세요.",
+          "extremelyPoor": "비상 경고: 모든 인구 집단이 심각한 건강상의 영향을 받을 위험이 높습니다. 실내에 머무르세요."
+        },
+        "eu": {
+          "good": "대부분의 사람들에게 이상적인 공기질 수준입니다.",
+          "fair": "공기질이 보통 수준입니다. 평소대로 야외 활동을 즐기세요.",
+          "moderate": "증상을 느끼는 민감군 개인은 격렬한 야외 활동을 줄이는 것을 고려해야 합니다.",
+          "poor": "건강에 해로운 공기질입니다. 민감군은 야외 신체 활동을 줄여야 합니다.",
+          "veryPoor": "모든 사람이 야외에서 보내는 시간을 줄이는 것을 고려해야 합니다.",
+          "extremelyPoor": "심각한 경고: 야외 노출을 최소화하고 야외 운동을 피하세요."
+        }
+      },
+      "pm2_5": {
+        "eu": {
+          "good": "초미세먼지 농도가 이상적인 수준입니다. 폐 깊숙이 침투할 위험이 없습니다.",
+          "fair": "초미세먼지(PM2.5) 농도가 보통 수준입니다. 평소대로 야외 활동을 즐기세요.",
+          "moderate": "호흡기 질환이 있는 사람은 미세입자로 인해 약간의 불편함을 느낄 수 있습니다.",
+          "poor": "중등도~고위험: 초미세먼지가 민감군의 호흡기를 자극할 수 있습니다.",
+          "veryPoor": "초미세먼지 고농도 상태입니다. 모든 사람은 야외에서 장시간의 격렬한 활동을 피해야 합니다.",
+          "extremelyPoor": "미세입자가 위험한 수준입니다. 가능한 한 공기청정기를 가동한 실내에 머무르세요."
+        },
+        "us": {
+          "good": "초미세먼지 농도가 미미하여 건강 위험이 없습니다.",
+          "fair": "PM2.5에 매우 민감한 사람은 장시간의 격렬한 야외 활동을 줄이는 것을 고려해야 합니다.",
+          "moderate": "민감군은 기침이나 호흡 곤란 등의 증상을 느낄 수 있습니다. 일반 대중은 보통 영향을 받지 않습니다.",
+          "poor": "모든 사람에게 폐 자극 위험이 크게 증가합니다. 고위험군은 실내에 머물러야 합니다.",
+          "veryPoor": "심각한 PM2.5 경보: 호흡기 및 심장 합병증 위험이 높습니다. 모든 야외 활동을 피하세요.",
+          "extremelyPoor": "비상 수준의 초미세먼지 농도입니다. 문과 창문을 닫고 공기청정기를 사용하세요."
+        }
+      },
+      "pm10": {
+        "eu": {
+          "good": "미세먼지 농도가 안전하고 이상적인 수준입니다.",
+          "fair": "먼지와 미세먼지가 적은 상태입니다. 일반 대중에게 정상적인 환경입니다.",
+          "moderate": "천식이나 알레르기가 있는 사람은 눈이나 목에 약간의 자극을 느낄 수 있습니다.",
+          "poor": "먼지와 입자물질로 인해 공기질이 나쁩니다. 고위험군은 야외 활동 시간을 제한해야 합니다.",
+          "veryPoor": "미세먼지(PM10) 농도가 높습니다. 먼지 흡입을 줄이기 위해 야외 활동을 제한하는 것이 좋습니다.",
+          "extremelyPoor": "공기 중 미세먼지 농도가 심각한 수준입니다. 모든 사람은 노출을 피하고 창문을 닫아 두세요."
+        },
+        "us": {
+          "good": "공기 중 미세먼지 농도가 미미한 수준입니다.",
+          "fair": "먼지 및 입자 오염이 적어 보통 수준의 공기질입니다.",
+          "moderate": "폐 질환자, 노약자, 어린이는 장시간의 야외 활동을 줄여야 합니다.",
+          "poor": "일반 대중의 호흡기 불편 위험이 증가하며 민감군에게 심각한 증상이 나타날 수 있습니다.",
+          "veryPoor": "건강에 해로운 상태: 심각한 기도 자극 위험이 있습니다. 야외에 머무는 것을 피하세요.",
+          "extremelyPoor": "PM10 비상 경보. 먼지 및 매연 농도가 매우 높으니 모든 야외 노출을 피하세요."
+        }
+      },
+      "ozone": {
+        "eu": {
+          "good": "지표면 오존 농도가 이상적인 수준입니다. 깨끗하고 맑은 공기입니다.",
+          "fair": "오존 농도가 정상 안전 기준 내에 있습니다.",
+          "moderate": "천식 환자는 야외 운동 시 목 자극 가능성을 모니터링해야 합니다.",
+          "poor": "오존 농도가 높습니다. 민감군은 오후 시간에 격렬한 신체 활동을 피해야 합니다.",
+          "veryPoor": "지표면 오존 농도가 높습니다. 특히 더운 날에는 야외 노출 시간을 줄이세요.",
+          "extremelyPoor": "오존 비상 경고: 폐 염증 위험이 높습니다. 실내에 머무르세요."
+        },
+        "us": {
+          "good": "지표면 오존 노출 위험이 없습니다.",
+          "fair": "공기질이 보통 수준입니다. 매우 민감한 사람은 늦은 오후에 약간의 불편함을 느낄 수 있습니다.",
+          "moderate": "어린이, 노약자 및 야외 운동 전문가는 폐 기능 감소를 경험할 수 있습니다.",
+          "poor": "일반 대중의 눈과 기도 자극 위험이 있습니다. 피크 시간대에는 야외 활동을 피하세요.",
+          "veryPoor": "오존 농도가 매우 높습니다. 모든 인구 집단에 대한 건강 경보이니 외출을 자제하세요.",
+          "extremelyPoor": "심각한 호흡기 손상 위험이 있습니다. 에어컨이 가동되는 실내에 머무르세요."
+        }
+      },
+      "nitrogen_dioxide": {
+        "eu": {
+          "good": "이산화질소 농도가 최소 수준입니다. 매우 우수한 공기질입니다.",
+          "fair": "주로 원활한 도심 교통에서 발생하는 NO2 수준으로, 수용 가능한 상태입니다.",
+          "moderate": "만성 호흡기 질환자는 기도가 약간 민감해짐을 느낄 수 있습니다.",
+          "poor": "NO2 농도가 높습니다. 천식이나 기관지염이 있는 사람은 혼잡한 교통 구역을 피해야 합니다.",
+          "veryPoor": "높은 NO2 오염 상태입니다. 모든 사람은 교통량이 많은 지역에서 장시간 노출되는 것을 피해야 합니다.",
+          "extremelyPoor": "이산화질소가 심각한 수준입니다. 외출을 자제하고, 도로에서 멀리 떨어진 실내 환기를 유지하세요."
+        },
+        "us": {
+          "good": "이산화질소와 관련된 건강 영향이 없습니다.",
+          "fair": "대부분의 사람들에게 명확한 위험이 없는 보통 수준의 NO2 농도입니다.",
+          "moderate": "천식 환자는 혼잡한 도로 근처에서 호흡기 증상이 증가할 수 있습니다.",
+          "poor": "호흡기 감염 및 염증 위험이 증가합니다. 민감군은 집에 머물러야 합니다.",
+          "veryPoor": "건강 경고: 기관지염 및 심각한 천식 발작 위험이 높습니다. 교통량이 많은 곳과 공업 지역을 피하세요.",
+          "extremelyPoor": "위험한 수준의 NO2입니다. 모든 인구 집단의 폐 기능에 심각한 영향을 미칠 위험이 있습니다."
+        }
+      },
+      "sulphur_dioxide": {
+        "eu": {
+          "good": "이산화황 농도가 미미합니다. 깨끗한 공기질입니다.",
+          "fair": "SO2 농도가 안전 배출 기준 내에 있습니다.",
+          "moderate": "천식 환자는 깊게 숨을 쉴 때 약간의 불편함을 느낄 수 있습니다.",
+          "poor": "SO2 농도가 높습니다. 민감한 사람은 야외 활동을 피해야 하며, 특히 공업 지대 근처는 더욱 주의하세요.",
+          "veryPoor": "공기 중 황 농도가 높습니다. 모든 사람은 야외에 머무는 시간을 제한해야 합니다.",
+          "extremelyPoor": "SO2가 심각한 수준입니다. 천식 환자에게 즉각적인 기관지 경련 위험이 있으니 실내에 머무르세요."
+        },
+        "us": {
+          "good": "SO2로 인한 자극 위험이 없습니다.",
+          "fair": "일반 대중에게 안전하고 보통 수준인 SO2 농도입니다.",
+          "moderate": "신체 활동 중인 천식 환자는 쌕쌕거림(천명)과 호흡 곤란을 느낄 수 있습니다.",
+          "poor": "일반 대중도 목과 눈의 자극을 느끼기 시작할 수 있습니다. 고위험군은 외출을 자제하세요.",
+          "veryPoor": "건강 경고: 위험한 이산화황 농도입니다. 야외 활동을 완전히 피하세요.",
+          "extremelyPoor": "SO2 보건 비상: 누구에게나 심각한 호흡기 손상 위험이 있습니다."
+        }
+      },
+      "carbon_monoxide": {
+        "us": {
+          "good": "일산화탄소(CO) 농도가 낮습니다. 정상적인 조건에서는 건강 위험이 최소화됩니다.",
+          "fair": "CO가 약간 상승했습니다. 심장 질환자는 특히 신체 활동 중에 더 민감할 수 있습니다.",
+          "moderate": "CO 농도가 상승했습니다. 민감한 사람은 두통, 피로, 호흡 곤란을 경험할 수 있으니 장시간의 활동을 줄이세요.",
+          "poor": "건강에 해로운 CO 수준입니다. 두통, 어지러움, 메스꺼움, 무기력증을 유발할 수 있습니다. 장시간 노출을 제한하세요.",
+          "veryPoor": "CO 농도가 매우 높습니다. 현기증, 혼란, 메스꺼움, 운동 조절 능력 상실을 유발할 수 있습니다. 노출을 피하고 신선한 공기를 찾으세요.",
+          "extremelyPoor": "위험할 정도로 높은 CO 수준입니다. 심각한 중독, 의식 불명 또는 사망을 유발할 수 있습니다. 즉시 오염원에서 벗어나 신선한 공기를 마시세요."
+        }
+      }
+    }
+  },
+  "devLocStatusTextes": {
+    "idle": "기기 위치 사용",
+    "locating": "위치 정보를 가져오는 중…",
+    "loading": "가장 가까운 도시 찾는 중…",
+    "active": "기기 위치 사용 중",
+    "denied": "위치 권한이 거부되었습니다. 브라우저 설정에서 권한을 허용한 후 다시 시도해 주세요.",
+    "unavailable": "기기 위치를 사용할 수 없습니다. 다시 시도하거나 위치를 직접 입력해 주세요.",
+    "error": "현재 위치에서 도시를 찾을 수 없습니다. 다시 시도해 주세요."
+  }
+}

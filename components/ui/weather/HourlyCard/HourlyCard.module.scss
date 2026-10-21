@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   gap: var(--wc-space-xs);
-  padding: 10px 0 8px;
+  padding: 10px 0 var(--wc-space-sm);
   background: var(--wc-surface);
   border: 1px solid var(--wc-hairline);
   border-radius: var(--wc-radius-md);

@@ -17,9 +17,10 @@ import { Arrow, CustomTick, CustomAreaDot } from './Components';
 interface Props {
   data: IPrecipChartData[];
   hoursAhead: number;
+  height: number;
 }
 
-export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
+export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Props) {
   const { t, i18n: { language } } = useTranslation();
   const { get: { is12hour } } = useAppSettings();
 
@@ -110,7 +111,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead }: Props) {
   );
 
   return (
-    <ResponsiveContainer width="100%" height={100}>
+    <ResponsiveContainer width="100%" height={height}>
       <AreaChart data={data} dataKey="key">
         <defs>
           {gradients.map(g => (

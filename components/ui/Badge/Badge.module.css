@@ -83,6 +83,6 @@
   height: 6px;
   border-radius: var(--wc-radius-full);
   background: var(--wc-accent);
-  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--wc-accent) 70%, transparent);
+  box-shadow: var(--wc-glow-sm) color-mix(in srgb, var(--wc-accent) 70%, transparent);
   flex-shrink: 0;
 }

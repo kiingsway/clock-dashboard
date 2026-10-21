@@ -3,13 +3,20 @@ import styles from './WeatherWidgets.module.scss';
 import { useNow } from '@/contexts/NowContext';
 import { IWeather } from '@/types/weather.types';
 import { DetailCard } from '@/components/ui/DetailCard/DetailCard';
-import ZoneGaugeBar from '@/components/ui/ZoneGaugeBar';
 import useBoolean from '@/hooks/useBoolean';
 import { useTranslation } from 'react-i18next';
 import buildWeatherWidgetsData, { TWeatherWidgetsDataItem } from './buildWeatherWidgetsData';
 import useAppSettings from '@/contexts/AppSettingsContext';
 import { IAQI } from '@/types/aqi.types';
-import AQIModal from '@/components/overlays/AQIModal';
+import dynamic from 'next/dynamic';
+import useHasBeenTrue from '@/hooks/useHasBeenTrue';
+
+const AQIModal = dynamic(() => import('@/components/overlays/AQIModal'));
+
+// recharts fica fora do bundle inicial; 87px é a altura padrão do ZoneGaugeBar.
+const ZoneGaugeBar = dynamic(() => import('@/components/ui/ZoneGaugeBar'), {
+  loading: () => <div style={{ height: 87 }} />,
+});
 
 interface Props {
   weather: IWeather;
@@ -22,13 +29,14 @@ export default function WeatherWidgets({ weather, aqi }: Props): JSX.Element | n
   const { t } = useTranslation();
   const { get: { aqiScale } } = useAppSettings();
   const [aqiOpen, { setTrue: openAQI, setFalse: closeAQI }] = useBoolean();
+  const shouldMountAQI = useHasBeenTrue(aqiOpen);
 
   const data = useMemo(() => buildWeatherWidgetsData(weather, aqi, aqiScale, now, locale, t), [weather, aqi, aqiScale, now, locale, t]);
 
   return (
     <div className={styles.main}>
 
-      {aqi && (
+      {aqi && shouldMountAQI && (
         <AQIModal
           aqi={aqi}
           onClose={closeAQI}

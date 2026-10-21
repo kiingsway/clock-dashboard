@@ -113,5 +113,5 @@
   box-shadow: var(--wc-shadow-md);
   transform: translate(-50%, -50%);
   transition: left 0.4s ease;
-  box-shadow: 0 0 15px 1px color-mix(in srgb, var(--wc-accent) 40%, transparent);
+  box-shadow: var(--wc-glow-lg) color-mix(in srgb, var(--wc-accent) 40%, transparent);
 }

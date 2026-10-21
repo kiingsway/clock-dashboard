@@ -3,10 +3,16 @@ import styles from './PrecipitationChart.module.scss';
 import { useTranslation } from 'react-i18next';
 import { IWeather } from '@/types/weather.types';
 import useAppSettings from '@/contexts/AppSettingsContext';
-import { ResponsiveContainer } from 'recharts';
-import PrecipStackedAreaChart from './PrecipitationAreaChart';
 import { useMemo } from 'react';
+import dynamic from 'next/dynamic';
 import buildPrecipChart from './buildPrecipChart';
+
+const CHART_HEIGHT = 100;
+
+// recharts é pesado e o gráfico só aparece quando há precipitação prevista.
+const PrecipStackedAreaChart = dynamic(() => import('./PrecipitationAreaChart'), {
+  loading: () => <div style={{ height: CHART_HEIGHT }} />,
+});
 
 export type TPrecipAreas = "rain" | "showers" | "snowfall";
 export const precipitationAreas: TPrecipAreas[] = ["snowfall", "rain", "showers"];
@@ -28,9 +34,7 @@ export default function PrecipitationChart({ weather: { current, hourly } }: Pro
 
   return (
     <div onDoubleClick={onDebugClick} className={styles.main}>
-      <ResponsiveContainer width="100%" height={100}>
-        <PrecipStackedAreaChart data={filteredData} hoursAhead={filteredData.length} />
-      </ResponsiveContainer>
+      <PrecipStackedAreaChart data={filteredData} hoursAhead={filteredData.length} height={CHART_HEIGHT} />
     </div>
   );
 }
