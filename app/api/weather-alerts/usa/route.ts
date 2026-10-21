@@ -1,32 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
+import parseCoordinates from "@/utils/locations/parseCoordinates";
 
 const NWS_API = "https://api.weather.gov";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
-  const lat = Number(searchParams.get("lat"));
-  const lon = Number(searchParams.get("lon"));
+  const coordinates = parseCoordinates(searchParams.get("lat"), searchParams.get("lon"));
 
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+  if (!coordinates) {
     return NextResponse.json(
       {
         error: "Invalid coordinates.",
-        message: "Parameters 'lat' and 'lon' must be valid numbers.",
+        message: "Parameters 'lat' and 'lon' must be valid numbers, with latitude between -90 and 90 and longitude between -180 and 180.",
       },
       { status: 400 }
     );
   }
 
-  if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
-    return NextResponse.json(
-      {
-        error: "Invalid coordinates.",
-        message: "Latitude must be between -90 and 90 and longitude between -180 and 180.",
-      },
-      { status: 400 }
-    );
-  }
+  const { latitude: lat, longitude: lon } = coordinates;
 
   try {
     const res = await fetch(

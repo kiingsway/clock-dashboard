@@ -4,6 +4,7 @@ import { IWeather } from "@/types/weather.types";
 import { DateTime } from "luxon";
 import getMoonDays from "./getMoonDays";
 import isValidWeather from "./isValidWeather";
+import parseCoordinates from "@/utils/locations/parseCoordinates";
 
 const api = {
   past_days: 1,
@@ -81,15 +82,16 @@ type TApiWeather = Promise<
 export async function GET(request: NextRequest): TApiWeather {
   const { searchParams } = new URL(request.url);
 
-  const latitude = Number(searchParams.get("latitude"));
-  const longitude = Number(searchParams.get("longitude"));
+  const coordinates = parseCoordinates(searchParams.get("latitude"), searchParams.get("longitude"));
 
-  if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+  if (!coordinates) {
     return NextResponse.json(
       { error: "Missing or invalid latitude/longitude." },
       { status: 400 }
     );
   }
+
+  const { latitude, longitude } = coordinates;
 
   const params = getParams(latitude, longitude);
 

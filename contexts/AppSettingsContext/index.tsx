@@ -13,7 +13,7 @@ import {
 import { AppSettings, UseAppSettings } from '@/types/app.types';
 import { STORAGE_KEY } from '@/constants/keys';
 import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from '@/constants/settings';
-import loadSettings from './loadSettings';
+import loadSettings, { parseSettings } from './loadSettings';
 import persistSettings from './persistSettings';
 import { AQIScale } from '@/types/aqi.types';
 import isValidLocationObject from '@/utils/locations/isValidLocationObject';
@@ -57,9 +57,7 @@ export function AppSettingsProvider({ children }: Props) {
       }
 
       try {
-        const parsed = JSON.parse(event.newValue) as Partial<AppSettings>;
-
-        setSettings({ ...DEFAULT_SETTINGS, ...parsed });
+        setSettings(parseSettings(event.newValue));
       } catch (error) {
         console.error(
           'Falha ao sincronizar configurações entre abas:',

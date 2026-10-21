@@ -15,8 +15,8 @@ export async function fetchWeather(latitude: number, longitude: number): Promise
   const res = await fetch(`/api/weather?latitude=${latitude}&longitude=${longitude}`);
 
   if (!res.ok) {
-    const error = await res.json();
-    throw new Error(error.message ?? error.error ?? 'Failed to fetch weather.');
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message ?? error?.error ?? 'Failed to fetch weather.');
   }
 
   return res.json();

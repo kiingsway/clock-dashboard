@@ -91,9 +91,33 @@ export function NowProvider({ children }: NowProviderProps) {
 
     update();
 
-    const interval = setInterval(update, 60_000);
+    let timeout: ReturnType<typeof setTimeout>;
 
-    return () => clearInterval(interval);
+    // Alinha a atualização à virada do minuto, em vez de contar 60s a partir da montagem.
+    const scheduleNextMinute = () => {
+      timeout = setTimeout(() => {
+        update();
+        scheduleNextMinute();
+      }, 60_000 - (Date.now() % 60_000));
+    };
+
+    scheduleNextMinute();
+
+    // Timers são atrasados em abas em segundo plano; atualiza ao voltar para a aba.
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return;
+
+      clearTimeout(timeout);
+      update();
+      scheduleNextMinute();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearTimeout(timeout);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [simulatedDate, timezone, locale, getNow]);
 
   const setSimulatedDate = (

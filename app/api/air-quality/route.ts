@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import isValidAirQualityData from "./isValidAirQualityData";
 import { IAQI } from "@/types/aqi.types";
+import parseCoordinates from "@/utils/locations/parseCoordinates";
 
 // https://air-quality-api.open-meteo.com/v1/air-quality?latitude=52.52&longitude=13.41&hourly=european_aqi,us_aqi&current=european_aqi,us_aqi,pm10,pm2_5,ozone,nitrogen_dioxide,sulphur_dioxide,carbon_monoxide,dust&past_days=1
 
@@ -45,15 +46,16 @@ type TApiAQI = Promise<
 export async function GET(request: NextRequest): TApiAQI {
   const { searchParams } = new URL(request.url);
 
-  const latitude = Number(searchParams.get("latitude"));
-  const longitude = Number(searchParams.get("longitude"));
+  const coordinates = parseCoordinates(searchParams.get("latitude"), searchParams.get("longitude"));
 
-  if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+  if (!coordinates) {
     return NextResponse.json(
       { error: "Missing or invalid latitude/longitude." },
       { status: 400 }
     );
   }
+
+  const { latitude, longitude } = coordinates;
 
   const params = getParams(latitude, longitude);
 
@@ -65,7 +67,7 @@ export async function GET(request: NextRequest): TApiAQI {
     });
 
     if (!isValidAirQualityData(airQualityData)) {
-      throw new Error(`Invalid weather API response. ${JSON.stringify(airQualityData)}`);
+      throw new Error(`Invalid air quality API response. ${JSON.stringify(airQualityData)}`);
     }
 
     return NextResponse.json(airQualityData, {
@@ -83,7 +85,7 @@ export async function GET(request: NextRequest): TApiAQI {
 
     return NextResponse.json(
       {
-        error: "Failed to fetch weather.",
+        error: "Failed to fetch air quality.",
         message,
       },
       { status: 500 }

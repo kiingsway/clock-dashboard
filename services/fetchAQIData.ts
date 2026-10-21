@@ -9,7 +9,10 @@ import { IAQI } from "@/types/aqi.types";
 export async function fetchAQIData(latitude: number, longitude: number): Promise<IAQI> {
   const res = await fetch(`/api/air-quality?latitude=${latitude}&longitude=${longitude}`);
 
-  if (!res.ok) throw new Error("Failed to fetch air quality.");
+  if (!res.ok) {
+    const error = await res.json().catch(() => null);
+    throw new Error(error?.message ?? error?.error ?? 'Failed to fetch air quality.');
+  }
 
   return res.json();
 }

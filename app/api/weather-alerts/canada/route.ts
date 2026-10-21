@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import axios from "axios";
 import { DateTime } from "luxon";
 import { IWeatherAlertCanada } from "@/types/WeatherAlerts/canada.types";
+import parseCoordinates from "@/utils/locations/parseCoordinates";
 
 interface WeatherAlert {
   properties: {
@@ -25,23 +26,17 @@ function kmToBoundingBox(lat: number, lon: number, radiusKm: number) {
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
 
-  const lat = Number(searchParams.get("lat"));
-  const lon = Number(searchParams.get("lon"));
+  const coordinates = parseCoordinates(searchParams.get("lat"), searchParams.get("lon"));
   const radiusKm = Number(searchParams.get("radiusKm") ?? 5);
 
-  if (
-    Number.isNaN(lat) ||
-    Number.isNaN(lon) ||
-    Number.isNaN(radiusKm) ||
-    radiusKm <= 0
-  ) {
+  if (!coordinates || !Number.isFinite(radiusKm) || radiusKm <= 0) {
     return NextResponse.json(
       { error: "Invalid lat, lon or radiusKm." },
       { status: 400 }
     );
   }
 
-  const bbox = kmToBoundingBox(lat, lon, radiusKm);
+  const bbox = kmToBoundingBox(coordinates.latitude, coordinates.longitude, radiusKm);
 
   try {
     const { data } = await axios.get("https://api.weather.gc.ca/collections/weather-alerts/items", {
@@ -49,6 +44,7 @@ export async function GET(request: NextRequest) {
         f: "json",
         bbox: `${bbox.minLon},${bbox.minLat},${bbox.maxLon},${bbox.maxLat}`,
       },
+      timeout: 15_000,
     });
 
     const alerts: IWeatherAlertCanada[] = data.features.filter((item: WeatherAlert) => {

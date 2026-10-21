@@ -1,22 +1,25 @@
 import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 import { isValidLocationArray } from "@/utils/locations/isValidLocationObject";
+import parseCoordinates from "@/utils/locations/parseCoordinates";
 
 export async function GET(request: NextRequest) {
 
   const { searchParams } = new URL(request.url);
 
-  const lat = searchParams.get("lat");
-  const lng = searchParams.get("lon");
+  const coordinates = parseCoordinates(searchParams.get("lat"), searchParams.get("lon"));
 
-  if (!lat || !lng) {
+  if (!coordinates) {
     return NextResponse.json(
       { error: "Missing or invalid query." },
       { status: 400 }
     );
   }
 
-  const params = new URLSearchParams({ lat, lng });
+  const params = new URLSearchParams({
+    lat: String(coordinates.latitude),
+    lng: String(coordinates.longitude),
+  });
 
   const url = `https://countries.dev/cities/near?${params}`;
 

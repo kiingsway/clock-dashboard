@@ -17,9 +17,58 @@ const getValidBoolean = (value: unknown, defaultValue: boolean): boolean => {
 };
 
 /**
- * Carrega as configurações salvas no localStorage.
+ * Converte o JSON salvo em configurações válidas.
  * Faz validação básica dos valores para evitar estados inválidos
  * (ex: localStorage corrompido ou editado manualmente).
+ * Lança erro se o JSON for inválido.
+ */
+export function parseSettings(raw: string): AppSettings {
+  const parsed = JSON.parse(raw) as Partial<AppSettings> | null;
+
+  if (!parsed || typeof parsed !== 'object') return DEFAULT_SETTINGS;
+
+  const location = 'location' in parsed && isValidLocationObject(parsed.location)
+    ? parsed.location
+    : DEFAULT_SETTINGS.location;
+
+  const numberKeys = [
+    { key: 'alertRadiusKm', range: ALERT_RADIUS_KM },
+    { key: 'precipHoursRange', range: RAIN_ALERT_HOURS },
+    { key: 'sunAlertThresholdMinutes', range: SUNWINDOW_BEFORE_MINUTES },
+  ] as const;
+
+  const [
+    alertRadiusKm,
+    precipHoursRange,
+    sunAlertThresholdMinutes
+  ] = numberKeys.map(({ key, range }) => getValidNumber(parsed[key], range, DEFAULT_SETTINGS[key]));
+
+  const booleanKeys = [
+    'showFeelsLikeWhenEqual',
+    'showMinMaxPeakBadge',
+    'focusCurrentWeatherOnLaunch',
+    'is12hour',
+    'useBottomSheet',
+  ] as const;
+
+  const [
+    showFeelsLikeWhenEqual,
+    showMinMaxPeakBadge,
+    focusCurrentWeatherOnLaunch,
+    is12hour,
+    useBottomSheet,
+  ] = booleanKeys.map(key => getValidBoolean(parsed[key], DEFAULT_SETTINGS[key]));
+
+  const aqiScales: AQIScale[] = ['european', 'us'];
+  const aqiScale = aqiScales.includes(parsed.aqiScale as AQIScale)
+    ? (parsed.aqiScale as AQIScale)
+    : DEFAULT_SETTINGS.aqiScale;
+
+  return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour, aqiScale, useBottomSheet };
+}
+
+/**
+ * Carrega as configurações salvas no localStorage.
  */
 export default function loadSettings(): AppSettings {
   if (typeof window === 'undefined') return DEFAULT_SETTINGS;
@@ -28,47 +77,7 @@ export default function loadSettings(): AppSettings {
     const raw = window.localStorage.getItem(STORAGE_KEY.SETTINGS);
     if (!raw) return DEFAULT_SETTINGS;
 
-    const parsed = JSON.parse(raw) as Partial<AppSettings>;
-
-    const location = 'location' in parsed && isValidLocationObject(parsed.location)
-      ? parsed.location
-      : DEFAULT_SETTINGS.location;
-
-    const numberKeys = [
-      { key: 'alertRadiusKm', range: ALERT_RADIUS_KM },
-      { key: 'precipHoursRange', range: RAIN_ALERT_HOURS },
-      { key: 'sunAlertThresholdMinutes', range: SUNWINDOW_BEFORE_MINUTES },
-    ] as const;
-
-    const [
-      alertRadiusKm,
-      precipHoursRange,
-      sunAlertThresholdMinutes
-    ] = numberKeys.map(({ key, range }) => getValidNumber(parsed[key], range, DEFAULT_SETTINGS[key]));
-
-    const booleanKeys = [
-      'showFeelsLikeWhenEqual',
-      'showMinMaxPeakBadge',
-      'focusCurrentWeatherOnLaunch',
-      'is12hour',
-      'useBottomSheet',
-    ] as const;
-
-    const [
-      showFeelsLikeWhenEqual,
-      showMinMaxPeakBadge,
-      focusCurrentWeatherOnLaunch,
-      is12hour,
-      useBottomSheet,
-    ] = booleanKeys.map(key => getValidBoolean(parsed[key], DEFAULT_SETTINGS[key]));
-
-    const aqiScales: AQIScale[] = ['european', 'us'];
-    const aqiScale = aqiScales.includes(parsed.aqiScale as AQIScale)
-      ? (parsed.aqiScale as AQIScale)
-      : DEFAULT_SETTINGS.aqiScale;
-
-    return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour, aqiScale, useBottomSheet };
-
+    return parseSettings(raw);
   } catch (error) {
     console.error('Falha ao carregar configurações do localStorage:', error);
     return DEFAULT_SETTINGS;
