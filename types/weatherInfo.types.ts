@@ -1,15 +1,14 @@
 import { WeatherIconProps } from "@/components/ui/weather/WeatherIcon";
-import { Key, ReactNode } from "react";
+import { Key } from "react";
 
 export interface NameIcon {
   name: string;
   icon: string;
 }
 
-export interface IMoonInfo extends Omit<NameIcon, 'icon'> {
+export interface IMoonInfo {
   name: string;
   phase: number;
-  icon: ReactNode;
   iconSrc: string;
   iconName: string;
   isVisible: boolean;

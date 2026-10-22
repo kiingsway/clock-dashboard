@@ -1,19 +1,19 @@
-import { useNow } from '@/contexts/NowContext';
+import { useToday } from '@/contexts/NowContext';
 import styles from './WeekDate.module.scss';
 
 export default function WeekDate() {
-  const { now } = useNow();
+  const today = useToday();
 
   const dateText = ((): string => {
-    if (!now) return '-';
-    return now.toLocaleString({ day: "numeric", month: "long" });
+    if (!today) return '-';
+    return today.toLocaleString({ day: "numeric", month: "long" });
   })();
 
   return (
     <p className={styles.dateLine}>
       <span className={styles.weekday}>
-        {now
-          ? now.toFormat("cccc").replace(/^./, (c) => c.toUpperCase())
+        {today
+          ? today.toFormat("cccc").replace(/^./, (c) => c.toUpperCase())
           : "-"}
       </span>
 

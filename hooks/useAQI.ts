@@ -12,15 +12,24 @@ export interface IUseWeather {
   refresh: KeyedMutator<IAQI>;
 }
 
+type TAQIKey = readonly [string, number, number];
+
+/** Chave e fetcher compartilhados com o preload (services/preloadInitialData.ts). */
+export const getAQIKey = (latitude: number, longitude: number): TAQIKey =>
+  [CACHE_KEY.AQI, latitude, longitude];
+
+export const aqiFetcher = ([, latitude, longitude]: TAQIKey): Promise<IAQI> =>
+  fetchAQIData(latitude, longitude);
+
 export function useAQI(): IUseWeather {
   const { get: { location: { latitude: lat, longitude: lon } } } = useAppSettings();
 
   const { data: aqiData, error, isLoading, isValidating, mutate } =
-    useSWR<IAQI>(
+    useSWR(
       lat != null && lon != null
-        ? [CACHE_KEY.AQI, lat, lon]
+        ? getAQIKey(lat, lon)
         : null,
-      () => fetchAQIData(lat!, lon!),
+      aqiFetcher,
       {
         refreshInterval: 5 * 60 * 1000,
         revalidateOnFocus: true,

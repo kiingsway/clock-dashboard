@@ -1,24 +1,34 @@
 import { DateTime } from "luxon";
 import { IDaily, IHourly } from "@/types/weather.types";
 
+export type CelestialBody = 'sun' | 'moon';
+
 export type SunEventKind = 'sunrise' | 'sunset';
+export type MoonEventKind = 'moonrise' | 'moonset';
+export type EventKind = SunEventKind | MoonEventKind;
 
 export type SunDaily = Pick<IDaily, 'time' | 'sunrise' | 'sunset'>;
 export type SunHourly = Pick<IHourly, 'time' | 'weather_code' | 'is_day'>;
 
-export interface SunEvent {
-  kind: SunEventKind;
-  time: DateTime;
+export interface ChartEvent {
+  kind: EventKind;
+  /** Sem horário quando o evento não acontece no dia (exibe "--:--"). */
+  time?: DateTime;
+  /** Ícone específico (ex.: fase da lua). Sem ele, usa o ícone da categoria `kind`. */
+  iconName?: string;
+  /** Exibe também a data (dd/LL), quando o evento é de outro dia. */
+  showDate?: boolean;
 }
 
 /**
  * Janela exibida no gráfico.
- * - Dia/noite: sunrise -> sunset ou sunset -> sunrise (`from`/`to` iguais aos eventos).
- * - Dia inteiro: 00:00 -> 00:00 do dia seguinte, com sunrise/sunset do dia nas laterais.
+ * - Período: nascer -> pôr (acima do horizonte) ou pôr -> nascer (abaixo),
+ *   com `from`/`to` iguais aos eventos.
+ * - Dia inteiro: 00:00 -> 00:00 do dia seguinte, com nascer/pôr do dia nas laterais.
  */
-export interface SunWindowRange {
-  start: SunEvent;
-  end: SunEvent;
+export interface ChartWindow {
+  start: ChartEvent;
+  end: ChartEvent;
   from: DateTime;
   to: DateTime;
 }

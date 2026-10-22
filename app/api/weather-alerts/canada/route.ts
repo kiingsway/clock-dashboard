@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
 import { DateTime } from "luxon";
 import { IWeatherAlertCanada } from "@/types/WeatherAlerts/canada.types";
-import parseCoordinates from "@/utils/locations/parseCoordinates";
+import parseCoordinates, { roundCoordinates } from "@/utils/locations/parseCoordinates";
+import fetchUpstream, { getUpstreamError } from "../../fetchUpstream";
 
 interface WeatherAlert {
   properties: {
@@ -36,18 +36,26 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const bbox = kmToBoundingBox(coordinates.latitude, coordinates.longitude, radiusKm);
+  const { latitude, longitude } = roundCoordinates(coordinates);
+  const bbox = kmToBoundingBox(latitude, longitude, radiusKm);
+
+  const params = new URLSearchParams({
+    f: "json",
+    bbox: `${bbox.minLon},${bbox.minLat},${bbox.maxLon},${bbox.maxLat}`,
+  });
 
   try {
-    const { data } = await axios.get("https://api.weather.gc.ca/collections/weather-alerts/items", {
-      params: {
-        f: "json",
-        bbox: `${bbox.minLon},${bbox.minLat},${bbox.maxLon},${bbox.maxLat}`,
-      },
-      timeout: 15_000,
-    });
+    const data = await fetchUpstream(
+      `https://api.weather.gc.ca/collections/weather-alerts/items?${params}`,
+      { revalidate: 300 },
+    ) as { features?: WeatherAlert[] };
 
-    const alerts: IWeatherAlertCanada[] = data.features.filter((item: WeatherAlert) => {
+    if (!Array.isArray(data?.features)) {
+      throw new Error("Invalid weather alerts API response.");
+    }
+
+    // A expiração é filtrada a cada requisição, já que a resposta fica até 5 min em cache.
+    const alerts = data.features.filter((item: WeatherAlert) => {
       const expires = item.properties.expiration_datetime;
 
       if (!expires) return true;
@@ -55,7 +63,7 @@ export async function GET(request: NextRequest) {
       const expiration = DateTime.fromISO(expires);
 
       return expiration.isValid && expiration > DateTime.now();
-    });
+    }) as unknown as IWeatherAlertCanada[];
 
     return NextResponse.json(alerts, {
       headers: {
@@ -63,9 +71,11 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (e) {
+    const { status, message } = getUpstreamError(e);
+
     return NextResponse.json(
-      { error: `Failed to fetch weather alerts. ${String(e)}` },
-      { status: 500 }
+      { error: "Failed to fetch weather alerts.", message },
+      { status }
     );
   }
 }

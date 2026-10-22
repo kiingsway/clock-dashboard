@@ -19,12 +19,18 @@ export function formatClock({
 
   const locale = localizedPeriod ? language : 'en-US';
 
+  // O Intl só aceita fusos IANA. Um fuso de offset fixo do Luxon ("UTC+9") quebraria
+  // o formatter, então nesse caso formata o horário local da data como se fosse UTC.
+  const isIanaZone = date.zone.type === 'iana' || date.zone.type === 'system';
+  const timeZone = isIanaZone ? date.zoneName ?? undefined : 'UTC';
+  const jsDate = isIanaZone ? date.toJSDate() : date.setZone('UTC', { keepLocalTime: true }).toJSDate();
+
   return new Intl.DateTimeFormat(locale, {
     hour: 'numeric',
     minute: '2-digit',
     hour12,
-    timeZone: date.zoneName ?? undefined,
-  }).format(date.toJSDate());
+    timeZone,
+  }).format(jsDate);
 }
 
 function getShortHour(

@@ -205,5 +205,3 @@ export interface WeatherIconInfo {
 }
 
 export type WindType = "speed" | "gusts";
-
-export type MoonPhaseIcon = { iconName: string | undefined; phase: number | undefined };

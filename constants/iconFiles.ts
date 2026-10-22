@@ -1,4 +1,5 @@
-const ICON_BASE_URI = "https://cdn.meteocons.com/3.0.0-next.10/svg/fill/";
+// Meteocons 3.0.0-next.10 (fill), servidos de public/icons/weather.
+const ICON_BASE_URI = "/icons/weather/";
 
 export const getIconUrl = (iconName: string) => `${ICON_BASE_URI}${iconName}.svg`;
 

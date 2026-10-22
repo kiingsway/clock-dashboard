@@ -1,11 +1,23 @@
 import { useEffect, useState } from "react";
 
-const CACHE_PREFIX = "svg-cache:";
-const CACHE_DURATION = 1000 * 60 * 60 * 24 * 7; // 1 semana
+// Os SVGs eram guardados no localStorage quando vinham de um CDN externo.
+// Agora são servidos pelo próprio app com Cache-Control, então o cache do
+// navegador basta; removemos as entradas antigas uma única vez.
+const LEGACY_CACHE_PREFIX = "svg-cache:";
 
-interface CachedSvg {
-  timestamp: number;
-  content: string;
+let legacyCacheCleared = false;
+
+function clearLegacyCache() {
+  if (legacyCacheCleared) return;
+  legacyCacheCleared = true;
+
+  try {
+    Object.keys(localStorage)
+      .filter(key => key.startsWith(LEGACY_CACHE_PREFIX))
+      .forEach(key => localStorage.removeItem(key));
+  } catch {
+    // localStorage indisponível (ex: modo privado); nada a limpar.
+  }
 }
 
 export function useSvgContent(src?: string) {
@@ -14,40 +26,23 @@ export function useSvgContent(src?: string) {
   useEffect(() => {
     if (!src) return;
 
-    const loadSvg = async () => {
-      const cacheKey = `${CACHE_PREFIX}${src}`;
+    clearLegacyCache();
 
-      const cached = localStorage.getItem(cacheKey);
+    let cancelled = false;
 
-      if (cached) {
-        const parsed: CachedSvg = JSON.parse(cached);
+    fetch(src)
+      .then(response => {
+        if (!response.ok) throw new Error(`Failed to fetch SVG: ${src}`);
+        return response.text();
+      })
+      .then(content => {
+        if (!cancelled) setSvgContent(content);
+      })
+      .catch(error => console.error(error));
 
-        if (Date.now() - parsed.timestamp < CACHE_DURATION) {
-          setSvgContent(parsed.content);
-          return;
-        }
-
-        localStorage.removeItem(cacheKey);
-      }
-
-      const response = await fetch(src);
-
-      if (!response.ok) throw new Error(`Failed to fetch SVG: ${src}`);
-
-      const content = await response.text();
-
-      localStorage.setItem(
-        cacheKey,
-        JSON.stringify({
-          timestamp: Date.now(),
-          content,
-        }),
-      );
-
-      setSvgContent(content);
+    return () => {
+      cancelled = true;
     };
-
-    loadSvg();
   }, [src]);
 
   return svgContent;

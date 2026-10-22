@@ -34,16 +34,6 @@ export interface IAQI {
     carbon_monoxide: number
     dust: number
   }
-  hourly_units: {
-    time: string
-    european_aqi: string
-    us_aqi: string
-  }
-  hourly: {
-    time: string[]
-    european_aqi: number[]
-    us_aqi: number[]
-  }
 }
 
 export interface AirQualityMetric {

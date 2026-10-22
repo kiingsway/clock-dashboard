@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { XAxis, Tooltip, Area, AreaChart, ResponsiveContainer, ReferenceDot, YAxis } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import { precipitationAreas, TPrecipAreas } from '..';
-import getAccentColor from '@/utils/weather/getAccentColor';
+import { getCategoryAccent } from '@/utils/weather/getWeatherCodeInfo';
 import { MAX_RAIN_MM_LIMIT, MAX_SHOWERS_MM_LIMIT, MAX_SNOWFALL_CM_LIMIT } from '@/constants/rainDescriptions';
 import { rainIntensityColor, showersIntensityColor, snowIntensityColor } from '@/utils/weather/getColors';
 import PrecipitationTooltip from '../PrecipitationTooltip';
@@ -24,9 +24,9 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
   const { t, i18n: { language } } = useTranslation();
   const { get: { is12hour } } = useAppSettings();
 
-  const rainColor = getAccentColor('rain', true);
-  const showersColor = getAccentColor('showers', true);
-  const snowColor = getAccentColor('snow', true);
+  const rainColor = getCategoryAccent('rain');
+  const showersColor = getCategoryAccent('showers');
+  const snowColor = getCategoryAccent('snow');
 
   // Calcula a opacidade final (de 0.1 até 0.9) baseada no maior valor do dataset
   const dynamicOpacity = useMemo(() => {

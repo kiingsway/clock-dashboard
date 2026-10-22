@@ -1,11 +1,13 @@
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
 import { useNow } from "@/contexts/NowContext";
 import buildSunWindow, { buildFullDayWindow } from "./buildSunWindow";
-import buildSunPathData, { getSunElevation } from "./buildSunPathData";
+import buildMoonWindow, { buildMoonFullDayWindow } from "./buildMoonWindow";
+import buildSunPathData, { getElevation } from "./buildSunPathData";
 import buildWeatherGradientStops from "./buildWeatherGradientStops";
-import dynamic from "next/dynamic";
+import buildMoonGradientStops from "./buildMoonGradientStops";
 import SunEventLabel from "./components/SunEventLabel";
 import { GradientStop, SunDaily, SunHourly } from "./types";
 import styles from './EventChartProgress.module.scss';
@@ -16,18 +18,15 @@ const SunPathChart = dynamic(() => import("./components/SunPathChart"), {
 });
 
 interface BaseProps {
-  daily: SunDaily;
-  hourly: SunHourly;
   timezone: string;
   latitude: number;
   longitude: number;
   isAppFocused?: boolean;
 }
 
-/** Só o período atual: dia (sunrise -> sunset) ou noite (sunset -> sunrise). */
+/** Só o período atual (acima ou abaixo do horizonte). */
 interface PeriodProps {
   fullDay?: false;
-  isDay: boolean;
   date?: never;
 }
 
@@ -35,10 +34,24 @@ interface PeriodProps {
 interface FullDayProps {
   fullDay: true;
   date: DateTime;
-  isDay?: never;
 }
 
-type Props = BaseProps & (PeriodProps | FullDayProps);
+/** Sol: cores pelo clima de cada hora; no modo período, `isDay` define dia ou noite. */
+type SunProps = {
+  body?: 'sun';
+  daily: SunDaily;
+  hourly: SunHourly;
+} & ((PeriodProps & { isDay: boolean }) | (FullDayProps & { isDay?: never }));
+
+/** Lua: tudo vem do suncalc; cores pela fase (MOON_COLORS). */
+type MoonProps = {
+  body: 'moon';
+  daily?: never;
+  hourly?: never;
+  isDay?: never;
+} & (PeriodProps | FullDayProps);
+
+type Props = BaseProps & (SunProps | MoonProps);
 
 const nearestStopColor = (stops: GradientStop[], offset: number): string | undefined =>
   stops.reduce<GradientStop | undefined>((closest, stop) =>
@@ -46,25 +59,35 @@ const nearestStopColor = (stops: GradientStop[], offset: number): string | undef
     undefined,
   )?.color;
 
-export default function EventChartProgress({ daily, hourly, isDay, fullDay, date, timezone, latitude, longitude, isAppFocused = false }: Props) {
+export default function EventChartProgress({ body = 'sun', daily, hourly, isDay, fullDay, date, timezone, latitude, longitude, isAppFocused = false }: Props) {
   const { t } = useTranslation();
   const { now } = useNow();
 
-  const { start, end, from, to } = useMemo(
-    () => fullDay && date
-      ? buildFullDayWindow({ daily, date, timezone, latitude, longitude })
-      : buildSunWindow({ daily, now, isDay: Boolean(isDay), timezone, latitude, longitude }),
-    [fullDay, date, daily, now, isDay, timezone, latitude, longitude],
-  );
+  const { start, end, from, to } = useMemo(() => {
+    const base = { timezone, latitude, longitude };
+
+    // `daily` sempre existe para o sol (garantido pelos tipos das props).
+    if (body === 'sun' && daily) {
+      return fullDay && date
+        ? buildFullDayWindow({ ...base, daily, date })
+        : buildSunWindow({ ...base, daily, now, isDay: Boolean(isDay) });
+    }
+
+    return fullDay && date
+      ? buildMoonFullDayWindow({ ...base, date })
+      : buildMoonWindow({ ...base, now });
+  }, [body, daily, isDay, fullDay, date, now, timezone, latitude, longitude]);
 
   const data = useMemo(
-    () => buildSunPathData(from, to, latitude, longitude),
-    [from, to, latitude, longitude],
+    () => buildSunPathData(body, from, to, latitude, longitude),
+    [body, from, to, latitude, longitude],
   );
 
   const stops = useMemo(
-    () => buildWeatherGradientStops({ hourly, start: from, end: to, timezone, t }),
-    [hourly, from, to, timezone, t],
+    () => body === 'sun' && hourly
+      ? buildWeatherGradientStops({ hourly, start: from, end: to, timezone, t })
+      : buildMoonGradientStops(from, to),
+    [body, hourly, from, to, timezone, t],
   );
 
   const startMs = from.toMillis();
@@ -79,7 +102,7 @@ export default function EventChartProgress({ daily, hourly, isDay, fullDay, date
   const marker = showMarker
     ? {
       time: nowMs,
-      elevation: getSunElevation(now, latitude, longitude),
+      elevation: getElevation(body, now, latitude, longitude),
       color: nearestStopColor(stops, (nowMs - startMs) / (endMs - startMs)) ?? 'var(--wc-accent)',
     }
     : undefined;

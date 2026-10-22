@@ -71,6 +71,14 @@ export function VersionBadge() {
   );
 }
 
+export function CreditLink({ href, children }: PropsWithChildren<{ href: string }>) {
+  return (
+    <a className={styles.creditLink} href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+    </a>
+  );
+}
+
 export interface BuildSettingRowProps {
   key: "is12hour" | "showFeelsLikeWhenEqual" | "showMinMaxPeakBadge" | "focusCurrentWeatherOnLaunch" | "useBottomSheet";
   get: AppSettings;

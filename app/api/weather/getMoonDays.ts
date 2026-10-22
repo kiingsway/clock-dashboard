@@ -2,7 +2,7 @@ import { getMoonTimes } from "suncalc";
 import { DateTime } from "luxon";
 import { IMoonDailyItem, IMoonDailyItemDate } from "@/types/weather.types";
 import { isValidDateTime } from "@/utils/formatters/dateFormatters";
-import getMoonNameIconPhase from "@/utils/weather/getMoonNameIconPhase";
+import { getMoonNameIconPhase } from "@/utils/weather/getMoonInfo";
 import { TFunction } from "i18next";
 
 interface GetMoonDaysParams {

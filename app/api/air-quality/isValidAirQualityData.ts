@@ -11,11 +11,7 @@ const isValidAirQualityData = (aqi: unknown): aqi is IAQI => {
     typeof data.timezone === 'string' &&
     !!data.current &&
     typeof data.current.european_aqi === 'number' &&
-    typeof data.current.us_aqi === 'number' &&
-    !!data.hourly &&
-    Array.isArray(data.hourly.time) &&
-    Array.isArray(data.hourly.european_aqi) &&
-    Array.isArray(data.hourly.us_aqi)
+    typeof data.current.us_aqi === 'number'
   );
 };
 

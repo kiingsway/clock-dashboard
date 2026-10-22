@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
 import { IWeather } from "@/types/weather.types";
 import { DateTime } from "luxon";
 import getMoonDays from "./getMoonDays";
 import isValidWeather from "./isValidWeather";
-import parseCoordinates from "@/utils/locations/parseCoordinates";
+import parseCoordinates, { roundCoordinates } from "@/utils/locations/parseCoordinates";
+import fetchUpstream, { getUpstreamError } from "../fetchUpstream";
 
 const api = {
   past_days: 1,
@@ -91,27 +91,26 @@ export async function GET(request: NextRequest): TApiWeather {
     );
   }
 
-  const { latitude, longitude } = coordinates;
+  const { latitude, longitude } = roundCoordinates(coordinates);
 
   const params = getParams(latitude, longitude);
 
   const url = `https://api.open-meteo.com/v1/forecast?${params}`;
 
   try {
-    const { data: weather } = await axios.get<IWeather>(url, {
-      timeout: 15_000,
-    });
+    const weather = await fetchUpstream(url, { revalidate: 300 });
 
     if (!isValidWeather(weather)) {
       throw new Error(`Invalid weather API response. ${JSON.stringify(weather)}`);
     }
 
+    // Mesmo intervalo de `daily` (inclui os dias passados), para a DailySheet de ontem ter dados da lua.
     const daily_moon = getMoonDays({
       lat: latitude,
       lon: longitude,
       timezone: weather.timezone,
-      startDate: DateTime.now().setZone(weather.timezone),
-      days: api.forecast_days,
+      startDate: DateTime.now().setZone(weather.timezone).minus({ days: api.past_days }),
+      days: api.past_days + api.forecast_days,
     });
 
     return NextResponse.json({ ...weather, daily_moon }, {
@@ -121,18 +120,14 @@ export async function GET(request: NextRequest): TApiWeather {
       },
     });
   } catch (e) {
-    const message = axios.isAxiosError(e)
-      ? e.message
-      : e instanceof Error
-        ? e.message
-        : String(e);
+    const { status, message } = getUpstreamError(e);
 
     return NextResponse.json(
       {
         error: "Failed to fetch weather.",
         message,
       },
-      { status: 500 }
+      { status }
     );
   }
 }

@@ -1,14 +1,23 @@
 import { DateTime } from "luxon";
-import { getPosition } from "suncalc";
-import { SunPathPoint } from "./types";
+import { getMoonPosition, getPosition } from "suncalc";
+import { CelestialBody, SunPathPoint } from "./types";
 
 const RAD_TO_DEG = 180 / Math.PI;
 
 export const getSunElevation = (date: DateTime, latitude: number, longitude: number): number =>
   getPosition(date.toJSDate(), latitude, longitude).altitude * RAD_TO_DEG;
 
-/** Amostra a elevação do sol entre `start` e `end` a cada `stepMinutes`. */
+export const getMoonElevation = (date: DateTime, latitude: number, longitude: number): number =>
+  getMoonPosition(date.toJSDate(), latitude, longitude).altitude * RAD_TO_DEG;
+
+export const getElevation = (body: CelestialBody, date: DateTime, latitude: number, longitude: number): number =>
+  body === 'moon'
+    ? getMoonElevation(date, latitude, longitude)
+    : getSunElevation(date, latitude, longitude);
+
+/** Amostra a elevação do sol/lua entre `start` e `end` a cada `stepMinutes`. */
 export default function buildSunPathData(
+  body: CelestialBody,
   start: DateTime,
   end: DateTime,
   latitude: number,
@@ -24,7 +33,7 @@ export default function buildSunPathData(
     const date = i === steps ? end : start.plus({ minutes: i * stepMinutes });
     return {
       time: date.toMillis(),
-      elevation: getSunElevation(date, latitude, longitude),
+      elevation: getElevation(body, date, latitude, longitude),
     };
   });
 }

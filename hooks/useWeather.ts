@@ -13,12 +13,21 @@ export interface IUseWeather {
   refresh: KeyedMutator<IWeather>;
 }
 
+type TWeatherKey = readonly [string, number, number];
+
+/** Chave e fetcher compartilhados com o preload (services/preloadInitialData.ts). */
+export const getWeatherKey = (latitude: number, longitude: number): TWeatherKey =>
+  [CACHE_KEY.WEATHER, latitude, longitude];
+
+export const weatherFetcher = ([, latitude, longitude]: TWeatherKey): Promise<IWeather> =>
+  fetchWeather(latitude, longitude);
+
 export default function useWeather(): IUseWeather {
   const { get: { location: { latitude, longitude } } } = useAppSettings();
 
-  const { data: weather, error, isLoading, isValidating, mutate } = useSWR<IWeather>(
-    [CACHE_KEY.WEATHER, latitude, longitude],
-    () => fetchWeather(latitude, longitude),
+  const { data: weather, error, isLoading, isValidating, mutate } = useSWR(
+    getWeatherKey(latitude, longitude),
+    weatherFetcher,
     {
       refreshInterval: 5 * 60 * 1000,
       revalidateOnFocus: true,

@@ -12,13 +12,16 @@ interface Props {
   today: DateTime;
   locale: string;
   t: TFunction
+  /** Começa a lista em ontem em vez de hoje (a API já retorna 1 dia passado). */
+  includeYesterday?: boolean;
 }
 
-export default function buildDailyForecastItem({ weather, today, locale, t }: Props): IDailyData[] {
+export default function buildDailyForecastItem({ weather, today, locale, t, includeYesterday = false }: Props): IDailyData[] {
 
   const { timezone: zone, daily, daily_units: { temperature_2m_max: tempUnit } } = weather;
 
-  const startIndex = getCurrentIndex(today, daily.time);
+  const todayIndex = getCurrentIndex(today, daily.time);
+  const startIndex = Math.max(0, todayIndex - (includeYesterday ? 1 : 0));
 
   const datetimes = daily.time.slice(startIndex, daily.time.length);
 

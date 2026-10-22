@@ -1,5 +1,5 @@
-import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
+import fetchUpstream, { getUpstreamError, LOCATIONS_REVALIDATE_SECONDS } from "../../fetchUpstream";
 
 export async function GET(request: NextRequest) {
 
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
   const url = `https://countries.dev/alpha/${countryCode}?${params}`;
 
   try {
-    const { data } = await axios.get(url, { timeout: 15_000 });
+    const data = await fetchUpstream(url, { revalidate: LOCATIONS_REVALIDATE_SECONDS });
 
     return NextResponse.json(data, {
       status: 200,
@@ -28,12 +28,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (e) {
-
-    const [message, status] = (() => {
-      if (axios.isAxiosError(e)) return [e.message, e.status ?? 500];
-      if (e instanceof Error) return [e.message, 500];
-      return [String(e), 500];
-    })();
+    const { status, message } = getUpstreamError(e);
 
     return NextResponse.json(
       { error: "Failed to fetch countries.", message },

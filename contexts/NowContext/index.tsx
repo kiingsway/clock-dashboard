@@ -23,6 +23,10 @@ interface NowContextValue {
 
 const NowContext = createContext<NowContextValue | undefined>(undefined);
 
+// Separado do NowContext: `now` muda a cada minuto, `today` só na virada do dia
+// (ou ao trocar fuso/idioma). Quem só precisa do dia não re-renderiza a cada minuto.
+const TodayContext = createContext<DateTime | undefined>(undefined);
+
 interface NowProviderProps {
   children: ReactNode;
 }
@@ -42,7 +46,7 @@ export function NowProvider({ children }: NowProviderProps) {
   }, [locale, simulatedDate, timezone]);
 
   const [now, setNow] = useState<DateTime>(getNow);
-  const [today, setToday] = useState<DateTime>(getNow);
+  const [today, setToday] = useState<DateTime>(() => getNow().startOf('day'));
 
   useEffect(() => {
     if (simulatedDate) {
@@ -84,8 +88,10 @@ export function NowProvider({ children }: NowProviderProps) {
 
         const sameDay = previous.hasSame(newDay, 'day');
         const sameZone = previous.zoneName === newDay.zoneName;
+        const sameLocale = previous.locale === newDay.locale;
 
-        return sameDay && sameZone ? previous : newDay;
+        // Mantém a mesma instância enquanto nada muda, para não re-renderizar quem depende só do dia.
+        return sameDay && sameZone && sameLocale ? previous : newDay;
       });
     };
 
@@ -152,9 +158,11 @@ export function NowProvider({ children }: NowProviderProps) {
   );
 
   return (
-    <NowContext.Provider value={value}>
-      {children}
-    </NowContext.Provider>
+    <TodayContext.Provider value={today}>
+      <NowContext.Provider value={value}>
+        {children}
+      </NowContext.Provider>
+    </TodayContext.Provider>
   );
 }
 
@@ -162,4 +170,11 @@ export function useNow() {
   const context = useContext(NowContext);
   if (!context) throw new Error('useNow must be used inside a NowProvider');
   return context;
+}
+
+/** Início do dia atual, no fuso e idioma da localização. Prefira a `useNow` quando a hora não importa. */
+export function useToday() {
+  const today = useContext(TodayContext);
+  if (!today) throw new Error('useToday must be used inside a NowProvider');
+  return today;
 }

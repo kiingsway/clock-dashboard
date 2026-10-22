@@ -1,7 +1,7 @@
 import { IWeather } from '@/types/weather.types';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
-import { useNow } from '@/contexts/NowContext';
+import { useToday } from '@/contexts/NowContext';
 import { TFunction } from 'i18next';
 import { capitalizeWords } from '@/utils/formatters/textFormatters';
 import { JSX } from 'react';
@@ -18,7 +18,7 @@ interface Props {
 
 export default function DailySheet({ weather, open, index, onClose }: Props): JSX.Element | null {
   const { t, i18n: { language: locale } } = useTranslation();
-  const { now } = useNow();
+  const today = useToday();
 
   if (typeof index !== 'number' || !weather) return null;
 
@@ -26,7 +26,7 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
 
   const indexDate = DateTime.fromISO(time[index], { zone: timezone });
 
-  const title = getForecastTitle(now, indexDate, locale, t);
+  const title = getForecastTitle(today, indexDate, locale, t);
 
   return (
     <ModalOrSheet
@@ -42,8 +42,8 @@ export default function DailySheet({ weather, open, index, onClose }: Props): JS
   );
 }
 
-function getForecastTitle(now: DateTime, date: DateTime, locale = "en-US", t: TFunction): string {
-  const diffDays = Math.floor(date.startOf('day').diff(now.startOf('day'), "days").days);
+function getForecastTitle(today: DateTime, date: DateTime, locale = "en-US", t: TFunction): string {
+  const diffDays = Math.floor(date.startOf('day').diff(today.startOf('day'), "days").days);
 
   const isYesterday = diffDays === -1;
   const isToday = diffDays === 0;

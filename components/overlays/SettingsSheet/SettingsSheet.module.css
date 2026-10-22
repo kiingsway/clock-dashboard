@@ -207,3 +207,13 @@
   flex-direction: row;
   gap: var(--wc-space-sm);
 }
+
+.creditLink {
+  color: var(--wc-accent);
+  text-decoration: none;
+}
+
+.creditLink:hover,
+.creditLink:focus-visible {
+  text-decoration: underline;
+}

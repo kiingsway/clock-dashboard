@@ -5,42 +5,23 @@ import { DAYLIGHT_HOURS, DEW_POINT_VALUES } from "@/constants/anchors";
 import { DAYLIGHT_COLORS, DEW_COLORS, HUMIDITY_COLORS, VISIBILITY_COLORS } from "@/constants/colors";
 import { IColorRange, IGradientColor, IInterpolateColor } from "@/types/colors.types";
 
+function interpolateThreePointColor(value: number, { min, med, max }: IColorRange, { low, mid, high }: IInterpolateColor): string {
+  return getGradientColor(value, [
+    { value: min, hex: low },
+    { value: med, hex: mid },
+    { value: max, hex: high },
+  ]);
+}
+
 /**
- * Interpola linearmente entre duas cores HEX.
+ * Interpola linearmente a cor de `value` entre os pontos (`stops`, em ordem crescente).
+ * Valores fora da faixa ficam com a cor do primeiro/último ponto.
  */
-function interpolateColor(color1: string, color2: string, factor: number): string {
-  const c1 = parseInt(color1.slice(1), 16);
-  const c2 = parseInt(color2.slice(1), 16);
-
-  const r1 = (c1 >> 16) & 0xff, g1 = (c1 >> 8) & 0xff, b1 = c1 & 0xff;
-  const r2 = (c2 >> 16) & 0xff, g2 = (c2 >> 8) & 0xff, b2 = c2 & 0xff;
-
-  const r = Math.round(r1 + factor * (r2 - r1));
-  const g = Math.round(g1 + factor * (g2 - g1));
-  const b = Math.round(b1 + factor * (b2 - b1));
-
-  return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
-}
-
-function interpolateThreePointColor(value: number, range: IColorRange, colors: IInterpolateColor): string {
-  const { min, med, max } = range;
-  const { low, mid, high } = colors;
-
-  const clamped = Math.max(min, Math.min(max, value));
-
-  if (clamped <= med) {
-    const factor = (clamped - min) / (med - min);
-    return interpolateColor(low, mid, factor);
-  }
-
-  const factor = (clamped - med) / (max - med);
-  return interpolateColor(mid, high, factor);
-}
-
 export function getGradientColor(value: number, stops: IGradientColor[], max?: number): string {
 
+  const minValue = stops[0].value;
   const maxValue = max ?? stops[stops.length - 1].value;
-  const v = Math.max(0, Math.min(maxValue, value));
+  const v = Math.max(minValue, Math.min(maxValue, value));
 
   let lower = stops[0];
   let upper = stops[stops.length - 1];
@@ -62,7 +43,6 @@ export function getGradientColor(value: number, stops: IGradientColor[], max?: n
   const [r, g, b] = (['r', 'g', 'b'] as const).map(c => Math.round(lerp(c1[c], c2[c], factor)));
 
   return `rgb(${r},${g},${b})`;
-  // return `rgb(${Math.round(lerp(c1.r, c2.r, factor))}, ${Math.round(lerp(c1.g, c2.g, factor))}, ${Math.round(lerp(c1.b, c2.b, factor))})`;
 }
 
 // Faixas aproximadas de intensidade de chuva (mm/h), uso meteorológico comum
@@ -100,21 +80,21 @@ export function showersIntensityColor(value: number): string {
  * - >= 24°C: Vermelho Pastel (#fca5a5) [Muito Quente / Abafado]
  *
  * @param dewPoint - Temperatura do ponto de orvalho em °C
- * @returns Código da cor em HEX
+ * @returns Cor no formato `rgb()`
  */
 export function getDewPointColor(dewPoint: number): string {
   return interpolateThreePointColor(dewPoint, DEW_POINT_VALUES, DEW_COLORS);
 }
 
 /**
- * Retorna uma cor em formato HEX interpolada (gradiente) com base na umidade.
+ * Retorna uma cor interpolada (gradiente) com base na umidade.
  *
  * Âncoras:
  * - 0% a 30%: Bege (#f59e0b) -> Branco (#ffffff)
  * - 30% a 100%: Branco (#ffffff) -> Azul (#3b82f6)
  *
  * @param humidity - Porcentagem de umidade (0 a 100)
- * @returns Código da cor em HEX
+ * @returns Cor no formato `rgb()`
  */
 export function getHumidityColor(humidity: number): string {
   return getGradientColor(humidity, HUMIDITY_COLORS);

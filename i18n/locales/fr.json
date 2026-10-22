@@ -120,6 +120,25 @@
         "title": "Utiliser le Bottom Sheet",
         "desc": "Affiche les détails et les fenêtres au bas de l'écran (Bottom Sheet) au lieu d'une fenêtre centrale (Modale)."
       }
+    },
+    "credits": {
+      "title": "Crédits",
+      "weather": {
+        "title": "Météo et qualité de l'air",
+        "desc": "Données de prévision et de qualité de l'air (CC BY 4.0)"
+      },
+      "alerts": {
+        "title": "Alertes météo",
+        "desc": "National Weather Service (États-Unis) et Environnement et Changement climatique Canada"
+      },
+      "locations": {
+        "title": "Lieux",
+        "desc": "Recherche de villes et de pays"
+      },
+      "icons": {
+        "title": "Icônes météo",
+        "desc": "Meteocons par Bas Milius (licence MIT)"
+      }
     }
   },
   "weatherTexts": {

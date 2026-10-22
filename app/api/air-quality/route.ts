@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import axios from "axios";
 import isValidAirQualityData from "./isValidAirQualityData";
 import { IAQI } from "@/types/aqi.types";
-import parseCoordinates from "@/utils/locations/parseCoordinates";
+import parseCoordinates, { roundCoordinates } from "@/utils/locations/parseCoordinates";
+import fetchUpstream, { getUpstreamError } from "../fetchUpstream";
 
-// https://air-quality-api.open-meteo.com/v1/air-quality?latitude=52.52&longitude=13.41&hourly=european_aqi,us_aqi&current=european_aqi,us_aqi,pm10,pm2_5,ozone,nitrogen_dioxide,sulphur_dioxide,carbon_monoxide,dust&past_days=1
+// https://air-quality-api.open-meteo.com/v1/air-quality?latitude=52.52&longitude=13.41&current=european_aqi,us_aqi,pm10,pm2_5,ozone,nitrogen_dioxide,sulphur_dioxide,carbon_monoxide,dust
 
 const api = {
-  past_days: 1,
-  timezone: "auto",
-  forecast_days: 3,
-  hourly: [
-    "european_aqi",
-    "us_aqi",
-  ],
   current: [
     'european_aqi',
     'us_aqi',
@@ -31,9 +24,6 @@ const getParams = (latitude: number, longitude: number) =>
   new URLSearchParams({
     latitude: String(latitude),
     longitude: String(longitude),
-    past_days: String(api.past_days),
-    forecast_days: String(api.forecast_days),
-    hourly: api.hourly.join(","),
     current: api.current.join(","),
   });
 
@@ -55,16 +45,14 @@ export async function GET(request: NextRequest): TApiAQI {
     );
   }
 
-  const { latitude, longitude } = coordinates;
+  const { latitude, longitude } = roundCoordinates(coordinates);
 
   const params = getParams(latitude, longitude);
 
   const url = `https://air-quality-api.open-meteo.com/v1/air-quality?${params}`;
 
   try {
-    const { data: airQualityData } = await axios.get<IAQI>(url, {
-      timeout: 15_000,
-    });
+    const airQualityData = await fetchUpstream(url, { revalidate: 300 });
 
     if (!isValidAirQualityData(airQualityData)) {
       throw new Error(`Invalid air quality API response. ${JSON.stringify(airQualityData)}`);
@@ -77,18 +65,14 @@ export async function GET(request: NextRequest): TApiAQI {
       },
     });
   } catch (e) {
-    const message = axios.isAxiosError(e)
-      ? e.message
-      : e instanceof Error
-        ? e.message
-        : String(e);
+    const { status, message } = getUpstreamError(e);
 
     return NextResponse.json(
       {
         error: "Failed to fetch air quality.",
         message,
       },
-      { status: 500 }
+      { status }
     );
   }
 }

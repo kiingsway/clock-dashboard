@@ -1,15 +1,13 @@
 import { DateTime } from "luxon";
-import getMoonInfo from "./getMoonInfo";
+import { getMoonInfo } from "./getMoonInfo";
 import { WeatherIconInfo } from "@/types/weather.types";
 import { TFunction } from "i18next";
 import getWeatherCodeInfo from "./getWeatherCodeInfo";
 
 interface Props {
   weatherCode: number;
-  timezone: string;
   isDay?: boolean;
   now: DateTime
-  date?: DateTime
   lat?: number;
   lon?: number;
   t: TFunction
@@ -26,7 +24,10 @@ export default function getWeatherIcon({
 
   const weatherCodeInfo = getWeatherCodeInfo(weatherCode, isDay, t);
 
-  const moonInfo = lat && lon ? getMoonInfo({ now, lat, lon }) : undefined;
+  // typeof em vez de truthiness: latitude/longitude 0 são válidas.
+  const moonInfo = typeof lat === 'number' && typeof lon === 'number'
+    ? getMoonInfo(now, lat, lon)
+    : undefined;
 
   let moon: undefined | { alt: string, src: string } = undefined;
 

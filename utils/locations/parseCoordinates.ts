@@ -21,3 +21,16 @@ export default function parseCoordinates(lat: string | null, lon: string | null)
 
   return { latitude, longitude };
 }
+
+/**
+ * Arredonda as coordenadas (2 casas ≈ 1 km) antes de chamar APIs externas,
+ * para que pontos próximos compartilhem a mesma entrada no cache do servidor.
+ */
+export function roundCoordinates({ latitude, longitude }: ICoordinates, decimals = 2): ICoordinates {
+  const factor = 10 ** decimals;
+
+  return {
+    latitude: Math.round(latitude * factor) / factor,
+    longitude: Math.round(longitude * factor) / factor,
+  };
+}

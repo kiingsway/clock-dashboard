@@ -120,6 +120,25 @@
         "title": "Use Bottom Sheet",
         "desc": "Displays details and windows at the bottom of the screen (Bottom Sheet) instead of a central window (Modal)."
       }
+    },
+    "credits": {
+      "title": "Credits",
+      "weather": {
+        "title": "Weather & air quality",
+        "desc": "Forecast and air-quality data (CC BY 4.0)"
+      },
+      "alerts": {
+        "title": "Weather alerts",
+        "desc": "National Weather Service (US) and Environment and Climate Change Canada"
+      },
+      "locations": {
+        "title": "Locations",
+        "desc": "City and country search"
+      },
+      "icons": {
+        "title": "Weather icons",
+        "desc": "Meteocons by Bas Milius (MIT License)"
+      }
     }
   },
   "weatherTexts": {

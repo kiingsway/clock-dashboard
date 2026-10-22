@@ -8,6 +8,11 @@ import { NowProvider } from '@/contexts/NowContext';
 import useAppSettings, { AppSettingsProvider } from '@/contexts/AppSettingsContext';
 import { TTabs } from '@/types/app.types';
 import { useTranslation } from 'react-i18next';
+import preloadInitialData from '@/services/preloadInitialData';
+
+// Começa a buscar clima, AQI e alertas junto com o carregamento das traduções,
+// antes do primeiro render. No servidor não faz nada.
+preloadInitialData();
 
 export default function Home() {
 

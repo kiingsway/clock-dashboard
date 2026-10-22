@@ -120,6 +120,25 @@
         "title": "바텀 시트 사용",
         "desc": "중앙 창(Modal) 대신 화면 하단에 상세 정보와 창(Bottom Sheet)을 표시합니다."
       }
+    },
+    "credits": {
+      "title": "크레딧",
+      "weather": {
+        "title": "날씨 및 대기질",
+        "desc": "예보 및 대기질 데이터 (CC BY 4.0)"
+      },
+      "alerts": {
+        "title": "기상 특보",
+        "desc": "미국 국립기상청(NWS) 및 캐나다 환경기후변화부(ECCC)"
+      },
+      "locations": {
+        "title": "위치",
+        "desc": "도시 및 국가 검색"
+      },
+      "icons": {
+        "title": "날씨 아이콘",
+        "desc": "Bas Milius의 Meteocons (MIT 라이선스)"
+      }
     }
   },
   "weatherTexts": {

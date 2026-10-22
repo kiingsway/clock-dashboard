@@ -3,7 +3,7 @@ import { type JSX } from 'react';
 import { TbMapPin } from "react-icons/tb";
 import { Badge } from '../../Badge';
 import { IWeatherAlert } from '@/types/weatherAlerts.types';
-import { useNow } from '@/contexts/NowContext';
+import { useToday } from '@/contexts/NowContext';
 import useAppSettings from '@/contexts/AppSettingsContext';
 import { useTranslation } from 'react-i18next';
 import formatAlertUntil from '@/utils/weatherAlerts/formatAlertUntil';
@@ -21,7 +21,7 @@ interface Props {
 export default function WeatherAlertCard({ alert, autoExpand }: Props): JSX.Element {
   const { t, i18n: { language: locale } } = useTranslation();
   const { get: { location: { timezone } } } = useAppSettings();
-  const { now } = useNow();
+  const today = useToday();
   const [expanded, { toggle: toggleExpand }] = useBoolean(autoExpand);
   const showMore = (): void => autoExpand ? undefined : toggleExpand();
 
@@ -45,7 +45,7 @@ export default function WeatherAlertCard({ alert, autoExpand }: Props): JSX.Elem
       ? description + ' '
       : `${description.slice(0, DESCRIPTION_PREVIEW_LENGTH).trimEnd()}... `;
 
-  const until = formatAlertUntil(expires, now, locale, timezone);
+  const until = formatAlertUntil(expires, today, locale, timezone);
 
   const accent = getSeverityColor(color);
 

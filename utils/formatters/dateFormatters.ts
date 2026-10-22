@@ -39,26 +39,4 @@ export function formatDateTime({ date, language, timezone }: FormatDateTimeOptio
   }).format(d);
 }
 
-type D = DateTime<boolean> | undefined
-
-/**
- * Returns the progress of `now` between two dates, from 0 to 1.
- *
- * @param dateBefore - The start date of the interval.
- * @param dateAfter - The end date of the interval.
- * @param now - The date used to calculate the current progress.
- * @returns A value from 0 to 1, where 0 is the start and 1 is the end.
- */
-export function getProgressBetweenDates(dateBefore: D, dateAfter: D, now: DateTime) {
-  if (!dateBefore?.isValid || !dateAfter?.isValid) return 0;
-
-  if (now.toMillis() >= dateAfter.toMillis()) return 1;
-  if (now.toMillis() <= dateBefore.toMillis()) return 0;
-
-  const elapsed = now.diff(dateBefore, "milliseconds").milliseconds;
-  const duration = dateAfter.diff(dateBefore, "milliseconds").milliseconds;
-
-  return elapsed / duration;
-}
-
 export const isValidDateTime = (date: DateTime | undefined): date is DateTime<true> => Boolean(date?.isValid);

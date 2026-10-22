@@ -13,84 +13,57 @@ interface IWeatherCodeInfo {
   iconSrc: string;
 }
 
-const getCategoryDef = (item: string | DayNNight, isDay: boolean) => typeof item === 'string' ? item : isDay ? item.day : item.night;
+/** WMO weather code (plus -1 = error, -2 = loading) → weather category. */
+const CATEGORY_BY_CODE: Record<number, WeatherCategoryName> = {
+  ...Object.fromEntries([0, 1].map(code => [code, 'clear'])),
+  2: 'partlyCloudy',
+  3: 'cloudy',
+  4: 'smoke',
+  5: 'haze',
+  27: 'hail',
+  ...Object.fromEntries([40, 41, 42, 44, 46, 48].map(code => [code, 'lightFog'])),
+  ...Object.fromEntries([43, 45, 47, 49].map(code => [code, 'fog'])),
+  ...Object.fromEntries([51, 53, 55].map(code => [code, 'drizzle'])),
+  ...Object.fromEntries([56, 57].map(code => [code, 'freezingDrizzle'])),
+  ...Object.fromEntries([61, 63].map(code => [code, 'rain'])),
+  65: 'heavyRain',
+  ...Object.fromEntries([66, 67].map(code => [code, 'freezingRain'])),
+  ...Object.fromEntries([71, 73, 77].map(code => [code, 'snow'])),
+  75: 'heavySnow',
+  ...Object.fromEntries([80, 81, 82].map(code => [code, 'showers'])),
+  83: 'sleet',
+  84: 'heavySleet',
+  ...Object.fromEntries([85, 86, 87, 88].map(code => [code, 'snowShowers'])),
+  95: 'thunderstorm',
+  96: 'moderateHail',
+  99: 'heavyHail',
+  [-1]: 'error',
+  [-2]: 'loading',
+};
+
+const pickDayNight = (item: string | DayNNight, isDay: boolean): string =>
+  typeof item === 'string' ? item : isDay ? item.day : item.night;
+
+/** Accent color of a weather category (day/night variant when it has one). */
+export function getCategoryAccent(name: WeatherCategoryName, isDay = true): string {
+  return pickDayNight(WEATHER_ACCENT_COLORS[name] ?? WEATHER_ACCENT_COLORS.unknown, isDay);
+}
+
+/** Meteocons icon name of a weather category (day/night variant when it has one). */
+export function getCategoryIconName(name: WeatherCategoryName, isDay = true): string {
+  return pickDayNight(WEATHER_ICONS[name] ?? WEATHER_ICONS.unknown, isDay);
+}
 
 export default function getWeatherCodeInfo(code: number | undefined, isDay: boolean, t: TFunction): IWeatherCodeInfo {
-  let name: WeatherCategoryName = "unknown";
-
-  let accent = getCategoryDef(WEATHER_ACCENT_COLORS[name], isDay);
-
-  let iconSrc = getIconUrl(getCategoryDef(WEATHER_ICONS[name], isDay));
-
-  if (typeof code !== 'number') return {
-    code: -99,
-    name,
-    title: t(`weatherCategoryNames.${name}`),
-    accent,
-    iconSrc,
-  };
-
-  if ([0, 1].includes(code)) {
-    name = "clear";
-  } else if (code === 2) {
-    name = "partlyCloudy";
-  } else if (code === 3) {
-    name = "cloudy";
-  } else if (code === 4) {
-    name = "smoke";
-  } else if (code === 5) {
-    name = "haze";
-  } else if (code === 27) {
-    name = "hail";
-  } else if ([40, 41, 42, 44, 46, 48].includes(code)) {
-    name = "lightFog";
-  } else if ([43, 45, 47, 49].includes(code)) {
-    name = "fog";
-  } else if ([51, 53, 55].includes(code)) {
-    name = "drizzle";
-  } else if ([56, 57].includes(code)) {
-    name = "freezingDrizzle";
-  } else if ([61, 63].includes(code)) {
-    name = "rain";
-  } else if (code === 65) {
-    name = "heavyRain";
-  } else if ([66, 67].includes(code)) {
-    name = "freezingRain";
-  } else if ([71, 73, 77].includes(code)) {
-    name = "snow";
-  } else if (code === 75) {
-    name = "heavySnow";
-  } else if ([80, 81, 82].includes(code)) {
-    name = "showers";
-  } else if (code === 83) {
-    name = "sleet";
-  } else if (code === 84) {
-    name = "heavySleet";
-  } else if ([85, 86, 87, 88].includes(code)) {
-    name = "snowShowers";
-  } else if (code === 95) {
-    name = "thunderstorm";
-  } else if (code === 96) {
-    name = "moderateHail";
-  } else if (code === 99) {
-    name = "heavyHail";
-  } else if (code === -1) {
-    name = "error";
-  } else if (code === -2) {
-    name = "loading";
-  } else {
-    name = "unknown";
-  }
-
-  accent = getCategoryDef(WEATHER_ACCENT_COLORS[name], isDay);
-
-  iconSrc = getIconUrl(getCategoryDef(WEATHER_ICONS[name], isDay));
+  const name: WeatherCategoryName = typeof code === 'number'
+    ? CATEGORY_BY_CODE[code] ?? 'unknown'
+    : 'unknown';
 
   return {
-    code,
+    code: typeof code === 'number' ? code : -99,
     name,
     title: t(`weatherCategoryNames.${name}`),
-    accent,
-    iconSrc
+    accent: getCategoryAccent(name, isDay),
+    iconSrc: getIconUrl(getCategoryIconName(name, isDay)),
   };
 }

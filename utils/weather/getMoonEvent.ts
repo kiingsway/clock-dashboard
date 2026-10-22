@@ -10,13 +10,16 @@ export default function getMoonEvent(moonDays: IMoonDailyItem[], index: number, 
   const format = (date?: DateTime) =>
     isValidDateTime(date) ? `${label}: ${timeOrDateTime(date)}` : null;
 
+  // setZone: mantém o fuso do texto ISO (o da localização), em vez de converter para o do navegador.
+  const parse = (iso: string) => DateTime.fromISO(iso, { setZone: true });
+
   const moonNow = moonDays[index]?.[event]?.date;
-  const current = moonNow ? format(DateTime.fromISO(moonNow)) : undefined;
+  const current = moonNow ? format(parse(moonNow)) : undefined;
   if (current) return current;
 
   const otherDayIndex = event === 'rise' ? index - 1 : index + 1;
   const moonOtherDay = moonDays[otherDayIndex]?.[event]?.date;
-  const other = moonOtherDay ? format(DateTime.fromISO(moonOtherDay)) : undefined;
+  const other = moonOtherDay ? format(parse(moonOtherDay)) : undefined;
 
   return other ?? `${label}: --:--`;
 }

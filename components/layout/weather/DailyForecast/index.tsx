@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useMemo, useState } from "react";
 import ForecastDay from "./ForecastDay";
 import dynamic from "next/dynamic";
-import { useNow } from "@/contexts/NowContext";
+import { useToday } from "@/contexts/NowContext";
 import { IDailyData } from "@/types/weatherInfo.types";
 import { splitCamelCase } from "@/utils/formatters/textFormatters";
 import buildDailyForecastItem from "./buildDailyForecastItem";
@@ -13,6 +13,8 @@ const DailySheet = dynamic(() => import("@/components/overlays/DailySheet"));
 
 interface Props {
   weather: IWeather
+  /** Mostra ontem no topo da lista. A DailySheet já funciona para ontem; fica oculto por padrão. */
+  showYesterday?: boolean
 }
 
 /**
@@ -22,22 +24,22 @@ interface Props {
  * the whole forecast window, so a glance at the bar shows where a day sits
  * in the week, not just its two numbers.
  */
-export default function DailyForecast({ weather }: Props) {
+export default function DailyForecast({ weather, showYesterday = false }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
-  const { today } = useNow();
+  const today = useToday();
 
   const [selectedDailyItem, selectDailyItem] = useState<IDailyData>();
 
   const dailyForecastItems = useMemo(() =>
-    buildDailyForecastItem({ weather, today, locale, t }),
-    [locale, today, t, weather]);
+    buildDailyForecastItem({ weather, today, locale, t, includeYesterday: showYesterday }),
+    [locale, today, t, weather, showYesterday]);
 
   const onDebugClick = () => console.info(splitCamelCase(DailyForecast.name), { dailyForecastItems, daily: weather.daily });
 
   return (
     <section className={styles.section} aria-label={t("nextDays")} onDoubleClick={onDebugClick}>
 
-      {selectedDailyItem?.index && (
+      {selectedDailyItem && (
         <DailySheet
           weather={weather}
           open={Boolean(selectedDailyItem)}

@@ -1,10 +1,9 @@
 import MiniCard from '@/components/ui/MiniCard';
 import HourlyList from '@/components/ui/weather/HourlyList';
-import MoonProgressBar from '@/components/ui/weather/MoonProgressBar';
 import { CSSProperties, Fragment, useMemo } from 'react';
 import styles from './DailySheet.module.scss';
 import { IWeather } from '@/types/weather.types';
-import { useNow } from '@/contexts/NowContext';
+import { useToday } from '@/contexts/NowContext';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 import buildDailySheetInfo from './buildDailySheetInfo';
@@ -20,7 +19,7 @@ interface Props {
 
 export default function DailySheetContent({ weather, index, style: styleProp }: Props) {
   const { t, i18n: { language: locale } } = useTranslation();
-  const { now } = useNow();
+  const today = useToday();
 
   const { daily, hourly, timezone } = weather;
 
@@ -46,7 +45,7 @@ export default function DailySheetContent({ weather, index, style: styleProp }: 
         date={indexDate}
         daily={daily}
         hourly={hourly}
-        timezone={weather?.timezone ?? now.zoneName ?? ""}
+        timezone={weather?.timezone ?? today.zoneName ?? ""}
         latitude={weather?.latitude ?? 0}
         longitude={weather?.longitude ?? 0}
       />
@@ -79,10 +78,13 @@ export default function DailySheetContent({ weather, index, style: styleProp }: 
             )}
 
             {index === 4 && (
-              <MoonProgressBar
+              <EventChartProgress
+                fullDay
+                body='moon'
                 date={indexDate}
-                dailyMoon={weather.daily_moon}
-                timezone={weather.timezone}
+                timezone={weather?.timezone ?? today.zoneName ?? ""}
+                latitude={weather?.latitude ?? 0}
+                longitude={weather?.longitude ?? 0}
               />
             )}
           </Fragment>

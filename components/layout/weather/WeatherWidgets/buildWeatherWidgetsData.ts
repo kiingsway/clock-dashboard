@@ -2,7 +2,6 @@ import { DetailCardProps } from '@/components/ui/DetailCard/DetailCard';
 import type { ZoneGaugeBarProps } from '@/components/ui/ZoneGaugeBar';
 import { AQI_EU_COLORS, AQI_USA_COLORS, DEFAULT_COLOR, HUMIDITY_COLORS, MOON_COLORS, VISIBILITY_COLORS, WIND_GUSTS_COLORS, WIND_SPEED_COLORS } from '@/constants/colors';
 import { getDewPointDescription, getHumidityDescription } from '@/constants/descriptions';
-import { getIconUrl } from '@/constants/iconFiles';
 import { UV_INDEX_LEVELS } from '@/constants/uvIndex';
 import { IAQI, AQIScale } from '@/types/aqi.types';
 import { IReferenceZone } from '@/types/chart.types';
@@ -10,9 +9,8 @@ import { IWeather } from '@/types/weather.types';
 import { AQI_COLORS } from '@/utils/aqi/getAQIInfo';
 import { formatDuration } from '@/utils/formatters/dateFormatters';
 import { getCurrentIndex } from '@/utils/formatters/getValueByArray';
-import { capitalizeWords, formatMetricValue } from '@/utils/formatters/textFormatters';
+import { formatMetricValue } from '@/utils/formatters/textFormatters';
 import { getAstronomicalSeasonInfo } from '@/utils/geo/getAstronomicalSeason';
-import getBeaufortScale from '@/utils/geo/getBeaufortScale';
 import { getCompassDirection } from '@/utils/geo/getCompassDirection';
 import { getSeasonZones } from '@/utils/geo/getSeasonColor';
 import buildAQIDescription from '@/utils/weather/buildDescriptions/aqi';
@@ -21,7 +19,7 @@ import buildUVDescription from '@/utils/weather/buildDescriptions/uvIndex';
 import buildVisibilityDescription from '@/utils/weather/buildDescriptions/visibility';
 import { getDaylightColor, getDewPointColor, getHumidityColor, getWindColor } from '@/utils/weather/getColors';
 import { getDaylightSunshineInfo } from '@/utils/weather/getDaylightSunshineInfo';
-import { getWindGustAnimationDuration, getWindSummary } from '@/utils/weather/getWindInfo';
+import { getWindIcons, getWindSummary } from '@/utils/weather/getWindInfo';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 
@@ -160,30 +158,13 @@ export default function buildWeatherWidgetsData(weather: IWeather, aqi: IAQI | u
 
       const compass = getCompassDirection(windDirectionNow, t);
       const windSpeedDesc = getWindSummary({ currentSpeed: windSpeedNow, averageSpeed: windSpeedDay, direction: compass.title }, t);
-      const beaufortLevel = getBeaufortScale(windSpeedNow);
-      const beaufortDuration = getWindGustAnimationDuration(windSpeedNow);
-      const beaufortTitle = `Beaufort Scale: ${beaufortLevel} (${windSpeedNow})`;
-      const directionText = `${capitalizeWords(t('wind'))} ${compass.name}`;
       const color = getWindColor(windSpeedNow, 'gusts');
 
       return {
         title,
         description: windSpeedDesc,
         textColor: color,
-        iconsProps: [
-          {
-            src: getIconUrl(`wind-beaufort-${beaufortLevel}`),
-            title: beaufortTitle,
-            alt: beaufortTitle,
-            duration: beaufortDuration,
-          },
-          {
-            src: compass.iconSrc,
-            title: directionText,
-            alt: directionText,
-            duration: beaufortDuration,
-          },
-        ],
+        iconsProps: getWindIcons(windSpeedNow, compass, t),
         zoneGauge: {
           value: windSpeedNow,
           unit: ` ${windUnit}`,

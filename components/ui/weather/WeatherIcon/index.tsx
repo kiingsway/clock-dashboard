@@ -3,11 +3,10 @@ import Image from 'next/image';
 import styles from './WeatherIcon.module.scss';
 import getWeatherIcon from "@/utils/weather/getWeatherIcon";
 import { WeatherCategoryName } from "@/types/weather.types";
-import getWeatherIconName from "@/utils/weather/getWeatherIconName";
+import { getCategoryIconName } from "@/utils/weather/getWeatherCodeInfo";
 import { capitalizeWords, splitCamelCase } from "@/utils/formatters/textFormatters";
 import AnimatedWeatherIcon from "./WeatherIconAnimated";
 import classNames from "classnames";
-import useAppSettings from "@/contexts/AppSettingsContext";
 import { useNow } from "@/contexts/NowContext";
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "../../Tooltip";
@@ -90,7 +89,6 @@ export default function WeatherIcon({
   hideGlow = false,
 }: WeatherIconProps): JSX.Element {
   const { now } = useNow();
-  const { get: { location: { timezone } } } = useAppSettings();
   const { t } = useTranslation();
 
   if (duration) return <AnimatedWeatherIcon src={src} alt={alt} title={title} size={size} duration={duration} />;
@@ -105,7 +103,7 @@ export default function WeatherIcon({
     }
 
     if (typeof weatherCode === 'number') {
-      const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, timezone, now, t });
+      const { current: { src, alt } } = getWeatherIcon({ weatherCode, isDay, lat, lon, now, t });
       return { src, alt, title };
     }
 
@@ -121,7 +119,7 @@ export default function WeatherIcon({
         };
       })();
 
-      const src = getIconUrl(getWeatherIconName({ name, title }, isDay));
+      const src = getIconUrl(getCategoryIconName(name, isDay));
       return { src, alt: title, title };
     }
   })();

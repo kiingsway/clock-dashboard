@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import parseCoordinates from "@/utils/locations/parseCoordinates";
+import parseCoordinates, { roundCoordinates } from "@/utils/locations/parseCoordinates";
 
 const NWS_API = "https://api.weather.gov";
 
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const { latitude: lat, longitude: lon } = coordinates;
+  const { latitude: lat, longitude: lon } = roundCoordinates(coordinates);
 
   try {
     const res = await fetch(
@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
           Accept: "application/geo+json",
           "User-Agent": "clock-dashboard/1.0",
         },
+        signal: AbortSignal.timeout(15_000),
         next: {
           revalidate: 300,
         },

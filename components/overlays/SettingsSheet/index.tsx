@@ -9,7 +9,7 @@ import { ALERT_RADIUS_KM, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES, LANGUAGES,
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { SlGlobe } from "react-icons/sl";
 import { GrMap } from "react-icons/gr";
-import { FiCloudRain, FiSunset, FiWind } from "react-icons/fi";
+import { FiAlertTriangle, FiCloud, FiCloudRain, FiImage, FiMapPin, FiSunset, FiWind } from "react-icons/fi";
 import { TbClock, TbTemperature, TbInfoCircle } from "react-icons/tb";
 import { PiMapPinAreaBold } from "react-icons/pi";
 import { TbClock12, TbClock24 } from "react-icons/tb";
@@ -17,7 +17,7 @@ import { RxSlider } from "react-icons/rx";
 import { VscScreenFull, VscScreenNormal } from "react-icons/vsc";
 import { AQIScale } from "@/types/aqi.types";
 import { FaRegWindowRestore } from "react-icons/fa";
-import SettingsSection, { SettingRow, buildBooleanSettingRow, VersionBadge } from "./SettingsSection";
+import SettingsSection, { SettingRow, buildBooleanSettingRow, VersionBadge, CreditLink } from "./SettingsSection";
 import ModalOrSheet from "@/components/ui/ModalOrSheet";
 import LocationSelector from "@/components/ui/settings/LocationSelector";
 
@@ -248,6 +248,38 @@ export function SettingsSheetContent({
           title={t("version")}
           description={t("settingsTexts.status.version")}
           value={<VersionBadge />}
+        />
+      </SettingsSection>
+
+      <SettingsSection title={t("settingsTexts.credits.title")}>
+        <SettingRow
+          icon={<FiCloud />}
+          title={t("settingsTexts.credits.weather.title")}
+          description={t("settingsTexts.credits.weather.desc")}
+          value={<CreditLink href="https://open-meteo.com/">Open-Meteo</CreditLink>}
+        />
+        <SettingRow
+          icon={<FiAlertTriangle />}
+          title={t("settingsTexts.credits.alerts.title")}
+          description={t("settingsTexts.credits.alerts.desc")}
+          value={
+            <>
+              <CreditLink href="https://www.weather.gov/">NWS</CreditLink>
+              <CreditLink href="https://weather.gc.ca/">ECCC</CreditLink>
+            </>
+          }
+        />
+        <SettingRow
+          icon={<FiMapPin />}
+          title={t("settingsTexts.credits.locations.title")}
+          description={t("settingsTexts.credits.locations.desc")}
+          value={<CreditLink href="https://countries.dev/">countries.dev</CreditLink>}
+        />
+        <SettingRow
+          icon={<FiImage />}
+          title={t("settingsTexts.credits.icons.title")}
+          description={t("settingsTexts.credits.icons.desc")}
+          value={<CreditLink href="https://github.com/basmilius/meteocons">Meteocons</CreditLink>}
         />
       </SettingsSection>
     </form>

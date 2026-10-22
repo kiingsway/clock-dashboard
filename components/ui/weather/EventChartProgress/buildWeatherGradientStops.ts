@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { TFunction } from "i18next";
-import { GradientStop, SunHourly } from "./types";
 import getWeatherCodeInfo from "@/utils/weather/getWeatherCodeInfo";
+import { GradientStop, SunHourly } from "./types";
 
 interface BuildWeatherGradientStopsProps {
   hourly: SunHourly;
@@ -30,7 +30,7 @@ export default function buildWeatherGradientStops({ hourly, start, end, timezone
     const ms = date.toMillis();
     if (ms < startMs - hourMs || ms > startMs + range + hourMs) return [];
 
-    const color = getWeatherCodeInfo(hourly.weather_code[index], hourly.is_day[index] === 1, t).accent;
+    const { accent: color } = getWeatherCodeInfo(hourly.weather_code[index], hourly.is_day[index] === 1, t);
 
     return [{ offset: (ms - startMs) / range, color }];
   });

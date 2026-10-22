@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { getTimes } from "suncalc";
-import { SunDaily, SunEventKind, SunWindowRange } from "./types";
+import { ChartWindow, SunDaily, SunEventKind } from "./types";
 
 interface BuildSunWindowProps {
   daily: SunDaily;
@@ -25,7 +25,7 @@ const getSuncalcTime = (date: DateTime, kind: SunEventKind, latitude: number, lo
   return DateTime.fromJSDate(time).setZone(timezone);
 };
 
-export default function buildSunWindow({ daily, now, isDay, timezone, latitude, longitude }: BuildSunWindowProps): SunWindowRange {
+export default function buildSunWindow({ daily, now, isDay, timezone, latitude, longitude }: BuildSunWindowProps): ChartWindow {
   const startKind: SunEventKind = isDay ? 'sunrise' : 'sunset';
   const endKind: SunEventKind = isDay ? 'sunset' : 'sunrise';
 
@@ -56,7 +56,7 @@ interface BuildFullDayWindowProps {
   longitude: number;
 }
 
-export function buildFullDayWindow({ daily, date, timezone, latitude, longitude }: BuildFullDayWindowProps): SunWindowRange {
+export function buildFullDayWindow({ daily, date, timezone, latitude, longitude }: BuildFullDayWindowProps): ChartWindow {
   const from = date.setZone(timezone).startOf('day');
   const to = from.plus({ days: 1 });
 

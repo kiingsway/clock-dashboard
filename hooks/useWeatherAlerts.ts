@@ -11,6 +11,8 @@ export interface UseWeatherAlerts {
   data: IWeatherAlert[] | undefined;
 }
 
+type TWeatherAlertsKey = readonly [string, WeatherAlertCountryCode, number, number, number];
+
 async function fetchAlertJson(url: string, countryCode: string | undefined) {
   const res = await fetch(url);
 
@@ -27,26 +29,40 @@ async function fetchAlertJson(url: string, countryCode: string | undefined) {
   return res.json();
 }
 
+/**
+ * Chave e fetcher compartilhados com o preload (services/preloadInitialData.ts).
+ * A chave é null quando o país não tem provedor de alertas.
+ */
+export const getWeatherAlertsKey = (
+  countryCode: string,
+  latitude: number,
+  longitude: number,
+  alertRadiusKm: number,
+): TWeatherAlertsKey | null =>
+  isSupportedWeatherAlertCountry(countryCode)
+    ? [CACHE_KEY.WEATHER_ALERTS, countryCode, latitude, longitude, alertRadiusKm]
+    : null;
+
+export async function weatherAlertsFetcher([, countryCode, lat, lon, radius]: TWeatherAlertsKey): Promise<IWeatherAlert[]> {
+  const provider = WEATHER_ALERT_PROVIDERS[countryCode];
+
+  const url = provider.buildUrl({
+    lat,
+    lon,
+    radiusKm: radius || DEFAULT_SETTINGS.alertRadiusKm,
+  });
+
+  const raw = await fetchAlertJson(url, countryCode);
+
+  return provider.mapper(raw);
+}
+
 export default function useWeatherAlerts(): UseWeatherAlerts {
   const { get: { location: { latitude, countryCode, longitude }, alertRadiusKm } } = useAppSettings();
 
   const { data, error, isLoading } = useSWR(
-    isSupportedWeatherAlertCountry(countryCode)
-      ? [CACHE_KEY.WEATHER_ALERTS, countryCode, latitude, longitude, alertRadiusKm]
-      : null,
-    async ([, countryCode, lat, lon, radius]) => {
-      const provider = WEATHER_ALERT_PROVIDERS[countryCode as WeatherAlertCountryCode];
-
-      const url = provider.buildUrl({
-        lat,
-        lon,
-        radiusKm: radius || DEFAULT_SETTINGS.alertRadiusKm,
-      });
-
-      const raw = await fetchAlertJson(url, countryCode);
-
-      return provider.mapper(raw);
-    },
+    getWeatherAlertsKey(countryCode, latitude, longitude, alertRadiusKm),
+    weatherAlertsFetcher,
     {
       refreshInterval: 5 * 60 * 1000,
       revalidateOnFocus: false,

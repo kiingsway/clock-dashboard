@@ -3,6 +3,7 @@ import { TFunction } from 'i18next';
 import { IMoonDailyItem } from '@/types/weather.types';
 import { DateTime } from 'luxon';
 import getMoonEvent from '../getMoonEvent';
+import ICON_FILES from '@/constants/iconFiles';
 
 export default function buildMoonDescription(dailyMoon: IMoonDailyItem[], date: DateTime, t: TFunction): DailySheetItemDesc {
 
@@ -30,7 +31,7 @@ export default function buildMoonDescription(dailyMoon: IMoonDailyItem[], date: 
       else return [rise?.iconName ?? set?.iconName] as string[];
     }
 
-    return [moonDate.date.iconName ?? 'night'];
+    return [moonDate.date.iconName ?? ICON_FILES.clearNight];
   })().map(iconName => ({ iconName }));
 
   return {
