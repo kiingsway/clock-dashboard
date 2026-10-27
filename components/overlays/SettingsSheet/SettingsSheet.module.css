@@ -96,30 +96,6 @@
   padding-left: calc(36px + var(--wc-space-md));
 }
 
-/* --- Select --- */
-
-.select {
-  width: 100%;
-  appearance: none;
-  -webkit-appearance: none;
-  background: var(--wc-ink);
-  border: 1px solid var(--wc-hairline);
-  border-radius: var(--wc-radius-sm);
-  color: var(--wc-text);
-  font-family: var(--wc-font-body);
-  font-size: var(--wc-text-sm);
-  padding: var(--wc-space-sm) var(--wc-space-md);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right var(--wc-space-md) center;
-  padding-right: var(--wc-space-2xl);
-}
-
-.select:focus-visible {
-  outline: none;
-  border-color: var(--wc-accent);
-  box-shadow: 0 0 0 2px var(--wc-accent-muted);
-}
 
 /* --- Range slider --- */
 

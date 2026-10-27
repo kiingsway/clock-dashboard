@@ -1,7 +1,10 @@
 import { CACHE_KEY } from "@/constants/keys";
+import { isBetaLocation } from "@/constants/locations";
 import { fetchWeather } from "@/services/fetchWeather";
 import { IWeather } from "@/types/weather.types";
 import useAppSettings from "@/contexts/AppSettingsContext";
+import { mockTemperatureRamp } from "@/utils/mock";
+import { useMemo } from "react";
 import useSWR from 'swr';
 import type { KeyedMutator } from 'swr';
 
@@ -23,9 +26,11 @@ export const weatherFetcher = ([, latitude, longitude]: TWeatherKey): Promise<IW
   fetchWeather(latitude, longitude);
 
 export default function useWeather(): IUseWeather {
-  const { get: { location: { latitude, longitude } } } = useAppSettings();
+  const { get: { location } } = useAppSettings();
+  const { latitude, longitude } = location;
+  const isBeta = isBetaLocation(location);
 
-  const { data: weather, error, isLoading, isValidating, mutate } = useSWR(
+  const { data, error, isLoading, isValidating, mutate } = useSWR(
     getWeatherKey(latitude, longitude),
     weatherFetcher,
     {
@@ -34,6 +39,12 @@ export default function useWeather(): IUseWeather {
       revalidateOnReconnect: true,
       dedupingInterval: 60 * 1000,
     }
+  );
+
+  // Cidade Beta: clima real com temperaturas simuladas (ver BETA_LOCATION)
+  const weather = useMemo(
+    () => data && isBeta ? mockTemperatureRamp(data) : data,
+    [data, isBeta],
   );
 
   return {

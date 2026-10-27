@@ -79,7 +79,15 @@
       "language": "Changer la langue utilisée dans l'application",
       "location": "Lieu utilisé pour la météo et le fuseau horaire de l'horloge",
       "searchLocation": "Rechercher un lieu…",
-      "aqiScale": "Définit la norme utilisée pour classer et afficher les indices de qualité de l'air."
+      "aqiScale": "Définit la norme utilisée pour classer et afficher les indices de qualité de l'air.",
+      "clearSearch": "Effacer la recherche",
+      "noLocations": "Aucun lieu trouvé.",
+      "locationsError": "Impossible de charger les lieux.",
+      "favoriteLocation": "Ajouter aux favoris",
+      "betaCity": {
+        "name": "Ville Bêta",
+        "desc": "Ville de test : météo réelle de Toronto avec une température allant de {{from}} °C à {{to}} °C en {{hours}} h."
+      }
     },
     "alerts": {
       "title": "Alertes",
@@ -119,6 +127,12 @@
       "useBottomSheet": {
         "title": "Utiliser le Bottom Sheet",
         "desc": "Affiche les détails et les fenêtres au bas de l'écran (Bottom Sheet) au lieu d'une fenêtre centrale (Modale)."
+      },
+      "hourlyForecastView": {
+        "title": "Prochaines heures",
+        "desc": "Affiche les prévisions des prochaines heures sous forme de cartes ou de graphique de température.",
+        "cards": "Cartes",
+        "chart": "Graphique"
       }
     },
     "credits": {

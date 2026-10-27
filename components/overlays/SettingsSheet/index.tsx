@@ -2,15 +2,17 @@ import { CSSProperties, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { useTranslation } from "react-i18next";
 import styles from "./SettingsSheet.module.css";
+import fieldStyles from "@/components/ui/Field/Field.module.css";
 import useAppSettings from "@/contexts/AppSettingsContext";
 import Alert from "@/components/ui/Alert";
 import Slider from "@/components/ui/Slider";
-import { ALERT_RADIUS_KM, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES, LANGUAGES, AQI_SCALES } from "@/constants/settings";
+import { ALERT_RADIUS_KM, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES, LANGUAGES, AQI_SCALES, HOURLY_FORECAST_VIEWS } from "@/constants/settings";
+import { HourlyForecastView } from "@/types/app.types";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { SlGlobe } from "react-icons/sl";
 import { GrMap } from "react-icons/gr";
 import { FiAlertTriangle, FiCloud, FiCloudRain, FiImage, FiMapPin, FiSunset, FiWind } from "react-icons/fi";
-import { TbClock, TbTemperature, TbInfoCircle } from "react-icons/tb";
+import { TbClock, TbTemperature, TbInfoCircle, TbChartArea } from "react-icons/tb";
 import { PiMapPinAreaBold } from "react-icons/pi";
 import { TbClock12, TbClock24 } from "react-icons/tb";
 import { RxSlider } from "react-icons/rx";
@@ -118,7 +120,7 @@ export function SettingsSheetContent({
           control={
             <select
               id="language"
-              className={styles.select}
+              className={fieldStyles.select}
               value={i18n.language}
               onChange={handleLanguageChange}
             >
@@ -149,7 +151,7 @@ export function SettingsSheetContent({
           control={
             <select
               id="aqiScale"
-              className={styles.select}
+              className={fieldStyles.select}
               value={get.aqiScale}
               onChange={e => set.aqiScale(e.target.value as AQIScale)}
             >
@@ -228,6 +230,24 @@ export function SettingsSheetContent({
       </SettingsSection>
 
       <SettingsSection title={t("settingsTexts.appearance.title")}>
+
+        <SettingRow
+          icon={<TbChartArea />}
+          title={t("settingsTexts.appearance.hourlyForecastView.title")}
+          description={t("settingsTexts.appearance.hourlyForecastView.desc")}
+          htmlFor="hourlyForecastView"
+          control={
+            <select
+              id="hourlyForecastView"
+              className={fieldStyles.select}
+              value={get.hourlyForecastView}
+              onChange={e => set.hourlyForecastView(e.target.value as HourlyForecastView)}
+            >
+              {HOURLY_FORECAST_VIEWS.map(view =>
+                <option key={view} value={view}>{t(`settingsTexts.appearance.hourlyForecastView.${view}`)}</option>)}
+            </select>
+          }
+        />
 
         {booleanSettingsKeys.map(({ key, icon }) => {
           return buildBooleanSettingRow({ get, icon, key, set, t });

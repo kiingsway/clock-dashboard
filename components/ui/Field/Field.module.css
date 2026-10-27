@@ -1,0 +1,61 @@
+/*
+ * Estilo único dos campos de formulário (input e select) das configurações.
+ * Use junto com uma classe local apenas para ajustes de layout (ex: padding para ícones).
+ */
+
+.input,
+.select {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  height: 42px;
+  padding: 0 var(--wc-space-md, 12px);
+
+  border: 1px solid var(--wc-hairline, #232838);
+  border-radius: var(--wc-radius-sm, 8px);
+  outline: none;
+
+  background-color: var(--wc-surface, #12161f);
+  color: var(--wc-text, #e8ecf4);
+
+  font-family: var(--wc-font-body, system-ui, sans-serif);
+  font-size: 14px;
+
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.input::placeholder {
+  color: var(--wc-text-faint, #5c6578);
+}
+
+.input:hover,
+.select:hover {
+  background-color: var(--wc-surface-raised, #232838);
+}
+
+.input:focus,
+.select:focus-visible {
+  border-color: var(--wc-accent, #8695f0);
+  background-color: var(--wc-surface-raised, #232838);
+  box-shadow: 0 0 0 4px var(--wc-accent-muted, rgba(134, 149, 240, 0.15));
+}
+
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238892a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+/* Lista nativa do select segue o tema escuro */
+.select option {
+  background-color: var(--wc-surface-raised, #232838);
+  color: var(--wc-text, #e8ecf4);
+}

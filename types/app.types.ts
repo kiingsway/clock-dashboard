@@ -6,6 +6,8 @@ export type TTabs = keyof typeof TABS;
 
 export type ImageInfo = { alt: string, src: string };
 
+export type HourlyForecastView = 'cards' | 'chart';
+
 export interface AppSettings {
   location: ILocation; // Localização selecionada do clima.
   alertRadiusKm: number; // Define área em km para busca de alertas de clima (apenas Canadá)
@@ -17,6 +19,7 @@ export interface AppSettings {
   is12hour: boolean; // Define se é 12 (true) ou 24 horas (false).
   aqiScale: AQIScale; // Define se o air quality index é padrão europeu ou americano.
   useBottomSheet: boolean; // 'true' define se janelas serão exibidas em Bottom Sheet (pode causar lag), 'false' usa Modal.
+  hourlyForecastView: HourlyForecastView; // Próximas horas em cards ou no gráfico de temperatura.
 }
 
 export interface SaveAppSettings {
@@ -30,6 +33,7 @@ export interface SaveAppSettings {
   is12hour: (value: boolean) => void;
   aqiScale: (value: AQIScale) => void;
   useBottomSheet: (value: boolean) => void;
+  hourlyForecastView: (value: HourlyForecastView) => void;
 }
 
 export interface UseAppSettings {

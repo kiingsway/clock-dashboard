@@ -15,7 +15,7 @@ import { isValidDateTime } from "@/utils/formatters/dateFormatters";
 
 type TPrecipAreas = "rain" | "showers" | "snowfall";
 
-function getPrecipitationIcon(area: TPrecipAreas, isDay = true): string {
+export function getPrecipitationIcon(area: TPrecipAreas, isDay = true): string {
   const time = isDay ? "day" : "night";
 
   const areas = {

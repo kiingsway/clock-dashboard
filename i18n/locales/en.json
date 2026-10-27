@@ -79,7 +79,15 @@
       "language": "Change the language used throughout the app",
       "location": "Location used for weather and the clock's time zone",
       "searchLocation": "Search location…",
-      "aqiScale": "Sets the standard used to classify and display air quality index levels."
+      "aqiScale": "Sets the standard used to classify and display air quality index levels.",
+      "clearSearch": "Clear search",
+      "noLocations": "No locations found.",
+      "locationsError": "Failed to load locations.",
+      "favoriteLocation": "Favorite location",
+      "betaCity": {
+        "name": "Beta City",
+        "desc": "Test city: real Toronto weather with temperature going from {{from}}°C to {{to}}°C in {{hours}}h."
+      }
     },
     "alerts": {
       "title": "Alerts",
@@ -119,6 +127,12 @@
       "useBottomSheet": {
         "title": "Use Bottom Sheet",
         "desc": "Displays details and windows at the bottom of the screen (Bottom Sheet) instead of a central window (Modal)."
+      },
+      "hourlyForecastView": {
+        "title": "Next hours",
+        "desc": "Shows the forecast for the next hours as cards or as a temperature chart.",
+        "cards": "Cards",
+        "chart": "Chart"
       }
     },
     "credits": {

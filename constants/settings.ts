@@ -1,4 +1,4 @@
-import { AppSettings } from "@/types/app.types";
+import { AppSettings, HourlyForecastView } from "@/types/app.types";
 import { AQIScale } from "@/types/aqi.types";
 
 export const LANGUAGES = [
@@ -10,6 +10,8 @@ export const LANGUAGES = [
 ] as const;
 
 export const AQI_SCALES: AQIScale[] = ['european', 'us'] as const;
+
+export const HOURLY_FORECAST_VIEWS: HourlyForecastView[] = ['cards', 'chart'] as const;
 
 export const DEFAULT_SETTINGS: AppSettings = {
   location: {
@@ -30,6 +32,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   is12hour: false,
   aqiScale: AQI_SCALES[0],
   useBottomSheet: true,
+  hourlyForecastView: HOURLY_FORECAST_VIEWS[0],
 };
 
 export const ALERT_RADIUS_KM = {

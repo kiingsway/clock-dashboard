@@ -5,10 +5,13 @@
   max-width: 420px;
   display: flex;
   flex-direction: column;
-  gap: var(--wc-space-sm);
+  gap: var(--wc-space-md);
 }
 
+/* ------------------------------------------------------------- Busca */
+
 .search {
+  position: relative;
   display: flex;
   flex-direction: row;
   gap: var(--wc-space-sm);
@@ -17,61 +20,57 @@
 .inputWrapper {
   position: relative;
   flex: 1;
+  display: flex;
+  align-items: center;
 }
 
-.button {
-  font-size: 14px;
-  border: 1px solid var(--wc-hairline);
-  border-radius: var(--wc-radius-sm);
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  font-size: 16px;
+  color: var(--wc-text-faint);
+  pointer-events: none;
+  transition: color 150ms ease;
+}
 
-  background: var(--wc-ink);
-  color: var(--wc-text);
+/* Visual vem de Field.module.css; aqui só o espaço para a lupa e o botão de limpar */
+.inputWrapper .input {
+  max-width: none;
+  padding: 0 40px;
+}
 
-  padding: var(--wc-space-sm) var(--wc-space-md);
+.inputWrapper:focus-within .searchIcon {
+  color: var(--wc-accent);
+}
+
+.clear {
+  position: absolute;
+  right: 8px;
+
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--wc-radius-full);
+  background: var(--wc-highlight);
+  color: var(--wc-text-muted);
 
   cursor: pointer;
-
-  transition: background 50ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 
   &:hover {
-    background: var(--wc-surface-raised);
-  }
-
-  &:active {
-    background: var(--wc-surface);
-  }
-}
-
-.input {
-  width: 100%;
-  // height: 44px;
-  padding: var(--wc-space-sm) var(--wc-space-md);
-
-  border: 1px solid var(--wc-hairline);
-  border-radius: var(--wc-radius-sm);
-  outline: none;
-
-  background: var(--wc-ink);
-  color: var(--wc-text);
-
-  font-size: 14px;
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-
-  &::placeholder {
-    color: var(--wc-text-faint);
-  }
-
-  &:focus {
-    border-color: var(--wc-accent);
-    box-shadow: var(--wc-focus-ring);
+    background: var(--wc-hairline);
+    color: var(--wc-text);
   }
 }
 
 .loader {
   position: absolute;
-  top: 50%;
   right: 14px;
 
   width: 16px;
@@ -81,12 +80,79 @@
   border-top-color: var(--wc-accent);
   border-radius: 50%;
 
-  transform: translateY(-50%);
   animation: spin 0.7s linear infinite;
 }
 
 @keyframes spin {
   to {
-    transform: translateY(-50%) rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------- Atalhos */
+
+.quickPicks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wc-space-sm);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding: 0 var(--wc-space-md);
+
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-full);
+  background: var(--wc-surface);
+  color: var(--wc-text-muted);
+
+  font-family: var(--wc-font-body);
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    color 150ms ease;
+
+  &:hover {
+    background: var(--wc-surface-raised);
+    color: var(--wc-text);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--wc-accent);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed='true'] {
+    border-color: var(--wc-accent);
+    background: var(--wc-accent-muted);
+    color: var(--wc-accent);
+  }
+}
+
+.betaChip {
+  --beta: #c084fc;
+
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--beta) 55%, transparent);
+  color: var(--beta);
+
+  &[aria-pressed='true'] {
+    border-style: solid;
+    border-color: var(--beta);
+    background: color-mix(in srgb, var(--beta) 16%, transparent);
+    color: var(--beta);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader {
+    animation-duration: 2s;
   }
 }

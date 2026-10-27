@@ -3,39 +3,43 @@
   align-items: center;
   justify-content: center;
 
-  font-size: 14px;
-  border: 1px solid var(--wc-hairline);
-  border-radius: var(--wc-radius-sm);
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  padding: 0;
 
-  background: var(--wc-ink);
-  color: var(--wc-text);
+  font-size: 18px;
+  border: 1px solid var(--wc-hairline, #232838);
+  border-radius: var(--wc-radius-sm, 8px);
 
-  padding: var(--wc-space-sm) var(--wc-space-md);
+  background: var(--wc-surface, #12161f);
+  color: var(--wc-text-muted, #8892a4);
 
   cursor: pointer;
 
   transition:
-    background 50ms ease,
+    background 150ms ease,
     color 150ms ease,
     border-color 150ms ease;
 
   &:hover {
-    background: var(--wc-surface-raised);
+    background: var(--wc-surface-raised, #232838);
+    color: var(--wc-text, #e8ecf4);
   }
 
   &:active {
-    background: var(--wc-surface);
+    transform: scale(0.96);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--wc-accent);
+    outline: 2px solid var(--wc-accent, #8695f0);
     outline-offset: 2px;
   }
 
   /* Aguardando permissão / GPS / API */
   &[data-status='locating'],
   &[data-status='loading'] {
-    color: var(--wc-text-muted);
+    color: var(--wc-text-muted, #8892a4);
     cursor: progress;
 
     svg {
@@ -45,26 +49,26 @@
 
   /* Usando a localização do dispositivo */
   &[data-status='active'] {
-    color: var(--wc-accent);
-    border-color: var(--wc-accent);
-    background: var(--wc-accent-muted);
+    color: var(--wc-accent, #8695f0);
+    border-color: var(--wc-accent, #8695f0);
+    background: var(--wc-accent-muted, rgba(134, 149, 240, 0.15));
 
     &:hover {
-      background: color-mix(in srgb, var(--wc-accent) 25%, transparent);
+      background: color-mix(in srgb, var(--wc-accent, #8695f0) 25%, transparent);
     }
   }
 
   /* Permissão recusada */
   &[data-status='denied'] {
-    color: var(--wc-danger);
-    border-color: color-mix(in srgb, var(--wc-danger) 50%, transparent);
+    color: var(--wc-danger, #e0554f);
+    border-color: color-mix(in srgb, var(--wc-danger, #e0554f) 50%, transparent);
   }
 
   /* Indisponível ou erro na requisição */
   &[data-status='unavailable'],
   &[data-status='error'] {
-    color: var(--wc-danger);
-    border-color: color-mix(in srgb, var(--wc-danger) 50%, transparent);
+    color: var(--wc-danger, #e0554f);
+    border-color: color-mix(in srgb, var(--wc-danger, #e0554f) 50%, transparent);
   }
 }
 

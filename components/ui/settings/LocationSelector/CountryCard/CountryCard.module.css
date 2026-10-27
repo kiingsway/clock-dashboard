@@ -1,26 +1,33 @@
 .card {
+  position: relative;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: var(--wc-space-lg);
-  padding: var(--wc-space-md);
-  background: var(--wc-ink);
-  border: 1px solid var(--wc-hairline);
-  border-radius: var(--wc-radius-sm);
-  box-shadow: var(--wc-shadow-sm);
-  font-family: var(--wc-font-body);
-  color: var(--wc-text);
   width: 100%;
   max-width: 420px;
+  box-sizing: border-box;
+  padding: var(--wc-space-md);
+  overflow: hidden;
+
+  border: 1px solid var(--wc-hairline);
+  border-radius: var(--wc-radius-sm);
+  background:
+    radial-gradient(120% 140% at 0% 0%, var(--wc-accent-muted), transparent 60%),
+    var(--wc-surface);
+  box-shadow: var(--wc-shadow-sm);
+
+  font-family: var(--wc-font-body);
+  color: var(--wc-text);
 }
 
 .media {
   position: relative;
-  flex: 0 0 96px;
-  min-height: 72px;
-  border-radius: var(--wc-radius-md);
+  flex: 0 0 84px;
+  height: 60px;
+  border-radius: 6px;
   overflow: hidden;
   background: var(--wc-surface-raised);
-  border: 1px solid var(--wc-hairline);
+  box-shadow: 0 0 0 1px var(--wc-hairline), 0 6px 16px rgb(0 0 0 / 30%);
 }
 
 .image {
@@ -39,6 +46,7 @@
 }
 
 .info {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -50,6 +58,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  align-items: baseline;
   column-gap: var(--wc-space-sm);
 }
 
@@ -72,6 +81,9 @@
 }
 
 .timezone {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: var(--wc-text-xs);
   color: var(--wc-text-muted);
 }
@@ -94,4 +106,70 @@
   font-family: var(--wc-font-clock);
   font-size: var(--wc-text-sm);
   color: var(--wc-accent);
+}
+
+.favorite {
+  flex: 0 0 auto;
+  align-self: flex-start;
+
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  border: 0;
+  border-radius: var(--wc-radius-full);
+  background: transparent;
+  color: var(--wc-text-faint);
+  font-size: 15px;
+
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+
+  &:hover {
+    background: var(--wc-highlight);
+    color: var(--wc-text);
+  }
+
+  &[data-active='true'] {
+    color: var(--wc-warning);
+  }
+}
+
+/* ------------------------------------------------------- Cidade Beta */
+
+.beta {
+  --beta: #c084fc;
+
+  border-color: color-mix(in srgb, var(--beta) 40%, transparent);
+  background:
+    radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--beta) 22%, transparent), transparent 60%),
+    var(--wc-surface);
+}
+
+.beta .placeholder {
+  font-size: 28px;
+  color: var(--beta);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, #e94f37 35%, transparent), color-mix(in srgb, #6b5cff 45%, transparent));
+}
+
+.badge {
+  padding: 1px 6px;
+  border-radius: var(--wc-radius-full);
+  background: color-mix(in srgb, var(--beta) 20%, transparent);
+  color: var(--beta);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.description {
+  margin: 0;
+  font-size: var(--wc-text-xs);
+  line-height: 1.4;
+  color: var(--wc-text-muted);
 }

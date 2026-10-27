@@ -79,7 +79,15 @@
       "language": "Altere o idioma usado em todo o aplicativo",
       "location": "Localização usada para a previsão do tempo e fuso horário do relógio",
       "searchLocation": "Pesquisar local…",
-      "aqiScale": "Define o padrão utilizado para classificar e exibir os índices de qualidade do ar."
+      "aqiScale": "Define o padrão utilizado para classificar e exibir os índices de qualidade do ar.",
+      "clearSearch": "Limpar busca",
+      "noLocations": "Nenhum local encontrado.",
+      "locationsError": "Não foi possível carregar os locais.",
+      "favoriteLocation": "Favoritar local",
+      "betaCity": {
+        "name": "Cidade Beta",
+        "desc": "Cidade de teste: clima real de Toronto com temperatura indo de {{from}}°C a {{to}}°C em {{hours}}h."
+      }
     },
     "alerts": {
       "title": "Alertas",
@@ -119,6 +127,12 @@
       "useBottomSheet": {
         "title": "Usar Bottom Sheet",
         "desc": "Exibe os detalhes e janelas na parte inferior da tela (Bottom Sheet) em vez de uma janela central (Modal)."
+      },
+      "hourlyForecastView": {
+        "title": "Próximas horas",
+        "desc": "Mostra a previsão das próximas horas em cards ou em um gráfico de temperatura.",
+        "cards": "Cards",
+        "chart": "Gráfico"
       }
     },
     "credits": {

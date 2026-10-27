@@ -54,10 +54,15 @@ export function getCategoryIconName(name: WeatherCategoryName, isDay = true): st
   return pickDayNight(WEATHER_ICONS[name] ?? WEATHER_ICONS.unknown, isDay);
 }
 
-export default function getWeatherCodeInfo(code: number | undefined, isDay: boolean, t: TFunction): IWeatherCodeInfo {
-  const name: WeatherCategoryName = typeof code === 'number'
+/** WMO weather code → weather category name ('unknown' when not mapped). */
+export function getWeatherCategoryName(code: number | undefined): WeatherCategoryName {
+  return typeof code === 'number'
     ? CATEGORY_BY_CODE[code] ?? 'unknown'
     : 'unknown';
+}
+
+export default function getWeatherCodeInfo(code: number | undefined, isDay: boolean, t: TFunction): IWeatherCodeInfo {
+  const name = getWeatherCategoryName(code);
 
   return {
     code: typeof code === 'number' ? code : -99,

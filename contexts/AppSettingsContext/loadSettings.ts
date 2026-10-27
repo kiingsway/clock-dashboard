@@ -1,6 +1,6 @@
 import { STORAGE_KEY } from "@/constants/keys";
-import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from "@/constants/settings";
-import { AppSettings } from "@/types/app.types";
+import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, HOURLY_FORECAST_VIEWS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from "@/constants/settings";
+import { AppSettings, HourlyForecastView } from "@/types/app.types";
 import { AQIScale } from "@/types/aqi.types";
 import isValidLocationObject from "@/utils/locations/isValidLocationObject";
 
@@ -64,7 +64,11 @@ export function parseSettings(raw: string): AppSettings {
     ? (parsed.aqiScale as AQIScale)
     : DEFAULT_SETTINGS.aqiScale;
 
-  return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour, aqiScale, useBottomSheet };
+  const hourlyForecastView = HOURLY_FORECAST_VIEWS.includes(parsed.hourlyForecastView as HourlyForecastView)
+    ? (parsed.hourlyForecastView as HourlyForecastView)
+    : DEFAULT_SETTINGS.hourlyForecastView;
+
+  return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour, aqiScale, useBottomSheet, hourlyForecastView };
 }
 
 /**

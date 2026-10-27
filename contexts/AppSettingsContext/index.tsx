@@ -10,9 +10,9 @@ import {
   type ReactNode,
 } from 'react';
 
-import { AppSettings, UseAppSettings } from '@/types/app.types';
+import { AppSettings, HourlyForecastView, UseAppSettings } from '@/types/app.types';
 import { STORAGE_KEY } from '@/constants/keys';
-import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from '@/constants/settings';
+import { ALERT_RADIUS_KM, DEFAULT_SETTINGS, HOURLY_FORECAST_VIEWS, RAIN_ALERT_HOURS, SUNWINDOW_BEFORE_MINUTES } from '@/constants/settings';
 import loadSettings, { parseSettings } from './loadSettings';
 import persistSettings from './persistSettings';
 import { AQIScale } from '@/types/aqi.types';
@@ -135,6 +135,11 @@ export function AppSettingsProvider({ children }: Props) {
     setSettings((prev) => ({ ...prev, useBottomSheet }));
   }, []);
 
+  const setHourlyForecastView = useCallback((value: HourlyForecastView) => {
+    const hourlyForecastView = HOURLY_FORECAST_VIEWS.includes(value) ? value : DEFAULT_SETTINGS.hourlyForecastView;
+    setSettings((prev) => ({ ...prev, hourlyForecastView }));
+  }, []);
+
   const resetSettings = useCallback(() => setSettings(DEFAULT_SETTINGS), []);
 
   const value = useMemo<UseAppSettings>(
@@ -153,9 +158,10 @@ export function AppSettingsProvider({ children }: Props) {
         is12hour: setIs12Hour,
         aqiScale: setAqiScale,
         useBottomSheet: setUseBottomSheet,
+        hourlyForecastView: setHourlyForecastView,
       },
     }),
-    [isLoaded, resetSettings, settings, setLocation, setAlertRadiusKm, setPrecipHoursRange, setSunAlertThresholdMinutes, setShowFeelsLikeWhenEqual, setShowMinMaxPeakBadge, setFocusCurrentWeatherOnLaunch, setIs12Hour, setAqiScale, setUseBottomSheet]);
+    [isLoaded, resetSettings, settings, setLocation, setAlertRadiusKm, setPrecipHoursRange, setSunAlertThresholdMinutes, setShowFeelsLikeWhenEqual, setShowMinMaxPeakBadge, setFocusCurrentWeatherOnLaunch, setIs12Hour, setAqiScale, setUseBottomSheet, setHourlyForecastView]);
 
   return (
     <AppSettingsContext.Provider value={value}>

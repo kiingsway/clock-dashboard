@@ -63,6 +63,29 @@ export const WEATHER_ACCENT_COLORS: TCategoryDef = {
   sunset: "#f4b860"
 } as const;
 
+/** Cor por temperatura (°C), de -50 a 50; fora disso fica a cor da ponta */
+export const TEMPERATURE_COLORS: IGradientColor[] = [
+  { value: -50, hex: '#9B4DCA' },
+  { value: -40, hex: '#7E55E8' },
+  { value: -30, hex: '#6B5CFF' },
+  { value: -25, hex: '#586DFF' },
+  { value: -20, hex: '#4A8CFF' },
+  { value: -15, hex: '#3BA8FF' },
+  { value: -10, hex: '#38BDF8' },
+  { value: -5, hex: '#4DD4E8' },
+  { value: 0, hex: '#64D9C2' },
+  { value: 5, hex: '#7ED957' },
+  { value: 10, hex: '#A8E34B' },
+  { value: 15, hex: '#D4E157' },
+  { value: 20, hex: '#F4D35E' },
+  { value: 25, hex: '#F6B65B' },
+  { value: 30, hex: '#F28C4B' },
+  { value: 35, hex: '#EF6C45' },
+  { value: 40, hex: '#E94F37' },
+  { value: 45, hex: '#D63A3A' },
+  { value: 50, hex: '#B82B4F' },
+];
+
 export const WIND_SPEED_COLORS: IGradientColor[] = [
   { value: 0, hex: YELLOW_COLORS[4] },   // Calmo
   { value: 10, hex: YELLOW_COLORS[3] },  // Brisa leve
