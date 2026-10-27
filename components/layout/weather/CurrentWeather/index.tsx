@@ -11,6 +11,7 @@ import PrecipitationChart from "@/components/ui/weather/PrecipitationChart";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import Alert from "@/components/ui/Alert";
 import EventChartProgress from "@/components/ui/weather/EventChartProgress";
+import useAppSettings from "@/contexts/AppSettingsContext";
 
 interface Props {
   weather: IWeather | undefined;
@@ -29,9 +30,10 @@ interface Props {
  */
 export default function CurrentWeather({ weather, loading, alerts, isFocused, error }: Props): JSX.Element {
   const { now } = useNow();
+  const { get: { location } } = useAppSettings();
 
   const {
-    current, currentUnits, daily, hourly,
+    current, currentUnits,
     isDay, tempMin, tempMax, sunWindow
   } = ensureWeather(weather, now, loading);
 
@@ -70,14 +72,14 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
 
         <WeatherAlerts alerts={alerts} />
 
+        {/* Posição pelo suncalc com a localização das configurações: aparece antes do clima carregar. */}
         <EventChartProgress
           isAppFocused={isFocused}
-          isDay={current.is_day === 1}
-          daily={daily}
-          hourly={hourly}
-          timezone={weather?.timezone ?? now.zoneName ?? ""}
-          latitude={weather?.latitude ?? 0}
-          longitude={weather?.longitude ?? 0}
+          daily={weather?.daily}
+          hourly={weather?.hourly}
+          timezone={location.timezone || now.zoneName || "UTC"}
+          latitude={location.latitude}
+          longitude={location.longitude}
         />
 
       </section>

@@ -36,19 +36,21 @@ interface FullDayProps {
   date: DateTime;
 }
 
-/** Sol: cores pelo clima de cada hora; no modo período, `isDay` define dia ou noite. */
+/**
+ * Sol: janela e curva sempre pelo suncalc (funciona antes do clima carregar).
+ * `daily` só fornece o horário exibido nos rótulos; `hourly`, as cores do clima.
+ */
 type SunProps = {
   body?: 'sun';
-  daily: SunDaily;
-  hourly: SunHourly;
-} & ((PeriodProps & { isDay: boolean }) | (FullDayProps & { isDay?: never }));
+  daily?: SunDaily;
+  hourly?: SunHourly;
+} & (PeriodProps | FullDayProps);
 
 /** Lua: tudo vem do suncalc; cores pela fase (MOON_COLORS). */
 type MoonProps = {
   body: 'moon';
   daily?: never;
   hourly?: never;
-  isDay?: never;
 } & (PeriodProps | FullDayProps);
 
 type Props = BaseProps & (SunProps | MoonProps);
@@ -59,24 +61,23 @@ const nearestStopColor = (stops: GradientStop[], offset: number): string | undef
     undefined,
   )?.color;
 
-export default function EventChartProgress({ body = 'sun', daily, hourly, isDay, fullDay, date, timezone, latitude, longitude, isAppFocused = false }: Props) {
+export default function EventChartProgress({ body = 'sun', daily, hourly, fullDay, date, timezone, latitude, longitude, isAppFocused = false }: Props) {
   const { t } = useTranslation();
   const { now } = useNow();
 
   const { start, end, from, to } = useMemo(() => {
     const base = { timezone, latitude, longitude };
 
-    // `daily` sempre existe para o sol (garantido pelos tipos das props).
-    if (body === 'sun' && daily) {
+    if (body === 'sun') {
       return fullDay && date
         ? buildFullDayWindow({ ...base, daily, date })
-        : buildSunWindow({ ...base, daily, now, isDay: Boolean(isDay) });
+        : buildSunWindow({ ...base, daily, now });
     }
 
     return fullDay && date
       ? buildMoonFullDayWindow({ ...base, date })
       : buildMoonWindow({ ...base, now });
-  }, [body, daily, isDay, fullDay, date, now, timezone, latitude, longitude]);
+  }, [body, daily, fullDay, date, now, timezone, latitude, longitude]);
 
   const data = useMemo(
     () => buildSunPathData(body, from, to, latitude, longitude),
@@ -84,9 +85,11 @@ export default function EventChartProgress({ body = 'sun', daily, hourly, isDay,
   );
 
   const stops = useMemo(
-    () => body === 'sun' && hourly
-      ? buildWeatherGradientStops({ hourly, start: from, end: to, timezone, t })
-      : buildMoonGradientStops(from, to),
+    () => {
+      if (body === 'moon') return buildMoonGradientStops(from, to);
+      // Sem clima ainda: sem paradas, a linha usa a cor de destaque.
+      return hourly ? buildWeatherGradientStops({ hourly, start: from, end: to, timezone, t }) : [];
+    },
     [body, hourly, from, to, timezone, t],
   );
 

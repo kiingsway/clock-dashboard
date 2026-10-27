@@ -12,7 +12,10 @@ export type SunHourly = Pick<IHourly, 'time' | 'weather_code' | 'is_day'>;
 
 export interface ChartEvent {
   kind: EventKind;
-  /** Sem horário quando o evento não acontece no dia (exibe "--:--"). */
+  /**
+   * Horário exibido no rótulo; sem ele, exibe "--:--" (evento não acontece no dia,
+   * ou, no sol, Open-Meteo ainda não carregou). A posição no gráfico vem de `from`/`to`.
+   */
   time?: DateTime;
   /** Ícone específico (ex.: fase da lua). Sem ele, usa o ícone da categoria `kind`. */
   iconName?: string;

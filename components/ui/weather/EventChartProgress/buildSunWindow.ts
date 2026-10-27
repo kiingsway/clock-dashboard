@@ -1,23 +1,23 @@
 import { DateTime } from "luxon";
 import { getTimes } from "suncalc";
-import { ChartWindow, SunDaily, SunEventKind } from "./types";
+import { getSunElevation } from "./buildSunPathData";
+import { ChartEvent, ChartWindow, SunDaily, SunEventKind } from "./types";
 
-interface BuildSunWindowProps {
-  daily: SunDaily;
-  now: DateTime;
-  isDay: boolean;
+interface SunBaseProps {
+  /** Opcional: só fornece o horário exibido nos rótulos (Open-Meteo). Não decide nada no gráfico. */
+  daily?: SunDaily;
   timezone: string;
   latitude: number;
   longitude: number;
 }
 
-const parseTimes = (times: string[], timezone: string): DateTime[] =>
-  times
-    .map(t => DateTime.fromISO(t, { zone: timezone }))
-    .filter(dt => dt.isValid)
-    .sort((a, b) => a.toMillis() - b.toMillis());
+interface SunTime {
+  kind: SunEventKind;
+  time: DateTime;
+}
 
-/** Fallback pelo suncalc quando o daily não cobre o dia necessário (ex.: sunset de ontem). */
+const SUN_KINDS: SunEventKind[] = ['sunrise', 'sunset'];
+
 const getSuncalcTime = (date: DateTime, kind: SunEventKind, latitude: number, longitude: number, timezone: string): DateTime | undefined => {
   const time = getTimes(date.set({ hour: 12 }).toJSDate(), latitude, longitude)[kind];
   // Regiões polares: o evento pode não existir naquele dia.
@@ -25,49 +25,79 @@ const getSuncalcTime = (date: DateTime, kind: SunEventKind, latitude: number, lo
   return DateTime.fromJSDate(time).setZone(timezone);
 };
 
-export default function buildSunWindow({ daily, now, isDay, timezone, latitude, longitude }: BuildSunWindowProps): ChartWindow {
-  const startKind: SunEventKind = isDay ? 'sunrise' : 'sunset';
-  const endKind: SunEventKind = isDay ? 'sunset' : 'sunrise';
+/** Nasceres/pores do suncalc de ontem, hoje e amanhã, ordenados. */
+const collectSunTimes = (now: DateTime, { timezone, latitude, longitude }: SunBaseProps): SunTime[] => {
+  const today = now.setZone(timezone).startOf('day');
 
-  const starts = parseTimes(daily[startKind], timezone);
-  const ends = parseTimes(daily[endKind], timezone);
+  return [-1, 0, 1]
+    .flatMap(offset => SUN_KINDS.flatMap(kind => {
+      const time = getSuncalcTime(today.plus({ days: offset }), kind, latitude, longitude, timezone);
+      return time ? [{ kind, time }] : [];
+    }))
+    .sort((a, b) => a.time.toMillis() - b.time.toMillis());
+};
 
-  const start = starts.filter(dt => dt <= now).at(-1)
-    ?? getSuncalcTime(now.minus({ days: 1 }), startKind, latitude, longitude, timezone)
-    ?? now.startOf('day');
+/** Horário do Open-Meteo para o mesmo evento no mesmo dia (só para exibir). */
+const findDailyTime = (daily: SunDaily | undefined, kind: SunEventKind, time: DateTime, timezone: string): DateTime | undefined =>
+  daily?.[kind]
+    ?.map(t => DateTime.fromISO(t, { zone: timezone }))
+    .find(dt => dt.isValid && dt.hasSame(time.setZone(timezone), 'day'));
 
-  const end = ends.find(dt => dt > start)
-    ?? getSuncalcTime(start.plus({ days: 1 }), endKind, latitude, longitude, timezone)
-    ?? start.plus({ days: 1 });
+/**
+ * Rótulo do evento: horário do Open-Meteo do mesmo dia do evento do suncalc.
+ * Sem Open-Meteo (ainda carregando) ou sem evento no dia, fica "--:--".
+ */
+const toChartEvent = (kind: SunEventKind, suncalcTime: DateTime | undefined, { daily, timezone }: SunBaseProps): ChartEvent => ({
+  kind,
+  time: suncalcTime && findDailyTime(daily, kind, suncalcTime, timezone),
+});
+
+interface BuildSunWindowProps extends SunBaseProps {
+  now: DateTime;
+}
+
+/**
+ * Período atual, todo pelo suncalc: último evento até `now` -> próximo evento do
+ * tipo oposto. Nascer -> pôr (dia) ou pôr -> nascer (noite). Assim `now` sempre
+ * fica dentro da janela, mesmo sem clima carregado ou com `is_day` defasado.
+ */
+export default function buildSunWindow({ now, ...base }: BuildSunWindowProps): ChartWindow {
+  const times = collectSunTimes(now, base);
+
+  const last = times.filter(s => s.time <= now).at(-1);
+
+  // Regiões polares: sem evento recente, decide pela elevação do sol.
+  const startKind: SunEventKind = last?.kind ?? (getSunElevation(now, base.latitude, base.longitude) > 0 ? 'sunrise' : 'sunset');
+  const endKind: SunEventKind = startKind === 'sunrise' ? 'sunset' : 'sunrise';
+
+  const end = times.find(s => s.kind === endKind && s.time > now)?.time;
+
+  const from = last?.time ?? now.setZone(base.timezone).startOf('day');
+  const to = end ?? from.plus({ days: 1 });
 
   return {
-    start: { kind: startKind, time: start },
-    end: { kind: endKind, time: end },
-    from: start,
-    to: end,
+    start: toChartEvent(startKind, last?.time, base),
+    end: toChartEvent(endKind, end, base),
+    from,
+    to,
   };
 }
 
-interface BuildFullDayWindowProps {
-  daily: SunDaily;
+interface BuildFullDayWindowProps extends SunBaseProps {
   date: DateTime;
-  timezone: string;
-  latitude: number;
-  longitude: number;
 }
 
-export function buildFullDayWindow({ daily, date, timezone, latitude, longitude }: BuildFullDayWindowProps): ChartWindow {
-  const from = date.setZone(timezone).startOf('day');
+/** 00:00 -> 24:00 de `date`, com nascer/pôr do suncalc nas laterais (horário exibido do Open-Meteo). */
+export function buildFullDayWindow({ date, ...base }: BuildFullDayWindowProps): ChartWindow {
+  const from = date.setZone(base.timezone).startOf('day');
   const to = from.plus({ days: 1 });
 
-  const findEvent = (kind: SunEventKind, fallback: DateTime): DateTime =>
-    parseTimes(daily[kind], timezone).find(dt => dt.hasSame(from, 'day'))
-    ?? getSuncalcTime(from, kind, latitude, longitude, timezone)
-    ?? fallback;
+  const event = (kind: SunEventKind) =>
+    toChartEvent(kind, getSuncalcTime(from, kind, base.latitude, base.longitude, base.timezone), base);
 
   return {
-    start: { kind: 'sunrise', time: findEvent('sunrise', from) },
-    end: { kind: 'sunset', time: findEvent('sunset', to) },
+    start: event('sunrise'),
+    end: event('sunset'),
     from,
     to,
   };
