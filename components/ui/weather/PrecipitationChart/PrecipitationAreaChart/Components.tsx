@@ -1,51 +1,28 @@
 import { IPrecipChartData } from "@/types/chart.types";
-import { CSSProperties } from "react";
 import { RiArrowDropRightFill } from "react-icons/ri";
 import WeatherIcon from "../../WeatherIcon";
+import { clampIconX } from "@/utils/charts/edgeLabels";
 
-interface CustomTickProps {
-  x: string | number;
-  y: string | number;
-  accent: string
-  label: string
-  hasPrecip: boolean;
-  isFirstItem: boolean;
-}
+const ARROW_SIZE = 24;
 
-export const CustomTick = ({ x, y, accent, hasPrecip, isFirstItem, label }: CustomTickProps) => {
-
-  const style = {
-    textAnchor: 'middle',
-    fill: isFirstItem ? 'var(--wc-accent)' : '#94a3b8',
-    fontWeight: isFirstItem && hasPrecip ? 700 : hasPrecip || isFirstItem ? 500 : 400,
-    fontSize: isFirstItem ? 13 : hasPrecip ? 12 : 11,
-    opacity: isFirstItem && hasPrecip ? 1 : hasPrecip ? 0.6 : isFirstItem ? 0.7 : 0.4,
-  } as const;
+/** `chartWidth`: largura do gráfico (0 = ainda não medida), para não sair da tela nas pontas. */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const Arrow = ({ cx, cy, accent, chartWidth = 0 }: { accent: string, chartWidth?: number } & any) => {
+  const x = clampIconX(cx, ARROW_SIZE, chartWidth) ?? 0;
 
   return (
-    <g
-      style={{ '--wc-accent': accent } as CSSProperties}
-      transform={`translate(${x},${y})`}>
-      <text x={0} y={0} dy={12} {...style}>
-        {label}
-      </text>
-    </g>
+    <RiArrowDropRightFill
+      x={x - ARROW_SIZE / 2}
+      y={cy - ARROW_SIZE / 2}
+      size={ARROW_SIZE}
+      color={accent}
+    />
   );
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const Arrow = ({ cx, cy, accent }: { accent: string } & any) => (
-  <RiArrowDropRightFill
-    x={cx - 12}
-    y={cy - 12}
-    size={24}
-    color={accent}
-  />
-);
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const CustomAreaDot = (props: any) => {
-  const { cx, cy, payload: p } = props;
+  const { cx, cy, payload: p, chartWidth = 0 } = props;
   const payload = p as IPrecipChartData;
 
   const no = {
@@ -57,10 +34,11 @@ export const CustomAreaDot = (props: any) => {
   if (no.rain && no.showers && no.snowfall) return null;
 
   const size = 30;
+  const x = clampIconX(cx, size, chartWidth) ?? 0;
 
   return (
     <foreignObject
-      x={cx - (size / 2)}
+      x={x - (size / 2)}
       y={(cy - (size + 2)) + 2}
       width={size}
       height={size}

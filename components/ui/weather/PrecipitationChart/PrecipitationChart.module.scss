@@ -3,11 +3,14 @@
   flex-direction: column;
   justify-content: space-between;
   gap: var(--wc-space-xs);
-  padding: 5px var(--wc-space-lg) 0;
+  padding: 5px 0 0;
   border-radius: var(--wc-radius-sm);
   cursor: default;
   user-select: none;
-  width: 100%;
+  // Ocupa a largura toda e anula o padding lateral da seção do clima atual: encosta nas bordas da tela.
+  align-self: stretch;
+  min-width: 0;
+  margin-inline: calc(var(--wc-space-lg) * -1);
 
   font-family: var(--wc-font-display);
   font-size: 12px;

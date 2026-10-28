@@ -11,9 +11,20 @@
   gap: var(--wc-space-lg);
 }
 
-/* A seção é centralizada; a faixa por hora precisa da largura toda (rolagem horizontal). */
+/*
+ * A seção é centralizada e tem padding lateral; a faixa por hora ocupa a largura
+ * toda e anula o padding, para o gráfico encostar nas bordas da tela.
+ */
 .hourly {
-  width: 100%;
+  align-self: stretch;
   min-width: 0;
+  margin-inline: calc(var(--wc-space-lg) * -1);
   text-align: initial;
+  /* O foco aumenta a fonte da seção (em); a previsão por hora mantém o tamanho de fora do foco. */
+  font-size: 1rem;
+}
+
+/* Cards da previsão por hora no foco: no máximo 170px de altura. */
+.hourly li {
+  max-height: 170px;
 }

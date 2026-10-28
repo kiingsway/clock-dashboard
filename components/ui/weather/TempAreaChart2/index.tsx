@@ -1,7 +1,7 @@
 import { useNow } from "@/contexts/NowContext";
 import useAppSettings from "@/contexts/AppSettingsContext";
 import { IWeather } from "@/types/weather.types";
-import { JSX, useMemo } from "react";
+import { JSX, useMemo, useState } from "react";
 import { ResponsiveContainer, AreaChart, XAxis, YAxis, Area, Line, LabelList, ReferenceDot, ReferenceLine, TooltipPayload, Tooltip } from "recharts";
 import { DateTime } from "luxon";
 import { t } from "i18next";
@@ -9,7 +9,8 @@ import { useTranslation } from "react-i18next";
 import buildChartData from "./buildChartData";
 import WeatherIconObject from "./WeatherIconObject";
 import TempLinearGradient from "./TempLinearGradient";
-import CustomTick from "./CustomTick";
+import CustomTick, { getTickFont } from "./CustomTick";
+import { EDGE_INSET, clampIconX, clampLabelX, getNowLabelEnd, tickFits } from "@/utils/charts/edgeLabels";
 import { ISunEventChart, IWeatherDataChart } from "./types";
 import ChartTooltip from "./ChartTooltip";
 import { getPrecipitationIcon } from "../PrecipitationChart/PrecipitationTooltip";
@@ -29,7 +30,8 @@ interface Props {
  * num deserto (25°C de variação). Os valores reproduzem o visual antigo num dia com 5°C de variação.
  */
 const CHART_HEIGHT = 176; // mesma altura do .chart no CSS
-const CHART_MARGIN = { top: 10, right: 10, left: 10, bottom: 0 };
+// Sem margem lateral: a curva encosta nas bordas da tela.
+const CHART_MARGIN = { top: 10, right: 0, left: 0, bottom: 0 };
 const X_AXIS_HEIGHT = 30; // altura padrão do XAxis do recharts
 const PLOT_HEIGHT = CHART_HEIGHT - CHART_MARGIN.top - CHART_MARGIN.bottom - X_AXIS_HEIGHT;
 const SPACE_PX = {
@@ -45,6 +47,11 @@ const SPACE_PX = {
  * - nascer/pôr do sol: numa faixa na base do gráfico, como uma linha do tempo
  */
 const SUN_ICON_SIZE = 20;
+const WEATHER_ICON_SIZE = 28; // padrão do WeatherIconObject
+
+// Mesmos valores do CSS; usados para medir os rótulos e mantê-los dentro da tela.
+const TEMP_LABEL_FONT = { fontSize: 15, fontFamily: 'var(--wc-font-display)' }; // .label
+const FEELS_LIKE_LABEL_FONT = { fontSize: 12 }; // .feelsLikeLabel
 
 const DEGREE = '°';
 
@@ -62,6 +69,8 @@ export default function TempAreaChart2({ weather }: Props) {
   const { i18n: { language } } = useTranslation();
   const { get: { is12hour, precipHoursRange: hoursAhead } } = useAppSettings();
   const { now } = useNow();
+  // Largura do gráfico, para manter rótulos e ícones das pontas dentro da tela.
+  const [chartWidth, setChartWidth] = useState(0);
 
   const data = useMemo(() =>
     buildChartData(weather, now, hoursAhead),
@@ -84,10 +93,12 @@ export default function TempAreaChart2({ weather }: Props) {
 
   const showLabelMod = Math.floor(chartHours / 19) + 1;
 
-  const paddingLeft = (() => {
-    const len = Math.max(t('now').length, 3); // Força palavras com menos de 3 caracteres a contarem como 3
-    return Math.round((len * 20 + 10) / 7);
-  })();
+  const firstData = data.weather[0];
+  const hasPrecip = Boolean(firstData && firstData.rain > 0);
+
+  // "Agora" fica alinhado à esquerda a partir da borda; horários que caem em cima dele são escondidos.
+  const nowLabel = t('now');
+  const nowLabelEnd = getNowLabelEnd(nowLabel, getTickFont(true, hasPrecip), CHART_MARGIN.left);
 
   // Graus por pixel na área do gráfico, para converter os espaços em px para a escala do eixo
   const tempRange = Math.max(data.highestTemp - data.lowestTemp, 1);
@@ -97,11 +108,9 @@ export default function TempAreaChart2({ weather }: Props) {
     data.highestTemp + SPACE_PX.ABOVE * degPerPx,
   ];
 
-  const firstData = data.weather[0];
-
   return (
     <div className={styles.chart}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" onResize={width => setChartWidth(width)}>
 
         <AreaChart data={data.weather} margin={CHART_MARGIN}>
 
@@ -116,7 +125,6 @@ export default function TempAreaChart2({ weather }: Props) {
             dataKey="x"
             type='number'
             domain={['dataMin', 'dataMax']}
-            padding={{ left: paddingLeft, right: 0 }}
             interval={0}
             axisLine={false}
             tickLine={false}
@@ -131,11 +139,25 @@ export default function TempAreaChart2({ weather }: Props) {
 
               const isFirstItem = data.weather[0].time === item.time;
 
-              const date = DateTime.fromISO(item.time);
+              if (isFirstItem) {
+                return (
+                  <CustomTick
+                    x={Number(x) + EDGE_INSET}
+                    y={y}
+                    label={nowLabel}
+                    accent={accent}
+                    isFirstItem
+                    hasPrecip={hasPrecip}
+                    textAnchor="start"
+                  />
+                );
+              }
 
-              const label = isFirstItem ?
-                t('now') :
-                formatClock({ date, language, hour12: is12hour, short: true, localizedPeriod: true });
+              const date = DateTime.fromISO(item.time);
+              const label = formatClock({ date, language, hour12: is12hour, short: true, localizedPeriod: true });
+
+              // Esconde o horário se ficar em cima do "Agora" ou passar da borda direita.
+              if (!tickFits(Number(x), label, getTickFont(false, hasPrecip), nowLabelEnd, chartWidth)) return null;
 
               return (
                 <CustomTick
@@ -143,8 +165,8 @@ export default function TempAreaChart2({ weather }: Props) {
                   y={y}
                   label={label}
                   accent={accent}
-                  isFirstItem={isFirstItem}
-                  hasPrecip={Boolean(firstData && firstData.rain > 0)}
+                  isFirstItem={false}
+                  hasPrecip={hasPrecip}
                 />
               );
             }}
@@ -182,7 +204,7 @@ export default function TempAreaChart2({ weather }: Props) {
 
                 return (
                   <text
-                    x={Number(x)}
+                    x={clampLabelX(Number(x), `${value}${DEGREE}`, TEMP_LABEL_FONT, chartWidth)}
                     y={Number(y) - 5}
                     textAnchor="middle"
                     className={styles.label}
@@ -231,7 +253,7 @@ export default function TempAreaChart2({ weather }: Props) {
 
                 return (
                   <text
-                    x={Number(x)}
+                    x={clampLabelX(Number(x), `${feelsLike}${DEGREE}`, FEELS_LIKE_LABEL_FONT, chartWidth)}
                     y={Number(y) - 8}
                     textAnchor="middle"
                     className={styles.feelsLikeLabel}
@@ -248,6 +270,7 @@ export default function TempAreaChart2({ weather }: Props) {
             sunEvent={data.sunEvent}
             weatherIconOffset={SPACE_PX.WEATHER_ICON * degPerPx}
             sunIconY={yDomain[0] + (SUN_ICON_SIZE / 2) * degPerPx}
+            chartWidth={chartWidth}
           />
 
         </AreaChart>
@@ -263,9 +286,11 @@ interface WeatherReferenceIconProps {
   weatherIconOffset: number;
   /** Posição (na escala de temperatura) da faixa de nascer/pôr do sol, na base do gráfico */
   sunIconY: number;
+  /** Largura do gráfico (0 = ainda não medida), para os ícones das pontas não saírem da tela */
+  chartWidth: number;
 }
 
-const WeatherReferenceIcon = ({ weather, sunEvent, weatherIconOffset, sunIconY }: WeatherReferenceIconProps): JSX.Element => {
+const WeatherReferenceIcon = ({ weather, sunEvent, weatherIconOffset, sunIconY, chartWidth }: WeatherReferenceIconProps): JSX.Element => {
   const lastX = weather[weather.length - 1]?.x ?? 0;
 
   return (
@@ -285,8 +310,9 @@ const WeatherReferenceIcon = ({ weather, sunEvent, weatherIconOffset, sunIconY }
               <WeatherIconObject
                 hideGlow
                 key={key}
-                cx={cx}
+                cx={clampIconX(cx, WEATHER_ICON_SIZE, chartWidth)}
                 cy={cy}
+                size={WEATHER_ICON_SIZE}
                 icon={{ weatherCode: code, isDay }}
               />
             )}
@@ -307,7 +333,7 @@ const WeatherReferenceIcon = ({ weather, sunEvent, weatherIconOffset, sunIconY }
             shape={({ key, cx, cy }) => (
               <WeatherIconObject
                 key={key}
-                cx={cx}
+                cx={clampIconX(cx, SUN_ICON_SIZE, chartWidth)}
                 cy={cy}
                 size={SUN_ICON_SIZE}
                 icon={{ category: item.event }} />

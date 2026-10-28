@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { XAxis, Tooltip, Area, AreaChart, ResponsiveContainer, ReferenceDot, YAxis } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import { precipitationAreas, TPrecipAreas } from '..';
@@ -12,7 +12,17 @@ import getWeatherCodeInfo from '@/utils/weather/getWeatherCodeInfo';
 import useAppSettings from '@/contexts/AppSettingsContext';
 import { DateTime } from 'luxon';
 import { formatClock } from '@/utils/formatters/formatClock';
-import { Arrow, CustomTick, CustomAreaDot } from './Components';
+import { Arrow, CustomAreaDot } from './Components';
+import CustomTick, { getTickFont } from '../../TempAreaChart2/CustomTick';
+import { EDGE_INSET, getNowLabelEnd, tickFits } from '@/utils/charts/edgeLabels';
+
+// Sem margem lateral: a área encosta nas bordas da tela.
+const CHART_MARGIN = { top: 5, right: 0, left: 0, bottom: 5 };
+// Os textos herdam a fonte do .main (PrecipitationChart.module.scss); usada para medir os rótulos.
+const TICK_FONT_FAMILY = 'var(--wc-font-display)';
+
+const tickFont = (isFirstItem: boolean, hasPrecip: boolean) =>
+  ({ ...getTickFont(isFirstItem, hasPrecip), fontFamily: TICK_FONT_FAMILY });
 
 interface Props {
   data: IPrecipChartData[];
@@ -23,6 +33,8 @@ interface Props {
 export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Props) {
   const { t, i18n: { language } } = useTranslation();
   const { get: { is12hour } } = useAppSettings();
+  // Largura do gráfico, para manter rótulos e ícones das pontas dentro da tela.
+  const [chartWidth, setChartWidth] = useState(0);
 
   const rainColor = getCategoryAccent('rain');
   const showersColor = getCategoryAccent('showers');
@@ -89,14 +101,13 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
       .map((item) => item.key);
   }, [data, hoursAhead]);
 
-  const paddingLeft = (() => {
-    const len = Math.max(t('now').length, 3); // Força palavras com menos de 3 caracteres a contarem como 3
-    return Math.round((len * 20 + 10) / 7);
-  })();
-
   const firstData = data?.[0] as IPrecipChartData | undefined;
   const firstTop = precipitationAreas.reduce((sum, area) => sum + (firstData?.[area] || 0), 0);
+  const hasPrecip = Boolean(firstData && firstData.rain > 0);
 
+  // "Agora" fica alinhado à esquerda a partir da borda; horários que caem em cima dele são escondidos.
+  const nowLabel = t('now');
+  const nowLabelEnd = getNowLabelEnd(nowLabel, tickFont(true, hasPrecip), CHART_MARGIN.left);
 
   const firstAccent = firstData ? getWeatherCodeInfo(firstData.weatherCode, firstData.isDay, t).accent : DEFAULT_COLOR.WEATHER;
 
@@ -111,8 +122,8 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
   );
 
   return (
-    <ResponsiveContainer width="100%" height={height}>
-      <AreaChart data={data} dataKey="key">
+    <ResponsiveContainer width="100%" height={height} onResize={width => setChartWidth(width)}>
+      <AreaChart data={data} dataKey="key" margin={CHART_MARGIN}>
         <defs>
           {gradients.map(g => (
             <linearGradient key={g.id} id={g.id} x1="0" y1="0" x2="0" y2="1">
@@ -126,7 +137,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
           <ReferenceDot
             x={firstData.hour}
             y={firstTop}
-            shape={<Arrow accent={firstAccent} />}
+            shape={<Arrow accent={firstAccent} chartWidth={chartWidth} />}
           />
         )}
 
@@ -139,7 +150,6 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
           dataKey="key"
           type='number'
           domain={['dataMin', 'dataMax']}
-          padding={{ left: paddingLeft, right: 0 }}
           interval={0}
           axisLine={false}
           tickLine={false}
@@ -154,11 +164,25 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
 
             const isFirstItem = data[0].key === item.key;
 
-            const date = DateTime.fromMillis(Number(item.key));
+            if (isFirstItem) {
+              return (
+                <CustomTick
+                  x={Number(x) + EDGE_INSET}
+                  y={y}
+                  label={nowLabel}
+                  accent={accent}
+                  isFirstItem
+                  hasPrecip={hasPrecip}
+                  textAnchor="start"
+                />
+              );
+            }
 
-            const label = isFirstItem ?
-              t('now') :
-              formatClock({ date, language, hour12: is12hour, short: true, localizedPeriod: true });
+            const date = DateTime.fromMillis(Number(item.key));
+            const label = formatClock({ date, language, hour12: is12hour, short: true, localizedPeriod: true });
+
+            // Esconde o horário se ficar em cima do "Agora" ou passar da borda direita.
+            if (!tickFits(Number(x), label, tickFont(false, hasPrecip), nowLabelEnd, chartWidth)) return null;
 
             return (
               <CustomTick
@@ -166,8 +190,8 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
                 y={y}
                 label={label}
                 accent={accent}
-                isFirstItem={data[0].key === item.key}
-                hasPrecip={Boolean(firstData && firstData.rain > 0)}
+                isFirstItem={false}
+                hasPrecip={hasPrecip}
               />
             );
           }}
@@ -184,7 +208,7 @@ export default function PrecipStackedAreaChart({ data, hoursAhead, height }: Pro
             fill={`url(#${area})`}
             stroke="none"
             strokeWidth={3}
-            dot={area === 'showers' ? <CustomAreaDot /> : undefined}
+            dot={area === 'showers' ? <CustomAreaDot chartWidth={chartWidth} /> : undefined}
           />
         ))}
       </AreaChart>
