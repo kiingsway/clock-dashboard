@@ -29,6 +29,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   showFeelsLikeWhenEqual: false, // Show Feels Like on Current Weather if equals temperature.
   showMinMaxPeakBadge: true, // Show "MIN" or "MAX" when the current temperature equals min ou max.
   focusCurrentWeatherOnLaunch: false, // Whether current weather is focused or not.
+  hourlyForecastInFocus: false, // Show HourlyForecast inside the focus group (below precipitation chart).
   is12hour: false,
   aqiScale: AQI_SCALES[0],
   useBottomSheet: true,

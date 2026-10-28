@@ -16,6 +16,7 @@ export interface AppSettings {
   showFeelsLikeWhenEqual: boolean; // Exibe a sensação térmica mesmo quando o seu valor for igual à temperatura atual. Se desativado, oculta o campo nessa condição. (showFeelsLikeIfEqualsTemp)
   showMinMaxPeakBadge: boolean; // Exibe os rótulos "MIN" ou "MAX" caso a temperatura atual atinja exatamente a mínima ou a máxima prevista para o dia. (showMinMaxOnTempRange)
   focusCurrentWeatherOnLaunch: boolean; // Define se o aplicativo deve abrir com a seção do clima atual em destaque por padrão. (startFocused)
+  hourlyForecastInFocus: boolean; // Exibe a previsão por hora dentro da seção do clima atual (foco), abaixo do gráfico de precipitação. Se desativado, fica abaixo da seção.
   is12hour: boolean; // Define se é 12 (true) ou 24 horas (false).
   aqiScale: AQIScale; // Define se o air quality index é padrão europeu ou americano.
   useBottomSheet: boolean; // 'true' define se janelas serão exibidas em Bottom Sheet (pode causar lag), 'false' usa Modal.
@@ -30,6 +31,7 @@ export interface SaveAppSettings {
   showFeelsLikeWhenEqual: (value: boolean) => void;
   showMinMaxPeakBadge: (value: boolean) => void;
   focusCurrentWeatherOnLaunch: (value: boolean) => void;
+  hourlyForecastInFocus: (value: boolean) => void;
   is12hour: (value: boolean) => void;
   aqiScale: (value: AQIScale) => void;
   useBottomSheet: (value: boolean) => void;

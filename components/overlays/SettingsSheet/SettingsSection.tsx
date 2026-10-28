@@ -80,7 +80,7 @@ export function CreditLink({ href, children }: PropsWithChildren<{ href: string 
 }
 
 export interface BuildSettingRowProps {
-  key: "is12hour" | "showFeelsLikeWhenEqual" | "showMinMaxPeakBadge" | "focusCurrentWeatherOnLaunch" | "useBottomSheet";
+  key: "is12hour" | "showFeelsLikeWhenEqual" | "showMinMaxPeakBadge" | "focusCurrentWeatherOnLaunch" | "hourlyForecastInFocus" | "useBottomSheet";
   get: AppSettings;
   set: SaveAppSettings;
   icon: JSX.Element | ((v: boolean) => JSX.Element) | ((v: boolean) => JSX.Element),

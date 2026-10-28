@@ -47,6 +47,7 @@ export function parseSettings(raw: string): AppSettings {
     'showFeelsLikeWhenEqual',
     'showMinMaxPeakBadge',
     'focusCurrentWeatherOnLaunch',
+    'hourlyForecastInFocus',
     'is12hour',
     'useBottomSheet',
   ] as const;
@@ -55,9 +56,10 @@ export function parseSettings(raw: string): AppSettings {
     showFeelsLikeWhenEqual,
     showMinMaxPeakBadge,
     focusCurrentWeatherOnLaunch,
+    hourlyForecastInFocus,
     is12hour,
     useBottomSheet,
-  ] = booleanKeys.map(key => getValidBoolean(parsed[key], DEFAULT_SETTINGS[key]));
+  ] =booleanKeys.map(key => getValidBoolean(parsed[key], DEFAULT_SETTINGS[key]));
 
   const aqiScales: AQIScale[] = ['european', 'us'];
   const aqiScale = aqiScales.includes(parsed.aqiScale as AQIScale)
@@ -68,7 +70,7 @@ export function parseSettings(raw: string): AppSettings {
     ? (parsed.hourlyForecastView as HourlyForecastView)
     : DEFAULT_SETTINGS.hourlyForecastView;
 
-  return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, sunAlertThresholdMinutes, is12hour, aqiScale, useBottomSheet, hourlyForecastView };
+  return { location, alertRadiusKm, precipHoursRange, showFeelsLikeWhenEqual, showMinMaxPeakBadge, focusCurrentWeatherOnLaunch, hourlyForecastInFocus, sunAlertThresholdMinutes, is12hour, aqiScale, useBottomSheet, hourlyForecastView };
 }
 
 /**

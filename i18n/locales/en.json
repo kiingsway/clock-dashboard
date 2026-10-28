@@ -120,6 +120,10 @@
         "title": "Focus Current Weather on Launch",
         "desc": "Sets whether the app should open with the current weather section selected and highlighted by default."
       },
+      "hourlyForecastInFocus": {
+        "title": "Hourly Forecast in Focus",
+        "desc": "Shows the hourly forecast inside the current weather section (highlighted), below the precipitation chart. When off, it stays below the section."
+      },
       "is12hour": {
         "title": "Time format",
         "desc": "Use AM and PM instead of the 24-hour format."

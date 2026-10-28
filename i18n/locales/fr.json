@@ -120,6 +120,10 @@
         "title": "Mettre la météo actuelle en évidence au démarrage",
         "desc": "Définit si l'application doit s'ouvrir avec la section de la météo actuelle sélectionnée et mise en évidence par défaut."
       },
+      "hourlyForecastInFocus": {
+        "title": "Prévisions horaires dans le focus",
+        "desc": "Affiche les prévisions horaires dans la section de la météo actuelle (mise en évidence), sous le graphique des précipitations. Désactivé, elles restent sous la section."
+      },
       "is12hour": {
         "title": "Format de l'heure",
         "desc": "Utiliser AM et PM au lieu du format 24 heures."

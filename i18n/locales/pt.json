@@ -120,6 +120,10 @@
         "title": "Focar Clima Atual ao Iniciar",
         "desc": "Define se o aplicativo deve abrir com a seção do clima atual selecionada e em destaque por padrão."
       },
+      "hourlyForecastInFocus": {
+        "title": "Previsão por Hora no Foco",
+        "desc": "Exibe a previsão por hora dentro da seção do clima atual (em destaque), abaixo do gráfico de precipitação. Se desativado, ela fica abaixo da seção."
+      },
       "is12hour": {
         "title": "Formato de hora",
         "desc": "Use AM e PM em vez do formato de 24 horas."

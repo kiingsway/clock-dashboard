@@ -10,3 +10,10 @@
   user-select: none;
   gap: var(--wc-space-lg);
 }
+
+/* A seção é centralizada; a faixa por hora precisa da largura toda (rolagem horizontal). */
+.hourly {
+  width: 100%;
+  min-width: 0;
+  text-align: initial;
+}

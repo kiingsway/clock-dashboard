@@ -120,6 +120,11 @@ export function AppSettingsProvider({ children }: Props) {
     setSettings((prev) => ({ ...prev, focusCurrentWeatherOnLaunch }));
   }, []);
 
+  const setHourlyForecastInFocus = useCallback((value: boolean) => {
+    const hourlyForecastInFocus = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.hourlyForecastInFocus;
+    setSettings((prev) => ({ ...prev, hourlyForecastInFocus }));
+  }, []);
+
   const setIs12Hour = useCallback((value: boolean) => {
     const is12hour = typeof value === 'boolean' ? value : DEFAULT_SETTINGS.is12hour;
     setSettings((prev) => ({ ...prev, is12hour }));
@@ -155,13 +160,14 @@ export function AppSettingsProvider({ children }: Props) {
         showFeelsLikeWhenEqual: setShowFeelsLikeWhenEqual,
         showMinMaxPeakBadge: setShowMinMaxPeakBadge,
         focusCurrentWeatherOnLaunch: setFocusCurrentWeatherOnLaunch,
+        hourlyForecastInFocus: setHourlyForecastInFocus,
         is12hour: setIs12Hour,
         aqiScale: setAqiScale,
         useBottomSheet: setUseBottomSheet,
         hourlyForecastView: setHourlyForecastView,
       },
     }),
-    [isLoaded, resetSettings, settings, setLocation, setAlertRadiusKm, setPrecipHoursRange, setSunAlertThresholdMinutes, setShowFeelsLikeWhenEqual, setShowMinMaxPeakBadge, setFocusCurrentWeatherOnLaunch, setIs12Hour, setAqiScale, setUseBottomSheet, setHourlyForecastView]);
+    [isLoaded, resetSettings, settings, setLocation, setAlertRadiusKm, setPrecipHoursRange, setSunAlertThresholdMinutes, setShowFeelsLikeWhenEqual, setShowMinMaxPeakBadge, setFocusCurrentWeatherOnLaunch, setHourlyForecastInFocus, setIs12Hour, setAqiScale, setUseBottomSheet, setHourlyForecastView]);
 
   return (
     <AppSettingsContext.Provider value={value}>

@@ -12,6 +12,7 @@ import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import Alert from "@/components/ui/Alert";
 import EventChartProgress from "@/components/ui/weather/EventChartProgress";
 import useAppSettings from "@/contexts/AppSettingsContext";
+import HourlyForecast from "@/components/layout/weather/HourlyForecast";
 
 interface Props {
   weather: IWeather | undefined;
@@ -19,6 +20,8 @@ interface Props {
   error: unknown;
   alerts: UseWeatherAlerts['data'];
   isFocused: boolean
+  /** Exibe a previsão por hora aqui (dentro do foco), abaixo do gráfico de precipitação. */
+  showHourlyForecast?: boolean
 }
 
 /**
@@ -28,7 +31,7 @@ interface Props {
  * gotten. Values and units are rendered exactly as given — no conversion
  * happens in this component.
  */
-export default function CurrentWeather({ weather, loading, alerts, isFocused, error }: Props): JSX.Element {
+export default function CurrentWeather({ weather, loading, alerts, isFocused, error, showHourlyForecast = false }: Props): JSX.Element {
   const { now } = useNow();
   const { get: { location } } = useAppSettings();
 
@@ -69,6 +72,14 @@ export default function CurrentWeather({ weather, loading, alerts, isFocused, er
         />
 
         {weather && <PrecipitationChart weather={weather} />}
+
+        {weather && showHourlyForecast && (
+          <div className={styles.hourly}>
+            <ErrorBoundary>
+              <HourlyForecast weather={weather} />
+            </ErrorBoundary>
+          </div>
+        )}
 
         <WeatherAlerts alerts={alerts} />
 

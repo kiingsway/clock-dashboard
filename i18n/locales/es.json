@@ -120,6 +120,10 @@
         "title": "Enfocar el clima actual al iniciar",
         "desc": "Define si la aplicación debe abrirse con la sección del clima actual seleccionada y destacada de forma predeterminada."
       },
+      "hourlyForecastInFocus": {
+        "title": "Pronóstico por hora en el foco",
+        "desc": "Muestra el pronóstico por hora dentro de la sección del clima actual (destacada), debajo del gráfico de precipitación. Si está desactivado, queda debajo de la sección."
+      },
       "is12hour": {
         "title": "Formato de hora",
         "desc": "Usar AM y PM en lugar del formato de 24 horas."

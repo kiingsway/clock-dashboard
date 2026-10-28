@@ -14,7 +14,7 @@ import { GrMap } from "react-icons/gr";
 import { FiAlertTriangle, FiCloud, FiCloudRain, FiImage, FiMapPin, FiSunset, FiWind } from "react-icons/fi";
 import { TbClock, TbTemperature, TbInfoCircle, TbChartArea } from "react-icons/tb";
 import { PiMapPinAreaBold } from "react-icons/pi";
-import { TbClock12, TbClock24 } from "react-icons/tb";
+import { TbClock12, TbClock24, TbClockHour4 } from "react-icons/tb";
 import { RxSlider } from "react-icons/rx";
 import { VscScreenFull, VscScreenNormal } from "react-icons/vsc";
 import { AQIScale } from "@/types/aqi.types";
@@ -95,6 +95,7 @@ export function SettingsSheetContent({
     { key: 'showFeelsLikeWhenEqual', icon: <TbTemperature /> },
     { key: 'showMinMaxPeakBadge', icon: <RxSlider /> },
     { key: 'focusCurrentWeatherOnLaunch', icon: (v: boolean) => v ? <VscScreenFull /> : <VscScreenNormal /> },
+    { key: 'hourlyForecastInFocus', icon: <TbClockHour4 /> },
     { key: 'useBottomSheet', icon: <FaRegWindowRestore /> }
   ] as const;
 

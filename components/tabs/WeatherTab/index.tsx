@@ -24,7 +24,7 @@ export default function WeatherTab() {
   const { t } = useTranslation();
   const { weather, isLoading, error: weatherError } = useWeather();
   const { aqiData, error: aqiError } = useAQI();
-  const { get: { focusCurrentWeatherOnLaunch } } = useAppSettings();
+  const { get: { focusCurrentWeatherOnLaunch, hourlyForecastInFocus } } = useAppSettings();
   const { data: alerts, error: alertsError } = useWeatherAlerts();
   const { focus, toggleFocus } = useFocusMode({ initialValue: focusCurrentWeatherOnLaunch, onFocus: 12000, offFocus: 0 });
   const [isSettingsOpen, { setTrue: openSettings, setFalse: closeSettings }] = useBoolean();
@@ -67,15 +67,18 @@ export default function WeatherTab() {
               loading={isLoading}
               error={error}
               isFocused={focus}
+              showHourlyForecast={hourlyForecastInFocus}
             />
           </ErrorBoundary>
         </div>
 
         {weather && (
           <div className={styles.weatherInfo}>
-            <ErrorBoundary>
-              <HourlyForecast weather={weather} />
-            </ErrorBoundary>
+            {!hourlyForecastInFocus && (
+              <ErrorBoundary>
+                <HourlyForecast weather={weather} />
+              </ErrorBoundary>
+            )}
 
             <ErrorBoundary>
               <DailyForecast weather={weather} />
