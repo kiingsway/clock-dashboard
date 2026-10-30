@@ -2,7 +2,7 @@ import { IWeather } from "@/types/weather.types";
 import styles from "./HourlyForecast.module.css";
 import { useTranslation } from "react-i18next";
 import HourlyList from "@/components/ui/weather/HourlyList";
-import TempAreaChart2 from "@/components/ui/weather/TempAreaChart2";
+import HourlyTemperatureChart from "@/components/ui/weather/HourlyTemperatureChart";
 import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import { useNow } from "@/contexts/NowContext";
 import useAppSettings from "@/contexts/AppSettingsContext";
@@ -32,7 +32,7 @@ export default function HourlyForecast({ weather }: HourlyForecastProps) {
     <section className={styles.section} aria-label={t('nextHours')} onDoubleClick={toggleView}>
       {hourlyForecastView === 'chart' ?
         <ErrorBoundary>
-          <TempAreaChart2 weather={weather} />
+          <HourlyTemperatureChart weather={weather} />
         </ErrorBoundary>
         :
         <HourlyList date={now} weather={weather} hoursAhead={72} kind="now" />

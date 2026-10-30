@@ -1,0 +1,70 @@
+.chart {
+  position: relative;
+  width: 100%;
+  height: 176px;
+}
+
+.svg {
+  display: block;
+  overflow: visible;
+}
+
+.curve,
+.feelsLike {
+  fill: none;
+  stroke-linecap: round;
+}
+
+.curve {
+  stroke-width: 2;
+}
+
+.feelsLike {
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  opacity: 0.55;
+}
+
+.now {
+  stroke: #6A6A6A;
+  stroke-dasharray: 1 6;
+  stroke-linecap: round;
+}
+
+.axis {
+  stroke: var(--wc-hairline);
+}
+
+.label {
+  font-family: var(--wc-font-display);
+  font-size: 15px;
+  fill: var(--wc-text-secondary);
+}
+
+.feelsLikeLabel {
+  font-size: 12px;
+  fill: #6A6A6A;
+}
+
+/* Hora sob o mouse: linha e ponto na curva, com o tooltip ao lado */
+.hover {
+  pointer-events: none;
+}
+
+.hover line {
+  stroke: var(--wc-text-muted);
+  stroke-opacity: 0.5;
+}
+
+.hover circle {
+  fill: var(--wc-text);
+  stroke: var(--wc-ink, #000);
+  stroke-width: 2;
+}
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  z-index: 99;
+  pointer-events: none;
+}

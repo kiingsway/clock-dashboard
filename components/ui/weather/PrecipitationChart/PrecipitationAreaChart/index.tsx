@@ -13,7 +13,7 @@ import useAppSettings from '@/contexts/AppSettingsContext';
 import { DateTime } from 'luxon';
 import { formatClock } from '@/utils/formatters/formatClock';
 import { Arrow, CustomAreaDot } from './Components';
-import CustomTick, { getTickFont } from '../../TempAreaChart2/CustomTick';
+import CustomTick, { getTickFont } from '../../HourlyTemperatureChart/CustomTick';
 import { EDGE_INSET, getNowLabelEnd, tickFits } from '@/utils/charts/edgeLabels';
 
 // Sem margem lateral: a área encosta nas bordas da tela.
